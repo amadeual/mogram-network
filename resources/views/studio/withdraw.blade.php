@@ -1,0 +1,165 @@
+@extends('layouts.app')
+
+@section('title', 'Processo de Saque - Mogram Studio')
+
+@section('content')
+<div class="app-layout" style="background: #0b0a15; min-height: 100vh; display: flex;">
+    <!-- Sidebar (Same as Studio) -->
+    @include("partials.studio-sidebar")
+
+    <main class="main-content" style="flex: 1; padding: 3rem 6rem; overflow-y: auto;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <a href="{{ route('studio.finance') }}" style="color: #3390ec; text-decoration: none; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; margin-bottom: 2rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+                Voltar para Carteira
+            </a>
+
+            <header style="margin-bottom: 3rem;">
+                <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px; margin-bottom: 0.5rem;">Processo de Saque</h1>
+                <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;">Gerencie seus ganhos e transfira com facilidade.</p>
+            </header>
+
+            <!-- Premium Wallet Card -->
+            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; position: relative; box-shadow: 0 30px 60px rgba(18, 97, 209, 0.25);">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="width: 38px; height: 38px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                        </div>
+                        <span style="font-size: 13px; font-weight: 900; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 1px;">Saldo Disponível</span>
+                    </div>
+                    <div style="color: rgba(255,255,255,0.6);">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+                    </div>
+                </div>
+                
+                <h2 style="font-size: 4rem; font-weight: 950; color: white; margin-bottom: 2rem; letter-spacing: -3px; display: flex; align-items: baseline; gap: 10px;">
+                    <span style="font-size: 1.5rem; opacity: 0.8;">R$</span> {{ number_format($availableBalance, 2, ',', '.') }}
+                </h2>
+
+                <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.15); width: fit-content; padding: 8px 16px; border-radius: 100px;">
+                    <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80;"></div>
+                    <span style="font-size: 12px; color: white; font-weight: 700;">Atualizado em tempo real</span>
+                </div>
+            </div>
+
+            <form action="{{ route('studio.withdraw') }}" method="POST">
+                @csrf
+                <input type="hidden" name="method" id="method_input" value="pix">
+
+                <!-- Withdraw Value -->
+                <div style="margin-bottom: 3rem;">
+                    <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1.5rem; display: block;">Valor do Saque</label>
+                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <span style="font-size: 2.5rem; font-weight: 900; color: var(--text-muted); margin-right: 1rem;">R$</span>
+                        <input type="number" id="withdraw_amount" name="amount" placeholder="0,00" step="0.01" min="50" required
+                               style="background: transparent; border: none; font-size: 3rem; font-weight: 900; color: white; outline: none; width: 100%;">
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="button" onclick="setPercent(0.25)" style="flex: 1; padding: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">25%</button>
+                        <button type="button" onclick="setPercent(0.50)" style="flex: 1; padding: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">50%</button>
+                        <button type="button" onclick="setPercent(1.00)" style="flex: 1; padding: 1.25rem; border: 1.5px solid #3390ec; background: rgba(51, 144, 236, 0.1); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">100%</button>
+                    </div>
+                </div>
+
+                <!-- Payment Method -->
+                <div style="margin-bottom: 3rem;">
+                    <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1.5rem; display: block;">Método de Pagamento</label>
+                    <div style="display: flex; gap: 1.5rem;">
+                        <!-- PIX Card -->
+                        <div id="pix_card" onclick="selectMethod('pix')" style="flex: 1; background: rgba(255,255,255,0.03); border: 2px solid #3390ec; border-radius: 24px; padding: 2rem; cursor: pointer; position: relative; transition: 0.3s;">
+                             <div style="position: absolute; right: 1.5rem; top: 1.5rem; width: 24px; height: 24px; background: #3390ec; border-radius: 50%; display: flex; align-items: center; justify-content: center;" id="pix_check">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>
+                             </div>
+                             <div style="width: 52px; height: 52px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_Pix.png" style="width: 32px; height: 32px; object-fit: contain;">
+                             </div>
+                             <h4 style="font-size: 18px; font-weight: 950; color: white; margin-bottom: 4px;">PIX</h4>
+                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Brasil (Instantâneo)</p>
+                        </div>
+                        <!-- Redotpay Card -->
+                        <div id="redotpay_card" onclick="selectMethod('redotpay')" style="flex: 1; background: rgba(255,255,255,0.03); border: 2px solid transparent; border-radius: 24px; padding: 2rem; cursor: pointer; position: relative; transition: 0.3s;">
+                             <div style="position: absolute; right: 1.5rem; top: 1.5rem; width: 24px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 50%;" id="redotpay_check"></div>
+                             <div style="width: 52px; height: 52px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+                             </div>
+                             <h4 style="font-size: 18px; font-weight: 950; color: white; margin-bottom: 4px;">RedotPay</h4>
+                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Internacional (USD)</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Fields -->
+                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;">
+                    <div>
+                        <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1rem; display: block;">Tipo</label>
+                        <select style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%; cursor: pointer;">
+                            <option value="cpf" style="background:#111">CPF</option>
+                            <option value="email" style="background:#111">E-mail</option>
+                            <option value="phone" style="background:#111">Telefone</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label id="account_label" style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1rem; display: block;">Chave PIX</label>
+                        <input type="text" name="account_info" placeholder="000.000.000-00" required
+                               style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%;">
+                    </div>
+                </div>
+
+                <div style="background: rgba(51, 144, 236, 0.05); border: 1.5px solid rgba(51, 144, 236, 0.1); border-radius: 24px; padding: 1.5rem; display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem;">
+                    <div style="width: 48px; height: 48px; background: rgba(51, 144, 236, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #3390ec;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 2px;">Tempo de Processamento</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Geralmente concluído em até 24 horas úteis.</p>
+                    </div>
+                </div>
+
+                <button type="submit" class="mogram-btn-primary" 
+                        style="width: 100%; padding: 1.5rem; border-radius: 24px; font-weight: 950; font-size: 18px; letter-spacing: 0.5px; border: none; cursor: pointer; box-shadow: 0 15px 30px rgba(51, 144, 236, 0.25);">
+                    Solicitar Saque
+                </button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script>
+    const availableBalance = {{ $availableBalance }};
+    const amountInput = document.getElementById('withdraw_amount');
+    const methodInput = document.getElementById('method_input');
+    
+    function setPercent(p) {
+        amountInput.value = (availableBalance * p).toFixed(2);
+    }
+
+    function selectMethod(m) {
+        methodInput.value = m;
+        const pixCard = document.getElementById('pix_card');
+        const redotCard = document.getElementById('redotpay_card');
+        const pixCheck = document.getElementById('pix_check');
+        const redotCheck = document.getElementById('redotpay_check');
+        const accountLabel = document.getElementById('account_label');
+
+        if (m === 'pix') {
+            pixCard.style.borderColor = '#3390ec';
+            redotCard.style.borderColor = 'transparent';
+            pixCheck.style.display = 'flex';
+            redotCheck.innerHTML = '';
+            accountLabel.innerText = 'Chave PIX';
+        } else {
+            redotCard.style.borderColor = '#3390ec';
+            pixCard.style.borderColor = 'transparent';
+            pixCheck.style.display = 'none';
+            redotCheck.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>';
+            redotCheck.style.display = 'flex';
+            redotCheck.style.justifyContent = 'center';
+            redotCheck.style.alignItems = 'center';
+            redotCheck.style.background = '#3390ec';
+            accountLabel.innerText = 'Email RedotPay';
+        }
+    }
+</script>
+@endsection

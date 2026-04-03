@@ -1,0 +1,87 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\LiveController;
+use App\Http\Controllers\StudioController;
+use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\FeedController;
+
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/', function () {
+    return view('landing');
+})->name('home');
+
+// Authentication Routes
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::get('/register', [AuthController::class, 'showRegistrationForm'])->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+// Legal Routes
+Route::get('/termos-de-uso', function () {
+    return view('legal.terms');
+})->name('terms');
+
+Route::get('/politica-de-privacidade', function () {
+    return view('legal.privacy');
+})->name('privacy');
+
+// Protected Routes
+Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');
+    Route::post('/posts/{post}/like', [FeedController::class, 'toggleLike'])->name('posts.like');
+    Route::post('/posts/{post}/comments', [FeedController::class, 'storeComment'])->name('posts.comment');
+    Route::delete('/comments/{comment}', [FeedController::class, 'deleteComment'])->name('comments.delete');
+
+    Route::get('/creator/ana', function () {
+        return view('profile');
+    })->name('creator.profile');
+
+    // Studio Routes
+    Route::get('/studio', [StudioController::class, 'index'])->name('studio.dashboard');
+    Route::get('/studio/contents', [StudioController::class, 'content'])->name('studio.content');
+    Route::get('/studio/analytics', [StudioController::class, 'analytics'])->name('studio.analytics');
+    Route::get('/studio/finance', [StudioController::class, 'finance'])->name('studio.finance');
+    Route::get('/studio/finance/withdraw', [StudioController::class, 'withdrawPage'])->name('studio.withdraw_page');
+    Route::post('/studio/withdraw', [StudioController::class, 'withdraw'])->name('studio.withdraw');
+    Route::get('/studio/create', [StudioController::class, 'create'])->name('studio.create');
+    Route::post('/studio/store', [StudioController::class, 'store'])->name('studio.store');
+    Route::get('/studio/edit/{post}', [StudioController::class, 'edit'])->name('studio.edit');
+    Route::get('/studio/analytics/{post}', [StudioController::class, 'postAnalytics'])->name('studio.post_analytics');
+    Route::put('/studio/update/{post}', [StudioController::class, 'update'])->name('studio.update');
+    Route::delete('/studio/delete/{post}', [StudioController::class, 'destroy'])->name('studio.delete');
+
+    // Settings Routes
+    Route::get('/studio/settings', [SettingsController::class, 'index'])->name('studio.settings');
+    Route::post('/studio/settings', [SettingsController::class, 'update'])->name('studio.settings.update');
+
+    Route::get('/create', function () {
+        return view('create-post');
+    })->name('post.create');
+
+    // Lives Routes
+    Route::get('/lives', [LiveController::class, 'index'])->name('lives');
+    Route::get('/lives/create', [LiveController::class, 'create'])->name('live.create');
+    Route::post('/lives/store', [LiveController::class, 'store'])->name('live.store');
+    Route::get('/lives/{live}', [LiveController::class, 'watch'])->name('live.watch');
+    Route::post('/lives/{live}/chat', [LiveController::class, 'sendMessage'])->name('live.chat');
+    Route::get('/lives/{live}/messages', [LiveController::class, 'getMessages'])->name('live.messages');
+    Route::post('/lives/{live}/gift', [LiveController::class, 'sendGift'])->name('live.gift');
+    Route::delete('/lives/{live}', [LiveController::class, 'destroy'])->name('live.destroy');
+    
+    // Placeholder for other features
+    Route::get('/stories', function () { return view('stories'); })->name('stories');
+
+    // Download Route
+    Route::get('/download/{id}', [DownloadController::class, 'download'])->name('post.download');
+});
