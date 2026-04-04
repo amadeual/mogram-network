@@ -17,8 +17,9 @@
             </p>
             
             <div style="display: flex; gap: 1.5rem; align-items: center;">
-                <a href="{{ route('register') }}" class="mogram-btn-primary" style="padding: 1.5rem 3rem; font-size: 1.1rem; border-radius: 99px; box-shadow: 0 20px 40px rgba(255, 75, 31, 0.3);">
-                    Começar Agor
+                <a href="{{ route('register') }}" class="mogram-btn-primary hero-cta-btn">
+                    <span class="hero-cta-short">Começar</span>
+                    <span class="hero-cta-full">Começar Agora</span>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
                 <div style="display: flex; align-items: center; gap: 0.5rem; color: #22C55E; font-weight: 800; font-size: 0.9rem;">
@@ -156,6 +157,25 @@
         font-weight: 950;
         letter-spacing: -3px;
         margin-bottom: 2rem;
+    }
+
+    .hero-cta-btn {
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        border-radius: 99px;
+        box-shadow: 0 20px 40px rgba(255, 75, 31, 0.3);
+    }
+
+    .hero-cta-full { display: none; }
+    .hero-cta-short { display: inline; }
+
+    @media (min-width: 768px) {
+        .hero-cta-btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.1rem;
+        }
+        .hero-cta-full { display: inline; }
+        .hero-cta-short { display: none; }
     }
 
     .section-header-row {
