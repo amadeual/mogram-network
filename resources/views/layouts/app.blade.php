@@ -88,5 +88,6 @@
     </style>
 
     @yield('scripts')
+    @stack('mobile-menu')
 </body>
 </html>
