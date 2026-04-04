@@ -8,9 +8,12 @@ use App\Models\Live;
 use App\Models\LiveChat;
 use App\Models\Gift;
 use App\Models\LiveGift;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\LiveStartedMail;
 
 class LiveController extends Controller
 {
@@ -61,6 +64,13 @@ class LiveController extends Controller
             'status' => 'online',
             'started_at' => now()
         ]);
+
+        try {
+            // Ideally this would go to followers. As a placeholder/test, send to creator
+            Mail::to(Auth::user()->email)->send(new LiveStartedMail($live));
+        } catch (\Exception $e) {
+            \Log::error('Erro ao enviar email de inicio de live: ' . $e->getMessage());
+        }
 
         return redirect()->route('live.watch', $live->id);
     }
