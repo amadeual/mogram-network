@@ -5,10 +5,10 @@
 @section('content')
 <div class="auth-container">
     <div class="auth-left">
-        <div style="margin-bottom: 2rem;">
-            <a href="/" class="text-muted text-sm flex items-center gap-2">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Voltar
+        <div class="auth-back-btn">
+            <a href="/" class="text-muted text-sm flex items-center gap-2" style="font-weight: 800; opacity: 0.8;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                VOLTAR
             </a>
         </div>
         
@@ -35,8 +35,13 @@
     </div>
 
     <div class="auth-right">
-        <div style="width: 100%; max-width: 400px; margin: 0 auto;">
-            <div class="text-center" style="margin-bottom: 2.5rem;">
+        <div class="auth-form-card">
+            <div class="text-center" style="margin-bottom: 3rem;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 512 512" style="margin-bottom: 1.5rem;">
+                    <defs><linearGradient id="regLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#regLogoGrad)" />
+                    <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
+                </svg>
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Bem-vindo ao Mogram</h2>
                 <p class="text-muted text-sm">Crie seu perfil e comece a faturar hoje mesmo.</p>
             </div>

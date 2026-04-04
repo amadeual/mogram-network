@@ -9,10 +9,12 @@
         <!-- Sidebar Navigation -->
         <aside style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
-                <div style="width: 35px; height: 35px; background: var(--primary-blue); border-radius: 8px; display: flex; align-items: center; justify-content: center;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M12 2L1 12h3v9h6v-6h4v6h6v-9h3L12 2z"/></svg>
-                </div>
-                <span style="font-size: 1.25rem; font-weight: 800; color: white;">Mogram</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512">
+                    <defs><linearGradient id="streamLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#streamLogoGrad)" />
+                    <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
+                </svg>
+                <span style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -1px;">Mogram</span>
             </div>
 
             <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -29,14 +31,14 @@
                 <p style="font-size: 0.65rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 1rem;">Canais Sugeridos</p>
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     @forelse($suggestedChannels as $suggested)
-                    <a href="{{ route('live.watch', $suggested->id) }}" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                    <div class="live-card-modern" onclick="showMogramLoader(); window.location.href='{{ route('live.watch', $suggested->id) }}'" style="display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer;">
                         <img src="{{ $suggested->user->avatar ? Storage::url($suggested->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $suggested->user->name }}" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid #22c55e;">
                         <div style="flex: 1;">
                             <p style="font-size: 0.75rem; font-weight: 700; color: white;">{{ $suggested->user->name }}</p>
                             <p style="font-size: 0.65rem; color: #555;">{{ Str::limit($suggested->title, 15) }}</p>
                         </div>
                         <span style="font-size: 0.65rem; color: #ef4444; font-weight: 800;">● {{ number_format(count($suggested->chats) * 1.5, 0) }}</span>
-                    </a>
+                    </div>
                     @empty
                     <p style="font-size: 0.7rem; color: #555; text-align: center;">Nenhum canal online agora.</p>
                     @endforelse
@@ -220,6 +222,9 @@
             showToast('Navegador não suporta câmera ou conexão insegura.', 'error');
             return;
         }
+
+        showMogramLoader(); // Show premium loader while requesting media
+
         navigator.mediaDevices.getUserMedia({ video: true, audio: true })
         .then(stream => {
             window.localStream = stream;
@@ -230,10 +235,15 @@
             document.getElementById('video_wrapper').style.display = 'flex';
             document.getElementById('broadcaster_tools').style.display = 'flex';
             
-            showToast('Câmera iniciada! Você está ao vivo.', 'success');
+            setTimeout(() => {
+                hideMogramLoader(); // Hide loader with smooth transition
+                showToast('Câmera iniciada! Você está ao vivo.', 'success');
+            }, 1000);
+
             startChatPolling();
         })
         .catch(err => {
+            hideMogramLoader();
             console.error(err);
             showToast('Erro ao acessar câmera.', 'error');
         });

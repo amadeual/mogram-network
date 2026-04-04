@@ -1,5 +1,12 @@
 <aside class="sidebar">
-    <div class="sidebar-logo">Mogram</div>
+    <div class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; padding: 0 1rem 3rem;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
+            <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+            <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
+            <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
+        </svg>
+        <span style="font-weight: 900; letter-spacing: -1px; color: white; font-size: 1.5rem;">Mogram</span>
+    </div>
     
     <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
         <a href="{{ route('dashboard') }}" class="menu-item {{ Route::is('dashboard') ? 'active' : '' }}">

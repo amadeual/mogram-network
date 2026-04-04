@@ -73,7 +73,7 @@
             
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                 @forelse($onlineLives as $live)
-                <div class="live-card-modern" onclick="window.location.href='{{ route('live.watch', $live->id) }}'">
+                <div class="live-card-modern" onclick="showMogramLoader(); window.location.href='{{ route('live.watch', $live->id) }}'">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
                         <div class="live-tag">LIVE</div>

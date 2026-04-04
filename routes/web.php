@@ -15,7 +15,21 @@ use App\Http\Controllers\FeedController;
 */
 
 Route::get('/', function () {
-    return view('landing');
+    $cutoffDate = '2026-04-03 21:00:00';
+    $demoUserIds = [1, 2];
+    
+    $query = App\Models\Live::query();
+
+    // Guests and New users only see REAL data
+    $isNew = !Auth::check() || Auth::user()->created_at->isAfter($cutoffDate);
+    
+    if ($isNew) {
+        $query->whereNotIn('user_id', $demoUserIds);
+    }
+
+    $topLives = $query->latest()->take(3)->get();
+    
+    return view('landing', compact('topLives'));
 })->name('home');
 
 // Authentication Routes
