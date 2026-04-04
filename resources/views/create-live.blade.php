@@ -49,20 +49,55 @@
                                    onfocus="this.style.borderColor='var(--primary-blue)'"></textarea>
                         </div>
 
+                        <!-- Category Input -->
+                        <div style="margin-bottom: 2rem;">
+                            <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Categoria</label>
+                            <select name="category" required style="width: 100%; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.25rem; color: white; font-weight: 600; outline: none; appearance: none; cursor: pointer; transition: 0.3s;" onfocus="this.style.borderColor='var(--primary-blue)'" onchange="this.style.borderColor='rgba(255,255,255,0.08)'">
+                                <option value="" disabled selected>Selecione uma categoria...</option>
+                                <option value="Gaming">Gaming 🎮</option>
+                                <option value="Música">Música 🎵</option>
+                                <option value="Bate-papo">Bate-papo 💬</option>
+                                <option value="Educação">Educação 📚</option>
+                                <option value="Lifestyle">Lifestyle ✨</option>
+                                <option value="Geral">Geral 🌍</option>
+                            </select>
+                        </div>
+
                         <!-- Monetization -->
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 3rem;">
-                            <div>
-                                <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Tipo de Acesso</label>
-                                <select name="is_free" id="access_type" onchange="togglePrice(this.value)"
-                                        style="width: 100%; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.25rem; color: white; font-weight: 600; outline: none; appearance: none; cursor: pointer;">
-                                    <option value="1">Grátis para todos</option>
-                                    <option value="0">Pago (Ticket de Acesso)</option>
-                                </select>
+                        <div style="margin-bottom: 3rem;">
+                            <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Tipo de Acesso</label>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                                <label class="access-type-card">
+                                    <input type="radio" name="is_free" value="1" checked onchange="togglePrice(this.value)" style="display: none;">
+                                    <div class="card-content">
+                                        <div class="icon-wrap">🌍</div>
+                                        <div style="flex: 1;">
+                                            <h4 style="color: white; font-size: 1rem; font-weight: 800; margin: 0;">Público Geral</h4>
+                                            <p style="color: var(--text-gray); font-size: 0.8rem; margin: 0; line-height: 1.2;">Live grátis para todos os seguidores</p>
+                                        </div>
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </label>
+                                
+                                <label class="access-type-card">
+                                    <input type="radio" name="is_free" value="0" onchange="togglePrice(this.value)" style="display: none;">
+                                    <div class="card-content">
+                                        <div class="icon-wrap" style="background: rgba(255,214,0,0.1); color: #ffd600;">💎</div>
+                                        <div style="flex: 1;">
+                                            <h4 style="color: white; font-size: 1rem; font-weight: 800; margin: 0;">Ticket VIP</h4>
+                                            <p style="color: var(--text-gray); font-size: 0.8rem; margin: 0; line-height: 1.2;">Live fechada e monetizada</p>
+                                        </div>
+                                        <div class="check-circle"></div>
+                                    </div>
+                                </label>
                             </div>
-                            <div id="price_container" style="display: none;">
-                                <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Preço do Bilhete (R$)</label>
-                                <input type="number" name="price" step="0.01" placeholder="0,00" 
-                                       style="width: 100%; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 1.25rem; color: white; font-weight: 800; font-size: 1.1rem; outline: none;">
+
+                            <div id="price_container" style="display: none; animation: slideDown 0.3s ease;">
+                                <label style="display: block; font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: uppercase; margin-bottom: 10px; letter-spacing: 1px;">Preço do Bilhete VIP (R$)</label>
+                                <input type="number" name="price" step="0.01" placeholder="Ex: 19,90" 
+                                       style="width: 100%; background: rgba(255,255,255,0.03); border: 2px solid rgba(255,214,0,0.3); border-radius: 14px; padding: 1.25rem; color: white; font-weight: 800; font-size: 1.1rem; outline: none; transition: 0.3s;"
+                                       onfocus="this.style.borderColor='#ffd600'">
                             </div>
                         </div>
 
@@ -123,11 +158,60 @@
         50% { transform: scale(1.5); opacity: 0.5; }
         100% { transform: scale(1); opacity: 1; }
     }
-    select {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 1.25rem center;
-        background-size: 1.1em;
+    
+    .access-type-card {
+        display: block;
+        cursor: pointer;
     }
+    .card-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1.25rem;
+        background: rgba(255,255,255,0.02);
+        border: 2px solid rgba(255,255,255,0.05);
+        border-radius: 16px;
+        transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .icon-wrap {
+        width: 44px; height: 44px;
+        background: rgba(51, 144, 236, 0.1);
+        color: #3390ec;
+        display: flex; align-items: center; justify-content: center;
+        border-radius: 12px;
+        font-size: 1.2rem;
+    }
+    .check-circle {
+        width: 24px; height: 24px;
+        border: 2px solid rgba(255,255,255,0.2);
+        border-radius: 50%;
+        transition: 0.3s;
+        position: relative;
+    }
+    .access-type-card input:checked + .card-content {
+        background: rgba(51, 144, 236, 0.05);
+        border-color: #3390ec;
+    }
+    
+    .access-type-card input[value="0"]:checked + .card-content {
+        background: rgba(255, 214, 0, 0.05);
+        border-color: #ffd600;
+    }
+    .access-type-card input[value="0"]:checked + .card-content .check-circle {
+        border-color: #ffd600;
+        background: #ffd600;
+    }
+    
+    .access-type-card input:checked + .card-content .check-circle {
+        border-color: #3390ec;
+        background: #3390ec;
+    }
+    .access-type-card input:checked + .card-content .check-circle::after {
+        content: '';
+        position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+        width: 10px; height: 10px; background: white; border-radius: 50%;
+    }
+
+    @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 @endsection

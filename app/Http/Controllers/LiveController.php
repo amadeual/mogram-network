@@ -17,7 +17,7 @@ use App\Mail\LiveStartedMail;
 
 class LiveController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $cutoffDate = '2026-04-03 21:00:00';
         $demoUserIds = [1, 2];
@@ -29,6 +29,11 @@ class LiveController extends Controller
         if (Auth::check() && Auth::user()->created_at->isAfter($cutoffDate)) {
             $onlineQuery->whereNotIn('user_id', $demoUserIds);
             $scheduledQuery->whereNotIn('user_id', $demoUserIds);
+        }
+
+        if ($request->has('category') && $request->category !== 'Para Você' && $request->category !== 'Explorar' && $request->category !== 'Seguindo') {
+            $onlineQuery->where('category', $request->category);
+            $scheduledQuery->where('category', $request->category);
         }
 
         $onlineLives = $onlineQuery->latest()->get();
@@ -48,6 +53,7 @@ class LiveController extends Controller
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:1000',
             'thumbnail' => 'required|image|max:2048',
+            'category' => 'nullable|string|max:100',
             'is_free' => 'required|boolean',
             'price' => 'nullable|numeric|min:0'
         ]);
@@ -58,6 +64,7 @@ class LiveController extends Controller
             'user_id' => Auth::id(),
             'title' => $request->title,
             'description' => $request->description,
+            'category' => $request->category ?? 'Geral',
             'thumbnail' => $thumbnailPath,
             'is_free' => $request->is_free,
             'price' => $request->is_free ? 0 : $request->price,

@@ -27,12 +27,12 @@
 
         <!-- Categories / Filters (TikTok Style) -->
         <div style="display: flex; gap: 1rem; margin-bottom: 3rem; overflow-x: auto; padding-bottom: 10px;">
-            <div class="filter-pill active">Para Você</div>
-            <div class="filter-pill">Seguindo</div>
-            <div class="filter-pill">Explorar</div>
-            <div class="filter-pill">Gaming</div>
-            <div class="filter-pill">Música</div>
-            <div class="filter-pill">Educação</div>
+            <a href="?category=Para Você" class="filter-pill {{ request('category', 'Para Você') == 'Para Você' ? 'active' : '' }}" style="text-decoration: none;">Para Você</a>
+            <a href="?category=Seguindo" class="filter-pill {{ request('category') == 'Seguindo' ? 'active' : '' }}" style="text-decoration: none;">Seguindo</a>
+            <a href="?category=Explorar" class="filter-pill {{ request('category') == 'Explorar' ? 'active' : '' }}" style="text-decoration: none;">Explorar</a>
+            <a href="?category=Gaming" class="filter-pill {{ request('category') == 'Gaming' ? 'active' : '' }}" style="text-decoration: none;">Gaming</a>
+            <a href="?category=Música" class="filter-pill {{ request('category') == 'Música' ? 'active' : '' }}" style="text-decoration: none;">Música</a>
+            <a href="?category=Educação" class="filter-pill {{ request('category') == 'Educação' ? 'active' : '' }}" style="text-decoration: none;">Educação</a>
         </div>
 
         <!-- Section: My Scheduled Lives (Only for Creator) -->
