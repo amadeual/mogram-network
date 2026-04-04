@@ -8,8 +8,8 @@
 
     <!-- Main Feed -->
     <main class="main-content">
-        <header style="height: 80px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray);">
-            <h1 style="font-size: 1.25rem; font-weight: 800;">Feed Principal</h1>
+        <header style="height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray);">
+            <h1 style="font-size: 1.15rem; font-weight: 800;">Feed Principal</h1>
             <div style="display: flex; gap: 1rem; position: relative;">
                 <button class="notif-bell" onclick="toggleNotifs()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -68,8 +68,8 @@
                     </div>
                 </div>
                 <div class="post-content">
-                    <h3 style="font-size: 16px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ $post->title }}</h3>
-                    <div style="font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.5;">
+                    <h3 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ $post->title }}</h3>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
                         {!! $post->description !!}
                     </div>
                 </div>
@@ -141,7 +141,7 @@
                             <div style="flex: 1; position: relative;">
                                 <input type="text" id="comment_input_{{ $post->id }}" 
                                        placeholder="Escreva um comentário..."
-                                       style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.75rem 3.5rem 0.75rem 1rem; color: white; font-size: 14px; outline: none; transition: 0.2s;"
+                                       style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.75rem 3.5rem 0.75rem 1rem; color: white; font-size: 13px; outline: none; transition: 0.2s;"
                                        onfocus="this.style.borderColor='#3390ec'"
                                        onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitComment('{{ $post->id }}'); }">
                                 <button onclick="showEmojiPicker('{{ $post->id }}')" 
