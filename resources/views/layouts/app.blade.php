@@ -19,10 +19,11 @@
 </head>
 <body>
     <!-- Global Mobile Elements -->
-    <div class="sidebar-overlay" id="mogram_sidebar_overlay" onclick="toggleMobileMenu()"></div>
+    <div class="sidebar-overlay" id="mogram_sidebar_overlay" onclick="const s=document.getElementById('mogram_sidebar'); if(s){ s.classList.remove('active'); document.getElementById('mogram_mobile_btn').classList.remove('active'); this.classList.remove('active'); document.body.style.overflow=''; }"></div>
     
     <div class="mobile-top-bar mobile-only">
-        <button class="mobile-menu-toggle" id="mogram_mobile_btn" onclick="toggleMobileMenu()">
+        <button class="mobile-menu-toggle" id="mogram_mobile_btn" 
+                onclick="const s=document.getElementById('mogram_sidebar'); const b=this; const o=document.getElementById('mogram_sidebar_overlay'); if(s){ s.classList.toggle('active'); b.classList.toggle('active'); if(o)o.classList.toggle('active'); document.body.style.overflow=s.classList.contains('active')?'hidden':''; }">
             <svg class="icon-menu" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             <svg class="icon-close" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
@@ -106,19 +107,5 @@
     </style>
 
     @yield('scripts')
-    <script>
-        function toggleMobileMenu() {
-            const sidebar = document.getElementById('mogram_sidebar');
-            const btn = document.getElementById('mogram_mobile_btn');
-            const overlay = document.getElementById('mogram_sidebar_overlay');
-            if (sidebar) {
-                sidebar.classList.toggle('active');
-                if (btn) btn.classList.toggle('active');
-                if (overlay) overlay.classList.toggle('active');
-                // Lock body scroll only when sidebar is open
-                document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
-            }
-        }
-    </script>
 </body>
 </html>
