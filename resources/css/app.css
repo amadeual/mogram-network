@@ -1310,8 +1310,10 @@ section { padding: 4rem 0; }
     .sidebar-logo { display: none !important; }
     .sidebar.active { transform: translateX(0); }
     .sidebar-overlay.active { display: block !important; opacity: 1; pointer-events: auto; }
-    .mobile-menu-toggle.active svg { display: none; }
-    .mobile-menu-toggle.active::after { content: "✕" !important; font-size: 24px; font-weight: 900; }
+    .mobile-menu-toggle .icon-close { display: none; }
+    .mobile-menu-toggle .icon-menu { display: block; }
+    .mobile-menu-toggle.active .icon-menu { display: none; }
+    .mobile-menu-toggle.active .icon-close { display: block; }
     .main-content {
         margin-left: 0 !important;
         padding-top: 64px !important;
@@ -1324,4 +1326,4 @@ section { padding: 4rem 0; }
 }
 
 .mobile-only { display: none !important; }
-.desktop-only { display: block; }
+.desktop-only { display: block !important; }
