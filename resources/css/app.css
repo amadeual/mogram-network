@@ -1246,7 +1246,7 @@ section { padding: 4rem 0; }
 /* Mobile Sidebar Responsiveness */
 /* Mobile Top Bar & Toggle */
 .mobile-top-bar {
-    display: none;
+    display: none !important;
     position: fixed;
     top: 0;
     left: 0;
@@ -1254,10 +1254,10 @@ section { padding: 4rem 0; }
     height: 64px;
     background: #0b0a15;
     border-bottom: 1px solid var(--border-gray);
-    z-index: 10000;
+    z-index: 99999 !important; /* Above everything */
     align-items: center;
     padding: 0 1rem;
-    gap: 15px;
+    gap: 12px;
 }
 
 .mobile-menu-toggle {
@@ -1297,19 +1297,19 @@ section { padding: 4rem 0; }
 
 @media (max-width: 991px) {
     .mobile-top-bar {
-        display: flex;
+        display: flex !important;
     }
     .mobile-menu-toggle {
-        display: flex;
+        display: flex !important;
     }
     .sidebar {
         transform: translateX(-100%);
-        z-index: 10005 !important;
+        z-index: 90000 !important; /* Sidebar below top bar but above overlay */
         border-right: none;
-        box-shadow: 15px 0 30px rgba(0,0,0,0.8);
-        padding-top: 70px !important; /* Space for the top bar elements if needed */
+        box-shadow: 15px 0 40px rgba(0,0,0,0.9);
+        padding-top: 80px !important; /* Important: Clear the top-bar */
     }
-    .desktop-only {
+    .sidebar .sidebar-logo {
         display: none !important;
     }
     .sidebar.active {
@@ -1324,7 +1324,7 @@ section { padding: 4rem 0; }
         display: none;
     }
     .mobile-menu-toggle.active::after {
-        content: "✕";
+        content: "✕" !important;
         font-size: 24px;
         font-weight: 900;
     }
@@ -1338,11 +1338,11 @@ section { padding: 4rem 0; }
         padding-left: 0 !important;
         border-top: 1px solid rgba(255,255,255,0.03);
     }
-    .main-content > div[style*="justify-content: space-between"] {
-        padding-left: 0 !important;
+    .dash-layout .sidebar, .app-layout .sidebar {
+        /* ensure consistency */
     }
     .dash-layout .main-content, .app-layout .main-content {
-        margin-left: 0;
+        margin-left: 0 !important;
     }
-    .right-sidebar { display: none; }
+    .right-sidebar { display: none !important; }
 }
