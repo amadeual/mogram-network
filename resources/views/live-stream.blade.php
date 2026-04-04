@@ -110,13 +110,22 @@
                         <img src="{{ Storage::url($live->thumbnail) }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3;">
                         <div style="position: relative; z-index: 5; text-align: center;">
                             @if(Auth::id() == $live->user_id)
-                                <div style="width: 80px; height: 80px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; border: 2px solid #3390ec; cursor: pointer;" onclick="startCamera()">
-                                    <svg width="32" height="32" fill="#3390ec" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                                <div id="camera_loading" style="text-align: center;">
+                                    <div style="width: 60px; height: 60px; border: 3px solid rgba(51,144,236,0.2); border-top-color: #3390ec; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
+                                    <h3 style="color: white; font-weight: 800;">Iniciando câmera...</h3>
+                                    <p style="color: #888; font-size: 0.9rem;">Aguarde, estamos preparando seu estúdio.</p>
                                 </div>
-                                <h3 style="color: white; font-weight: 800;">Seu estúdio está pronto!</h3>
-                                <p style="color: #888; font-size: 0.9rem;">Toque no ícone acima para iniciar.</p>
+                                <div id="camera_retry" style="display: none; text-align: center;">
+                                    <div style="width: 80px; height: 80px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; border: 2px solid #3390ec; cursor: pointer;" onclick="startCamera()">
+                                        <svg width="32" height="32" fill="#3390ec" viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+                                    </div>
+                                    <h3 style="color: white; font-weight: 800;">Toque para iniciar a câmera</h3>
+                                    <p id="camera_error_msg" style="color: #ef4444; font-size: 0.85rem; margin-top: 0.5rem;"></p>
+                                </div>
                             @else
+                                <div style="width: 50px; height: 50px; border: 3px solid rgba(255,255,255,0.1); border-top-color: white; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1.5rem;"></div>
                                 <h3 style="color: white; font-weight: 800;">Aguardando o criador...</h3>
+                                <p style="color: #888; font-size: 0.85rem; margin-top: 0.5rem;">A transmissão começará em breve.</p>
                             @endif
                         </div>
                     </div>
@@ -207,6 +216,7 @@
 
 <script>
     let selectedGiftId = null;
+    const IS_CREATOR = {{ Auth::id() == $live->user_id ? 'true' : 'false' }};
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast_container');
@@ -217,44 +227,110 @@
         setTimeout(() => toast.remove(), 4000);
     }
 
+    function showRetryUI(errorMessage) {
+        const loading = document.getElementById('camera_loading');
+        const retry = document.getElementById('camera_retry');
+        const errorMsg = document.getElementById('camera_error_msg');
+        if (loading) loading.style.display = 'none';
+        if (retry) retry.style.display = 'block';
+        if (errorMsg) errorMsg.textContent = errorMessage || '';
+    }
+
+    function activateStream(stream) {
+        window.localStream = stream;
+        const video = document.getElementById('creator_video');
+        video.srcObject = stream;
+        video.play().catch(() => {});
+
+        document.getElementById('offline_view').style.display = 'none';
+        document.getElementById('video_wrapper').style.display = 'flex';
+        
+        const tools = document.getElementById('broadcaster_tools');
+        if (tools) tools.style.display = 'flex';
+
+        // Update audio/video button states based on available tracks
+        const audioBtn = document.getElementById('btn_audio');
+        const videoBtn = document.getElementById('btn_video');
+        const hasAudio = stream.getAudioTracks().length > 0;
+        const hasVideo = stream.getVideoTracks().length > 0;
+        if (audioBtn) audioBtn.style.background = hasAudio ? 'rgba(0,0,0,0.6)' : '#ef4444';
+        if (videoBtn) videoBtn.style.background = hasVideo ? 'rgba(0,0,0,0.6)' : '#ef4444';
+
+        if (typeof hideMogramLoader === 'function') hideMogramLoader();
+        showToast('Câmera iniciada! Você está ao vivo.', 'success');
+        startChatPolling();
+    }
+
     function startCamera() {
-        if (!navigator.mediaDevices) {
-            showToast('Navegador não suporta câmera ou conexão insegura.', 'error');
+        // Check for secure context (HTTPS or localhost)
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+            showRetryUI('Seu navegador não suporta acesso à câmera. Use HTTPS ou um navegador moderno.');
+            showToast('Câmera não disponível neste navegador/conexão.', 'error');
             return;
         }
 
-        showMogramLoader(); // Show premium loader while requesting media
+        if (typeof showMogramLoader === 'function') showMogramLoader();
 
-        navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+        // Try video + audio first
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true })
         .then(stream => {
-            window.localStream = stream;
-            const video = document.getElementById('creator_video');
-            video.srcObject = stream;
-            
-            document.getElementById('offline_view').style.display = 'none';
-            document.getElementById('video_wrapper').style.display = 'flex';
-            document.getElementById('broadcaster_tools').style.display = 'flex';
-            
-            setTimeout(() => {
-                hideMogramLoader(); // Hide loader with smooth transition
-                showToast('Câmera iniciada! Você está ao vivo.', 'success');
-            }, 1000);
-
-            startChatPolling();
+            activateStream(stream);
         })
         .catch(err => {
-            hideMogramLoader();
-            console.error(err);
-            showToast('Erro ao acessar câmera.', 'error');
+            console.warn('Full media failed, trying video only:', err.name);
+            // Fallback: try video only
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(stream => {
+                activateStream(stream);
+                showToast('Câmera iniciada sem áudio (microfone não disponível).', 'success');
+            })
+            .catch(err2 => {
+                console.warn('Video only failed, trying audio only:', err2.name);
+                // Fallback: try audio only
+                navigator.mediaDevices.getUserMedia({ video: false, audio: true })
+                .then(stream => {
+                    activateStream(stream);
+                    showToast('Apenas áudio disponível (câmera não encontrada).', 'success');
+                })
+                .catch(err3 => {
+                    console.error('All media failed:', err3.name, err3.message);
+                    if (typeof hideMogramLoader === 'function') hideMogramLoader();
+                    
+                    let errorMsg = 'Erro ao acessar câmera/microfone.';
+                    if (err3.name === 'NotAllowedError' || err3.name === 'PermissionDeniedError') {
+                        errorMsg = 'Permissão negada. Permita o acesso à câmera nas configurações do navegador.';
+                    } else if (err3.name === 'NotFoundError' || err3.name === 'DevicesNotFoundError') {
+                        errorMsg = 'Nenhuma câmera ou microfone encontrado no dispositivo.';
+                    } else if (err3.name === 'NotReadableError' || err3.name === 'TrackStartError') {
+                        errorMsg = 'Câmera em uso por outro aplicativo. Feche outros apps e tente novamente.';
+                    } else if (err3.name === 'OverconstrainedError') {
+                        errorMsg = 'Câmera não suporta a resolução solicitada.';
+                    } else if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
+                        errorMsg = 'Câmera requer conexão segura (HTTPS). Contate o administrador.';
+                    }
+
+                    showRetryUI(errorMsg);
+                    showToast(errorMsg, 'error');
+                });
+            });
         });
     }
 
     function togglePause() {
         const overlay = document.getElementById('paused_overlay');
         const btn = document.getElementById('btn_pause');
+        if (!overlay || !btn) return;
+        
         const isPaused = overlay.style.display === 'flex';
         overlay.style.display = isPaused ? 'none' : 'flex';
         btn.style.background = isPaused ? 'rgba(0,0,0,0.6)' : '#ef4444';
+        
+        // Actually pause/resume the stream tracks
+        if (window.localStream) {
+            window.localStream.getVideoTracks().forEach(t => t.enabled = isPaused);
+            window.localStream.getAudioTracks().forEach(t => t.enabled = isPaused);
+        }
+        
         showToast(isPaused ? 'Live retomada!' : 'Live pausada');
     }
 
@@ -269,15 +345,23 @@
     }
 
     function toggleAudio() {
-        const t = window.localStream.getAudioTracks()[0];
+        if (!window.localStream) return;
+        const tracks = window.localStream.getAudioTracks();
+        if (tracks.length === 0) { showToast('Nenhum microfone disponível.', 'error'); return; }
+        const t = tracks[0];
         t.enabled = !t.enabled;
         document.getElementById('btn_audio').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
+        showToast(t.enabled ? 'Microfone ligado' : 'Microfone desligado');
     }
 
     function toggleVideo() {
-        const t = window.localStream.getVideoTracks()[0];
+        if (!window.localStream) return;
+        const tracks = window.localStream.getVideoTracks();
+        if (tracks.length === 0) { showToast('Nenhuma câmera disponível.', 'error'); return; }
+        const t = tracks[0];
         t.enabled = !t.enabled;
         document.getElementById('btn_video').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
+        showToast(t.enabled ? 'Câmera ligada' : 'Câmera desligada');
     }
 
     function startChatPolling() {
@@ -286,7 +370,7 @@
             .then(res => res.json())
             .then(data => {
                 if(data.success) document.getElementById('chat_messages').innerHTML = data.html;
-            });
+            }).catch(() => {});
         }, 3000);
     }
 
@@ -323,12 +407,28 @@
     }
 
     function deleteLive() {
-        if(!confirm('Encerrar live?')) return;
-        fetch('{{ route('live.destroy', $live->id) }}', {
-            method: 'DELETE',
-            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
-        }).then(() => window.location.href = '/lives');
+        openMogramModal('Encerrar Live', 'Tem certeza que deseja encerrar a transmissão? Esta ação não pode ser desfeita.', () => {
+            // Stop all media tracks
+            if (window.localStream) {
+                window.localStream.getTracks().forEach(t => t.stop());
+            }
+            fetch('{{ route('live.destroy', $live->id) }}', {
+                method: 'DELETE',
+                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
+            }).then(() => window.location.href = '/lives');
+        });
     }
+
+    // AUTO-START: If the current user is the creator, auto-start the camera on page load
+    document.addEventListener('DOMContentLoaded', () => {
+        if (IS_CREATOR) {
+            // Small delay to ensure DOM is fully ready
+            setTimeout(() => startCamera(), 500);
+        } else {
+            // For viewers, start chat polling immediately
+            startChatPolling();
+        }
+    });
 </script>
 
 <style>
