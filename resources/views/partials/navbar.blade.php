@@ -42,7 +42,7 @@
                     </div>
                 </div>
             @else
-                <a href="{{ route('login') }}" class="text-white text-sm font-bold nav-login-desktop">Entrar</a>
+                <a href="{{ route('login') }}" class="text-white text-sm font-bold nav-login-desktop" style="margin-right: 0.75rem;">Entrar</a>
                 <a href="{{ route('register') }}" class="mogram-btn-primary" style="padding: 0.6rem 1.2rem; font-size: 13px;">Começar</a>
             @endauth
 
