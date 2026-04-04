@@ -135,7 +135,7 @@
                         <div style="background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">AO VIVO</div>
                         <div style="background: rgba(0,0,0,0.5); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> 
-                            <span id="viewer_count">124</span>
+                            <span id="viewer_count">{{ count($messages->unique('user_id')) }}</span>
                         </div>
                         @if(Auth::id() == $live->user_id)
                             <div style="background: rgba(51, 144, 236, 0.2); color: #3390ec; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; border: 1px solid #3390ec;">
