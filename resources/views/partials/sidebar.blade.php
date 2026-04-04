@@ -1,5 +1,5 @@
 <aside class="sidebar" id="mogram_sidebar">
-    <div class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; padding: 0 1rem 3rem;">
+    <div class="sidebar-logo desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0 1rem 3rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
             <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
             <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
