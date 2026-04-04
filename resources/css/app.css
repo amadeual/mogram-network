@@ -677,9 +677,10 @@ section { padding: 4rem 0; }
     height: 100vh;
     position: fixed;
     border-right: 1px solid var(--border-gray);
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
     display: flex;
     flex-direction: column;
+    overflow-y: auto;
 }
 
 .main-content {
