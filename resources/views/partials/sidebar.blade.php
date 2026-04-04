@@ -1,4 +1,4 @@
-<aside class="sidebar">
+<aside class="sidebar" id="mogram_sidebar">
     <div class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; padding: 0 1rem 3rem;">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
             <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -61,3 +61,9 @@
         </form>
     </div>
 </aside>
+
+<!-- Mobile Menu Toggle & Overlay -->
+<button class="mobile-menu-toggle" onclick="document.getElementById('mogram_sidebar').classList.toggle('active')">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+<div class="sidebar-overlay" onclick="document.getElementById('mogram_sidebar').classList.remove('active')"></div>
