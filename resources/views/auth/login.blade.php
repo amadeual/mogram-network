@@ -16,11 +16,11 @@
             Mogram Premium
         </div>
         
-        <h1 style="font-size: 3.5rem; font-weight: 800; line-height: 1.1; margin-bottom: 2rem;">
+        <h1 style="font-size: clamp(2rem, 3.5vw, 2.75rem); font-weight: 800; line-height: 1.2; margin-bottom: 1.5rem;">
             Monetize seu conteúdo <span class="grad-text">exclusivo</span> com simplicidade.
         </h1>
         
-        <p class="text-light" style="font-size: 1.125rem; max-width: 450px; margin-bottom: 3rem;">
+        <p class="text-light" style="font-size: clamp(0.95rem, 1.5vw, 1.05rem); max-width: 450px; margin-bottom: 2.5rem; line-height: 1.6;">
             Junte-se a milhares de criadores que estão transformando sua paixão em receita recorrente. Controle total, análises em tempo real e pagamentos seguros.
         </p>
         
