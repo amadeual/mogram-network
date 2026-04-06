@@ -22,7 +22,20 @@ class FeedController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('dashboard', compact('posts'));
+        // Get active stories from followed users + own
+        $followingIds = auth()->user()->following()->pluck('users.id')->toArray();
+        $followingIds[] = auth()->id();
+
+        $activeStories = collect();
+        if (\Illuminate\Support\Facades\Schema::hasTable('stories')) {
+            $activeStories = \App\Models\Story::whereIn('user_id', $followingIds)
+                ->where('expires_at', '>', now())
+                ->with('user')
+                ->get()
+                ->groupBy('user_id');
+        }
+
+        return view('dashboard', compact('posts', 'activeStories'));
     }
 
     public function toggleLike(Post $post)

@@ -110,7 +110,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/lives/{live}', [LiveController::class, 'destroy'])->name('live.destroy');
     
     // Placeholder for other features
-    Route::get('/stories', function () { return view('stories'); })->name('stories');
+    // Stories Routes
+    Route::get('/stories', [App\Http\Controllers\StoryController::class, 'index'])->name('stories');
+    Route::post('/stories/store', [App\Http\Controllers\StoryController::class, 'store'])->name('stories.store');
+    Route::post('/stories/{story}/view', [App\Http\Controllers\StoryController::class, 'markAsViewed'])->name('stories.view');
 
     // Download Route
     Route::get('/download/{id}', [DownloadController::class, 'download'])->name('post.download');

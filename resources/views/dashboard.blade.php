@@ -60,30 +60,33 @@
         </style>
 
         <div class="feed-container">
-            <!-- Stories -->
-            <div class="stories-bar">
-                <div class="story-circle">
-                    <div class="story-avatar-wrapper empty" style="position: relative;">
-                        <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" class="story-avatar">
-                        <div style="position: absolute; bottom: -2px; right: -2px; width: 22px; height: 22px; background: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #0b0a15;">
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            <!-- Dynamic Stories Bar -->
+            <div class="stories-bar" style="display: flex; gap: 1rem; padding: 1rem 0; overflow-x: auto; scrollbar-width: none;">
+                <!-- Add Own Story -->
+                <div class="story-circle" style="text-align: center; cursor: pointer; flex-shrink: 0;" onclick="document.getElementById('create-story-input').click()">
+                    <div class="story-avatar-wrapper empty" style="position: relative; width: 62px; height: 62px; border-radius: 50%; padding: 3px; background: rgba(255,255,255,0.05); margin-bottom: 5px;">
+                        @if(auth()->user()->avatar)
+                            <img src="{{ Storage::url(auth()->user()->avatar) }}" class="story-avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        @else
+                            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" class="story-avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">
+                        @endif
+                        <div style="position: absolute; bottom: 2px; right: 2px; width: 18px; height: 18px; background: var(--primary-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #0b0a15;">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                         </div>
                     </div>
-                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Seu Story</span>
+                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Seu Story</span>
+                    <input type="file" id="create-story-input" style="display: none;" accept="image/*,video/*" onchange="uploadStory(this)">
                 </div>
-                <div class="story-circle">
-                    <div class="story-avatar-wrapper">
-                        <img src="{{ asset('images/creators/ana.png') }}" class="story-avatar">
-                    </div>
-                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Ana Clara</span>
-                </div>
-                <div class="story-circle">
-                    <div class="story-avatar-wrapper">
-                        <img src="{{ asset('images/creators/marcos.png') }}" class="story-avatar">
-                    </div>
-                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">João M.</span>
-                </div>
-                <!-- ... More stories -->
+
+                @foreach($activeStories as $userId => $userStories)
+                    @php $user = $userStories->first()->user; @endphp
+                    <a href="{{ route('stories') }}" class="story-circle" style="text-align: center; cursor: pointer; flex-shrink: 0; text-decoration: none;">
+                        <div class="story-avatar-wrapper" style="width: 62px; height: 62px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); margin-bottom: 5px;">
+                            <img src="{{ $user->avatar ? Storage::url($user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $user->name }}" class="story-avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #0b0a15;">
+                        </div>
+                        <span style="font-size: 11px; color: white; font-weight: 700;">{{ Str::limit($user->name, 8) }}</span>
+                    </a>
+                @endforeach
             </div>
 
             <!-- Dynamic Posts Feed -->
@@ -472,6 +475,38 @@
             input.disabled = false;
             delete submittingPosts[postId];
             showToast('Erro ao enviar', 'error');
+        });
+    }
+
+    function uploadStory(input) {
+        if (!input.files || !input.files[0]) return;
+        
+        const file = input.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('_token', '{{ csrf_token() }}');
+
+        showToast('Enviando story...');
+
+        fetch("{{ route('stories.store') }}", {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast('Story publicado com sucesso!');
+                setTimeout(() => window.location.reload(), 1500);
+            } else {
+                showToast(data.message || 'Erro ao publicar story', 'error');
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            showToast('Erro técnico ao publicar', 'error');
         });
     }
 
