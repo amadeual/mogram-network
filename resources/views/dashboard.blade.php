@@ -116,9 +116,13 @@
                                     <p style="font-size: 14px; font-weight: 800; color: white; margin-bottom: 2px;">Documento PDF</p>
                                     <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Seu acesso exclusivo está liberado</p>
                                 </div>
+                                @php
+                                    $ext = pathinfo($post->file_path, PATHINFO_EXTENSION);
+                                    $safeName = \Illuminate\Support\Str::slug($post->title ?: 'mogram') . '.' . ($ext ?: 'pdf');
+                                @endphp
                                 <div style="display: flex; gap: 0.75rem;">
                                     <a href="{{ Storage::url($post->file_path) }}" target="_blank" class="mogram-btn-secondary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Visualizar</a>
-                                    <a href="{{ Storage::url($post->file_path) }}" download class="mogram-btn-primary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white;">Baixar</a>
+                                    <a href="{{ Storage::url($post->file_path) }}" download="{{ $safeName }}" class="mogram-btn-primary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white;">Baixar</a>
                                 </div>
                             </div>
                         @endif

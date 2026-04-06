@@ -188,7 +188,10 @@ class StudioController extends Controller
         $post->category = $request->category;
 
         if ($request->hasFile('file')) {
-            $path = $request->file('file')->store('posts', 'public');
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '_' . uniqid() . '.' . $extension;
+            $path = $file->storeAs('posts', $fileName, 'public');
             $post->file_path = $path;
         }
 
@@ -229,7 +232,10 @@ class StudioController extends Controller
             if ($post->file_path) {
                 Storage::disk('public')->delete($post->file_path);
             }
-            $path = $request->file('file')->store('posts', 'public');
+            $file = $request->file('file');
+            $extension = $file->getClientOriginalExtension();
+            $fileName = time() . '_' . uniqid() . '.' . $extension;
+            $path = $file->storeAs('posts', $fileName, 'public');
             $post->file_path = $path;
         }
 
