@@ -8,6 +8,8 @@ use App\Http\Controllers\LiveController;
 use App\Http\Controllers\StudioController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\FeedController;
+use App\Http\Controllers\WalletController;
+use App\Http\Controllers\ChatController;
 
 /*
 |--------------------------------------------------------------------------
