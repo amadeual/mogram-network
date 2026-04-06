@@ -232,7 +232,7 @@ class StudioController extends Controller
     {
         $request->validate([
             'title' => 'nullable|string|max:255',
-            'description' => 'required|string|max:2200',
+            'description' => 'required|string|max:50000',
             'type' => 'required|in:video,image,pdf,stories',
             'price' => $request->is_paid ? 'required|numeric|min:5' : 'nullable|numeric|min:0',
             'file' => 'required|file|max:51200',
@@ -290,7 +290,7 @@ class StudioController extends Controller
 
         $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'nullable|string|max:2200',
+            'description' => 'nullable|string|max:50000',
             'type' => 'required|in:video,image,pdf,stories',
             'price' => 'nullable|numeric|min:0',
             'file' => 'nullable|file|max:51200',
