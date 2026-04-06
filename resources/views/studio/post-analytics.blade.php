@@ -63,10 +63,10 @@
                     <div style="width: 36px; height: 36px; background: rgba(51, 144, 236, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #3390ec;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                     </div>
-                    <span style="color: #22c55e; font-size: 11px; font-weight: 800;">+12%</span>
+                    <span style="color: #22c55e; font-size: 11px; font-weight: 800;">Ativo</span>
                 </div>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 0.5rem;">Visualizações</p>
-                <h3 style="font-size: 2rem; font-weight: 950; color: white;">12.430</h3>
+                <h3 style="font-size: 2rem; font-weight: 950; color: white;">{{ number_format($post->views, 0, ',', '.') }}</h3>
             </div>
             
             <div class="premium-metric-card" style="--accent-color: #22c55e;">
@@ -74,10 +74,10 @@
                     <div style="width: 36px; height: 36px; background: rgba(34, 197, 94, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #22c55e;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                     </div>
-                    <span style="color: #22c55e; font-size: 11px; font-weight: 800;">+5.2%</span>
+                    <span style="color: #22c55e; font-size: 11px; font-weight: 800;">Receita</span>
                 </div>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 0.5rem;">Total Ganho</p>
-                <h3 style="font-size: 2rem; font-weight: 950; color: #22c55e;"><span style="font-size: 1.25rem;">R$</span> 2.850,00</h3>
+                <h3 style="font-size: 2rem; font-weight: 950; color: #22c55e;"><span style="font-size: 1.25rem;">R$</span> {{ number_format($post->purchases()->sum('amount'), 2, ',', '.') }}</h3>
             </div>
 
             <div class="premium-metric-card" style="--accent-color: #a855f7;">
@@ -85,10 +85,10 @@
                     <div style="width: 36px; height: 36px; background: rgba(168, 85, 247, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </div>
-                    <span style="color: #22c55e; font-size: 11px; font-weight: 800;">+18%</span>
+                    <span style="color: #22c55e; font-size: 11px; font-weight: 800;">Vendas</span>
                 </div>
                 <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 0.5rem;">Desbloqueios</p>
-                <h3 style="font-size: 2rem; font-weight: 950; color: white;">412</h3>
+                <h3 style="font-size: 2rem; font-weight: 950; color: white;">{{ $post->purchases()->count() }}</h3>
             </div>
 
             <div class="premium-metric-card" style="--accent-color: #f59e0b;">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
                 <div style="height: 250px; display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem; padding: 0 1rem;">
-                    @php $heights = [30, 45, 60, 70, 65, 90, 80, 75]; @php
+                    @php $heights = [30, 45, 60, 70, 65, 90, 80, 75]; @endphp
                     @foreach(['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SÁB', 'DOM', 'HOJE'] as $i => $day)
                     <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
                         <div style="width: 100%; height: {{ $heights[$i] }}%; background: {{ $day == 'SÁB' ? 'var(--primary-blue)' : 'rgba(51, 144, 236, 0.15)' }}; border-radius: 8px; position: relative; transition: 0.3s;" onmouseover="this.style.background='var(--primary-blue)'" onmouseout="this.style.background='{{ $day == 'SÁB' ? 'var(--primary-blue)' : 'rgba(51, 144, 236, 0.15)' }}'"></div>
