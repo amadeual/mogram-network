@@ -32,27 +32,27 @@
                     
                     <!-- Core Info Card -->
                     <div class="glass-editor-card">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-                            <div style="width: 36px; height: 36px; background: rgba(51, 144, 236, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
+                            <div style="width: 32px; height: 32px; background: rgba(51, 144, 236, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                             </div>
-                            <h3 style="font-size: 1.1rem; font-weight: 800; color: white;">Informações Gerais</h3>
+                            <h3 style="font-size: 1rem; font-weight: 800; color: white;">Informações Gerais</h3>
                         </div>
 
                         <!-- Title Input -->
-                        <div style="margin-bottom: 1.25rem;">
+                        <div style="margin-bottom: 1rem;">
                             <label class="premium-label">Título da Transmissão</label>
                             <input type="text" name="title" required maxlength="100" placeholder="Ex: Show Acústico Exclusivo para Fãs! 🎸" class="mogram-input-v2">
                         </div>
 
                         <!-- Description Input -->
-                        <div style="margin-bottom: 1.25rem;">
+                        <div style="margin-bottom: 1rem;">
                             <label class="premium-label">Descrição (O que esperar?)</label>
-                            <textarea name="description" required maxlength="1000" placeholder="Diga ao seu público sobre o que será a live..." class="mogram-input-v2" style="min-height: 100px; resize: vertical;"></textarea>
+                            <textarea name="description" required maxlength="1000" placeholder="Diga ao seu público sobre o que será a live..." class="mogram-input-v2" style="min-height: 80px; resize: none;"></textarea>
                         </div>
 
                         <!-- Dynamic Category Select -->
-                        <div style="margin-bottom: 0.5rem;">
+                        <div>
                             <label class="premium-label">Categoria do Conteúdo</label>
                             <div style="position: relative;">
                                 <select name="category" required class="mogram-select-v2">
@@ -230,8 +230,8 @@
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1.5px solid rgba(255, 255, 255, 0.05);
-        border-radius: 18px;
-        padding: 1.25rem;
+        border-radius: 16px;
+        padding: 1rem;
         transition: 0.3s ease;
     }
 
@@ -249,11 +249,11 @@
         width: 100%;
         background: rgba(0, 0, 0, 0.2);
         border: 1.5px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 1rem 1.25rem;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
         color: white;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.9rem;
         outline: none;
         transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
@@ -264,11 +264,11 @@
         width: 100%;
         background: #1a1c2e;
         border: 1.5px solid rgba(255, 255, 255, 0.08);
-        border-radius: 12px;
-        padding: 1rem 1.25rem;
+        border-radius: 10px;
+        padding: 0.75rem 1rem;
         color: white;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.9rem;
         outline: none;
         appearance: none;
         cursor: pointer;
