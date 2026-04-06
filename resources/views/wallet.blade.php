@@ -33,76 +33,77 @@
             </div>
         @endif
 
-        <div style="display: flex; flex-wrap: wrap; gap: 2rem; align-items: flex-start; margin-bottom: 3.5rem;">
-            <!-- Credit Card Style (Match Finance) -->
-            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 2rem; width: 380px; max-width: 100%; aspect-ratio: 1.6 / 1; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); border: 1.5px solid rgba(255,255,255,0.1); position: relative; overflow: hidden;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; margin-bottom: 3.5rem;">
+            <!-- Credit Card Style (Compact & Elegant) -->
+            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 1.75rem; position: relative; box-shadow: 0 15px 40px rgba(18, 97, 209, 0.3); border: 1.5px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 210px;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                    <div style="width: 40px; height: 30px; background: rgba(255,255,255,0.15); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);"></div>
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <svg width="20" height="20" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="white" opacity="0.2"/><path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" /></svg>
-                        <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px;">MOGRAM</span>
+                    <div style="font-size: 28px;">💰</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg width="24" height="24" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="white" opacity="0.2"/><path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" /></svg>
+                        <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px; opacity: 0.9;">MOGRAM</span>
                     </div>
                 </div>
 
                 <div>
-                    <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">Saldo Disponível</p>
-                    <h2 style="font-size: 2.2rem; font-weight: 950; color: white; letter-spacing: -1.5px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
+                    <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.25rem;">SALDO ATUAL</p>
+                    <h2 style="font-size: 2.1rem; font-weight: 950; color: white; letter-spacing: -1.5px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <p style="font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 2px;">**** **** **** {{ Auth::id() }}</p>
-                    <button onclick="openDepositModal()" style="background: white; border: none; padding: 8px 16px; border-radius: 100px; color: #1261d1; font-size: 12px; font-weight: 900; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
-                        Adicionar Saldo
-                    </button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                     <p style="font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 3px; font-family: monospace;">**** {{ str_pad(Auth::id(), 4, '0', STR_PAD_LEFT) }}</p>
+                     <div style="font-size: 22px; opacity: 0.8;">💳</div>
                 </div>
 
-                <!-- Absolute decorative glow -->
-                <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: white; filter: blur(80px); opacity: 0.15;"></div>
+                <!-- Decorative glow -->
+                <div style="position: absolute; top: -10%; right: -10%; width: 50%; height: 50%; background: white; filter: blur(70px); opacity: 0.12;"></div>
             </div>
 
-            <!-- Quick Stats / Cards Style -->
-            <div style="flex: 1; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                <div class="premium-finance-card" onclick="openDepositModal()" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem; transition: all 0.4s; cursor: pointer;">
-                    <div style="width: 44px; height: 44px; background: rgba(51, 144, 236, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin-bottom: 1.5rem;">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
-                    </div>
-                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Recarga Rápida</p>
-                    <h4 style="font-size: 1.2rem; font-weight: 950; color: white;">Via PIX / Cartão</h4>
+            <!-- Quick Add Saldo (Optimized Size) -->
+            <div class="premium-finance-card" onclick="openDepositModal()" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 28px; padding: 2rem; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; height: 210px; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden;">
+                <div style="width: 60px; height: 60px; background: rgba(34, 197, 94, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; margin-bottom: 1rem; box-shadow: 0 10px 25px rgba(34, 197, 94, 0.1);">
+                    💸
+                </div>
+                <h3 style="font-size: 20px; font-weight: 950; color: white; margin-bottom: 0.25rem; letter-spacing: -0.5px;">Recarga Rápida</h3>
+                <p style="color: var(--text-muted); font-size: 14px; font-weight: 700; opacity: 0.8;">Adicionar saldo via PIX / Cartão</p>
+                
+                <!-- Small action indicator -->
+                <div style="background: #22c55e; color: white; font-size: 10px; font-weight: 950; padding: 4px 10px; border-radius: 6px; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                    AGORA
                 </div>
             </div>
         </div>
 
-        <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 1.5rem;">Histórico de Transações</h3>
+        <h3 style="font-size: 1.4rem; font-weight: 950; color: white; margin-bottom: 1.5rem; letter-spacing: -0.5px;">Histórico de Transações</h3>
         
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
             @forelse($history as $item)
-            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
+            <div class="transaction-item" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; cursor: default;">
+                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                    <div style="width: 52px; height: 52px; background: {{ $item['direction'] == 'in' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
                         @if($item['direction'] == 'in')
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            <span style="font-size: 20px;">💵</span>
                         @else
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/></svg>
+                            <span style="font-size: 20px;">🛍️</span>
                         @endif
                     </div>
                     <div>
-                        <h4 style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 3px;">{{ $item['type'] }}</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">{{ $item['description'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
+                        <h4 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 4px; letter-spacing: -0.3px;">{{ $item['type'] }}</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">{{ $item['description'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
                     </div>
                 </div>
                 <div style="text-align: right;">
-                    <p style="font-size: 16px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
+                    <p style="font-size: 17px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }}; letter-spacing: -0.5px;">
                         {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
                     </p>
-                    <p style="font-size: 10px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</p>
+                    <div style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 6px; margin-top: 6px;">
+                        <span style="font-size: 9px; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'var(--text-muted)' }}; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</span>
+                    </div>
                 </div>
             </div>
             @empty
-            <div style="text-align: center; padding: 4rem 2rem; background: rgba(255,255,255,0.01); border-radius: 32px; border: 2px dashed rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1rem;">
-                <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.03); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.1);">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
-                </div>
-                <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Nenhuma transação registrada.</p>
+            <div style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.01); border-radius: 32px; border: 2px dashed rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1.25rem;">
+                <div style="font-size: 48px; opacity: 0.2;">📭</div>
+                <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Você ainda não possui transações registradas.</p>
             </div>
             @endforelse
         </div>
@@ -115,20 +116,20 @@
                 </button>
 
                 <div style="text-align: center; margin-bottom: 2rem;">
-                    <div style="width: 64px; height: 64px; background: rgba(51, 144, 236, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin: 0 auto 1.5rem;">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12H3"/><path d="M12 3v18"/><path d="M5 20h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2z"/></svg>
+                    <div style="width: 72px; height: 72px; background: rgba(51, 144, 236, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 1.5rem;">
+                        🪙
                     </div>
                     <h2 style="font-size: 24px; font-weight: 950; color: white; letter-spacing: -0.5px; margin-bottom: 0.5rem;">Adicionar Saldo</h2>
-                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Complete os dados para gerar o pagamento.</p>
+                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Recarga via PIX e Cartão</p>
                 </div>
 
                 <form action="{{ route('wallet.deposit') }}" method="POST">
                     @csrf
                     <div style="margin-bottom: 1.5rem;">
-                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 0.25rem 1rem;">
-                            <span style="font-size: 18px; font-weight: 950; color: var(--text-muted); margin-right: 0.75rem;">R$</span>
+                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 0.25rem 1.25rem;">
+                            <span style="font-size: 20px; font-weight: 950; color: var(--text-muted); margin-right: 0.75rem;">R$</span>
                             <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" required
-                                   style="background: transparent; border: none; padding: 1rem 0; color: white; outline: none; width: 100%; font-size: 20px; font-weight: 950;">
+                                   style="background: transparent; border: none; padding: 1.25rem 0; color: white; outline: none; width: 100%; font-size: 22px; font-weight: 950;">
                         </div>
                         <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px; font-weight: 700; margin-left: 0.5rem;">Valor mínimo: R$ 10,00</p>
                     </div>
@@ -137,23 +138,23 @@
                         <input type="text" id="cpfInput" name="taxId" placeholder="CPF (somente números)" required
                                maxlength="11"
                                oninput="validateCPF(this)"
-                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
-                        <span id="cpfError" style="color: #ef4444; font-size: 11px; font-weight: 700; margin-top: 4px; display: none;">CPF Inválido</span>
+                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.9rem 1.25rem; color: white; outline: none; width: 100%; font-size: 14px; font-weight: 700;">
+                        <span id="cpfError" style="color: #ef4444; font-size: 11px; font-weight: 700; margin-top: 5px; display: none; margin-left: 0.5rem;">CPF Inválido</span>
                     </div>
 
-                    <div style="margin-bottom: 1.5rem;">
+                    <div style="margin-bottom: 2rem;">
                         <input type="text" name="cellphone" placeholder="Celular (ex: 11999999999)" required
                                pattern="[0-9]{10,11}" title="O Celular deve conter o DDD seguido de 8 ou 9 números."
-                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
+                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.9rem 1.25rem; color: white; outline: none; width: 100%; font-size: 14px; font-weight: 700;">
                     </div>
 
-                    <button type="submit" id="submitDeposit" class="mogram-btn-primary" style="width: 100%; padding: 1.25rem; border-radius: 16px; font-weight: 950; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        Continuar para Pagamento
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+                    <button type="submit" id="submitDeposit" class="mogram-btn-primary" style="width: 100%; padding: 1.5rem; border-radius: 20px; font-weight: 950; font-size: 18px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3);">
+                        Gerar Pagamento
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
                     
-                    <p style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 1.5rem; font-weight: 700; opacity: 0.7;">
-                        Pagamento processado com segurança por Abacate Pay.
+                    <p style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 1.5rem; font-weight: 850; opacity: 0.7;">
+                        Pagamento processado com segurança por <span style="color: #22c55e;">Abacate Pay</span>.
                     </p>
                 </form>
             </div>
@@ -215,6 +216,11 @@
     }
     #depositModal {
         transition: opacity 0.3s ease-in-out;
+    }
+    .transaction-item:hover {
+        background: rgba(255,255,255,0.04) !important;
+        border-color: rgba(255,255,255,0.1) !important;
+        transform: translateY(-3px);
     }
 </style>
 @endsection
