@@ -102,6 +102,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lives/create', [LiveController::class, 'create'])->name('live.create');
     Route::post('/lives/store', [LiveController::class, 'store'])->name('live.store');
     Route::get('/lives/{live}', [LiveController::class, 'watch'])->name('live.watch');
+    Route::post('/lives/{live}/start', [LiveController::class, 'start'])->name('live.start');
+    Route::get('/lives/{live}/status', [LiveController::class, 'status'])->name('live.status');
     Route::post('/lives/{live}/chat', [LiveController::class, 'sendMessage'])->name('live.chat');
     Route::get('/lives/{live}/messages', [LiveController::class, 'getMessages'])->name('live.messages');
     Route::post('/lives/{live}/gift', [LiveController::class, 'sendGift'])->name('live.gift');

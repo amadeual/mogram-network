@@ -87,7 +87,7 @@
                 <div id="video_layers" style="position: absolute; inset: 0;">
                     
                     <!-- 1. Video System (Active Stream) -->
-                    <div id="video_wrapper" style="width: 100%; height: 100%; display: none; gap: 4px;">
+                    <div id="video_wrapper" style="width: 100%; height: 100%; display: {{ $live->status == 'online' ? 'flex' : 'none' }}; gap: 4px;">
                         <div id="main_video_slot" style="flex: 1; height: 100%; position: relative; background: #000;">
                             <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
@@ -106,7 +106,7 @@
                     </div>
 
                     <!-- 2. Offline / Start Prompt Layer -->
-                    <div id="offline_view" style="width: 100%; height: 100%; position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div id="offline_view" style="width: 100%; height: 100%; position: absolute; inset: 0; display: {{ $live->status == 'online' && Auth::id() != $live->user_id ? 'none' : 'flex' }}; flex-direction: column; align-items: center; justify-content: center;">
                         <img src="{{ Storage::url($live->thumbnail) }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3;">
                         <div style="position: relative; z-index: 5; text-align: center;">
                             @if(Auth::id() == $live->user_id)
@@ -258,6 +258,13 @@
 
         if (typeof hideMogramLoader === 'function') hideMogramLoader();
         showToast('Câmera iniciada! Você está ao vivo.', 'success');
+        
+        // Signal server that we are online
+        fetch('{{ route('live.start', $live->id) }}', {
+            method: 'POST',
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
+        });
+
         startChatPolling();
     }
 
@@ -372,6 +379,20 @@
                 if(data.success) document.getElementById('chat_messages').innerHTML = data.html;
             }).catch(() => {});
         }, 3000);
+
+        if (!IS_CREATOR) {
+            setInterval(checkLiveStatus, 5000);
+        }
+    }
+
+    function checkLiveStatus() {
+        fetch('{{ route('live.status', $live->id) }}')
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'online') {
+                window.location.reload();
+            }
+        }).catch(() => {});
     }
 
     function sendChatMessage() {

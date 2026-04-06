@@ -68,7 +68,7 @@ class LiveController extends Controller
             'thumbnail' => $thumbnailPath,
             'is_free' => $request->is_free,
             'price' => $request->is_free ? 0 : $request->price,
-            'status' => 'online',
+            'status' => 'preparing',
             'started_at' => now()
         ]);
 
@@ -121,6 +121,24 @@ class LiveController extends Controller
         $live->delete();
 
         return response()->json(['success' => true]);
+    }
+
+    public function start(Live $live)
+    {
+        if (Auth::id() != $live->user_id) {
+            return response()->json(['success' => false], 403);
+        }
+
+        $live->update(['status' => 'online']);
+        return response()->json(['success' => true]);
+    }
+
+    public function status(Live $live)
+    {
+        return response()->json([
+            'success' => true,
+            'status' => $live->status
+        ]);
     }
 
     public function sendMessage(Request $request, Live $live)
