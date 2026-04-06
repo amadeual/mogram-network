@@ -107,9 +107,9 @@ class WalletController extends Controller
     public function deposit(Request $request)
     {
         $request->validate([
-            'amount' => 'required|numeric|min:10',
-            'taxId' => 'required|string|size:11',
-            'cellphone' => 'required|string|min:10|max:11',
+            'amount' => 'required|numeric|min:10|max:5000',
+            'taxId' => 'required|string|min:11|max:14',
+            'cellphone' => 'required|string',
         ], [
             'taxId.size' => 'O CPF deve ter exatamente 11 números.',
             'taxId.required' => 'O CPF é obrigatório.',

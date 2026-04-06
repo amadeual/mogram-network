@@ -133,10 +133,13 @@
                     <div style="margin-bottom: 1.5rem;">
                         <div style="display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 0.25rem 1.25rem;">
                             <span style="font-size: 20px; font-weight: 950; color: var(--text-muted); margin-right: 0.75rem;">R$</span>
-                            <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" required
+                            <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" max="5000" required
                                    style="background: transparent; border: none; padding: 1.25rem 0; color: white; outline: none; width: 100%; font-size: 22px; font-weight: 950;">
                         </div>
-                        <p style="font-size: 11px; color: var(--text-muted); margin-top: 8px; font-weight: 700; margin-left: 0.5rem;">Valor mínimo: R$ 10,00</p>
+                        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                            <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Mín: R$ 10,00</p>
+                            <p style="font-size: 11px; color: #ef4444; font-weight: 700;">Máx: R$ 5.000,00</p>
+                        </div>
                     </div>
 
                     <div style="margin-bottom: 1rem;">
