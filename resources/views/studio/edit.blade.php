@@ -20,7 +20,17 @@
         </header>
 
         <div class="studio-body" style="padding: 0 3rem 3rem;">
-            <form action="{{ route('studio.update', $post->id) }}" method="POST" enctype="multipart/form-data" 
+            @if($errors->any())
+            <div style="background: rgba(239,68,68,0.1); border: 1.5px solid rgba(239,68,68,0.2); border-radius: 16px; padding: 1rem 1.5rem; color: #ef4444; font-weight: 800; font-size: 14px; margin-bottom: 2rem;">
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <form action="{{ route('studio.update', $post->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateAndSync()"
                   class="studio-grid-custom studio-card-pad" style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem; display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem;">
                 @csrf
                 @method('PUT')
@@ -99,7 +109,7 @@
                             <p style="font-size: 12px; color: var(--text-muted);" id="file-status-subtitle">Atual: {{ basename($post->file_path) }}</p>
                         </div>
 
-                        <div id="thumbnail_section" style="{{ in_array($post->type, ['video', 'pdf']) ? 'display: block;' : 'display: none;' }} border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; margin-top: 1rem;">
+                        <div id="thumbnail_section" style="display: block; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; margin-top: 1rem;">
                             <label style="font-size: 13px; font-weight: 800; color: white; display: flex; align-items: center; gap: 8px; margin-bottom: 1rem;">
                                 <div style="width: 4px; height: 16px; background: #a855f7; border-radius: 2px;"></div>
                                 Capa do Conteúdo (Thumbnail)
@@ -209,12 +219,29 @@
                 let text = editor.innerText;
                 if (text.length > 2200) {
                     editor.innerText = text.substring(0, 2200);
-                    // Reset cursor
                 }
                 descriptionInput.value = editor.innerHTML;
                 updateCharCount();
             }
         }
+
+        window.validateAndSync = function() {
+            // First sync to get latest text
+            window.syncEditor();
+            
+            const title = document.querySelector('input[name="title"]').value.trim();
+            const description = descriptionInput.value.trim();
+            
+            let errors = [];
+            if(!title) errors.push("O Título é obrigatório.");
+            if(!description || description === "<br>") errors.push("A Legenda/Descrição é obrigatória.");
+            
+            if(errors.length > 0) {
+                alert("Ops! Verifique os seguintes campos:\n\n- " + errors.join("\n- "));
+                return false;
+            }
+            return true;
+        };
 
         function updateCharCount() {
             if (editor) {

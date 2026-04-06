@@ -142,7 +142,7 @@
                             <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">ou <span style="color: #3390ec;">clique para procurar</span> no computador</p>
                         </div>
 
-                        <div id="thumbnail_section" style="display: none; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 2rem;">
+                        <div id="thumbnail_section" style="display: block; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 2rem;">
                             <div style="display: flex; align-items: center; gap: 12px; color: white; margin-bottom: 1.5rem;">
                                 <div style="width: 32px; height: 32px; background: rgba(168, 85, 247, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
