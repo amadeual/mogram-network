@@ -84,4 +84,54 @@ class FeedController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function unlockPost(Post $post)
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Check if already purchased
+        if ($post->isPurchasedBy($user)) {
+            return response()->json(['success' => true, 'message' => 'Conteúdo já desbloqueado!']);
+        }
+
+        // Check balance
+        if ($user->balance < $post->price) {
+            return response()->json([
+                'success' => false, 
+                'error' => 'Saldo insuficiente!',
+                'balance' => $user->balance,
+                'price' => $post->price,
+                'message' => 'Seu saldo atual é R$ ' . number_format($user->balance, 2, ',', '.') . '. Faça um depósito para desbloquear este conteúdo exclusivo.'
+            ], 402);
+        }
+
+        // Process purchase
+        try {
+            \Illuminate\Support\Facades\DB::transaction(function() use ($user, $post) {
+                // Debit buyer
+                $user->decrement('balance', $post->price);
+                
+                // Credit seller (creator)
+                $creator = $post->user;
+                $creator->increment('balance', $post->price);
+
+                // Record purchase
+                \App\Models\Purchase::create([
+                    'user_id' => $user->id,
+                    'post_id' => $post->id,
+                    'amount' => $post->price
+                ]);
+            });
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Conteúdo desbloqueado com sucesso!',
+                'new_balance' => $user->fresh()->balance
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => 'Erro ao processar a compra. Tente novamente.'], 500);
+        }
+    }
 }

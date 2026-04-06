@@ -83,7 +83,10 @@
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                             </div>
                             <p style="font-size: 12px; font-weight: 900; color: white; margin-bottom: 1rem;">Conteúdo Exclusivo</p>
-                            <button class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 12px;">Desbloquear R$ {{ number_format($post->price, 2, ',', '.') }}</button>
+                            <form onsubmit="unlockPost(event, '{{ $post->id }}', '{{ $post->price }}')" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 12px;">Desbloquear R$ {{ number_format($post->price, 2, ',', '.') }}</button>
+                            </form>
                         </div>
                     @else
                         @if($post->type == 'video')
@@ -398,6 +401,46 @@
                     } else {
                         showToast(data.error || 'Erro ao excluir', 'error');
                     }
+                });
+            }
+        );
+    }
+
+    function unlockPost(e, postId, price) {
+        e.preventDefault();
+        
+        openMogramModal(
+            'Desbloquear Conteúdo?', 
+            `Deseja usar R$ ${parseFloat(price).toLocaleString('pt-BR', {minimumFractionDigits: 2})} do seu saldo para desbloquear este conteúdo?`,
+            () => {
+                fetch(`/posts/${postId}/unlock`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message);
+                        setTimeout(() => window.location.reload(), 1500);
+                    } else {
+                        if (data.error === 'Saldo insuficiente!') {
+                            openMogramModal(
+                                'Saldo Insuficiente',
+                                data.message,
+                                () => { window.location.href = '#'; }, // Redirect to deposit if page exists
+                                'Depositar Agora'
+                            );
+                        } else {
+                            showToast(data.error || 'Erro ao processar', 'error');
+                        }
+                    }
+                })
+                .catch(err => {
+                    showToast('Ocorreu um erro técnico. Tente novamente.', 'error');
                 });
             }
         );

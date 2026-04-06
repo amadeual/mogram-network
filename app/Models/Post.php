@@ -53,4 +53,9 @@ class Post extends Model
     {
         return $this->hasMany(Purchase::class);
     }
+
+    public function isPurchasedBy(User $user)
+    {
+        return $this->purchases()->where('user_id', $user->id)->exists();
+    }
 }

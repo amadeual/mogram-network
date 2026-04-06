@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');
     Route::post('/posts/{post}/like', [FeedController::class, 'toggleLike'])->name('posts.like');
     Route::post('/posts/{post}/comments', [FeedController::class, 'storeComment'])->name('posts.comment');
+    Route::post('/posts/{post}/unlock', [FeedController::class, 'unlockPost'])->name('posts.unlock');
     Route::delete('/comments/{comment}', [FeedController::class, 'deleteComment'])->name('comments.delete');
 
     Route::get('/creator/ana', function () {
