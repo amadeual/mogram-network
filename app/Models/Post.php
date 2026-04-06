@@ -53,7 +53,7 @@ class Post extends Model
     {
         $likesCount = $this->likes()->count();
         $commentsCount = $this->comments()->count();
-        return $likesCount + $commentsCount + $this->views + $this->shares;
+        return $likesCount + $commentsCount;
     }
 
     public function incrementViews()
