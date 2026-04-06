@@ -8,7 +8,7 @@
     @include('partials.sidebar')
 
     <!-- Main Create Area -->
-    <main class="main-content" style="padding: 1.25rem; max-width: 1100px; margin: 0 auto;">
+    <main class="main-content" style="padding: 1rem 1.5rem;">
         
         <!-- Header Section -->
         <header style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem;">
