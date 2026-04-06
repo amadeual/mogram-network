@@ -131,6 +131,13 @@ class FeedController extends Controller
                 } catch (\Exception $e) {
                     \Log::error('Erro ao enviar email de compra: ' . $e->getMessage());
                 }
+
+                // Send email to creator (seller)
+                try {
+                    Mail::to($creator->email)->send(new \App\Mail\ContentSoldMail($post->price, $user->name, $post->title));
+                } catch (\Exception $e) {
+                    \Log::error('Erro ao enviar email de venda: ' . $e->getMessage());
+                }
             });
 
             return response()->json([

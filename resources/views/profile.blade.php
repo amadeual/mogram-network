@@ -1,107 +1,281 @@
 @extends('layouts.app')
 
-@section('title', 'Ana Silva - Mogram Creator Hub')
+@section('title', $user->name . ' - Mogram')
 
 @section('content')
 <div class="app-layout">
-    <!-- Sidebar (Same as Feed) -->
     @include('partials.sidebar')
 
     <main class="main-content">
-        <div class="creator-header">
-            <div style="position: relative; display: inline-block;">
-                <img src="{{ asset('images/creators/ana.png') }}" class="creator-avatar-large">
-                <div style="position: absolute; bottom: 20px; right: 5px; width: 24px; height: 24px; background: #3390ec; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 3px solid #0b0a15;">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+        <div class="creator-header" style="text-align: center; padding: 3rem 2rem; background: linear-gradient(to bottom, rgba(51, 144, 236, 0.05), transparent); border-bottom: 1px solid var(--border-gray);">
+            <div style="position: relative; display: inline-block; margin-bottom: 1.5rem;">
+                @if($user->avatar)
+                    <img src="{{ Storage::url($user->avatar) }}" style="width: 120px; height: 120px; border-radius: 40px; object-fit: cover; border: 4px solid #3390ec; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                @else
+                    <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $user->name }}" style="width: 120px; height: 120px; border-radius: 40px; object-fit: cover; border: 4px solid #3390ec;">
+                @endif
+                
+                @if($user->is_verified)
+                <div style="position: absolute; bottom: -5px; right: -5px; width: 32px; height: 32px; background: #3390ec; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 4px solid #0b0a15;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
                 </div>
+                @endif
             </div>
             
-            <h1 style="font-size: 1.75rem; font-weight: 900; margin-bottom: 0.25rem;">Ana Silva</h1>
-            <p style="font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Lifestyle & Moda</p>
+            <h1 style="font-size: 2rem; font-weight: 950; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">{{ $user->name }}</h1>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1.5rem;">
+                <span style="font-size: 12px; color: var(--primary-blue); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: rgba(51, 144, 236, 0.1); padding: 4px 12px; border-radius: 20px;">@ {{ $user->username }}</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">•</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">{{ $user->category ?: 'Membro Mogram' }}</span>
+            </div>
             
-            <div class="creator-stats">
-                <div class="stat-item">
-                    <span class="stat-value">125K</span>
-                    <span class="stat-label">Seguidores</span>
+            <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 2rem;">
+                <div style="text-align: center;">
+                    <p style="font-size: 18px; font-weight: 950; color: white; margin: 0;" id="followers_count">{{ number_format($followersCount, 0, ',', '.') }}</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Seguidores</p>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-value">300</span>
-                    <span class="stat-label">Posts</span>
+                <div style="text-align: center;">
+                    <p style="font-size: 18px; font-weight: 950; color: white; margin: 0;">{{ $posts->count() }}</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Posts</p>
                 </div>
-                <div class="stat-item">
-                    <span class="stat-value">4.9</span>
-                    <span class="stat-label">Avaliação</span>
+                <div style="text-align: center;">
+                    <p style="font-size: 18px; font-weight: 950; color: white; margin: 0;">{{ $lives->count() }}</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Lives</p>
                 </div>
             </div>
 
-            <p style="max-width: 420px; margin: 0 auto; line-height: 1.6; color: var(--text-light); text-align: center;">
-                Conteúdo exclusivo sobre moda, bastidores e dicas de estilo. Assine para desbloquear tudo! ✨👗📸
+            <p style="max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.6; color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;">
+                {{ $user->bio ?: 'Este usuário ainda não adicionou uma biografia.' }}
             </p>
 
-            <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;">
-                <button class="mogram-btn-social" style="padding: 1rem 3rem;">Seguir</button>
-                <button class="mogram-btn-primary" style="padding: 1rem 3rem;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right: 8px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                    Assinar
+            <div style="display: flex; justify-content: center; gap: 1rem;">
+                @if(Auth::id() !== $user->id)
+                    <button id="follow_btn" onclick="toggleFollow('{{ $user->id }}')" 
+                            style="padding: 0.85rem 2.5rem; border-radius: 14px; font-weight: 900; font-size: 14px; cursor: pointer; transition: 0.3s; 
+                            @if($isFollowing) 
+                                background: rgba(255,255,255,0.05); color: white; border: 1.5px solid rgba(255,255,255,0.1);
+                            @else 
+                                background: var(--primary-blue); color: white; border: none; box-shadow: 0 10px 20px rgba(51, 144, 236, 0.2);
+                            @endif">
+                        {{ $isFollowing ? 'Deixar de Seguir' : 'Seguir' }}
+                    </button>
+                    <a href="{{ route('chat.show', $user->id) }}" 
+                       style="width: 48px; height: 48px; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; transition: 0.3s; text-decoration: none;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </a>
+                @else
+                    <a href="{{ route('studio.settings') }}" 
+                       style="padding: 0.85rem 2.5rem; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; font-weight: 900; font-size: 14px; color: white; text-decoration: none; transition: 0.3s;">
+                        Editar Perfil
+                    </a>
+                @endif
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: center; border-bottom: 1px solid var(--border-gray); background: rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+            <div style="display: flex; gap: 4rem;">
+                <button onclick="switchTab('posts')" class="tab-btn active" id="tab_posts_btn" style="padding: 1.25rem 1rem; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; position: relative; transition: 0.3s;">
+                    Posts
+                    <div class="tab-indicator" style="position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--primary-blue); border-radius: 3px 3px 0 0; opacity: 1;"></div>
                 </button>
-                <button class="mogram-btn-social" style="padding: 1rem;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                <button onclick="switchTab('lives')" class="tab-btn" id="tab_lives_btn" style="padding: 1.25rem 1rem; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; position: relative; transition: 0.3s;">
+                    Lives
+                    <div class="tab-indicator" style="position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--primary-blue); border-radius: 3px 3px 0 0; opacity: 0;"></div>
                 </button>
             </div>
         </div>
 
-        <div class="tab-bar">
-            <a href="#" class="tab-link active">Posts</a>
-            <a href="#" class="tab-link">Stories</a>
-            <a href="#" class="tab-link">Lives</a>
-        </div>
-
-        <div class="feed-container">
-            <!-- Pinned Post -->
-            <div class="post-card">
-                <div style="padding: 0.75rem 1.5rem; background: rgba(51, 144, 236, 0.05); border-bottom: 1px solid var(--border-gray); display: flex; align-items: center; gap: 8px;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#3390ec"><path d="M21 10h-8V2l-1-1H4v21l1 1h8v-3l1-1h7l1-1V11l-1-1z"/></svg>
-                    <span style="font-size: 10px; font-weight: 800; color: var(--primary-blue); text-transform: uppercase;">Fixado</span>
-                </div>
-                <div class="post-media" style="aspect-ratio: 1/1;">
-                    <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop" style="filter: blur(20px) brightness(0.5);">
-                    <div class="exclusive-overlay">
-                        <div style="width: 56px; height: 56px; background: rgba(255, 255, 255, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <div class="feed-container" id="content_posts" style="padding-top: 2rem;">
+            @forelse($posts as $post)
+                <div class="post-card">
+                    <div class="post-header">
+                        @if($post->user->avatar)
+                            <img src="{{ Storage::url($post->user->avatar) }}" class="post-author-img" style="object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
+                        @else
+                            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $post->user->name }}" class="post-author-img">
+                        @endif
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
+                                {{ $post->user->name }} 
+                                @if($post->user->is_verified)
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="#3390ec"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                @endif
+                            </h4>
+                            <p style="font-size: 11px; color: var(--text-muted);">{{ $post->created_at->diffForHumans() }}</p>
                         </div>
-                        <h3 style="font-size: 1.25rem; font-weight: 900; margin-bottom: 0.5rem;">Conteúdo Exclusivo</h3>
-                        <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 2rem;">Bastidores da sessão de fotos de Verão.</p>
-                        <button class="mogram-btn-primary" style="padding: 1rem 3.5rem; border-radius: 12px;">Desbloquear <span style="font-weight: 400; opacity: 0.8; margin-left: 8px;">R$ 9,90</span></button>
                     </div>
-                </div>
-            </div>
+                    <div class="post-content">
+                        <h3 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ $post->title }}</h3>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
+                            @php
+                                $plainText = strip_tags($post->description);
+                                $isLong = mb_strlen($plainText) > 200;
+                            @endphp
 
-            <!-- Normal Post -->
-            <div class="post-card">
-                <div class="post-header">
-                    <img src="{{ asset('images/creators/ana.png') }}" class="post-author-img">
-                    <div style="flex: 1;">
-                        <h4 style="font-size: 14px; font-weight: 800;">Ana Silva</h4>
-                        <p style="font-size: 11px; color: var(--text-muted);">Ontem às 13:30</p>
+                            @if($isLong)
+                                <div id="short_desc_{{ $post->id }}">
+                                    {{ mb_substr($plainText, 0, 200) }}...
+                                    <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
+                                </div>
+                                <div id="full_desc_{{ $post->id }}" style="display: none;">
+                                    {!! $post->description !!}
+                                </div>
+                            @else
+                                {!! $post->description !!}
+                            @endif
+                        </div>
+                    </div>
+                    
+                    @if($post->file_path)
+                    <div class="post-media" style="margin-top: 1rem; position: relative;">
+                        @php 
+                            $isPurchased = auth()->check() && $post->isPurchasedBy(auth()->user());
+                            $isOwner = auth()->id() == $post->user_id;
+                            $shouldShow = !$post->is_exclusive || $isOwner || $isPurchased;
+                        @endphp
+
+                        @if(!$shouldShow)
+                            <img src="{{ Storage::url($post->file_path) }}" style="filter: blur(40px) brightness(0.5); width: 100%; border-radius: 16px;">
+                            <div class="exclusive-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: 16px;">
+                                <div style="width: 50px; height: 50px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                </div>
+                                <p style="font-size: 12px; font-weight: 900; color: white; margin-bottom: 1rem;">Conteúdo Exclusivo</p>
+                                <form onsubmit="unlockPost(event, '{{ $post->id }}', '{{ $post->price }}')" style="display:inline;">
+                                    @csrf
+                                    <button type="submit" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 12px;">Desbloquear R$ {{ number_format($post->price, 2, ',', '.') }}</button>
+                                </form>
+                            </div>
+                        @else
+                            @if($post->type == 'video')
+                                <video src="{{ Storage::url($post->file_path) }}" controls controlsList="nodownload" style="width: 100%; border-radius: 16px; background: black; max-height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
+                            @elseif($post->type == 'image')
+                                <div class="purchased-image" style="position: relative;">
+                                    <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                                    @if($isPurchased && !$isOwner)
+                                        <div style="position: absolute; top: 12px; right: 12px; background: rgba(34, 197, 94, 0.9); color: white; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(5px);">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                            DESBLOQUEADO
+                                        </div>
+                                    @endif
+                                </div>
+                            @endif
+                        @endif
+                    </div>
+                    @endif
+                </div>
+            @empty
+                <div style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.02); border-radius: 24px; border: 1.5px dashed rgba(255,255,255,0.05);">
+                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Este usuário ainda não publicou nenhum post.</p>
+                </div>
+            @endforelse
+        </div>
+
+        <div class="feed-container" id="content_lives" style="display: none; padding-top: 2rem;">
+            @forelse($lives as $live)
+                <div class="post-card" style="padding: 1.5rem; background: rgba(51, 144, 236, 0.05); border: 1px solid rgba(51, 144, 236, 0.1);">
+                    <div style="display: flex; gap: 1.5rem; align-items: center;">
+                        <div style="position: relative; width: 100px; height: 100px; flex-shrink: 0;">
+                             <img src="{{ $user->avatar ? Storage::url($user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $user->name }}" style="width: 100%; height: 100%; border-radius: 16px; object-fit: cover;">
+                             <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; border: 2px solid #0b0a15; white-space: nowrap;">AO VIVO</div>
+                        </div>
+                        <div style="flex: 1;">
+                            <h4 style="font-size: 18px; font-weight: 950; color: white; margin-bottom: 0.5rem;">{{ $live->title }}</h4>
+                            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem;">{{ $live->description }}</p>
+                            <a href="{{ route('live.watch', $live->id) }}" class="mogram-btn-primary" style="padding: 0.75rem 2rem; font-size: 13px; font-weight: 800; text-decoration: none; display: inline-block;">Assistir Live Agora</a>
+                        </div>
                     </div>
                 </div>
-                <div class="post-media" style="aspect-ratio: 1/1;">
-                    <img src="https://images.unsplash.com/photo-1539109132381-31a1C974a0c1?q=80&w=1974&auto=format&fit=crop">
+            @empty
+                <div style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.02); border-radius: 24px; border: 1.5px dashed rgba(255,255,255,0.05);">
+                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">O usuário não está em live no momento.</p>
                 </div>
-                <div class="post-footer">
-                    <div style="display: flex; gap: 1.5rem;">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                    </div>
-                </div>
-                <div style="padding: 0 1.5rem 1.5rem;">
-                    <p style="font-size: 13px; font-weight: 800; margin-bottom: 0.25rem;">2.845 curtidas</p>
-                    <p style="font-size: 13px; line-height: 1.5;"><span style="font-weight: 800;">Ana Silva</span> Look do dia para o evento de ontem! Apaixonada por essa combinação de cores. O que acharam? 👇</p>
-                    <p style="font-size: 12px; color: var(--text-muted); margin-top: 0.5rem; cursor: pointer;">Ver todos os 124 comentários</p>
-                </div>
-            </div>
+            @endforelse
         </div>
     </main>
 </div>
+
+<style>
+    .tab-btn.active { color: white !important; }
+    .tab-btn.active .tab-indicator { opacity: 1 !important; }
+</style>
+
+@section('scripts')
+<script>
+    function showFullDesc(postId) {
+        document.getElementById(`short_desc_${postId}`).style.display = 'none';
+        document.getElementById(`full_desc_${postId}`).style.display = 'block';
+    }
+
+    function toggleFollow(userId) {
+        const btn = document.getElementById('follow_btn');
+        btn.disabled = true;
+        
+        fetch(`/profile/${userId}/follow`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            btn.disabled = false;
+            document.getElementById('followers_count').innerText = data.followers_count;
+            
+            if (data.status === 'followed') {
+                btn.innerText = 'Deixar de Seguir';
+                btn.style.background = 'rgba(255,255,255,0.05)';
+                btn.style.border = '1.5px solid rgba(255,255,255,0.1)';
+                btn.style.boxShadow = 'none';
+            } else {
+                btn.innerText = 'Seguir';
+                btn.style.background = 'var(--primary-blue)';
+                btn.style.border = 'none';
+                btn.style.boxShadow = '0 10px 20px rgba(51, 144, 236, 0.2)';
+            }
+        });
+    }
+
+    function switchTab(tab) {
+        document.getElementById('content_posts').style.display = tab === 'posts' ? 'block' : 'none';
+        document.getElementById('content_lives').style.display = tab === 'lives' ? 'block' : 'none';
+        
+        const postsBtn = document.getElementById('tab_posts_btn');
+        const livesBtn = document.getElementById('tab_lives_btn');
+        
+        if (tab === 'posts') {
+            postsBtn.classList.add('active');
+            livesBtn.classList.remove('active');
+        } else {
+            livesBtn.classList.add('active');
+            postsBtn.classList.remove('active');
+        }
+    }
+
+    function unlockPost(e, postId, price) {
+        e.preventDefault();
+        
+        // Basic confirmation for demo - ideally matches dashboard.blade.php's modal
+        if (!confirm(`Deseja desbloquear este conteúdo por R$ ${price}?`)) return;
+
+        fetch(`/posts/${postId}/unlock`, {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload();
+            } else {
+                alert(data.error || 'Erro ao processar');
+            }
+        });
+    }
+</script>
+@endsection
 @endsection

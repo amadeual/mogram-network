@@ -22,18 +22,22 @@
                 @php $post = $purchase->post; @endphp
                 <div class="post-card">
                     <div class="post-header">
-                        @if($post->user->avatar)
-                            <img src="{{ Storage::url($post->user->avatar) }}" class="post-author-img" style="object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
-                        @else
-                            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $post->user->name }}" class="post-author-img">
-                        @endif
+                        <a href="{{ route('creator.profile', $post->user->username) }}" style="text-decoration: none;">
+                            @if($post->user->avatar)
+                                <img src="{{ Storage::url($post->user->avatar) }}" class="post-author-img" style="object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
+                            @else
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $post->user->name }}" class="post-author-img">
+                            @endif
+                        </a>
                         <div style="flex: 1;">
-                            <h4 style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
-                                {{ $post->user->name }} 
-                                @if($post->user->is_verified)
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="#3390ec"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-                                @endif
-                            </h4>
+                            <a href="{{ route('creator.profile', $post->user->username) }}" style="text-decoration: none;">
+                                <h4 style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: white;">
+                                    {{ $post->user->name }} 
+                                    @if($post->user->is_verified)
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#3390ec"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
+                                    @endif
+                                </h4>
+                            </a>
                             <p style="font-size: 11px; color: var(--text-muted);">Comprado em {{ $purchase->created_at->format('d/m/Y H:i') }}</p>
                         </div>
                         <div style="background: rgba(34, 197, 94, 0.1); color: #22c55e; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
@@ -44,7 +48,22 @@
                     <div class="post-content">
                         <h3 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ $post->title }}</h3>
                         <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
-                            {!! $post->description !!}
+                            @php
+                                $plainText = strip_tags($post->description);
+                                $isLong = mb_strlen($plainText) > 200;
+                            @endphp
+
+                            @if($isLong)
+                                <div id="short_desc_{{ $post->id }}">
+                                    {{ mb_substr($plainText, 0, 200) }}...
+                                    <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
+                                </div>
+                                <div id="full_desc_{{ $post->id }}" style="display: none;">
+                                    {!! $post->description !!}
+                                </div>
+                            @else
+                                {!! $post->description !!}
+                            @endif
                         </div>
                     </div>
                     
@@ -133,6 +152,11 @@
 
 @section('scripts')
 <script>
+    function showFullDesc(postId) {
+        document.getElementById(`short_desc_${postId}`).style.display = 'none';
+        document.getElementById(`full_desc_${postId}`).style.display = 'block';
+    }
+
     function toggleLike(btn, postId) {
         fetch(`/posts/${postId}/like`, {
             method: 'POST',

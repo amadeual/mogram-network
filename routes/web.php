@@ -69,9 +69,8 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/unlock', [FeedController::class, 'unlockPost'])->name('posts.unlock');
     Route::delete('/comments/{comment}', [FeedController::class, 'deleteComment'])->name('comments.delete');
 
-    Route::get('/creator/ana', function () {
-        return view('profile');
-    })->name('creator.profile');
+    Route::get('/profile/{username}', [App\Http\Controllers\ProfileController::class, 'show'])->name('creator.profile');
+    Route::post('/profile/{user}/follow', [App\Http\Controllers\ProfileController::class, 'toggleFollow'])->name('user.follow');
 
     // Studio Routes
     Route::get('/studio', [StudioController::class, 'index'])->name('studio.dashboard');
