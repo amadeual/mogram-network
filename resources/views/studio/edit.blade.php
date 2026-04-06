@@ -288,14 +288,10 @@
                 else if (file.type === 'application/pdf') typeSelect.value = 'pdf';
             }
 
-            // Sync thumbnail section
+            // Show thumbnail section for all types
             const thumbSection = document.getElementById('thumbnail_section');
             if(thumbSection) {
-                if(file.type.startsWith('video/') || file.type === 'application/pdf') {
-                    thumbSection.style.display = 'block';
-                } else {
-                    thumbSection.style.display = 'none';
-                }
+                thumbSection.style.display = 'block';
             }
         };
 

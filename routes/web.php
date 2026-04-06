@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/studio/store', [StudioController::class, 'store'])->name('studio.store');
     Route::get('/studio/edit/{post}', [StudioController::class, 'edit'])->name('studio.edit');
     Route::get('/studio/analytics/{post}', [StudioController::class, 'postAnalytics'])->name('studio.post_analytics');
-    Route::post('/studio/update/{post}', [StudioController::class, 'update'])->name('studio.update');
+    Route::put('/studio/update/{post}', [StudioController::class, 'update'])->name('studio.update');
     Route::delete('/studio/delete/{post}', [StudioController::class, 'destroy'])->name('studio.delete');
     Route::post('/posts/{post}/view', [StudioController::class, 'incrementView'])->name('posts.view');
     Route::post('/posts/{post}/share', [StudioController::class, 'incrementShare'])->name('posts.share');
