@@ -16,9 +16,15 @@ class StudioController extends Controller
     public function index()
     {
         $posts = Post::where('user_id', Auth::id())->latest()->take(5)->get();
-        
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
-        $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $liveRevenue = DB::table('live_gifts')
+            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->where('lives.user_id', Auth::id())
+            ->sum(DB::raw('amount - commission'));
+        
+        $totalRevenue = $postRevenue + $liveRevenue;
         
         return view('studio.dashboard', compact('posts', 'totalRevenue'));
     }
@@ -27,9 +33,15 @@ class StudioController extends Controller
     {
         $posts = Post::where('user_id', Auth::id())->latest()->paginate(10);
         $totalPosts = Post::where('user_id', Auth::id())->count();
-        
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
-        $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $liveRevenue = DB::table('live_gifts')
+            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->where('lives.user_id', Auth::id())
+            ->sum(DB::raw('amount - commission'));
+            
+        $totalRevenue = $postRevenue + $liveRevenue;
         
         return view('studio.content', compact('posts', 'totalPosts', 'totalRevenue'));
     }
@@ -38,7 +50,14 @@ class StudioController extends Controller
     {
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         $totalPosts = count($postIds);
-        $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $liveRevenue = DB::table('live_gifts')
+            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->where('lives.user_id', Auth::id())
+            ->sum(DB::raw('amount - commission'));
+            
+        $totalRevenue = $postRevenue + $liveRevenue;
         $totalViews = Post::where('user_id', Auth::id())->sum('views');
         
         // Weekly Earnings Evolution (Monday to Sunday)
@@ -73,7 +92,7 @@ class StudioController extends Controller
             ->join('posts', 'purchases.post_id', '=', 'posts.id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->whereIn('purchases.post_id', $postIds)
-            ->select('purchases.*', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
+            ->select('purchases.amount', 'purchases.created_at', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
             ->get();
 
         // Live Gifts (Lives)
@@ -82,7 +101,7 @@ class StudioController extends Controller
             ->join('users', 'live_gifts.user_id', '=', 'users.id')
             ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
             ->where('lives.user_id', Auth::id())
-            ->select('live_gifts.*', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
+            ->select('live_gifts.amount', 'live_gifts.commission', 'live_gifts.created_at', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
             ->get();
 
         $withdrawals = Withdrawal::where('user_id', Auth::id())->latest()->get();
@@ -123,7 +142,7 @@ class StudioController extends Controller
                 'username' => Auth::user()->username,
                 'amount' => $w->amount,
                 'direction' => 'out',
-                'date' => $w->created_at,
+                'date' => $w->created_at->toDateTimeString(),
                 'status' => ucfirst($w->status),
             ]);
         }
