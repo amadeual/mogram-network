@@ -30,9 +30,11 @@
             <a href="?category=Para Você" class="filter-pill {{ request('category', 'Para Você') == 'Para Você' ? 'active' : '' }}" style="text-decoration: none;">Para Você</a>
             <a href="?category=Seguindo" class="filter-pill {{ request('category') == 'Seguindo' ? 'active' : '' }}" style="text-decoration: none;">Seguindo</a>
             <a href="?category=Explorar" class="filter-pill {{ request('category') == 'Explorar' ? 'active' : '' }}" style="text-decoration: none;">Explorar</a>
-            <a href="?category=Gaming" class="filter-pill {{ request('category') == 'Gaming' ? 'active' : '' }}" style="text-decoration: none;">Gaming</a>
             <a href="?category=Música" class="filter-pill {{ request('category') == 'Música' ? 'active' : '' }}" style="text-decoration: none;">Música</a>
+            <a href="?category=Fé & Religião" class="filter-pill {{ request('category') == 'Fé & Religião' ? 'active' : '' }}" style="text-decoration: none;">Fé & Religião</a>
+            <a href="?category=Tecnologia" class="filter-pill {{ request('category') == 'Tecnologia' ? 'active' : '' }}" style="text-decoration: none;">Tecnologia</a>
             <a href="?category=Educação" class="filter-pill {{ request('category') == 'Educação' ? 'active' : '' }}" style="text-decoration: none;">Educação</a>
+            <a href="?category=Geral" class="filter-pill {{ request('category') == 'Geral' ? 'active' : '' }}" style="text-decoration: none;">Geral</a>
         </div>
 
         <!-- Section: My Scheduled Lives (Only for Creator) -->
