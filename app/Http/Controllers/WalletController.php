@@ -35,7 +35,24 @@ class WalletController extends Controller
                 ];
             });
 
-        $history = $purchases->sortByDesc('date');
+        // History of my deposits (in)
+        $deposits = Deposit::where('user_id', $user->id)
+            ->where('status', 'completed')
+            ->get()
+            ->map(function($d) {
+                return [
+                    'type' => 'Depósito PIX/Cartão',
+                    'description' => 'Via Abacate Pay',
+                    'user' => 'Saldo Adicionado',
+                    'username' => Auth::user()->username,
+                    'amount' => $d->amount,
+                    'direction' => 'in',
+                    'date' => $d->created_at,
+                    'status' => 'Concluído'
+                ];
+            });
+
+        $history = $purchases->concat($deposits)->sortByDesc('date');
         $availableBalance = $user->balance;
 
         return view('wallet', compact('availableBalance', 'history'));
@@ -119,20 +136,37 @@ class WalletController extends Controller
     public function webhook(Request $request)
     {
         $payload = $request->all();
-        // Abacate Pay sends the status in 'data' structure
-        $status = $payload['data']['status'] ?? null;
-        $externalId = $payload['data']['id'] ?? null;
+        \Illuminate\Support\Facades\Log::info('AbacatePay Webhook Received:', $payload);
 
-        if ($status === 'PAID' || $status === 'CONFIRMED') {
+        // Abacate Pay sends the status in 'data' structure
+        // Different versions might have status directly or inside data
+        $status = $payload['data']['status'] ?? $payload['status'] ?? null;
+        $externalId = $payload['data']['id'] ?? $payload['id'] ?? null;
+        
+        // Also check for the event type if available
+        $event = $payload['event'] ?? null;
+
+        if ($status === 'PAID' || $status === 'CONFIRMED' || $event === 'billing.paid' || $event === 'checkout.completed') {
+            // Find by external_id (checkout id) or look in metadata if we sent it
             $deposit = Deposit::where('external_id', $externalId)->where('status', 'pending')->first();
+
+            if (!$deposit) {
+                // Try to find by metadata externalId if available
+                $metaId = $payload['data']['metadata']['externalId'] ?? null;
+                if ($metaId) {
+                    $deposit = Deposit::where('id', str_replace('deposit_', '', $metaId))->where('status', 'pending')->first();
+                }
+            }
 
             if ($deposit) {
                 DB::transaction(function() use ($deposit) {
                     $deposit->update(['status' => 'completed']);
                     
                     $user = $deposit->user;
-                    $user->balance += $deposit->amount;
+                    $user->balance = (float)$user->balance + (float)$deposit->amount;
                     $user->save();
+                    
+                    \Illuminate\Support\Facades\Log::info("Deposit confirmed for User {$user->id}: +{$deposit->amount}");
                 });
                 return response()->json(['success' => true]);
             }

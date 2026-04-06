@@ -113,17 +113,21 @@
             @forelse($history as $item)
             <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s;">
                 <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.1); border-radius: 14px; display: flex; align-items: center; justify-content: center; color: #ef4444;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                    <div style="width: 48px; height: 48px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)' }}; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : '#ef4444' }};">
+                        @if($item['direction'] == 'in')
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                        @else
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                        @endif
                     </div>
                     <div>
                         <h4 style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 3px;">{{ $item['type'] }}</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Para {{ $item['user'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
+                        <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">{{ $item['user'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
                     </div>
                 </div>
                 <div style="text-align: right;">
-                    <p style="font-size: 16px; font-weight: 950; color: white;">
-                        - R$ {{ number_format($item['amount'], 2, ',', '.') }}
+                    <p style="font-size: 16px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
+                        {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
                     </p>
                     <p style="font-size: 10px; color: #22c55e; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</p>
                 </div>
