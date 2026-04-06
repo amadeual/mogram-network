@@ -2,20 +2,29 @@
 
 @section('content')
     <div style="font-size: 48px; margin-bottom: 24px;">📸</div>
-    <h1>Novo Conteúdo Desbloqueado!</h1>
-    <p>Sua compra de conteúdo no <span class="highlight">Mogram Network</span> foi realizada com sucesso. O conteúdo exclusivo já está em sua biblioteca.</p>
+    <h1>Conteúdo Desbloqueado!</h1>
+    <p>A sua compra de conteúdo exclusivo no <span class="highlight">Mogram Network</span> foi realizada. O conteúdo já está em sua biblioteca.</p>
     
-    <div class="stats-grid">
-        <div class="stat-item">CONTEÚDO <span class="stat-value">CONTEÚDO EXCLUSIVO</span></div>
-        <div class="stat-item">CRIADOR <span class="stat-value">PERFIL OFICIAL</span></div>
-        <div class="stat-item">INVESTIDO <span class="stat-value" style="color: #ef4444;">- R$ {{ number_format($amount, 2, ',', '.') }}</span></div>
-    </div>
+    <table class="stats-table" cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            <td class="stat-label">CONTEÚDO:</td>
+            <td class="stat-value">EXCLUSIVO</td>
+        </tr>
+        <tr>
+            <td class="stat-label">INVESTIDO:</td>
+            <td class="stat-value" style="color: #ef4444;">- R$ {{ number_format($amount, 2, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td class="stat-label">DATA:</td>
+            <td class="stat-value">{{ date('d/m/Y - H:i') }}</td>
+        </tr>
+    </table>
 
-    <p>Obrigado por apoiar a economia criativa. Aproveite sua visualização agora!</p>
+    <p>Obrigado por apoiar a economia criativa. Aproveite cada minuto!</p>
     
     <a href="{{ url('/dashboard') }}" class="btn">ACESSAR CONTEÚDO</a>
     
-    <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center;">
-        <p style="font-size: 13px; color: rgba(255,255,255,0.4);">Aproveite cada pixel. Seu apoio é essencial.</p>
+    <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
+        <p style="font-size: 13px; color: rgba(255,255,255,0.4);">Seu suporte é essencial para nossos criadores.</p>
     </div>
 @endsection

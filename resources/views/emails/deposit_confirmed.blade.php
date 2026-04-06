@@ -3,19 +3,28 @@
 @section('content')
     <div style="font-size: 48px; margin-bottom: 24px;">💰</div>
     <h1>Depósito Confirmado!</h1>
-    <p>Seu saldo no <span class="highlight">Mogram Network</span> foi atualizado. Os fundos já estão disponíveis para uso imediato em nossa plataforma.</p>
+    <p>Seu saldo no <span class="highlight">Mogram Network</span> foi atualizado com sucesso. Os fundos já estão disponíveis em sua carteira.</p>
     
-    <div class="stats-grid">
-        <div class="stat-item">VALOR <span class="stat-value" style="color: #22c55e;">+ R$ {{ number_format($amount, 2, ',', '.') }}</span></div>
-        <div class="stat-item">MÉTODO <span class="stat-value">PIX / CARTÃO (ABACATE PAY)</span></div>
-        <div class="stat-item">DATA <span class="stat-value">{{ date('d M, Y - H:i') }}</span></div>
-    </div>
+    <table class="stats-table" cellpadding="0" cellspacing="0" border="0" width="100%">
+        <tr>
+            <td class="stat-label">VALOR:</td>
+            <td class="stat-value" style="color: #22c55e;">+ R$ {{ number_format($amount, 2, ',', '.') }}</td>
+        </tr>
+        <tr>
+            <td class="stat-label">MÉTODO:</td>
+            <td class="stat-value">PIX / CARTÃO</td>
+        </tr>
+        <tr>
+            <td class="stat-label">DATA:</td>
+            <td class="stat-value">{{ date('d/m/Y - H:i') }}</td>
+        </tr>
+    </table>
 
-    <p>Use seu saldo para apoiar seus criadores favoritos, desbloquear conteúdos exclusivos ou assinar novos canais.</p>
+    <p>Apoie seus criadores favoritos ou assine novos canais hoje mesmo.</p>
     
     <a href="{{ url('/wallet') }}" class="btn">VER MINHA CARTEIRA</a>
     
-    <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.05); text-align: center;">
-        <p style="font-size: 13px; color: rgba(255,255,255,0.4);">Identificador da transação: #{{ $id }}</p>
+    <div style="margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255, 255, 255, 0.1); text-align: center;">
+        <p style="font-size: 13px; color: rgba(255,255,255,0.4);">ID da Transação: #{{ $id }}</p>
     </div>
 @endsection
