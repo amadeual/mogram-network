@@ -135,20 +135,31 @@
                         @endphp
 
                         @if(!$shouldShow)
-                            <img src="{{ Storage::url($post->file_path) }}" style="filter: blur(40px) brightness(0.5); width: 100%; border-radius: 16px;">
-                            <div class="exclusive-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: 16px;">
-                                <div style="width: 50px; height: 50px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            <div style="position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; border-radius: 16px; background: #000;">
+                                @if($post->thumbnail)
+                                    <img src="{{ Storage::url($post->thumbnail) }}" style="filter: blur(40px) brightness(0.6); width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                                @elseif($post->type == 'image')
+                                    <img src="{{ Storage::url($post->file_path) }}" style="filter: blur(40px) brightness(0.6); width: 100%; height: 100%; object-fit: cover; opacity: 0.8;">
+                                @else
+                                    <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #1a1c2e, #0b0a15); display: flex; align-items: center; justify-content: center; opacity: 0.5;">
+                                        <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    </div>
+                                @endif
+                                
+                                <div class="exclusive-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4);">
+                                    <div style="width: 50px; height: 50px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; border: 1.5px solid rgba(51, 144, 236, 0.3);">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    </div>
+                                    <h4 style="font-size: 15px; font-weight: 950; color: white; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Conteúdo Exclusivo</h4>
+                                    <form onsubmit="unlockPost(event, '{{ $post->id }}', '{{ $post->price }}')" style="display:inline;">
+                                        @csrf
+                                        <button type="submit" class="mogram-btn-primary" style="padding: 0.875rem 2rem; border-radius: 12px; font-weight: 850; font-size: 13px; background: #3390ec; border: none; color: white; cursor: pointer; box-shadow: 0 10px 20px rgba(51, 144, 236, 0.3);">Desbloquear R$ {{ number_format($post->price, 2, ',', '.') }}</button>
+                                    </form>
                                 </div>
-                                <p style="font-size: 12px; font-weight: 900; color: white; margin-bottom: 1rem;">Conteúdo Exclusivo</p>
-                                <form onsubmit="unlockPost(event, '{{ $post->id }}', '{{ $post->price }}')" style="display:inline;">
-                                    @csrf
-                                    <button type="submit" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 10px; font-size: 12px;">Desbloquear R$ {{ number_format($post->price, 2, ',', '.') }}</button>
-                                </form>
                             </div>
                         @else
                             @if($post->type == 'video')
-                                <video src="{{ Storage::url($post->file_path) }}" controls controlsList="nodownload" style="width: 100%; border-radius: 16px; background: black; max-height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
+                                <video src="{{ Storage::url($post->file_path) }}" poster="{{ $post->thumbnail ? Storage::url($post->thumbnail) : '' }}" controls controlsList="nodownload" style="width: 100%; border-radius: 16px; background: black; max-height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
                             @elseif($post->type == 'image')
                                 <div class="purchased-image" style="position: relative;">
                                     <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">

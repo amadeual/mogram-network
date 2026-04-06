@@ -70,27 +70,35 @@
                     @if($post->file_path)
                     <div class="post-media" style="margin-top: 1rem; position: relative;">
                         @if($post->type == 'video')
-                            <video src="{{ Storage::url($post->file_path) }}" controls controlsList="nodownload" style="width: 100%; border-radius: 16px; background: black; max-height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
+                            <video src="{{ Storage::url($post->file_path) }}" poster="{{ $post->thumbnail ? Storage::url($post->thumbnail) : '' }}" controls controlsList="nodownload" style="width: 100%; border-radius: 16px; background: black; max-height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
                         @elseif($post->type == 'image')
                             <div class="purchased-image" style="position: relative;">
                                 <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
                             </div>
                         @elseif($post->type == 'pdf')
-                            <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 2rem; display: flex; align-items: center; gap: 1.5rem; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-                                <div style="width: 50px; height: 50px; background: rgba(239,68,68,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                </div>
-                                <div style="flex: 1;">
-                                    <p style="font-size: 14px; font-weight: 800; color: white; margin-bottom: 2px;">Documento PDF</p>
-                                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Seu acesso exclusivo está liberado</p>
+                            <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 1.5rem; display: flex; flex-direction: column; gap: 1.5rem; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
+                                <div style="display: flex; align-items: center; gap: 1.5rem;">
+                                    @if($post->thumbnail)
+                                        <div style="width: 80px; height: 110px; border-radius: 12px; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); flex-shrink: 0;">
+                                            <img src="{{ Storage::url($post->thumbnail) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                        </div>
+                                    @else
+                                        <div style="width: 50px; height: 50px; background: rgba(239,68,68,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                        </div>
+                                    @endif
+                                    <div style="flex: 1;">
+                                        <p style="font-size: 14px; font-weight: 800; color: white; margin-bottom: 2px;">Documento PDF</p>
+                                        <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Seu acesso exclusivo está liberado</p>
+                                    </div>
                                 </div>
                                 @php
                                     $ext = pathinfo($post->file_path, PATHINFO_EXTENSION);
                                     $safeName = \Illuminate\Support\Str::slug($post->title ?: 'mogram') . '.' . ($ext ?: 'pdf');
                                 @endphp
-                                <div style="display: flex; gap: 0.75rem;">
-                                    <a href="{{ Storage::url($post->file_path) }}" target="_blank" class="mogram-btn-secondary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Visualizar</a>
-                                    <a href="{{ Storage::url($post->file_path) }}" download="{{ $safeName }}" class="mogram-btn-primary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white;">Baixar</a>
+                                <div style="display: flex; gap: 0.75rem; width: 100%;">
+                                    <a href="{{ Storage::url($post->file_path) }}" target="_blank" class="mogram-btn-secondary" style="flex: 1; text-align: center; padding: 0.8rem; border-radius: 12px; font-size: 12px; font-weight: 800; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Visualizar</a>
+                                    <a href="{{ Storage::url($post->file_path) }}" download="{{ $safeName }}" class="mogram-btn-primary" style="flex: 1; text-align: center; padding: 0.8rem; border-radius: 12px; font-size: 12px; font-weight: 800; text-decoration: none; color: white;">Baixar</a>
                                 </div>
                             </div>
                         @endif

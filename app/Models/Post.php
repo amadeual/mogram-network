@@ -17,6 +17,7 @@ class Post extends Model
         'is_exclusive',
         'price',
         'file_path',
+        'thumbnail',
         'scheduled_at',
         'allow_comments',
         'category',

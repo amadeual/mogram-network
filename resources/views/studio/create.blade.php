@@ -127,9 +127,9 @@
                                 <div style="width: 36px; height: 36px; background: rgba(51, 144, 236, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #3390ec;">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><path d="M7 12h10"/><path d="M12 7v10"/></svg>
                                 </div>
-                                <h3 style="font-size: 16px; font-weight: 850;">Mídia do Post</h3>
+                                <h3 style="font-size: 16px; font-weight: 850;">{{ __('Mídia do Post') }}</h3>
                             </div>
-                            <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Máx. 10 arquivos (Fotos, Vídeos ou PDFs)</span>
+                            <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Máx. 50MB (Foto, Vídeo ou PDF)</span>
                         </div>
 
                         <div id="dropzone" style="border: 2px dashed rgba(255,255,255,0.08); border-radius: 24px; padding: 4rem 2rem; text-align: center; background: rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; margin-bottom: 2rem;">
@@ -138,8 +138,30 @@
                             <div style="width: 56px; height: 56px; background: rgba(51, 144, 236, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin: 0 auto 1.5rem;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/><polyline points="16 16 12 12 8 16"/></svg>
                             </div>
-                            <h4 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 0.5rem;">Arraste e solte seus arquivos aqui</h4>
-                            <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">ou <span style="color: #3390ec;">clique para procurar</span> no seu computador</p>
+                            <h4 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ __('Arraste seu conteúdo aqui') }}</h4>
+                            <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">ou <span style="color: #3390ec;">clique para procurar</span> no computador</p>
+                        </div>
+
+                        <div id="thumbnail_section" style="display: none; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 2rem;">
+                            <div style="display: flex; align-items: center; gap: 12px; color: white; margin-bottom: 1.5rem;">
+                                <div style="width: 32px; height: 32px; background: rgba(168, 85, 247, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 14px; font-weight: 850;">Thumbnail (Capa)</h4>
+                                    <p style="font-size: 10px; color: var(--text-muted);">Recomendado para Vídeos e PDFs</p>
+                                </div>
+                            </div>
+                            <div onclick="document.getElementById('thumbnail_input').click()" style="width: 160px; height: 90px; border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; background: rgba(0,0,0,0.2); overflow: hidden;">
+                                <input type="file" name="thumbnail" id="thumbnail_input" accept="image/*" hidden onchange="handleThumbnailSelect(this)">
+                                <div id="thumbnail_preview_content" style="text-align: center;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--text-muted); margin-bottom: 4px;"><path d="M12 5v14M5 12h14"/></svg>
+                                    <span style="font-size: 10px; color: var(--text-muted); font-weight: 800;">Adicionar Capa</span>
+                                </div>
+                                <div id="thumbnail_img_preview" style="display: none; width: 100%; height: 100%;">
+                                    <img src="" style="width: 100%; height: 100%; object-fit: cover;">
+                                </div>
+                            </div>
                         </div>
 
                         <div id="media_previews_container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
@@ -538,7 +560,34 @@
                 };
                 reader.readAsDataURL(file);
                 container.appendChild(wrapper);
+
+                // Show/hide thumbnail section
+                const thumbSection = document.getElementById('thumbnail_section');
+                if(thumbSection) {
+                    if(file.type.startsWith('video/') || file.type === 'application/pdf') {
+                        thumbSection.style.display = 'block';
+                    } else {
+                        thumbSection.style.display = 'none';
+                    }
+                }
             });
+        };
+
+        window.handleThumbnailSelect = function(input) {
+            const file = input.files[0];
+            if(!file) return;
+
+            const reader = new FileReader();
+            const previewImg = document.querySelector('#thumbnail_img_preview img');
+            const previewContainer = document.getElementById('thumbnail_img_preview');
+            const placeholder = document.getElementById('thumbnail_preview_content');
+
+            reader.onload = (e) => {
+                if(previewImg) previewImg.src = e.target.result;
+                if(previewContainer) previewContainer.style.display = 'block';
+                if(placeholder) placeholder.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
         };
 
         if(dropzone) {

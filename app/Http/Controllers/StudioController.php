@@ -170,6 +170,7 @@ class StudioController extends Controller
             'type' => 'required|in:video,image,pdf,stories',
             'price' => $request->is_paid ? 'required|numeric|min:5' : 'nullable|numeric|min:0',
             'file' => 'required|file|max:51200',
+            'thumbnail' => 'nullable|image|max:5120',
             'is_paid' => 'nullable|boolean',
             'scheduled_at' => 'nullable|date',
             'allow_comments' => 'nullable|boolean',
@@ -193,6 +194,13 @@ class StudioController extends Controller
             $fileName = time() . '_' . uniqid() . '.' . $extension;
             $path = $file->storeAs('posts', $fileName, 'public');
             $post->file_path = $path;
+        }
+
+        if ($request->hasFile('thumbnail')) {
+            $thumb = $request->file('thumbnail');
+            $thumbName = time() . '_' . uniqid() . '_thumb.' . $thumb->getClientOriginalExtension();
+            $thumbPath = $thumb->storeAs('posts/thumbnails', $thumbName, 'public');
+            $post->thumbnail = $thumbPath;
         }
 
         $post->save();
@@ -220,6 +228,7 @@ class StudioController extends Controller
             'type' => 'required|in:video,image,pdf,stories',
             'price' => 'nullable|numeric|min:0',
             'file' => 'nullable|file|max:51200',
+            'thumbnail' => 'nullable|image|max:5120',
         ]);
 
         $post->title = $request->title;
@@ -237,6 +246,16 @@ class StudioController extends Controller
             $fileName = time() . '_' . uniqid() . '.' . $extension;
             $path = $file->storeAs('posts', $fileName, 'public');
             $post->file_path = $path;
+        }
+
+        if ($request->hasFile('thumbnail')) {
+            if ($post->thumbnail) {
+                Storage::disk('public')->delete($post->thumbnail);
+            }
+            $thumb = $request->file('thumbnail');
+            $thumbName = time() . '_' . uniqid() . '_thumb.' . $thumb->getClientOriginalExtension();
+            $thumbPath = $thumb->storeAs('posts/thumbnails', $thumbName, 'public');
+            $post->thumbnail = $thumbPath;
         }
 
         $post->save();
