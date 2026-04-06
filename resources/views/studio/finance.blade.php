@@ -7,11 +7,11 @@
     <!-- Studio Sidebar -->
     @include("partials.studio-sidebar")
 
-    <main class="main-content" style="flex: 1; background: #0b0a15; padding: 2.5rem 3rem; overflow-y: auto;">
+    <main class="main-content studio-main-pad" style="flex: 1; background: #0b0a15; padding: 2.5rem 3rem; overflow-y: auto;">
         
         <!-- Overview Section -->
         <div id="overview_section">
-            <header style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+            <header class="studio-header" style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px;">Carteira</h1>
             </header>
 
@@ -102,7 +102,7 @@
                 Voltar para Carteira
             </a>
 
-            <header style="margin-bottom: 3rem;">
+            <header class="studio-header" style="margin-bottom: 3rem;">
                 <h1 style="font-size: 2.8rem; font-weight: 950; color: white; letter-spacing: -2px; margin-bottom: 0.5rem;">Processo de Saque</h1>
                 <p style="color: var(--text-muted); font-size: 15px; font-weight: 700;">Gerencie seus ganhos e transfira com facilidade.</p>
             </header>
@@ -131,7 +131,7 @@
 
                 <div style="margin-bottom: 3rem;">
                     <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: uppercase;">Método de Pagamento</label>
-                    <div style="display: flex; gap: 1.5rem;">
+                    <div class="studio-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                         <div id="pix_card" onclick="selectMethod('pix')" style="flex: 1; background: #151621; border: 2.5px solid #3390ec; border-radius: 28px; padding: 2.5rem; cursor: pointer; transition: 0.3s; position: relative;">
                              <div style="position: absolute; right: 2rem; top: 2rem; width: 24px; height: 24px; background: #3390ec; border-radius: 50%; display: flex; align-items: center; justify-content: center;" id="pix_check">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>
@@ -146,7 +146,7 @@
                     </div>
                 </div>
 
-                <div id="pix_details" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;">
+                <div id="pix_details" class="studio-grid-2" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;">
                     <div>
                         <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1rem; display: block;">Tipo de Chave</label>
                         <select id="pix_type_select" name="pix_type" onchange="updatePixPlaceholder()" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%; cursor: pointer;">

@@ -1289,3 +1289,62 @@ section { padding: 4rem 0; }
     transition: opacity 0.35s ease;
     pointer-events: none;
 }
+
+/* ===== STUDIO MOBILE OPTIMIZATION ===== */
+@media (max-width: 768px) {
+    .studio-header {
+        padding: 1.5rem 1rem !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem !important;
+        height: auto !important;
+    }
+    .studio-header-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    .studio-body {
+        padding: 0 1rem 2rem !important;
+    }
+    .studio-main-pad {
+        padding: 1.5rem 1rem !important;
+    }
+    .studio-grid-3 {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .studio-grid-4 {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .studio-grid-2 {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+    .studio-grid-custom {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+    }
+    .studio-card-pad {
+        padding: 1.5rem 1rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    .studio-huge-stat {
+        font-size: 2.5rem !important;
+    }
+    .studio-table {
+        display: block !important;
+        width: 100% !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+    }
+    /* Provide sufficient breathing room to studio layout to prevent cutoff when bottom-bar nav exists */
+    .app-layout .main-content {
+        padding-bottom: 60px !important;
+    }
+    .create-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1.5rem !important;
+        padding: 1.5rem !important;
+    }
+}

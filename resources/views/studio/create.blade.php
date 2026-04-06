@@ -13,7 +13,7 @@
             @csrf
             
             <!-- Fixed Header -->
-            <header style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(11, 10, 21, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between;">
+            <header class="studio-header" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(11, 10, 21, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
                         <span>Início</span>
@@ -33,7 +33,7 @@
                 </div>
             </header>
 
-            <div style="padding: 3rem; display: grid; grid-template-columns: 1fr 340px; gap: 3rem;">
+            <div class="create-grid" style="padding: 3rem; display: grid; grid-template-columns: 1fr 340px; gap: 3rem;">
                 
                 <!-- Left Side: Editor -->
                 <div style="display: flex; flex-direction: column; gap: 2.5rem;">

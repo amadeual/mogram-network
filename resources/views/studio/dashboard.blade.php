@@ -9,7 +9,7 @@
 
     <!-- Studio Content -->
     <main class="main-content" style="background: #0b0a15;">
-        <header style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
+        <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Dashboard do Studio</h1>
                 <p style="color: var(--text-muted); font-size: 15px;">Acompanhe o desempenho e gerencie seu conteúdo.</p>
@@ -20,9 +20,9 @@
             </a>
         </header>
 
-        <div style="padding: 0 3rem 3rem;">
+        <div class="studio-body" style="padding: 0 3rem 3rem;">
             <!-- Metrics Grid -->
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div class="studio-grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
                 <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Publicações Totais</p>
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Content Area -->
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem;">
+            <div class="studio-card-pad" style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem;">
                 <div style="display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem;">
                     <h3 style="font-size: 18px; font-weight: 900; color: white;">Publicações Recentes</h3>
                 </div>

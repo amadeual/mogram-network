@@ -9,7 +9,7 @@
 
     <!-- Content Area -->
     <main class="main-content" style="background: #0b0a15;">
-        <header style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
+        <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
             <a href="{{ route('studio.dashboard') }}" style="color: var(--text-muted); cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 12px;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
             </a>
@@ -19,9 +19,9 @@
             </div>
         </header>
 
-        <div style="padding: 0 3rem 3rem;">
+        <div class="studio-body" style="padding: 0 3rem 3rem;">
             <form action="{{ route('studio.update', $post->id) }}" method="POST" enctype="multipart/form-data" 
-                  style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem; display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem;">
+                  class="studio-grid-custom studio-card-pad" style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem; display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem;">
                 @csrf
                 @method('PUT')
                 

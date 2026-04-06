@@ -7,8 +7,8 @@
     <!-- Studio Sidebar -->
     @include('partials.studio-sidebar')
 
-    <main class="main-content" style="background: #0b0a15; padding: 2.5rem 3rem;">
-        <header style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: end;">
+    <main class="main-content studio-main-pad" style="background: #0b0a15; padding: 2.5rem 3rem;">
+        <header class="studio-header" style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: end;">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Analytics Geral</h1>
                 <p style="color: var(--text-muted); font-size: 15px;">Monitoramento completo do seu desempenho no Mogram.</p>
@@ -16,7 +16,7 @@
         </header>
 
         <!-- Key Metrics -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="studio-grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
             <div class="premium-metric-card" style="--accent-color: #3390ec;">
                 <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Visualizações Totais</p>
                 <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">128.4k</h3>
@@ -35,9 +35,9 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
+        <div class="studio-grid-2" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
             <!-- Main Chart -->
-            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
+            <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos</h3>
                 <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;">
                     @php $stats_data = [30, 45, 25, 60, 85, 40, 70, 95, 65, 55, 80, 100]; @endphp
@@ -48,7 +48,7 @@
             </div>
 
             <!-- Content Ranking -->
-            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
+            <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 2rem;">Top Conteúdos</h3>
                 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                     @forelse($topPosts as $tpost)

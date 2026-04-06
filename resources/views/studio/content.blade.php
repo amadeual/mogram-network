@@ -59,7 +59,7 @@
     </aside>
 
     <main class="main-content" style="background: #0b0a15;">
-        <header style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
+        <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Gerenciar Conteúdo</h1>
                 <p style="color: var(--text-muted); font-size: 15px;">Visualize, edite e monitore o desempenho de suas publicações.</p>
@@ -70,8 +70,8 @@
             </a>
         </header>
 
-        <div style="padding: 0 3rem 3rem;">
-            <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="studio-body" style="padding: 0 3rem 3rem;">
+            <div class="metrics-grid studio-grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #3390ec;">
                     <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Publicações Totais</p>
                     <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ $totalPosts }}</h3>
@@ -89,7 +89,7 @@
                 </div>
             </div>
 
-            <div style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem;">
+            <div class="studio-card-pad" style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem;">
                 <table class="studio-table">
                     <thead>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
