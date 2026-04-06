@@ -41,11 +41,12 @@
     </div>
 
     <script>
-        function openMogramModal(title, text, confirmCallback, iconType = 'error') {
+        function openMogramModal(title, text, confirmCallback, confirmLabel = 'Sim', iconType = 'success') {
             const overlay = document.getElementById('mogram-modal-overlay');
             document.getElementById('mogram-modal-title').innerText = title;
             document.getElementById('mogram-modal-text').innerText = text;
             const confirmBtn = document.getElementById('mogram-modal-confirm');
+            confirmBtn.innerText = confirmLabel;
             
             confirmBtn.onclick = () => {
                 confirmCallback();
@@ -53,10 +54,12 @@
             };
 
             if (iconType === 'success') {
+                document.getElementById('mogram-modal-icon').innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
                 document.getElementById('mogram-modal-icon').style.color = '#3390ec';
                 document.getElementById('mogram-modal-icon').style.background = 'rgba(51,144,236,0.1)';
                 confirmBtn.style.background = '#3390ec';
             } else {
+                document.getElementById('mogram-modal-icon').innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
                 document.getElementById('mogram-modal-icon').style.color = '#ef4444';
                 document.getElementById('mogram-modal-icon').style.background = 'rgba(239,68,68,0.1)';
                 confirmBtn.style.background = '#ef4444';

@@ -402,7 +402,9 @@
                         showToast(data.error || 'Erro ao excluir', 'error');
                     }
                 });
-            }
+            },
+            'Excluir',
+            'error'
         );
     }
 
@@ -431,8 +433,9 @@
                             openMogramModal(
                                 'Saldo Insuficiente',
                                 data.message,
-                                () => { window.location.href = '#'; }, // Redirect to deposit if page exists
-                                'Depositar Agora'
+                                () => { window.location.href = '#'; }, 
+                                'Depositar Agora',
+                                'error'
                             );
                         } else {
                             showToast(data.error || 'Erro ao processar', 'error');
