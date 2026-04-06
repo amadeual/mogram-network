@@ -48,6 +48,13 @@ class ProfileController extends Controller
         } else {
             $me->following()->attach($user->id);
             $status = 'followed';
+            
+            // Notify the user being followed
+            try {
+                $user->notify(new \App\Notifications\NewFollowerNotification($me->name, $me->username));
+            } catch (\Exception $e) {
+                \Log::error('Erro ao notificar novo seguidor: ' . $e->getMessage());
+            }
         }
 
         return response()->json([

@@ -24,10 +24,25 @@
             </div>
 
             <div style="display: flex; gap: 1rem; position: relative; align-items: center;">
-                <button class="notif-bell" onclick="toggleNotifs()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative; padding: 8px; border-radius: 12px; transition: 0.2s;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    <div style="position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #FF3B30; border-radius: 50%; border: 2px solid #0b0a15;"></div>
-                </button>
+                <div style="position: relative;">
+                    <button class="notif-bell" onclick="toggleNotifications()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative; padding: 8px; border-radius: 12px; transition: 0.2s;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <div id="notif-badge" style="position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #FF3B30; border-radius: 50%; border: 2px solid #0b0a15;"></div>
+                        @endif
+                    </button>
+
+                    <!-- Notifications Dropdown -->
+                    <div id="notifications-dropdown" style="display: none; position: absolute; top: 50px; right: 0; width: 320px; background: #1a1c2e; border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.4); z-index: 1000; overflow: hidden;">
+                        <div style="padding: 16px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;">
+                            <h3 style="margin: 0; font-size: 16px; color: white; font-weight: 800;">Notificações</h3>
+                            <button onclick="markAllNotificationsAsRead()" style="background: transparent; border: none; color: var(--primary-blue); font-size: 12px; font-weight: 700; cursor: pointer;">Lida tudo</button>
+                        </div>
+                        <div id="notif-list" style="max-height: 400px; overflow-y: auto; padding: 0;">
+                            <!-- Notifications will be loaded here -->
+                        </div>
+                    </div>
+                </div>
                 <a href="{{ route('chat.index') }}" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; padding: 8px; border-radius: 12px; transition: 0.2s;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </a>
@@ -507,6 +522,77 @@
         .catch(err => {
             console.error(err);
             showToast('Erro técnico ao publicar', 'error');
+        });
+    }
+
+    function toggleNotifications() {
+        const dropdown = document.getElementById('notifications-dropdown');
+        if (dropdown.style.display === 'none') {
+            fetchNotifications();
+            dropdown.style.display = 'block';
+        } else {
+            dropdown.style.display = 'none';
+        }
+    }
+
+    function fetchNotifications() {
+        const list = document.getElementById('notif-list');
+        list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 13px;">Carregando...</div>';
+
+        fetch("{{ route('notifications.index') }}")
+        .then(res => res.json())
+        .then(data => {
+            list.innerHTML = '';
+            if (data.notifications.length === 0) {
+                list.innerHTML = '<div style="padding: 30px; text-align: center; color: var(--text-muted); font-size: 13px; font-weight: 600;">Nenhuma notificação por aqui.</div>';
+                return;
+            }
+
+            data.notifications.forEach(notif => {
+                const item = document.createElement('div');
+                item.style.cssText = `
+                    padding: 16px;
+                    border-bottom: 1px solid rgba(255,255,255,0.03);
+                    display: flex;
+                    gap: 12px;
+                    cursor: pointer;
+                    background: ${notif.read_at ? 'transparent' : 'rgba(51,144,236,0.05)'};
+                    transition: 0.2s;
+                `;
+                item.onmouseover = () => item.style.background = 'rgba(255,255,255,0.02)';
+                item.onmouseout = () => item.style.background = notif.read_at ? 'transparent' : 'rgba(51,144,236,0.05)';
+
+                const iconMap = {
+                    'deposit': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4CAF50" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4mar"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>',
+                    'sale': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFD700" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>',
+                    'follow': '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="2.5"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="18" y1="8" x2="23" y2="8"/><line x1="20.5" y1="5.5" x2="20.5" y2="10.5"/></svg>'
+                };
+
+                const icon = iconMap[notif.data.type] || '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
+                item.innerHTML = `
+                    <div style="flex-shrink: 0; width: 40px; height: 40px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
+                        ${icon}
+                    </div>
+                    <div>
+                        <div style="color: white; font-size: 13px; font-weight: 800; margin-bottom: 2px;">${notif.data.title}</div>
+                        <div style="color: rgba(255,255,255,0.6); font-size: 12px; font-weight: 600; line-height: 1.4;">${notif.data.message}</div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        });
+    }
+
+    function markAllNotificationsAsRead() {
+        fetch("{{ route('notifications.read') }}", {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}' }
+        })
+        .then(() => {
+            const badge = document.getElementById('notif-badge');
+            if(badge) badge.style.display = 'none';
+            fetchNotifications();
         });
     }
 

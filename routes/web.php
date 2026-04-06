@@ -115,6 +115,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/stories/store', [App\Http\Controllers\StoryController::class, 'store'])->name('stories.store');
     Route::post('/stories/{story}/view', [App\Http\Controllers\StoryController::class, 'markAsViewed'])->name('stories.view');
 
+    // Notifications Routes
+    Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
+    Route::post('/notifications/read', [App\Http\Controllers\NotificationController::class, 'markAsRead'])->name('notifications.read');
+
     // Download Route
     Route::get('/download/{id}', [DownloadController::class, 'download'])->name('post.download');
 

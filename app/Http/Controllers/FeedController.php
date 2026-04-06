@@ -151,6 +151,12 @@ class FeedController extends Controller
                 } catch (\Exception $e) {
                     \Log::error('Erro ao enviar email de venda: ' . $e->getMessage());
                 }
+                // Notify creator
+                try {
+                    $creator->notify(new \App\Notifications\ContentSold($post->price, $user->name, $post->title));
+                } catch (\Exception $e) {
+                    \Log::error('Erro ao notificar venda de conteúdo: ' . $e->getMessage());
+                }
             });
 
             return response()->json([

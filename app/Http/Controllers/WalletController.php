@@ -49,6 +49,13 @@ class WalletController extends Controller
                                 }
 
                                 \Illuminate\Support\Facades\Log::info("Auto-Sync: Deposit confirmed for User {$user->id}: +{$deposit->amount}");
+                                
+                                // Notify user
+                                try {
+                                    $user->notify(new \App\Notifications\NewDeposit($deposit->amount));
+                                } catch (\Exception $e) {
+                                    \Illuminate\Support\Facades\Log::error("Notification Error (Auto-Sync): " . $e->getMessage());
+                                }
                             });
                             break;
                         }
@@ -226,6 +233,13 @@ class WalletController extends Controller
                     }
                     
                     \Illuminate\Support\Facades\Log::info("Deposit confirmed for User {$user->id}: +{$deposit->amount}");
+                    
+                    // Notify user
+                    try {
+                        $user->notify(new \App\Notifications\NewDeposit($deposit->amount));
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::error("Notification Error (Webhook): " . $e->getMessage());
+                    }
                 });
                 return response()->json(['success' => true]);
             }
