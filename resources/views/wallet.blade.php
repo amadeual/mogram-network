@@ -18,9 +18,18 @@
             </div>
         @endif
 
-        @if(session('error'))
+        @if(session('error') || $errors->any())
             <div style="background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.2); color: #ef4444; padding: 1.25rem; border-radius: 16px; margin-bottom: 2rem; font-weight: 700;">
-                {{ session('error') }}
+                @if(session('error'))
+                    {{ session('error') }}
+                @endif
+                @if($errors->any())
+                    <ul style="margin: 0; padding-left: 1.25rem;">
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                @endif
             </div>
         @endif
 
@@ -71,11 +80,13 @@
 
                     <div style="margin-bottom: 1rem;">
                         <input type="text" name="taxId" placeholder="CPF (somente números)" required
+                               pattern="[0-9]{11}" title="O CPF deve conter 11 números."
                                style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
                     </div>
 
                     <div style="margin-bottom: 1.5rem;">
                         <input type="text" name="cellphone" placeholder="Celular (ex: 11999999999)" required
+                               pattern="[0-9]{10,11}" title="O Celular deve conter o DDD seguido de 8 ou 9 números."
                                style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
                     </div>
 

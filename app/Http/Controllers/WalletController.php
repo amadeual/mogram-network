@@ -62,8 +62,14 @@ class WalletController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:10',
-            'taxId' => 'required|string|min:11',
-            'cellphone' => 'required|string|min:10',
+            'taxId' => 'required|string|size:11',
+            'cellphone' => 'required|string|min:10|max:11',
+        ], [
+            'taxId.size' => 'O CPF deve ter exatamente 11 números.',
+            'taxId.required' => 'O CPF é obrigatório.',
+            'cellphone.min' => 'O celular deve ter pelo menos 10 números (DDD + número).',
+            'cellphone.max' => 'O celular não pode ter mais de 11 números.',
+            'amount.min' => 'O valor mínimo para depósito é R$ 10,00.',
         ]);
 
         $user = Auth::user();
