@@ -62,6 +62,7 @@ Route::get('/politica-de-privacidade', function () {
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');
+    Route::get('/search/users', [App\Http\Controllers\SearchController::class, 'search'])->name('search.users');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
     Route::post('/wallet/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
     Route::post('/posts/{post}/like', [FeedController::class, 'toggleLike'])->name('posts.like');

@@ -8,18 +8,56 @@
 
     <!-- Main Feed -->
     <main class="main-content">
-        <header style="height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray);">
-            <h1 style="font-size: 1.15rem; font-weight: 800;">Feed Principal</h1>
-            <div style="display: flex; gap: 1rem; position: relative;">
-                <button class="notif-bell" onclick="toggleNotifs()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative;">
+        <header style="height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray); background: rgba(11, 10, 21, 0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
+            <div style="flex: 1; max-width: 400px; position: relative;">
+                <div style="position: relative;">
+                    <svg style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="user-search" placeholder="Buscar criadores (ex: @username ou nome)..." 
+                           style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 15px 12px 45px; color: white; font-size: 14px; font-weight: 600; outline: none; transition: 0.3s; border-color: transparent;"
+                           autocomplete="off">
+                </div>
+                
+                <!-- Search Results Dropdown -->
+                <div id="search-results" style="display: none; position: absolute; top: calc(100% + 10px); left: 0; right: 0; background: #1a1926; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); z-index: 1001; overflow: hidden; animation: slideIn 0.2s ease-out;">
+                    <div id="results-list" style="max-height: 400px; overflow-y: auto; padding: 8px;"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem; position: relative; align-items: center;">
+                <button class="notif-bell" onclick="toggleNotifs()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative; padding: 8px; border-radius: 12px; transition: 0.2s;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    <div style="position: absolute; top: 0; right: 0; width: 10px; height: 10px; background: #FF3B30; border-radius: 50%; border: 2px solid #0b0a15;"></div>
+                    <div style="position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; background: #FF3B30; border-radius: 50%; border: 2px solid #0b0a15;"></div>
                 </button>
-                <a href="{{ route('chat.index') }}" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center;">
+                <a href="{{ route('chat.index') }}" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; padding: 8px; border-radius: 12px; transition: 0.2s;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </a>
             </div>
         </header>
+
+        <style>
+            @keyframes slideIn {
+                from { transform: translateY(-10px); opacity: 0; }
+                to { transform: translateY(0); opacity: 1; }
+            }
+            #user-search:focus {
+                background: rgba(255,255,255,0.08);
+                border-color: var(--primary-blue);
+                box-shadow: 0 0 0 4px rgba(51, 144, 236, 0.1);
+            }
+            .search-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                border-radius: 14px;
+                color: white;
+                text-decoration: none;
+                transition: 0.2s;
+            }
+            .search-item:hover {
+                background: rgba(255,255,255,0.05);
+            }
+        </style>
 
         <div class="feed-container">
             <!-- Stories -->
@@ -581,6 +619,60 @@
         }
         closeShareModal();
     }
+
+    // User Search Logic
+    const searchInput = document.getElementById('user-search');
+    const searchResults = document.getElementById('search-results');
+    const resultsList = document.getElementById('results-list');
+    let searchTimeout;
+
+    searchInput.addEventListener('input', function() {
+        clearTimeout(searchTimeout);
+        const query = this.value.trim();
+
+        if (query.length < 2) {
+            searchResults.style.display = 'none';
+            return;
+        }
+
+        searchTimeout = setTimeout(() => {
+            fetch(`/search/users?q=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    resultsList.innerHTML = '';
+                    if (data.users.length > 0) {
+                        data.users.forEach(user => {
+                            const item = document.createElement('a');
+                            item.href = user.profile_url;
+                            item.className = 'search-item';
+                            item.innerHTML = `
+                                <img src="${user.avatar}" style="width: 40px; height: 40px; border-radius: 14px; object-fit: cover;">
+                                <div style="flex: 1;">
+                                    <h4 style="font-size: 13px; font-weight: 800; margin: 0; color: white; display: flex; align-items: center; gap: 4px;">
+                                        ${user.name}
+                                        ${user.is_verified ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="#3390ec"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>' : ''}
+                                    </h4>
+                                    <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@${user.username}</p>
+                                </div>
+                                <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: ${user.is_following ? 'var(--text-muted)' : 'var(--primary-blue)'}">
+                                    ${user.is_following ? 'Seguindo' : 'Ver Perfil'}
+                                </div>
+                            `;
+                            resultsList.appendChild(item);
+                        });
+                    } else {
+                        resultsList.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px; font-weight: 600;">Nenhum criador encontrado</div>';
+                    }
+                    searchResults.style.display = 'block';
+                });
+        }, 300);
+    });
+
+    document.addEventListener('click', function(e) {
+        if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.style.display = 'none';
+        }
+    });
 
     // Post View Tracking
     document.addEventListener('DOMContentLoaded', function() {
