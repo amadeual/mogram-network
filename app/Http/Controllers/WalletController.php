@@ -43,7 +43,11 @@ class WalletController extends Controller
 
     public function deposit(Request $request)
     {
-        $request->validate(['amount' => 'required|numeric|min:10']);
+        $request->validate([
+            'amount' => 'required|numeric|min:10',
+            'taxId' => 'required|string|min:11',
+            'cellphone' => 'required|string|min:10',
+        ]);
 
         $user = Auth::user();
         $amount = $request->amount;
@@ -80,7 +84,8 @@ class WalletController extends Controller
                 'customer' => [
                     'name' => $user->name,
                     'email' => $user->email,
-                    'taxId' => '00000000000', // Optional, but some APIs require it. 
+                    'taxId' => preg_replace('/[^0-9]/', '', $request->taxId),
+                    'cellphone' => preg_replace('/[^0-9]/', '', $request->cellphone),
                 ]
             ]);
 

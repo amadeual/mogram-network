@@ -63,10 +63,20 @@
 
                 <form action="{{ route('wallet.deposit') }}" method="POST">
                     @csrf
-                    <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; margin-bottom: 1rem;">
                         <span style="font-size: 1.5rem; font-weight: 950; color: var(--text-muted); margin-right: 1rem;">R$</span>
-                        <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" required
-                               style="background: transparent; border: none; font-size: 2rem; font-weight: 950; color: white; outline: none; width: 100%;">
+                        <input type="number" name="amount" placeholder="Valor (mín. 10)" step="0.01" min="10" required
+                               style="background: transparent; border: none; font-size: 1.5rem; font-weight: 950; color: white; outline: none; width: 100%;">
+                    </div>
+
+                    <div style="margin-bottom: 1rem;">
+                        <input type="text" name="taxId" placeholder="CPF (somente números)" required
+                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
+                    </div>
+
+                    <div style="margin-bottom: 1.5rem;">
+                        <input type="text" name="cellphone" placeholder="Celular (ex: 11999999999)" required
+                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
                     </div>
 
                     <button type="submit" class="mogram-btn-primary" style="width: 100%; padding: 1.25rem; border-radius: 16px; font-weight: 950; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
