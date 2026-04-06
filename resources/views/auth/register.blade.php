@@ -77,11 +77,12 @@
                     <div class="mogram-input-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>
                     </div>
-                    <input type="text" name="username" class="mogram-input" placeholder="@seunome" required>
+                    <input type="text" name="username" id="username_input" class="mogram-input" placeholder="@seunome" required autocomplete="off">
+                    <div id="username_status" style="font-size: 10px; margin-top: 5px; font-weight: 800; display: none;"></div>
                 </div>
 
                 <div class="mogram-input-group">
-                    <label class="mogram-label">E-mail ou nome de usuário</label>
+                    <label class="mogram-label">E-mail</label>
                     <div class="mogram-input-icon">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                     </div>
@@ -99,10 +100,53 @@
                     </div>
                 </div>
 
-                <button type="submit" class="mogram-btn-primary mogram-btn-full" style="margin-top: 1rem;">
+                <button type="submit" id="submit_btn" class="mogram-btn-primary mogram-btn-full" style="margin-top: 1rem;">
                     Criar conta
                 </button>
             </form>
+
+            <script>
+                const usernameInput = document.getElementById('username_input');
+                const usernameStatus = document.getElementById('username_status');
+                const submitBtn = document.getElementById('submit_btn');
+                let timeout = null;
+
+                usernameInput.addEventListener('input', function() {
+                    clearTimeout(timeout);
+                    const username = this.value.trim();
+                    
+                    if (username.length < 3) {
+                        usernameStatus.style.display = 'none';
+                        return;
+                    }
+
+                    timeout = setTimeout(() => {
+                        fetch('{{ route('username.check') }}', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({ username: username })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            usernameStatus.style.display = 'block';
+                            if (data.available) {
+                                usernameStatus.innerText = '✓ Nome de usuário disponível';
+                                usernameStatus.style.color = '#22c55e';
+                                submitBtn.disabled = false;
+                                submitBtn.style.opacity = '1';
+                            } else {
+                                usernameStatus.innerText = '✕ Nome de usuário já em uso';
+                                usernameStatus.style.color = '#ef4444';
+                                submitBtn.disabled = true;
+                                submitBtn.style.opacity = '0.5';
+                            }
+                        });
+                    }, 500);
+                });
+            </script>
 
             <div style="margin: 2rem 0; position: relative; text-align: center;">
                 <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-gray); z-index: 0;"></div>
