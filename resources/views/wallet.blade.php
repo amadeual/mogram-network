@@ -79,9 +79,11 @@
                     </div>
 
                     <div style="margin-bottom: 1rem;">
-                        <input type="text" name="taxId" placeholder="CPF (somente números)" required
-                               pattern="[0-9]{11}" title="O CPF deve conter 11 números."
+                        <input type="text" id="cpfInput" name="taxId" placeholder="CPF (somente números)" required
+                               maxlength="11"
+                               oninput="validateCPF(this)"
                                style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
+                        <span id="cpfError" style="color: #ef4444; font-size: 11px; font-weight: 700; margin-top: 4px; display: none;">CPF Inválido</span>
                     </div>
 
                     <div style="margin-bottom: 1.5rem;">
@@ -90,7 +92,7 @@
                                style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; outline: none; width: 100%; font-size: 14px;">
                     </div>
 
-                    <button type="submit" class="mogram-btn-primary" style="width: 100%; padding: 1.25rem; border-radius: 16px; font-weight: 950; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <button type="submit" id="submitDeposit" class="mogram-btn-primary" style="width: 100%; padding: 1.25rem; border-radius: 16px; font-weight: 950; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
                         Continuar para Pagamento
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
                     </button>
@@ -103,6 +105,36 @@
         </div>
 
         <script>
+            function validateCPF(input) {
+                const cpf = input.value.replace(/\D/g, '');
+                const errorSpan = document.getElementById('cpfError');
+                const submitBtn = document.getElementById('submitDeposit');
+
+                if (cpf.length === 11) {
+                    if (isValidCPF(cpf)) {
+                        errorSpan.style.display = 'none';
+                        input.style.borderColor = 'rgba(255,255,255,0.05)';
+                        submitBtn.disabled = false;
+                        submitBtn.style.opacity = '1';
+                    } else {
+                        errorSpan.style.display = 'block';
+                        input.style.borderColor = '#ef4444';
+                        submitBtn.disabled = true;
+                        submitBtn.style.opacity = '0.5';
+                    }
+                } else {
+                    errorSpan.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            function isValidCPF(cpf) {
+                if (cpf.length !== 11 || !!cpf.match(/(\d)\1{10}/)) return false;
+                const cpfs = cpf.split('').map(el => +el);
+                const rest = (count) => (cpfs.slice(0, count-12).reduce((soma, el, index) => (soma + el * (count - index)), 0) * 10) % 11 % 10;
+                return rest(10) === cpfs[9] && rest(11) === cpfs[10];
+            }
+
             function openDepositModal() {
                 const modal = document.getElementById('depositModal');
                 modal.style.display = 'flex';
