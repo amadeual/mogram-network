@@ -76,7 +76,13 @@
                 
                 @if($post->file_path)
                 <div class="post-media" style="margin-top: 1rem; position: relative;">
-                    @if($post->is_exclusive && auth()->id() != $post->user_id)
+                    @php 
+                        $isPurchased = auth()->check() && $post->isPurchasedBy(auth()->user());
+                        $isOwner = auth()->id() == $post->user_id;
+                        $shouldShow = !$post->is_exclusive || $isOwner || $isPurchased;
+                    @endphp
+
+                    @if(!$shouldShow)
                         <img src="{{ Storage::url($post->file_path) }}" style="filter: blur(40px) brightness(0.5); width: 100%; border-radius: 16px;">
                         <div class="exclusive-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: 16px;">
                             <div style="width: 50px; height: 50px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
@@ -90,19 +96,30 @@
                         </div>
                     @else
                         @if($post->type == 'video')
-                            <video src="{{ Storage::url($post->file_path) }}" controls style="width: 100%; border-radius: 16px; background: black; max-height: 500px;"></video>
+                            <video src="{{ Storage::url($post->file_path) }}" controls controlsList="nodownload" style="width: 100%; border-radius: 16px; background: black; max-height: 500px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
                         @elseif($post->type == 'image')
-                            <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px;">
+                            <div class="purchased-image" style="position: relative;">
+                                <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                                @if($isPurchased && !$isOwner)
+                                    <div style="position: absolute; top: 12px; right: 12px; background: rgba(34, 197, 94, 0.9); color: white; padding: 6px 12px; border-radius: 10px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(5px);">
+                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                                        DESBLOQUEADO
+                                    </div>
+                                @endif
+                            </div>
                         @elseif($post->type == 'pdf')
-                            <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 2rem; display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 2rem; display: flex; align-items: center; gap: 1.5rem; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
                                 <div style="width: 50px; height: 50px; background: rgba(239,68,68,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
                                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                                 </div>
                                 <div style="flex: 1;">
-                                    <p style="font-size: 13px; font-weight: 800; color: white; margin-bottom: 2px;">Documento PDF</p>
-                                    <p style="font-size: 11px; color: var(--text-muted);">Clique para baixar e visualizar</p>
+                                    <p style="font-size: 14px; font-weight: 800; color: white; margin-bottom: 2px;">Documento PDF</p>
+                                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Seu acesso exclusivo está liberado</p>
                                 </div>
-                                <a href="{{ Storage::url($post->file_path) }}" download class="mogram-btn-secondary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px;">Baixar</a>
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <a href="{{ Storage::url($post->file_path) }}" target="_blank" class="mogram-btn-secondary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Visualizar</a>
+                                    <a href="{{ Storage::url($post->file_path) }}" download class="mogram-btn-primary" style="padding: 0.6rem 1rem; border-radius: 10px; font-size: 11px; font-weight: 800; text-decoration: none; color: white;">Baixar</a>
+                                </div>
                             </div>
                         @endif
                     @endif
