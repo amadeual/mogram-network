@@ -32,11 +32,8 @@
                 Analytics
             </a>
             <a href="#" class="menu-item" style="display: flex; justify-content: space-between; padding: 0.875rem 1rem;">
-                <span style="display: flex; gap: 1rem; align-items: center;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                    Comentários
                 </span>
-                <span style="background: var(--primary-blue); color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">4</span>
+                <span style="background: var(--primary-blue); color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">0</span>
             </a>
             <a href="{{ route('studio.finance') }}" class="menu-item" style="padding: 0.875rem 1rem;">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -84,7 +81,7 @@
                 </div>
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #a855f7;">
                     <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Engajamento Global</p>
-                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">4.8%</h3>
+                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">0%</h3>
                     <p style="font-size: 11px; color: var(--text-muted);">Média de todos os conteúdos</p>
                 </div>
             </div>
@@ -135,7 +132,7 @@
                             <td>
                                 <div style="display: flex; gap: 1rem; align-items: center;">
                                     <div style="text-align: center;">
-                                        <p style="font-size: 12px; font-weight: 900; color: white; margin: 0;">1.2k</p>
+                                        <p style="font-size: 12px; font-weight: 900; color: white; margin: 0;">0</p>
                                         <p style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Views</p>
                                     </div>
                                 </div>

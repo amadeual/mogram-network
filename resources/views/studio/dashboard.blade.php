@@ -53,15 +53,15 @@
 
                 <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Saldo Estimado</p>
+                        <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Receita Total</p>
                         <div style="width: 32px; height: 32px; background: rgba(34, 197, 94, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #22c55e;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                         </div>
                     </div>
-                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin-bottom: 0.75rem;">R$ 0,00</h3>
+                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin-bottom: 0.75rem;">R$ {{ number_format($totalRevenue ?? 0, 2, ',', '.') }}</h3>
                     <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #22c55e;">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                        0% <span style="font-weight: 400; color: var(--text-muted); margin-left: 2px;">vs. mês passado</span>
+                        0% <span style="font-weight: 400; color: var(--text-muted); margin-left: 2px;">este mês</span>
                     </div>
                 </div>
             </div>

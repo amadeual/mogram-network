@@ -19,10 +19,10 @@
         <div class="studio-grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
             <div class="premium-metric-card" style="--accent-color: #3390ec;">
                 <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Visualizações Totais</p>
-                <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">128.4k</h3>
+                <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">0</h3>
                 <div style="color: #22c55e; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                    +12.5%
+                    0%
                 </div>
             </div>
             <div class="premium-metric-card" style="--accent-color: #22c55e;">
@@ -30,7 +30,7 @@
                 <h3 style="font-size: 2.25rem; font-weight: 950; color: #22c55e; margin: 0.75rem 0;">R$ {{ number_format($totalRevenue, 2, ',', '.') }}</h3>
                 <div style="color: #22c55e; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                    +8.2%
+                    0%
                 </div>
             </div>
         </div>
@@ -40,9 +40,9 @@
             <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos</h3>
                 <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;">
-                    @php $stats_data = [30, 45, 25, 60, 85, 40, 70, 95, 65, 55, 80, 100]; @endphp
+                    @php $stats_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; @endphp
                     @foreach($stats_data as $i => $val)
-                        <div style="flex: 1; height: {{ $val }}%; background: var(--primary-blue); border-radius: 8px 8px 0 0; opacity: 0.6;"></div>
+                        <div style="flex: 1; height: 5%; background: var(--primary-blue); border-radius: 8px 8px 0 0; opacity: 0.1;"></div>
                     @endforeach
                 </div>
             </div>

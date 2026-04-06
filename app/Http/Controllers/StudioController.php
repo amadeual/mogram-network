@@ -16,7 +16,11 @@ class StudioController extends Controller
     public function index()
     {
         $posts = Post::where('user_id', Auth::id())->latest()->take(5)->get();
-        return view('studio.dashboard', compact('posts'));
+        
+        $postIds = Post::where('user_id', Auth::id())->pluck('id');
+        $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        
+        return view('studio.dashboard', compact('posts', 'totalRevenue'));
     }
 
     public function content()
