@@ -31,7 +31,7 @@ class LiveController extends Controller
             $scheduledQuery->whereNotIn('user_id', $demoUserIds);
         }
 
-        if ($request->has('category') && $request->category !== 'Para Você' && $request->category !== 'Explorar' && $request->category !== 'Seguindo') {
+        if ($request->has('category') && $request->category !== 'Explorar') {
             $onlineQuery->where('category', $request->category);
             $scheduledQuery->where('category', $request->category);
         }
