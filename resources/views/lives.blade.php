@@ -7,9 +7,9 @@
     @include('partials.sidebar')
 
     <!-- Main Content -->
-    <main class="main-content" style="padding: 2rem 3rem; overflow-y: auto;">
+    <main class="main-content" style="padding: 1.5rem 2rem; overflow-y: auto;">
         <!-- Trending Header -->
-        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
+        <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 900; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">Explorar <span style="color: var(--primary-blue);">Lives</span></h1>
                 <p style="color: #888; font-size: 1rem; font-weight: 600;">Descubra talentos e interaja em tempo real.</p>
