@@ -75,6 +75,10 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 Chat
             </a>
+            <a href="{{ route('purchases.index') }}" class="menu-item sidebar-nav-item {{ Route::is('purchases.*') ? 'active' : '' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                Minhas Compras
+            </a>
             <a href="{{ route('wallet.index') }}" class="menu-item sidebar-nav-item {{ Route::is('wallet.*') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
                 Carteira
@@ -283,6 +287,9 @@
     .sidebar.active .sidebar-nav-item:nth-child(6) { animation: navSlideIn 0.3s ease 0.30s both; }
     .sidebar.active .sidebar-nav-item:nth-child(7) { animation: navSlideIn 0.3s ease 0.35s both; }
     .sidebar.active .sidebar-nav-item:nth-child(8) { animation: navSlideIn 0.3s ease 0.40s both; }
+    .sidebar.active .sidebar-nav-item:nth-child(9) { animation: navSlideIn 0.3s ease 0.45s both; }
+    .sidebar.active .sidebar-nav-item:nth-child(10) { animation: navSlideIn 0.3s ease 0.50s both; }
+    .sidebar.active .sidebar-nav-item:nth-child(11) { animation: navSlideIn 0.3s ease 0.55s both; }
 
     /* Overlay */
     .sidebar-overlay {

@@ -116,6 +116,7 @@ class WalletController extends Controller
             'cellphone.min' => 'O celular deve ter pelo menos 10 números (DDD + número).',
             'cellphone.max' => 'O celular não pode ter mais de 11 números.',
             'amount.min' => 'O valor mínimo para depósito é R$ 10,00.',
+            'amount.max' => 'O valor máximo para depósito é R$ 5.000,00.',
         ]);
 
         $user = Auth::user();

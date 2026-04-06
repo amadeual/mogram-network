@@ -134,6 +134,7 @@
                         <div style="display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 0.25rem 1.25rem;">
                             <span style="font-size: 20px; font-weight: 950; color: var(--text-muted); margin-right: 0.75rem;">R$</span>
                             <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" max="5000" required
+                                   oninput="if(this.value > 5000) this.value = 5000"
                                    style="background: transparent; border: none; padding: 1.25rem 0; color: white; outline: none; width: 100%; font-size: 22px; font-weight: 950;">
                         </div>
                         <div style="display: flex; justify-content: space-between; margin-top: 8px;">

@@ -115,4 +115,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chat', [App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
     Route::get('/chat/{user}', [App\Http\Controllers\ChatController::class, 'show'])->name('chat.show');
     Route::post('/chat/{user}', [App\Http\Controllers\ChatController::class, 'sendMessage'])->name('chat.send');
+
+    // Purchases Routes
+    Route::get('/purchases', [App\Http\Controllers\PurchaseController::class, 'index'])->name('purchases.index');
 });
