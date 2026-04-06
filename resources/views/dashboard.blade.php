@@ -73,24 +73,24 @@
                 </div>
                 <div class="post-content">
                     <h3 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ $post->title }}</h3>
-                    <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
-                        @php
-                            $plainText = strip_tags($post->description);
-                            $isLong = mb_strlen($plainText) > 200;
-                        @endphp
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
+                            @php
+                                $plainText = strip_tags($post->description);
+                                $isLong = mb_strlen($plainText) > 500;
+                            @endphp
 
-                        @if($isLong)
-                            <div id="short_desc_{{ $post->id }}">
-                                {{ mb_substr($plainText, 0, 200) }}...
-                                <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
-                            </div>
-                            <div id="full_desc_{{ $post->id }}" style="display: none;">
+                            @if($isLong)
+                                <div id="short_desc_{{ $post->id }}">
+                                    {{ mb_substr($plainText, 0, 500) }}...
+                                    <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
+                                </div>
+                                <div id="full_desc_{{ $post->id }}" style="display: none;">
+                                    {!! $post->description !!}
+                                </div>
+                            @else
                                 {!! $post->description !!}
-                            </div>
-                        @else
-                            {!! $post->description !!}
-                        @endif
-                    </div>
+                            @endif
+                        </div>
                 </div>
                 
                 @if($post->file_path)

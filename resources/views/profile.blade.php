@@ -109,12 +109,12 @@
                         <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
                             @php
                                 $plainText = strip_tags($post->description);
-                                $isLong = mb_strlen($plainText) > 200;
+                                $isLong = mb_strlen($plainText) > 500;
                             @endphp
 
                             @if($isLong)
                                 <div id="short_desc_{{ $post->id }}">
-                                    {{ mb_substr($plainText, 0, 200) }}...
+                                    {{ mb_substr($plainText, 0, 500) }}...
                                     <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
                                 </div>
                                 <div id="full_desc_{{ $post->id }}" style="display: none;">
