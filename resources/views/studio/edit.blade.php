@@ -91,12 +91,12 @@
                         </label>
                         <div style="border: 2px dashed rgba(255,255,255,0.1); border-radius: 24px; padding: 3rem 2rem; text-align: center; background: rgba(255,255,255,0.01); cursor: pointer; transition: 0.3s;"
                              onclick="document.getElementById('file-input').click()">
-                            <input type="file" name="file" id="file-input" hidden onchange="toggleThumbSection(this)">
+                            <input type="file" name="file" id="file-input" hidden onchange="handleNewMedia(this)">
                             <div style="width: 56px; height: 56px; background: rgba(51, 144, 236, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); margin: 0 auto 1.25rem;">
                                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                             </div>
-                            <h4 style="font-size: 15px; font-weight: 800; color: white; margin-bottom: 0.5rem;">Clique para trocar o arquivo</h4>
-                            <p style="font-size: 12px; color: var(--text-muted);">Atual: {{ basename($post->file_path) }}</p>
+                            <h4 style="font-size: 15px; font-weight: 800; color: white; margin-bottom: 0.5rem;" id="file-status-title">Clique para trocar a mídia</h4>
+                            <p style="font-size: 12px; color: var(--text-muted);" id="file-status-subtitle">Atual: {{ basename($post->file_path) }}</p>
                         </div>
 
                         <div id="thumbnail_section" style="{{ in_array($post->type, ['video', 'pdf']) ? 'display: block;' : 'display: none;' }} border-top: 1px solid rgba(255,255,255,0.05); padding-top: 1.5rem; margin-top: 1rem;">
@@ -269,9 +269,26 @@
             }
         });
 
-        window.toggleThumbSection = function(input) {
+        window.handleNewMedia = function(input) {
             const file = input.files[0];
             if(!file) return;
+
+            // Update UI feedback
+            const title = document.getElementById('file-status-title');
+            const subtitle = document.getElementById('file-status-subtitle');
+            if(title) title.innerText = "Novo arquivo selecionado!";
+            if(subtitle) subtitle.innerText = file.name;
+            if(subtitle) subtitle.style.color = "#3390ec";
+
+            // Auto-detect type
+            const typeSelect = document.querySelector('select[name="type"]');
+            if(typeSelect) {
+                if (file.type.startsWith('video/')) typeSelect.value = 'video';
+                else if (file.type.startsWith('image/')) typeSelect.value = 'image';
+                else if (file.type === 'application/pdf') typeSelect.value = 'pdf';
+            }
+
+            // Sync thumbnail section
             const thumbSection = document.getElementById('thumbnail_section');
             if(thumbSection) {
                 if(file.type.startsWith('video/') || file.type === 'application/pdf') {
