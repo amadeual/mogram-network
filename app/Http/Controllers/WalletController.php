@@ -7,6 +7,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use App\Models\Deposit;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\DepositConfirmedMail;
 
 class WalletController extends Controller
 {
@@ -39,6 +41,13 @@ class WalletController extends Controller
                                 $deposit->update(['status' => 'completed']);
                                 $user->balance = (float)$user->balance + (float)$deposit->amount;
                                 $user->save();
+                                
+                                try {
+                                    Mail::to($user->email)->send(new DepositConfirmedMail($deposit->amount, $deposit->id));
+                                } catch (\Exception $e) {
+                                    \Illuminate\Support\Facades\Log::error("Email Error (Auto-Sync): " . $e->getMessage());
+                                }
+
                                 \Illuminate\Support\Facades\Log::info("Auto-Sync: Deposit confirmed for User {$user->id}: +{$deposit->amount}");
                             });
                             break;
@@ -208,6 +217,12 @@ class WalletController extends Controller
                     $user = $deposit->user;
                     $user->balance = (float)$user->balance + (float)$deposit->amount;
                     $user->save();
+
+                    try {
+                        Mail::to($user->email)->send(new DepositConfirmedMail($deposit->amount, $deposit->id));
+                    } catch (\Exception $e) {
+                        \Illuminate\Support\Facades\Log::error("Email Error (Webhook): " . $e->getMessage());
+                    }
                     
                     \Illuminate\Support\Facades\Log::info("Deposit confirmed for User {$user->id}: +{$deposit->amount}");
                 });

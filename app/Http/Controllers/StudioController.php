@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\WithdrawalRequestedMail;
 
 class StudioController extends Controller
 {
@@ -126,13 +128,19 @@ class StudioController extends Controller
                 ->withInput();
         }
 
-        Withdrawal::create([
+        $w = Withdrawal::create([
             'user_id' => Auth::id(),
             'amount' => $request->amount,
             'method' => $request->method,
             'account_info' => $request->account_info,
             'status' => 'pending',
         ]);
+
+        try {
+            Mail::to(Auth::user()->email)->send(new WithdrawalRequestedMail($request->amount, $request->method, $w->id));
+        } catch (\Exception $e) {
+            \Log::error('Erro ao enviar email de saque: ' . $e->getMessage());
+        }
 
         return redirect()->route('studio.finance')->with('success', 'Pedido de saque enviado com sucesso!');
     }

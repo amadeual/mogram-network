@@ -7,6 +7,8 @@ use App\Models\Like;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ContentPurchasedMail;
 
 class FeedController extends Controller
 {
@@ -122,6 +124,13 @@ class FeedController extends Controller
                     'post_id' => $post->id,
                     'amount' => $post->price
                 ]);
+
+                // Send email to buyer
+                try {
+                    Mail::to($user->email)->send(new ContentPurchasedMail($post->price));
+                } catch (\Exception $e) {
+                    \Log::error('Erro ao enviar email de compra: ' . $e->getMessage());
+                }
             });
 
             return response()->json([
