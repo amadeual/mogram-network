@@ -50,8 +50,13 @@
                 </div>
 
                 <div style="display: flex; justify-content: space-between; align-items: flex-end;">
-                     <p style="font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 3px; font-family: monospace;">**** {{ str_pad(Auth::id(), 4, '0', STR_PAD_LEFT) }}</p>
-                     <div style="font-size: 22px; opacity: 0.8;">💳</div>
+                     <div style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); font-family: monospace; opacity: 0.8; letter-spacing: 2px;">
+                        **** {{ str_pad(Auth::id(), 4, '0', STR_PAD_LEFT) }}
+                     </div>
+                     <button onclick="openDepositModal()" style="background: white; color: #1261d1; border: none; padding: 0.65rem 1.25rem; border-radius: 12px; font-size: 12px; font-weight: 950; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(255,255,255,0.2); transition: 0.2s;">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        DEPOSITAR
+                     </button>
                 </div>
 
                 <!-- Decorative glow -->
