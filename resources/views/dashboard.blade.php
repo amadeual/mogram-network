@@ -50,7 +50,7 @@
 
             <!-- Dynamic Posts Feed -->
             @forelse($posts as $post)
-            <div class="post-card">
+            <div class="post-card" data-post-id="{{ $post->id }}">
                 <div class="post-header">
                     <a href="{{ route('creator.profile', $post->user->username) }}" style="text-decoration: none;">
                         @if($post->user->avatar)
@@ -553,6 +553,17 @@
         const encodedUrl = encodeURIComponent(currentShareUrl);
         const encodedTitle = encodeURIComponent(currentShareTitle);
 
+        // Increment Share Count
+        if (currentSharePostId) {
+            fetch(`/posts/${currentSharePostId}/share`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            });
+        }
+
         switch (platform) {
             case 'whatsapp':
                 shareUrl = `https://wa.me/?text=${encodedTitle}%20${encodedUrl}`;
@@ -570,6 +581,34 @@
         }
         closeShareModal();
     }
+
+    // Post View Tracking
+    document.addEventListener('DOMContentLoaded', function() {
+        const viewOptions = { threshold: 0.3 };
+        const viewObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const postId = entry.target.dataset.postId;
+                    if (postId && !entry.target.getAttribute('data-viewed')) {
+                        fetch(`/posts/${postId}/view`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                'Accept': 'application/json'
+                            }
+                        }).then(() => {
+                            entry.target.setAttribute('data-viewed', 'true');
+                            viewObserver.unobserve(entry.target);
+                        });
+                    }
+                }
+            });
+        }, viewOptions);
+
+        document.querySelectorAll('.post-card').forEach(card => {
+            viewObserver.observe(card);
+        });
+    });
 </script>
 @endsection
 @endsection

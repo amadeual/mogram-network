@@ -39,12 +39,12 @@
 
                 <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                        <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Aprovados (30d)</p>
+                        <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Visualizações Totais</p>
                         <div style="width: 32px; height: 32px; background: rgba(168, 85, 247, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                         </div>
                     </div>
-                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin-bottom: 0.75rem;">{{ Auth::user()->posts()->count() }}</h3>
+                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin-bottom: 0.75rem;">{{ number_format(Auth::user()->posts()->sum('views'), 0, ',', '.') }}</h3>
                     <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: #22c55e;">
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                         +0% <span style="font-weight: 400; color: var(--text-muted); margin-left: 2px;">vs. mês passado</span>
@@ -76,8 +76,9 @@
                     <thead>
                         <tr style="border-bottom: 1px solid rgba(255,255,255,0.05);">
                             <th style="padding-bottom: 1.5rem;">CONTEÚDO</th>
-                            <th style="padding-bottom: 1.5rem;">TIPO</th>
                             <th style="padding-bottom: 1.5rem;">STATUS</th>
+                            <th style="padding-bottom: 1.5rem;">VIEWS</th>
+                            <th style="padding-bottom: 1.5rem;">ENGAJAMENTO</th>
                             <th style="padding-bottom: 1.5rem;">PREÇO</th>
                             <th style="padding-bottom: 1.5rem; text-align: right;">AÇÕES</th>
                         </tr>
@@ -103,16 +104,13 @@
                                 </div>
                             </td>
                             <td>
-                                <span style="background: rgba(255,255,255,0.05); padding: 6px 14px; border-radius: 10px; font-size: 12px; font-weight: 700; color: white; display: inline-flex; align-items: center; gap: 8px; text-transform: capitalize;">
-                                    {{ $post->type }}
-                                </span>
-                            </td>
-                            <td>
                                 <span style="background: rgba(34,197,94,0.1); color: #22c55e; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 800; display: inline-flex; align-items: center; gap: 8px;">
                                     <div style="width: 7px; height: 7px; background: #22c55e; border-radius: 50%;"></div>
                                     Publicado
                                 </span>
                             </td>
+                            <td style="font-size: 14px; font-weight: 800; color: white;">{{ number_format($post->views, 0, ',', '.') }}</td>
+                            <td style="font-size: 14px; font-weight: 800; color: var(--primary-blue);">{{ number_format($post->getEngagement(), 0, ',', '.') }}</td>
                             <td style="font-size: 14px; font-weight: 800; color: white;">R$ {{ number_format($post->price, 2, ',', '.') }}</td>
                             <td style="text-align: right;">
                                 <div style="display: flex; gap: 1.25rem; justify-content: flex-end; color: var(--text-muted);">

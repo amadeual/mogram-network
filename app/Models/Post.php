@@ -21,6 +21,8 @@ class Post extends Model
         'scheduled_at',
         'allow_comments',
         'category',
+        'views',
+        'shares',
     ];
 
     protected $casts = [
@@ -28,6 +30,8 @@ class Post extends Model
         'is_exclusive' => 'boolean',
         'allow_comments' => 'boolean',
         'price' => 'decimal:2',
+        'views' => 'integer',
+        'shares' => 'integer',
     ];
 
     public function user()
@@ -42,7 +46,19 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class)->whereNull('parent_id');
+        return $this->hasMany(Comment::class);
+    }
+
+    public function getEngagement()
+    {
+        $likesCount = $this->likes()->count();
+        $commentsCount = $this->comments()->count();
+        return $likesCount + $commentsCount + $this->views + $this->shares;
+    }
+
+    public function incrementViews()
+    {
+        $this->increment('views');
     }
 
     public function isLikedBy(User $user)

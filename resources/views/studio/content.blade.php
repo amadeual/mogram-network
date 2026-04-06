@@ -80,9 +80,13 @@
                     <p style="font-size: 11px; color: #22c55e; font-weight: 700;">+ R$ 0,00 <span style="font-weight: 400; color: var(--text-muted);">esta semana</span></p>
                 </div>
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #a855f7;">
-                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Engajamento Global</p>
-                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">0%</h3>
-                    <p style="font-size: 11px; color: var(--text-muted);">Média de todos os conteúdos</p>
+                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Engagement Global</p>
+                    @php
+                        $totalEngagement = $posts->sum(function($p) { return $p->getEngagement(); });
+                        $avgEngagement = $totalPosts > 0 ? $totalEngagement / $totalPosts : 0;
+                    @endphp
+                    <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ number_format($avgEngagement, 1, ',', '.') }}</h3>
+                    <p style="font-size: 11px; color: var(--text-muted);">Média por publicação</p>
                 </div>
             </div>
 
@@ -130,10 +134,14 @@
                                 </span>
                             </td>
                             <td>
-                                <div style="display: flex; gap: 1rem; align-items: center;">
+                                <div style="display: flex; gap: 1.5rem; align-items: center;">
                                     <div style="text-align: center;">
-                                        <p style="font-size: 12px; font-weight: 900; color: white; margin: 0;">0</p>
+                                        <p style="font-size: 12px; font-weight: 900; color: white; margin: 0;">{{ number_format($post->views, 0, ',', '.') }}</p>
                                         <p style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Views</p>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <p style="font-size: 12px; font-weight: 900; color: var(--primary-blue); margin: 0;">{{ number_format($post->getEngagement(), 0, ',', '.') }}</p>
+                                        <p style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Engage</p>
                                     </div>
                                 </div>
                             </td>

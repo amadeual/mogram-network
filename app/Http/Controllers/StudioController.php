@@ -276,4 +276,16 @@ class StudioController extends Controller
 
         return redirect()->back()->with('success', 'Conteúdo removido!');
     }
+
+    public function incrementView(Post $post)
+    {
+        $post->increment('views');
+        return response()->json(['success' => true, 'views' => $post->views]);
+    }
+
+    public function incrementShare(Post $post)
+    {
+        $post->increment('shares');
+        return response()->json(['success' => true, 'shares' => $post->shares]);
+    }
 }
