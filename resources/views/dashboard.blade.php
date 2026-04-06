@@ -402,6 +402,8 @@
             }
         );
     }
+</script>
+
 <!-- Share Modal -->
 <div id="mogramShareModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center;">
     <div style="background: #1a1a1a; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; width: 90%; max-width: 400px; position: relative;">
