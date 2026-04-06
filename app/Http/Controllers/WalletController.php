@@ -14,6 +14,43 @@ class WalletController extends Controller
     {
         /** @var \App\Models\User $user */
         $user = Auth::user();
+
+        // Sync pending deposits with Abacate Pay (Sync/Poll fallback for local testing)
+        $pendingDeposits = Deposit::where('user_id', $user->id)->where('status', 'pending')->get();
+        $apiKey = env('ABACATE_PAY_KEY');
+
+        foreach ($pendingDeposits as $deposit) {
+            try {
+                if (!$deposit->external_id) continue;
+                
+                $response = \Illuminate\Support\Facades\Http::withHeaders([
+                    'Authorization' => 'Bearer ' . $apiKey,
+                    'Accept' => 'application/json'
+                ])->get('https://api.abacatepay.com/v1/billing/list', [ // or specific list with filter
+                    'id' => $deposit->external_id
+                ]);
+
+                if ($response->successful()) {
+                    $billings = $response->json()['data'] ?? [];
+                    // Check if our specific billing is PAID
+                    foreach($billings as $bill) {
+                        if ($bill['id'] === $deposit->external_id && ($bill['status'] === 'PAID' || $bill['status'] === 'CONFIRMED')) {
+                            DB::transaction(function() use ($deposit, $user) {
+                                $deposit->update(['status' => 'completed']);
+                                $user->balance = (float)$user->balance + (float)$deposit->amount;
+                                $user->save();
+                                \Illuminate\Support\Facades\Log::info("Auto-Sync: Deposit confirmed for User {$user->id}: +{$deposit->amount}");
+                            });
+                            break;
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                \Illuminate\Support\Facades\Log::error("Sync Error: " . $e->getMessage());
+            }
+        }
+
+        $user->refresh();
         
         // History of my purchases (out)
         $purchases = DB::table('purchases')
