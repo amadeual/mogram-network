@@ -7,20 +7,20 @@
     <!-- Sidebar (Same as Studio) -->
     @include("partials.studio-sidebar")
 
-    <main class="main-content" style="flex: 1; padding: 3rem 6rem; overflow-y: auto;">
+    <main class="main-content studio-main-pad" style="flex: 1; padding: 3rem 6rem; overflow-y: auto;">
         <div style="max-width: 800px; margin: 0 auto;">
             <a href="{{ route('studio.finance') }}" style="color: #3390ec; text-decoration: none; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; margin-bottom: 2rem;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
                 Voltar para Carteira
             </a>
 
-            <header style="margin-bottom: 3rem;">
+            <header class="studio-header" style="margin-bottom: 3rem;">
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px; margin-bottom: 0.5rem;">Processo de Saque</h1>
                 <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;">Gerencie seus ganhos e transfira com facilidade.</p>
             </header>
 
             <!-- Premium Wallet Card -->
-            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; position: relative; box-shadow: 0 30px 60px rgba(18, 97, 209, 0.25);">
+            <div class="studio-card-pad" style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; position: relative; box-shadow: 0 30px 60px rgba(18, 97, 209, 0.25);">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 38px; height: 38px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
@@ -50,7 +50,7 @@
                 <!-- Withdraw Value -->
                 <div style="margin-bottom: 3rem;">
                     <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1.5rem; display: block;">Valor do Saque</label>
-                    <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <div class="studio-card-pad" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
                         <span style="font-size: 2.5rem; font-weight: 900; color: var(--text-muted); margin-right: 1rem;">R$</span>
                         <input type="number" id="withdraw_amount" name="amount" placeholder="0,00" step="0.01" min="50" required
                                style="background: transparent; border: none; font-size: 3rem; font-weight: 900; color: white; outline: none; width: 100%;">
@@ -66,7 +66,7 @@
                 <!-- Payment Method -->
                 <div style="margin-bottom: 3rem;">
                     <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1.5rem; display: block;">Método de Pagamento</label>
-                    <div style="display: flex; gap: 1.5rem;">
+                    <div class="studio-grid-2" style="display: flex; gap: 1.5rem;">
                         <!-- PIX Card -->
                         <div id="pix_card" onclick="selectMethod('pix')" style="flex: 1; background: rgba(255,255,255,0.03); border: 2px solid #3390ec; border-radius: 24px; padding: 2rem; cursor: pointer; position: relative; transition: 0.3s;">
                              <div style="position: absolute; right: 1.5rem; top: 1.5rem; width: 24px; height: 24px; background: #3390ec; border-radius: 50%; display: flex; align-items: center; justify-content: center;" id="pix_check">
@@ -91,7 +91,7 @@
                 </div>
 
                 <!-- Form Fields -->
-                <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;">
+                <div class="studio-grid-2" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;">
                     <div>
                         <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1rem; display: block;">Tipo</label>
                         <select style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%; cursor: pointer;">

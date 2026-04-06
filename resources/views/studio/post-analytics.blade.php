@@ -6,8 +6,8 @@
 <div class="app-layout">
     @include("partials.studio-sidebar")
 
-    <main class="main-content" style="background: #0b0a15; padding: 2rem 3rem;">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+    <main class="main-content studio-main-pad" style="background: #0b0a15; padding: 2rem 3rem;">
+        <header class="studio-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
             <div>
                 <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 0.5rem;">Posts / <span style="color: white; font-weight: 700;">Análise de Performance</span></p>
                 <h1 style="font-size: 2rem; font-weight: 950; color: white;">Detalhes da Análise</h1>
@@ -25,7 +25,7 @@
         </header>
 
         <!-- Post Summary Card -->
-        <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem; display: flex; gap: 2rem; align-items: center; margin-bottom: 2rem;">
+        <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem; display: flex; gap: 2rem; align-items: center; margin-bottom: 2rem;">
             <div style="width: 120px; height: 120px; border-radius: 20px; overflow: hidden; background: rgba(255,255,255,0.1);">
                 @if($post->type == 'image')
                     <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -57,7 +57,7 @@
         </div>
 
         <!-- Metric Cards -->
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="studio-grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
             <div class="premium-metric-card" style="--accent-color: #3390ec;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <div style="width: 36px; height: 36px; background: rgba(51, 144, 236, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #3390ec;">
@@ -103,9 +103,9 @@
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem;">
+        <div class="studio-grid-custom" style="display: grid; grid-template-columns: 1fr 340px; gap: 2rem;">
             <!-- Chart Section -->
-            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
+            <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
                     <h3 style="font-size: 18px; font-weight: 900; color: white;">Desempenho ao Longo do Tempo</h3>
                     <div style="background: rgba(0,0,0,0.3); padding: 4px; border-radius: 12px; display: flex; gap: 4px;">
@@ -125,7 +125,7 @@
             </div>
 
             <!-- Audience Section -->
-            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
+            <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 2rem;">Público Alvo</h3>
                 
                 <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">LOCALIZAÇÃO</p>
@@ -164,7 +164,7 @@
             </div>
         </div>
 
-        <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem; margin-top: 2rem;">
+        <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2rem; margin-top: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white;">Principais Comentários</h3>
                 <div style="display: flex; align-items: center; gap: 1rem;">
