@@ -116,7 +116,7 @@
                     <div style="display: flex; gap: 1.5rem; flex-direction: column;">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="color: var(--text-gray); font-size: 0.9rem;">Assinantes Online</span>
-                            <span style="font-weight: 700;">1.240</span>
+                            <span style="font-weight: 700;">{{ number_format(Auth::user()->followers()->count(), 0, ',', '.') }}</span>
                         </div>
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <span style="color: var(--text-gray); font-size: 0.9rem;">Ganhos estimados</span>
