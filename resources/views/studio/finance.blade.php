@@ -43,37 +43,49 @@
                 <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: white; filter: blur(80px); opacity: 0.15;"></div>
             </div>
 
-            <!-- Dashboard Summary - RESTORED PREMIUM CARDS -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
-                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem; transition: all 0.4s; cursor: pointer;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
-                        <div style="width: 44px; height: 44px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                <!-- Conteúdo (Real) -->
+                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+                        <div style="width: 40px; height: 40px; background: rgba(51, 144, 236, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         </div>
-                        <span style="font-size: 11px; font-weight: 800; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 4px 8px; border-radius: 6px;">↑ 12%</span>
                     </div>
-                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Assinaturas</p>
-                    <h4 style="font-size: 1.6rem; font-weight: 950; color: white;">R$ {{ number_format($totalRevenue * 0.6, 2, ',', '.') }}</h4>
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Conteúdo</p>
+                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($postRevenue, 2, ',', '.') }}</h4>
                 </div>
-                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem; transition: all 0.4s; cursor: pointer;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
-                        <div style="width: 44px; height: 44px; background: rgba(236, 72, 153, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ec4899;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+
+                <!-- Lives (Real) -->
+                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+                        <div style="width: 40px; height: 40px; background: rgba(236, 72, 153, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #ec4899;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
                         </div>
-                        <span style="font-size: 11px; font-weight: 800; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 4px 8px; border-radius: 6px;">↑ 5%</span>
                     </div>
                     <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Lives</p>
-                    <h4 style="font-size: 1.6rem; font-weight: 950; color: white;">R$ {{ number_format($totalRevenue * 0.3, 2, ',', '.') }}</h4>
+                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($liveRevenue, 2, ',', '.') }}</h4>
                 </div>
-                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem; transition: all 0.4s; cursor: pointer;">
-                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.5rem;">
-                        <div style="width: 44px; height: 44px; background: rgba(245, 158, 11, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f59e0b;">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+
+                <!-- Assinaturas (Future/Placeholder) -->
+                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer; opacity: 0.6;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+                        <div style="width: 40px; height: 40px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         </div>
-                        <span style="font-size: 11px; font-weight: 800; color: #22c55e; background: rgba(34, 197, 94, 0.1); padding: 4px 8px; border-radius: 6px;">↑ 20%</span>
+                    </div>
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Assinaturas</p>
+                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ 0,00</h4>
+                </div>
+
+                <!-- Mimos (Future/Placeholder) -->
+                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer; opacity: 0.6;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+                        <div style="width: 40px; height: 40px; background: rgba(245, 158, 11, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f59e0b;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                        </div>
                     </div>
                     <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Mimos</p>
-                    <h4 style="font-size: 1.6rem; font-weight: 950; color: white;">R$ {{ number_format($totalRevenue * 0.1, 2, ',', '.') }}</h4>
+                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ 0,00</h4>
                 </div>
             </div>
 

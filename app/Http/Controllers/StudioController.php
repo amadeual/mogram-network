@@ -53,26 +53,49 @@ class StudioController extends Controller
     {
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         
-        $incomes = DB::table('purchases')
+        // Post Purchases (Conteúdo)
+        $postSales = DB::table('purchases')
             ->join('posts', 'purchases.post_id', '=', 'posts.id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->whereIn('purchases.post_id', $postIds)
             ->select('purchases.*', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
             ->get();
 
+        // Live Gifts (Lives)
+        $liveGifts = DB::table('live_gifts')
+            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->join('users', 'live_gifts.user_id', '=', 'users.id')
+            ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
+            ->where('lives.user_id', Auth::id())
+            ->select('live_gifts.*', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
+            ->get();
+
         $withdrawals = Withdrawal::where('user_id', Auth::id())->latest()->get();
 
         $history = collect();
 
-        foreach ($incomes as $income) {
+        foreach ($postSales as $sale) {
             $history->push([
-                'type' => 'Post Pago',
-                'description' => $income->post_title,
-                'user' => $income->buyer_name,
-                'username' => $income->buyer_username,
-                'amount' => $income->amount,
+                'type' => 'Conteúdo',
+                'description' => $sale->post_title,
+                'user' => $sale->buyer_name,
+                'username' => $sale->buyer_username,
+                'amount' => $sale->amount,
                 'direction' => 'in',
-                'date' => $income->created_at,
+                'date' => $sale->created_at,
+                'status' => 'Aprovado',
+            ]);
+        }
+
+        foreach ($liveGifts as $gift) {
+            $history->push([
+                'type' => 'Lives',
+                'description' => $gift->gift_name,
+                'user' => $gift->sender_name,
+                'username' => $gift->sender_username,
+                'amount' => $gift->amount - $gift->commission,
+                'direction' => 'in',
+                'date' => $gift->created_at,
                 'status' => 'Aprovado',
             ]);
         }
@@ -92,11 +115,20 @@ class StudioController extends Controller
 
         $history = $history->sortByDesc('date');
 
-        $totalRevenue = $incomes->sum('amount');
+        $postRevenue = $postSales->sum('amount');
+        $liveRevenue = $liveGifts->sum(function($g) { return $g->amount - $g->commission; });
+        $totalRevenue = $postRevenue + $liveRevenue;
+        
         $totalCompletedWithdrawals = $withdrawals->whereIn('status', ['completed', 'pending'])->sum('amount');
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
         
-        return view('studio.finance', compact('totalRevenue', 'availableBalance', 'history'));
+        return view('studio.finance', compact(
+            'totalRevenue', 
+            'postRevenue', 
+            'liveRevenue', 
+            'availableBalance', 
+            'history'
+        ));
     }
 
     public function withdrawPage()
