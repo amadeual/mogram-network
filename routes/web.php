@@ -63,6 +63,7 @@ Route::get('/politica-de-privacidade', function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
+    Route::post('/wallet/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
     Route::post('/posts/{post}/like', [FeedController::class, 'toggleLike'])->name('posts.like');
     Route::post('/posts/{post}/comments', [FeedController::class, 'storeComment'])->name('posts.comment');
     Route::post('/posts/{post}/unlock', [FeedController::class, 'unlockPost'])->name('posts.unlock');

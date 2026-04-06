@@ -31,14 +31,60 @@
             <!-- Card Footer Action -->
             <div style="display: flex; justify-content: space-between; align-items: center;">
                 <p style="font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 2px;">**** **** **** {{ Auth::id() }}</p>
-                <button onclick="showToast('Integração de PIX em breve!', 'info')" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 12px; border-radius: 8px; color: white; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">
-                    Depositar
-                </button>
-            </div>
-
-            <!-- Absolute decorative glow -->
-            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: white; filter: blur(80px); opacity: 0.15;"></div>
+            <button onclick="openDepositModal()" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 12px; border-radius: 8px; color: white; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">
+                Depositar
+            </button>
         </div>
+
+        <!-- Deposit Modal -->
+        <div id="depositModal" style="display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 1000; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #151621; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 32px; width: 100%; max-width: 400px; padding: 2.5rem; position: relative; box-shadow: 0 25px 50px rgba(0,0,0,0.5);">
+                <button onclick="closeDepositModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; background: rgba(255,255,255,0.05); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer;">✕</button>
+                
+                <div style="text-align: center; margin-bottom: 2rem;">
+                    <div style="width: 60px; height: 60px; background: rgba(51, 144, 236, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin: 0 auto 1.5rem;">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                    </div>
+                    <h3 style="font-size: 1.5rem; font-weight: 950; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">Adicionar Saldo</h3>
+                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Escolha o valor que deseja depositar via Abacate Pay (Pix ou Cartão).</p>
+                </div>
+
+                <form action="{{ route('wallet.deposit') }}" method="POST">
+                    @csrf
+                    <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
+                        <span style="font-size: 1.5rem; font-weight: 950; color: var(--text-muted); margin-right: 1rem;">R$</span>
+                        <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" required
+                               style="background: transparent; border: none; font-size: 2rem; font-weight: 950; color: white; outline: none; width: 100%;">
+                    </div>
+
+                    <button type="submit" class="mogram-btn-primary" style="width: 100%; padding: 1.25rem; border-radius: 16px; font-weight: 950; font-size: 16px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        Continuar para Pagamento
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+                    </button>
+                    
+                    <p style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 1.5rem; font-weight: 700; opacity: 0.7;">
+                        Pagamento processado com segurança por Abacate Pay.
+                    </p>
+                </form>
+            </div>
+        </div>
+
+        <script>
+            function openDepositModal() {
+                const modal = document.getElementById('depositModal');
+                modal.style.display = 'flex';
+                modal.style.opacity = '0';
+                setTimeout(() => modal.style.opacity = '1', 10);
+            }
+            function closeDepositModal() {
+                const modal = document.getElementById('depositModal');
+                modal.style.opacity = '0';
+                setTimeout(() => modal.style.display = 'none', 300);
+            }
+        </script>
+        <style>
+            #depositModal { transition: opacity 0.3s ease; }
+        </style>
 
         <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 1.5rem;">Histórico de Gastos</h3>
         <div style="display: flex; flex-direction: column; gap: 0.75rem;">
