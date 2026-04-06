@@ -165,6 +165,7 @@
                             <div style="flex: 1; position: relative;">
                                 <input type="text" id="comment_input_{{ $post->id }}" 
                                        placeholder="Escreva um comentário..."
+                                       maxlength="255"
                                        style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.75rem 3.5rem 0.75rem 1rem; color: white; font-size: 13px; outline: none; transition: 0.2s;"
                                        onfocus="this.style.borderColor='#3390ec'"
                                        onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitComment('{{ $post->id }}'); }">

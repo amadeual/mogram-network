@@ -111,7 +111,10 @@
                             <div id="editor_body" contenteditable="true" 
                                  style="background: transparent; border: none; font-size: 1.1rem; font-weight: 500; color: white; width: 100%; min-height: 250px; outline: none; line-height: 1.6; cursor: text;"
                                  oninput="syncEditor()"></div>
-                            <textarea name="description" id="description_input" hidden required></textarea>
+                            <div style="display: flex; justify-content: flex-end; padding-top: 1rem;">
+                                <span id="char_count_display" style="font-size: 11px; font-weight: 800; color: var(--text-muted);">0 / 2200</span>
+                            </div>
+                            <textarea name="description" id="description_input" hidden required maxlength="2200"></textarea>
                             
                             <p id="placeholder_custom" style="position: absolute; top: 115px; color: var(--text-muted); pointer-events: none; font-size: 1.1rem; font-weight: 500;">O que você está pensando? Escreva sua legenda aqui...</p>
                         </div>
@@ -362,9 +365,28 @@
         // Sync editor to hidden input
         window.syncEditor = function() {
             if (editor && descriptionInput) {
+                let text = editor.innerText;
+                if (text.length > 2200) {
+                    editor.innerText = text.substring(0, 2200);
+                    // Place cursor at end
+                    const range = document.createRange();
+                    const sel = window.getSelection();
+                    range.setStart(editor.childNodes[0], 2200);
+                    range.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                    text = editor.innerText;
+                }
+                
                 descriptionInput.value = editor.innerHTML;
+                const countDisplay = document.getElementById('char_count_display');
+                if (countDisplay) {
+                    countDisplay.innerText = `${text.length} / 2200`;
+                    countDisplay.style.color = text.length >= 2100 ? '#ef4444' : 'var(--text-muted)';
+                }
+
                 if (placeholder) {
-                    placeholder.style.display = editor.innerText.trim() === "" ? 'block' : 'none';
+                    placeholder.style.display = text.trim() === "" ? 'block' : 'none';
                 }
             }
         }

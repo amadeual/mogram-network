@@ -51,7 +51,7 @@ class FeedController extends Controller
     public function storeComment(Request $request, Post $post)
     {
         $request->validate([
-            'content' => 'required|string|max:1000',
+            'content' => 'required|string|max:255',
             'parent_id' => 'nullable|exists:comments,id'
         ]);
 
