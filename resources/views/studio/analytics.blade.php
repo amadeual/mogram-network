@@ -38,16 +38,23 @@
         <div class="studio-grid-2" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
             <!-- Main Chart -->
             <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
-                <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos (Últimos 7 dias)</h3>
-                <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-bottom: 2rem; position: relative;">
-                    @php $max_val = $weeklyEarnings->max() ?: 1; @endphp
+                <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos Semanal (Seg-Dom)</h3>
+                <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-bottom: 2rem; position: relative; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 15px;">
+                    @php $fixed_max = 2500; @endphp
                     @foreach($weeklyEarnings as $day => $val)
                         <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                            <div style="font-size: 9px; color: #22c55e; font-weight: 800;">R$ {{ number_format($val, 0) }}</div>
-                            <div style="width: 100%; height: {{ max(5, ($val / $max_val) * 100) }}%; background: linear-gradient(to top, var(--primary-blue), #8b5cf6); border-radius: 8px 8px 4px 4px; transition: 0.3s; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.2);"></div>
-                            <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; margin-top: 4px;">{{ $day }}</div>
+                            <div style="font-size: 9px; color: #22c55e; font-weight: 800; min-height: 12px;">@if($val > 0) R$ {{ number_format($val, 0) }} @endif</div>
+                            <div style="width: 100%; height: {{ min(100, max(2, ($val / $fixed_max) * 100)) }}%; background: linear-gradient(to top, var(--primary-blue), #8b5cf6); border-radius: 12px 12px 6px 6px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 20px rgba(51, 144, 236, 0.3); cursor: pointer;" title="R$ {{ number_format($val, 2) }}"></div>
+                            <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; margin-top: 4px; text-transform: capitalize;">{{ $day }}</div>
                         </div>
                     @endforeach
+
+                    <!-- Scale markers -->
+                    <div style="position: absolute; left: -10px; top: 0; bottom: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 9px; color: var(--text-muted); font-weight: 700;">
+                        <span>2500</span>
+                        <span>1250</span>
+                        <span>0</span>
+                    </div>
                 </div>
             </div>
 

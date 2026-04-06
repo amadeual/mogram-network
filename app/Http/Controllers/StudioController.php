@@ -41,16 +41,18 @@ class StudioController extends Controller
         $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
         $totalViews = Post::where('user_id', Auth::id())->sum('views');
         
-        // Weekly Earnings Evolution (Last 7 Days)
+        // Weekly Earnings Evolution (Monday to Sunday)
         $weeklyEarnings = collect();
-        for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
+        $startOfWeek = now()->startOfWeek(); 
+        for ($i = 0; $i < 7; $i++) {
+            $currentDay = $startOfWeek->copy()->addDays($i);
+            $date = $currentDay->format('Y-m-d');
             $amount = DB::table('purchases')
                 ->whereIn('post_id', $postIds)
                 ->whereDate('created_at', $date)
                 ->sum('amount');
             
-            $weeklyEarnings->put(now()->subDays($i)->format('d/m'), (float)$amount);
+            $weeklyEarnings->put($currentDay->translatedFormat('D'), (float)$amount);
         }
 
         $topPosts = Post::where('user_id', Auth::id())
