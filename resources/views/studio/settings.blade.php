@@ -8,12 +8,12 @@
     @include('partials.studio-sidebar')
 
     <main class="main-content" style="background: #0b0a15; flex: 1; overflow-y: auto;">
-        <header style="padding: 2.5rem 3rem 1.5rem;">
+        <header class="settings-header" style="padding: 2.5rem 3rem 1.5rem;">
             <h1 style="font-size: 2.5rem; font-weight: 950; color: white; margin-bottom: 0.5rem; letter-spacing: -1.5px;">Configurações</h1>
             <p style="color: var(--text-muted); font-size: 15px; font-weight: 700;">Personalize sua identidade e como os fãs veem seu perfil.</p>
         </header>
 
-        <div style="padding: 0 3rem 3rem;">
+        <div class="settings-body" style="padding: 0 3rem 3rem;">
             @if(session('success'))
                 <div style="background: rgba(34,197,94,0.1); border: 1.5px solid rgba(34,197,94,0.2); border-radius: 16px; padding: 1rem 1.5rem; color: #22c55e; font-weight: 800; font-size: 14px; margin-bottom: 2rem; display: flex; align-items: center; gap: 12px;">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
@@ -22,10 +22,10 @@
             @endif
 
             <form action="{{ route('studio.settings.update') }}" method="POST" enctype="multipart/form-data" 
-                  style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 3rem; max-width: 800px;">
+                  class="settings-form" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 3rem; max-width: 800px;">
                 @csrf
                 
-                <div style="display: flex; gap: 3rem; align-items: start; margin-bottom:3rem;">
+                <div class="settings-avatar-group" style="display: flex; gap: 3rem; align-items: start; margin-bottom:3rem;">
                     <!-- Avatar Upload -->
                     <div style="text-align: center;">
                         <div style="position: relative; width: 140px; height: 140px; margin: 0 auto 1.5rem;">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
+                <div class="settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
                     <div>
                         <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Sua Cidade</label>
                         <input type="text" name="city" value="{{ $user->city }}" placeholder="Ex: São Paulo, SP"
@@ -92,7 +92,7 @@
                               style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem 1.25rem; color: white; font-weight: 600; outline: none; resize: none; line-height: 1.5;">{{ $user->bio }}</textarea>
                 </div>
 
-                <div style="display: flex; justify-content: flex-end; gap: 1rem;">
+                <div class="settings-btn-group" style="display: flex; justify-content: flex-end; gap: 1rem;">
                     <button type="button" onclick="history.back()" class="mogram-btn-secondary" style="padding: 1rem 2rem; border-radius: 14px; font-weight: 800;">Cancelar</button>
                     <button type="submit" class="mogram-btn-primary" style="padding: 1rem 3rem; border-radius: 14px; font-weight: 950; box-shadow: 0 8px 30px rgba(51, 144, 236, 0.3);">Salvar Alterações</button>
                 </div>
@@ -119,6 +119,19 @@
         background-repeat: no-repeat;
         background-position: right 1rem center;
         background-size: 1em;
+    }
+
+    @media (max-width: 768px) {
+        .settings-header { padding: 1.5rem 1rem !important; }
+        .settings-body { padding: 0 1rem 2rem !important; }
+        .settings-form { padding: 1.5rem !important; border-radius: 20px !important; }
+        .settings-avatar-group { flex-direction: column !important; gap: 1.5rem !important; align-items: center !important; text-align: center; }
+        .settings-avatar-group > div:last-child { width: 100%; text-align: left; }
+        .settings-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; }
+        .settings-btn-group { flex-direction: column-reverse; gap: 1rem !important; }
+        .settings-btn-group button { width: 100%; }
+        /* Add spacing so content isnt hidden behind mobile bottom nav */
+        .settings-body { margin-bottom: 60px; }
     }
 </style>
 @endsection
