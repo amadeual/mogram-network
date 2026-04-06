@@ -12,16 +12,32 @@
             <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px;">Minha Carteira</h1>
         </header>
 
-        <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 2rem; margin-bottom: 2.5rem; position: relative; box-shadow: 0 15px 35px rgba(18, 97, 209, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: space-between;">
-            <div>
-                <p style="font-size: 12px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Seu Saldo</p>
-                <h2 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -1.5px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
+        <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 24px; padding: 1.75rem; margin-bottom: 2.5rem; position: relative; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); width: 340px; max-width: 100%; aspect-ratio: 1.6 / 1; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1);">
+            <!-- Card Chip & Logo -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                <div style="width: 40px; height: 30px; background: rgba(255,255,255,0.15); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);"></div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                    <svg width="20" height="20" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="white" opacity="0.2"/><path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" /></svg>
+                    <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px;">MOGRAM</span>
+                </div>
             </div>
-            <button onclick="showToast('Integração de PIX em breve!', 'info')" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); color: white; padding: 0.75rem 1.5rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-weight: 900; font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;"
-                    onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
-                Depositar
-            </button>
+            
+            <!-- Balance Content -->
+            <div>
+                <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">Saldo em Conta</p>
+                <h2 style="font-size: 2rem; font-weight: 950; color: white; letter-spacing: -1px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
+            </div>
+            
+            <!-- Card Footer Action -->
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <p style="font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.5); letter-spacing: 2px;">**** **** **** {{ Auth::id() }}</p>
+                <button onclick="showToast('Integração de PIX em breve!', 'info')" style="background: rgba(255,255,255,0.2); border: none; padding: 6px 12px; border-radius: 8px; color: white; font-size: 11px; font-weight: 900; cursor: pointer; transition: 0.3s; backdrop-filter: blur(5px);">
+                    Depositar
+                </button>
+            </div>
+
+            <!-- Absolute decorative glow -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: white; filter: blur(80px); opacity: 0.15;"></div>
         </div>
 
         <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 1.5rem;">Histórico de Gastos</h3>
