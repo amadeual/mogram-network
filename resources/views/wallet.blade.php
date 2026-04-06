@@ -152,35 +152,53 @@
         </style>
 
         <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 1.5rem;">Histórico de Gastos</h3>
-        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
             @forelse($history as $item)
-            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s;">
-                <div style="display: flex; align-items: center; gap: 1rem;">
-                    <div style="width: 48px; height: 48px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(239, 68, 68, 0.1)' }}; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : '#ef4444' }};">
+            <div class="transaction-item" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: default;">
+                <div style="display: flex; align-items: center; gap: 1.25rem;">
+                    <div style="width: 52px; height: 52px; background: {{ $item['direction'] == 'in' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%)' : 'linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.05) 100%)' }}; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : '#ef4444' }}; box-shadow: 0 8px 20px rgba(0,0,0,0.2);">
                         @if($item['direction'] == 'in')
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
                         @else
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                         @endif
                     </div>
                     <div>
-                        <h4 style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 3px;">{{ $item['type'] }}</h4>
-                        <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">{{ $item['user'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
+                        <h4 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 4px; letter-spacing: -0.3px;">{{ $item['type'] }}</h4>
+                        <p style="font-size: 12px; color: var(--text-muted); font-weight: 700; opacity: 0.8;">
+                           {{ $item['description'] }} • {{ (new \DateTime($item['date']))->format('d M, H:i') }}
+                        </p>
                     </div>
                 </div>
+                
                 <div style="text-align: right;">
-                    <p style="font-size: 16px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
+                    <p style="font-size: 18px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }}; letter-spacing: -0.5px;">
                         {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
                     </p>
-                    <p style="font-size: 10px; color: #22c55e; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</p>
+                    <div style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: rgba(34, 197, 94, 0.1); border-radius: 6px; margin-top: 6px;">
+                        <div style="width: 5px; height: 5px; background: #22c55e; border-radius: 50%;"></div>
+                        <span style="font-size: 9px; color: #22c55e; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</span>
+                    </div>
                 </div>
             </div>
             @empty
-            <div style="text-align: center; padding: 3rem; background: rgba(255,255,255,0.01); border-radius: 24px; border: 1px dashed rgba(255,255,255,0.05);">
-                <p style="color: var(--text-muted); font-size: 13px;">Você ainda não realizou nenhum desbloqueio de conteúdo.</p>
+            <div style="text-align: center; padding: 4rem 2rem; background: rgba(255,255,255,0.01); border-radius: 32px; border: 2px dashed rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.03); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.1);">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18"/></svg>
+                </div>
+                <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Nenhuma transação encontrada na sua conta.</p>
             </div>
             @endforelse
         </div>
+
+        <style>
+            .transaction-item:hover {
+                background: rgba(255,255,255,0.04) !important;
+                border-color: rgba(255,255,255,0.1) !important;
+                transform: translateY(-2px);
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+        </style>
 
     </main>
 </div>
