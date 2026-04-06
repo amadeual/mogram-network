@@ -59,15 +59,14 @@ class WalletController extends Controller
         $apiKey = env('ABACATE_PAY_KEY');
 
         try {
+            // Using v1 billing structure as per most dynamic integrations
             $response = \Illuminate\Support\Facades\Http::withHeaders([
                 'Authorization' => 'Bearer ' . $apiKey,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json'
-            ])->post('https://api.abacatepay.com/v1/checkout/create', [
+            ])->post('https://api.abacatepay.com/v1/billing/create', [
                 'frequency' => 'ONE_TIME',
-                'methods' => ['PIX', 'BILL'], // Abacate Pay uses BILL for cards sometimes or similar, per search v2/checkouts/create is better
-                // Let's use the v2 structure if possible, but the search said v1 in some places.
-                // Re-checking search: "v2/checkouts/create" was mentioned.
+                'methods' => ['PIX', 'CARD'],
                 'products' => [
                     [
                         'externalId' => 'deposit_' . $deposit->id,
@@ -78,33 +77,15 @@ class WalletController extends Controller
                 ],
                 'returnUrl' => route('wallet.index'),
                 'completionUrl' => route('wallet.index'),
-                'customerId' => $user->id, // If already exists, or we send 'customer' object
+                'customer' => [
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'taxId' => '00000000000', // Optional, but some APIs require it. 
+                ]
             ]);
-
-            // If v1 fails, fallback to v2 checkouts/create
-            if ($response->failed()) {
-                 $response = \Illuminate\Support\Facades\Http::withHeaders([
-                    'Authorization' => 'Bearer ' . $apiKey,
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
-                ])->post('https://api.abacatepay.com/v2/checkouts/create', [
-                    'items' => [
-                        [
-                            'id' => 'deposit_' . $deposit->id,
-                            'quantity' => 1,
-                            'price' => $amountCents,
-                            'name' => 'Adição de Saldo Mogram'
-                        ]
-                    ],
-                    'methods' => ['PIX', 'CARD'],
-                    'returnUrl' => route('wallet.index'),
-                    'externalId' => 'dep_' . $deposit->id,
-                ]);
-            }
 
             if ($response->successful()) {
                 $data = $response->json();
-                // Depending on the version, the URL might be in different places.
                 $checkoutUrl = $data['data']['url'] ?? $data['url'] ?? null;
                 $externalId = $data['data']['id'] ?? $data['id'] ?? null;
 
@@ -117,7 +98,10 @@ class WalletController extends Controller
                 }
             }
 
-            return redirect()->back()->with('error', 'Erro ao processar pagamento com Abacate Pay. Verifique se a chave API está configurada.');
+            // Fallback to simpler structure if products fails
+            $errorBody = $response->body();
+            
+            return redirect()->back()->with('error', 'Erro do Abacate Pay: ' . $errorBody);
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Erro técnico: ' . $e->getMessage());

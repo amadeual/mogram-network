@@ -12,6 +12,18 @@
             <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px;">Minha Carteira</h1>
         </header>
 
+        @if(session('success'))
+            <div style="background: rgba(34, 197, 94, 0.1); border: 1.5px solid rgba(34, 197, 94, 0.2); color: #22c55e; padding: 1.25rem; border-radius: 16px; margin-bottom: 2rem; font-weight: 700;">
+                {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.2); color: #ef4444; padding: 1.25rem; border-radius: 16px; margin-bottom: 2rem; font-weight: 700;">
+                {{ session('error') }}
+            </div>
+        @endif
+
         <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 24px; padding: 1.75rem; margin-bottom: 2.5rem; position: relative; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3); width: 340px; max-width: 100%; aspect-ratio: 1.6 / 1; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; border: 1.5px solid rgba(255,255,255,0.1);">
             <!-- Card Chip & Logo -->
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
