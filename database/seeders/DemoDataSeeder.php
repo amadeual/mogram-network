@@ -2,88 +2,91 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Post;
-use App\Models\Live;
+use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
-use Carbon\Carbon;
 
 class DemoDataSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Create a Creator User
-        $ana = User::updateOrCreate(
+        // Create 2 Creators
+        $ana = User::firstOrCreate(
             ['email' => 'ana@mogram.com'],
             [
-                'name' => 'Ana Clara',
-                'username' => 'ana_clara',
+                'name' => 'Ana Silva',
+                'username' => 'anasilva',
                 'password' => Hash::make('password'),
-                'avatar' => '/images/ana_clara.png',
-                'city' => 'Rio de Janeiro',
-                'category' => 'Marketing Creator',
-                'bio' => 'Especialista em marketing digital e criação de conteúdo. 🚀',
                 'is_verified' => true,
+                'category' => 'Lifestyle & Moda',
+                'bio' => 'Conteúdo exclusivo sobre moda e bastidores.'
             ]
         );
 
-        $marcos = User::updateOrCreate(
+        $marcos = User::firstOrCreate(
             ['email' => 'marcos@mogram.com'],
             [
-                'name' => 'Marcos Silva',
-                'username' => 'marcos_silva',
+                'name' => 'Marcos Gamer',
+                'username' => 'marcosgamer',
                 'password' => Hash::make('password'),
-                'avatar' => '/images/marcos_silva.png',
-                'city' => 'São Paulo',
-                'category' => 'Tech & Gaming',
-                'bio' => 'Apaixonado por tecnologia e jogos eletrônicos. 🎮✨',
                 'is_verified' => true,
+                'category' => 'Games & Tech',
+                'bio' => 'Lives diárias e reviews de jogos.'
             ]
         );
 
-        // 2. Create some Posts
-        Post::create([
-            'user_id' => $ana->id,
-            'title' => 'Estratégias de Crescimento para 2024',
-            'description' => 'Aprenda as técnicas avançadas de tráfego pago e branding. 📈✨',
-            'type' => 'video',
-            'is_exclusive' => true,
-            'price' => 29.90,
-            'file_path' => '/images/island_video.png', 
-        ]);
+        // Create 5 Posts
+        $posts = [
+            [
+                'user_id' => $ana->id,
+                'title' => 'Um dia de trabalho no paraíso 🌴',
+                'description' => 'Aproveitando o sol para adiantar as edições da nova coleção. O que acharam desse setup?',
+                'file_path' => 'images/posts/travel.png',
+                'type' => 'image',
+                'price' => 0.00,
+                'is_exclusive' => false
+            ],
+            [
+                'user_id' => $ana->id,
+                'title' => 'Look Urban Night ✨',
+                'description' => 'As luzes da cidade sempre inspiram meus melhores looks. Estilo e conforto em uma só peça.',
+                'file_path' => 'images/posts/fashion.png',
+                'type' => 'image',
+                'price' => 0.00,
+                'is_exclusive' => false
+            ],
+            [
+                'user_id' => $marcos->id,
+                'title' => 'Segredos da Alta Gastronomia 🍳',
+                'description' => 'Confira como preparei este prato exclusivo hoje. Dicas de tempero e apresentação.',
+                'file_path' => 'images/posts/chef.png',
+                'type' => 'image',
+                'price' => 19.90,
+                'is_exclusive' => true
+            ],
+            [
+                'user_id' => $ana->id,
+                'title' => 'Yoga ao pôr do sol 🧘‍♀️',
+                'description' => 'Minha rotina completa de meditação e yoga para começar bem a semana. Conteúdo exclusivo para assinantes.',
+                'file_path' => 'images/posts/fitness.png',
+                'type' => 'image',
+                'price' => 49.90,
+                'is_exclusive' => true
+            ],
+            [
+                'user_id' => $marcos->id,
+                'title' => 'Mercado Central 🍎',
+                'description' => 'Buscando inspirações e novos sabores no mercado local hoje pela manhã.',
+                'file_path' => 'images/posts/art.png',
+                'type' => 'image',
+                'price' => 0.00,
+                'is_exclusive' => false
+            ]
+        ];
 
-        Post::create([
-            'user_id' => $marcos->id,
-            'title' => 'Review do Novo Gadget X',
-            'description' => 'As especificações superaram minhas expectativas! 📸🕹️',
-            'type' => 'image',
-            'is_exclusive' => false,
-            'price' => 0,
-            'file_path' => '/images/live_gadget.png', 
-        ]);
-
-        // 3. Create a Scheduled Live (using model fields)
-        Live::create([
-            'user_id' => $ana->id,
-            'title' => 'Workshop: Monetizando sua Audiência',
-            'description' => 'Sessão ao vivo exclusiva sobre como vender seus primeiros infoprodutos.',
-            'thumbnail' => '/images/live_office.png',
-            'status' => 'scheduled',
-            'started_at' => Carbon::now()->addDays(2),
-            'price' => 49.00,
-            'is_free' => false,
-        ]);
-        
-        Live::create([
-            'user_id' => $marcos->id,
-            'title' => 'Gameplay Sábado: Novos Lançamentos',
-            'description' => 'Testando os jogos que saíram essa semana com vocês! 🎮',
-            'thumbnail' => '/images/live_fitness.png',
-            'status' => 'live',
-            'started_at' => Carbon::now(),
-            'price' => 0,
-            'is_free' => true,
-        ]);
+        foreach ($posts as $postData) {
+            Post::create($postData);
+        }
     }
 }
