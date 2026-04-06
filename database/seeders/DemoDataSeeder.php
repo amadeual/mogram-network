@@ -20,6 +20,7 @@ class DemoDataSeeder extends Seeder
                 'password' => Hash::make('password'),
                 'is_verified' => true,
                 'category' => 'Lifestyle & Moda',
+                'avatar' => 'images/avatars/ana.png',
                 'bio' => 'Conteúdo exclusivo sobre moda e bastidores.'
             ]
         );
@@ -31,6 +32,7 @@ class DemoDataSeeder extends Seeder
                 'username' => 'marcosgamer',
                 'password' => Hash::make('password'),
                 'is_verified' => true,
+                'avatar' => 'images/avatars/marcos.png',
                 'category' => 'Games & Tech',
                 'bio' => 'Lives diárias e reviews de jogos.'
             ]
