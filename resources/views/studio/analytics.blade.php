@@ -19,10 +19,10 @@
         <div class="studio-grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
             <div class="premium-metric-card" style="--accent-color: #3390ec;">
                 <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Visualizações Totais</p>
-                <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">0</h3>
+                <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ number_format($totalViews, 0, ',', '.') }}</h3>
                 <div style="color: #22c55e; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
-                    0%
+                    Frequência Alta
                 </div>
             </div>
             <div class="premium-metric-card" style="--accent-color: #22c55e;">
@@ -38,11 +38,15 @@
         <div class="studio-grid-2" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
             <!-- Main Chart -->
             <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
-                <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos</h3>
-                <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px;">
-                    @php $stats_data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; @endphp
-                    @foreach($stats_data as $i => $val)
-                        <div style="flex: 1; height: 5%; background: var(--primary-blue); border-radius: 8px 8px 0 0; opacity: 0.1;"></div>
+                <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos (Últimos 7 dias)</h3>
+                <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-bottom: 2rem; position: relative;">
+                    @php $max_val = $weeklyEarnings->max() ?: 1; @endphp
+                    @foreach($weeklyEarnings as $day => $val)
+                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                            <div style="font-size: 9px; color: #22c55e; font-weight: 800;">R$ {{ number_format($val, 0) }}</div>
+                            <div style="width: 100%; height: {{ max(5, ($val / $max_val) * 100) }}%; background: linear-gradient(to top, var(--primary-blue), #8b5cf6); border-radius: 8px 8px 4px 4px; transition: 0.3s; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.2);"></div>
+                            <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; margin-top: 4px;">{{ $day }}</div>
+                        </div>
                     @endforeach
                 </div>
             </div>

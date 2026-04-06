@@ -39,14 +39,27 @@ class StudioController extends Controller
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         $totalPosts = count($postIds);
         $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $totalViews = Post::where('user_id', Auth::id())->sum('views');
         
+        // Weekly Earnings Evolution (Last 7 Days)
+        $weeklyEarnings = collect();
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $amount = DB::table('purchases')
+                ->whereIn('post_id', $postIds)
+                ->whereDate('created_at', $date)
+                ->sum('amount');
+            
+            $weeklyEarnings->put(now()->subDays($i)->format('d/m'), (float)$amount);
+        }
+
         $topPosts = Post::where('user_id', Auth::id())
             ->whereHas('purchases')
             ->withCount('purchases')
             ->orderBy('purchases_count', 'desc')
             ->take(3)->get();
             
-        return view('studio.analytics', compact('totalPosts', 'totalRevenue', 'topPosts'));
+        return view('studio.analytics', compact('totalPosts', 'totalRevenue', 'totalViews', 'topPosts', 'weeklyEarnings'));
     }
 
     public function finance()
