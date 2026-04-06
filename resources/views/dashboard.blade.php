@@ -77,7 +77,7 @@
                 @if($post->file_path)
                 <div class="post-media" style="margin-top: 1rem; position: relative;">
                     @if($post->is_exclusive && auth()->id() != $post->user_id)
-                        <img src="{{ Storage::url($post->file_path) }}" style="filter: blur(40px) brightness(0.5); width: 100%; border-radius: 16px;">
+                        <img src="{{ asset($post->file_path) }}" style="filter: blur(40px) brightness(0.5); width: 100%; border-radius: 16px;">
                         <div class="exclusive-overlay" style="position: absolute; top:0; left:0; width:100%; height:100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.4); border-radius: 16px;">
                             <div style="width: 50px; height: 50px; background: rgba(51, 144, 236, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1rem;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -87,9 +87,9 @@
                         </div>
                     @else
                         @if($post->type == 'video')
-                            <video src="{{ Storage::url($post->file_path) }}" controls style="width: 100%; border-radius: 16px; background: black; max-height: 500px;"></video>
+                            <video src="{{ asset($post->file_path) }}" controls style="width: 100%; border-radius: 16px; background: black; max-height: 500px;"></video>
                         @elseif($post->type == 'image')
-                            <img src="{{ Storage::url($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px;">
+                            <img src="{{ asset($post->file_path) }}" style="width: 100%; border-radius: 16px; object-fit: contain; max-height: 600px;">
                         @elseif($post->type == 'pdf')
                             <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 2rem; display: flex; align-items: center; gap: 1.5rem;">
                                 <div style="width: 50px; height: 50px; background: rgba(239,68,68,0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center;">
