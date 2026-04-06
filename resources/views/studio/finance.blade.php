@@ -15,12 +15,12 @@
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px;">Carteira</h1>
             </header>
 
-            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; position: relative; box-shadow: 0 20px 40px rgba(18, 97, 209, 0.3); overflow: hidden;">
-                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
-                    <p style="font-size: 13px; font-weight: 850; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 1px;">Saldo Disponível</p>
+            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 2rem; margin-bottom: 2.5rem; position: relative; box-shadow: 0 15px 35px rgba(18, 97, 209, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                    <p style="font-size: 12px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Saldo Disponível</p>
+                    <h2 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -1.5px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
                 </div>
-                <h2 style="font-size: 3.5rem; font-weight: 950; color: white; margin-bottom: 2rem; letter-spacing: -2px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
-                <button onclick="toggleView('withdraw')" style="background: white; color: #1261d1; padding: 0.875rem 1.75rem; border: none; border-radius: 14px; font-weight: 950; font-size: 14px; cursor: pointer; transition: 0.3s;"
+                <button onclick="toggleView('withdraw')" style="background: white; color: #1261d1; padding: 0.75rem 1.75rem; border: none; border-radius: 12px; font-weight: 950; font-size: 13px; cursor: pointer; transition: 0.3s;"
                         onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Sacar Agora</button>
             </div>
 

@@ -12,17 +12,16 @@
             <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px;">Minha Carteira</h1>
         </header>
 
-        <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; position: relative; box-shadow: 0 20px 40px rgba(18, 97, 209, 0.3); overflow: hidden;">
-            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
-                <p style="font-size: 13px; font-weight: 850; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 1px;">Seu Saldo</p>
+        <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 2rem; margin-bottom: 2.5rem; position: relative; box-shadow: 0 15px 35px rgba(18, 97, 209, 0.2); overflow: hidden; display: flex; align-items: center; justify-content: space-between;">
+            <div>
+                <p style="font-size: 12px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Seu Saldo</p>
+                <h2 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -1.5px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
             </div>
-            <h2 style="font-size: 3.5rem; font-weight: 950; color: white; margin-bottom: 2rem; letter-spacing: -2px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
-            <div style="display: flex; gap: 1rem;">
-                <button onclick="showToast('Integração de PIX em breve!', 'info')" style="background: white; color: #1261d1; padding: 0.875rem 1.75rem; border: none; border-radius: 14px; font-weight: 950; font-size: 14px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    Depositar Agora
-                </button>
-            </div>
+            <button onclick="showToast('Integração de PIX em breve!', 'info')" style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); color: white; padding: 0.75rem 1.5rem; border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; font-weight: 900; font-size: 13px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px;"
+                    onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 5v14M5 12h14"/></svg>
+                Depositar
+            </button>
         </div>
 
         <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 1.5rem;">Histórico de Gastos</h3>
