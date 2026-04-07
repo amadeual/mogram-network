@@ -401,6 +401,12 @@
                 updateStatus('Ao Vivo', '#22c55e');
                 document.getElementById('offline_view').style.display = 'none';
                 document.getElementById('video_wrapper').style.display = 'flex';
+                
+                // Show unmute prompt if player starts muted
+                const video = document.getElementById('creator_video');
+                if (video && video.muted) {
+                    document.getElementById('unmute_prompt').style.display = 'flex';
+                }
             }
             if (s === 'IDLE') updateStatus('Aguardando Criador...', '#3390ec');
         });
@@ -441,8 +447,11 @@
             
             // Add devices to IVS
             console.log('Adding devices to IVS Broadcaster...');
-            await ivsBroadcaster.addVideoInputDevice(stream, 'camera', { index: 0 });
-            await ivsBroadcaster.addAudioInputDevice(stream, 'mic');
+            const videoTrack = stream.getVideoTracks()[0];
+            const audioTrack = stream.getAudioTracks()[0];
+            
+            if (videoTrack) await ivsBroadcaster.addVideoInputDevice(videoTrack, 'camera', { index: 0 });
+            if (audioTrack) await ivsBroadcaster.addAudioInputDevice(audioTrack, 'mic');
 
             console.log('Broadcasting to Amazon IVS...');
             await ivsBroadcaster.startBroadcast(IVS_STREAM_KEY);
