@@ -8,9 +8,9 @@
     <!-- Amazon IVS SDKs -->
     <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
-    <div style="display: flex; flex: 1; height: calc(100vh - 55px); overflow: hidden;" class="responsive-container">
+    <div style="display: flex; flex: 1; height: calc(100vh - 55px); overflow: hidden; width: 100%;" class="responsive-container">
         <!-- Sidebar Navigation -->
-        <aside class="left-nav" style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
+        <aside class="left-nav" style="width: 240px; flex-shrink: 0; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512">
                     <defs><linearGradient id="streamLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -50,7 +50,7 @@
         </aside>
 
         <!-- Stream Area -->
-        <main style="flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 0 1.5rem;">
+        <main style="flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 0 1.25rem; min-width: 0;">
             <!-- Creator Header -->
             <div style="padding: 1.5rem 0; display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; gap: 1.25rem; align-items: center;">
@@ -273,7 +273,7 @@
         </main>
 
         <!-- Right Side: Chat Area -->
-        <aside class="chat-sidebar" style="width: 380px; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+        <aside class="chat-sidebar" style="width: 320px; flex-shrink: 0; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
             <!-- Tab Headers (Compacted) -->
             <div style="padding: 1rem 1.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: white;">Chat ao Vivo</div>
             
