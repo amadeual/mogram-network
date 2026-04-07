@@ -727,26 +727,37 @@
     }
 
     function deleteLive(btn) {
-        showMogramConfirm('Encerrar Live', 'Deseja realmente encerrar esta transmissão agora? Todos os espectadores serão desconectados.', () => {
-            const originalHtml = btn.innerHTML;
-            btn.innerHTML = 'Encerrando...';
-            btn.disabled = true;
-
-            if (window.localStream) {
-                window.localStream.getTracks().forEach(t => t.stop());
+        if (typeof showMogramConfirm === 'function') {
+            showMogramConfirm('Encerrar Live', 'Deseja realmente encerrar esta transmissão agora? Todos os espectadores serão desconectados.', () => {
+                executeDeleteLive(btn);
+            });
+        } else {
+            if (confirm('Deseja realmente encerrar esta transmissão?')) {
+                executeDeleteLive(btn);
             }
+        }
+    }
 
-            if (peer) peer.destroy();
+    function executeDeleteLive(btn) {
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = 'Encerrando...';
+        btn.disabled = true;
 
-            fetch('{{ route('live.destroy', $live->id) }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({ _method: 'DELETE' })
-            })
-            .then(res => res.json())
+        if (window.localStream) {
+            window.localStream.getTracks().forEach(t => t.stop());
+        }
+
+        if (peer) peer.destroy();
+
+        fetch('{{ route('live.destroy', $live->id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ _method: 'DELETE' })
+        })
+        .then(res => res.json())
         .then(data => {
             if (data.success) {
                 window.location.href = '{{ route('lives') }}';
@@ -768,11 +779,21 @@
 
     // Helper to start the stream
     function initLive() {
-        initPeer();
-        if (IS_CREATOR) {
-            setTimeout(startCamera, 1000);
-        } else {
-            startChatPolling();
+        console.log('Initializing Mogram Live Studio...');
+        try {
+            if (typeof initPeer === 'function') initPeer();
+            
+            if (IS_CREATOR) {
+                console.log('Creator mode detected, starting camera...');
+                setTimeout(() => {
+                    if (typeof startCamera === 'function') startCamera();
+                }, 1000);
+            } else {
+                console.log('Viewer mode detected, starting chat...');
+                if (typeof startChatPolling === 'function') startChatPolling();
+            }
+        } catch (e) {
+            console.error('Failed to initialize live studio:', e);
         }
     }
 
@@ -780,6 +801,11 @@
 
     function showMogramConfirm(title, message, onConfirm) {
         const modal = document.getElementById('mogram_confirm_modal');
+        if (!modal) {
+            if (confirm(message)) onConfirm();
+            return;
+        }
+        
         document.getElementById('confirm_title').innerText = title;
         document.getElementById('confirm_msg').innerText = message;
         
@@ -796,14 +822,15 @@
     }
 
     function closeConfirm() {
-        document.getElementById('mogram_confirm_modal').style.display = 'none';
+        const modal = document.getElementById('mogram_confirm_modal');
+        if (modal) modal.style.display = 'none';
     }
 
     // Close on click outside
-    window.onclick = function(event) {
+    window.addEventListener('click', function(event) {
         const confirmModal = document.getElementById('mogram_confirm_modal');
         if (confirmModal && event.target == confirmModal) closeConfirm();
-    }
+    });
 </script>
 
 <style>
