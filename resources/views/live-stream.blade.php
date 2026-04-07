@@ -134,7 +134,37 @@
                             <a href="{{ route('lives') }}" style="background: #3390ec; color: white; text-decoration: none; padding: 12px 30px; border-radius: 12px; font-weight: 800;">Explorar outras lives</a>
                         </div>
 
-                        <!-- 7. Paid Entry Overlay -->
+                        <!-- 8. Gift Modal (Premium Redesign) -->
+                        <div id="gift_modal" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 400; align-items: center; justify-content: center; padding: 1.5rem;">
+                            <div style="background: #11131f; width: 100%; max-width: 440px; border-radius: 32px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                                    <div>
+                                        <h3 style="color: white; font-weight: 900; font-size: 1.25rem; margin: 0; letter-spacing: -0.5px;">Enviar Presente</h3>
+                                        <p style="color: #64748b; font-size: 0.75rem; font-weight: 700; margin: 5px 0 0;">Apoie o criador agora!</p>
+                                    </div>
+                                    <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">&times;</button>
+                                </div>
+                                
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 350px; overflow-y: auto; padding-right: 5px;" class="custom-scroll">
+                                    @foreach($gifts as $gift)
+                                    <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-item-v2" style="cursor: pointer; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px 10px; text-align: center; transition: 0.3s;">
+                                        <div style="font-size: 2.25rem; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
+                                        <div style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 4px;">{{ $gift->name }}</div>
+                                        <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 8px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                
+                                <div id="selected_gift_summary" style="margin-bottom: 1.5rem; text-align: center; display: none;">
+                                    <p style="color: #64748b; font-size: 0.75rem; font-weight: 700;">Seu saldo atual: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
+                                </div>
+
+                                <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2);">
+                                    ENVIAR PRESENTE
+                                </button>
+                            </div>
+                        </div>
+
                     <!-- 7. Paid Entry Overlay (Professionalized) -->
                     @if(isset($hasAccess) && !$hasAccess)
                     <div id="payment_overlay" style="position: absolute; inset: 0; background: rgba(11, 10, 21, 0.85); backdrop-filter: blur(25px); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 2rem;">
@@ -830,10 +860,22 @@
         m.style.display = m.style.display === 'none' ? 'flex' : 'none';
     }
 
-    function selectGift(id) {
+    function selectGift(id, element) {
         selectedGiftId = id;
+        
+        // Remove active class from all
+        document.querySelectorAll('.gift-item-v2').forEach(el => {
+            el.style.borderColor = 'rgba(255,255,255,0.05)';
+            el.style.background = 'rgba(255,255,255,0.02)';
+        });
+        
+        // Add active class
+        element.style.borderColor = '#ffd600';
+        element.style.background = 'rgba(255,214,0,0.05)';
+        
         document.getElementById('send_gift_btn').disabled = false;
         document.getElementById('send_gift_btn').style.opacity = '1';
+        document.getElementById('selected_gift_summary').style.display = 'block';
     }
 
     function confirmSendGift() {
@@ -984,5 +1026,25 @@
         from { transform: translate(-50%, -40px); opacity: 0; } 
         to { transform: translate(-50%, 0); opacity: 1; } 
     }
+    @keyframes giftPulse {
+        0% { transform: scale(0.95); opacity: 0.5; }
+        50% { transform: scale(1.02); }
+        100% { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes modalPop {
+        from { transform: scale(0.8) translateY(20px); opacity: 0; }
+        to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    
+    .gift-item-v2:hover {
+        transform: translateY(-5px);
+        background: rgba(255,255,255,0.05) !important;
+        border-color: rgba(255,255,255,0.2) !important;
+    }
+    
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 </style>
 @endsection

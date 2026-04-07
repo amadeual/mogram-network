@@ -355,20 +355,26 @@ class LiveController extends Controller
         }
 
         DB::transaction(function () use ($user, $gift, $live) {
+            // Deduct from sender
             $user->decrement('balance', $gift->price);
+            
+            // Platform commission (20%)
             $platformComm = $gift->price * 0.20;
             $creatorShare = $gift->price - $platformComm;
+            
+            // Credit the creator
             $live->user->increment('balance', $creatorShare);
 
-            LiveGift::create([
+            // Record gift
+            \App\Models\LiveGift::create([
                 'live_id' => $live->id,
                 'user_id' => $user->id,
                 'gift_id' => $gift->id,
-                'amount' => $gift->price,
-                'commission' => $platformComm
+                'price' => $gift->price
             ]);
 
-            $chat = LiveChat::create([
+            // Create special chat message for the gift
+            \App\Models\LiveChat::create([
                 'live_id' => $live->id,
                 'user_id' => $user->id,
                 'message' => "enviou " . $gift->icon . " " . $gift->name . "!"

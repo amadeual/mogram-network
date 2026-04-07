@@ -7,28 +7,23 @@ use App\Models\Gift;
 
 class GiftSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
-    public function run(): void
+    public function run()
     {
         $gifts = [
-            ['name' => 'Rosa', 'icon' => '🌹', 'price' => 1.00],
-            ['name' => 'Café', 'icon' => '☕', 'price' => 10.00],
-            ['name' => 'Coração', 'icon' => '❤️', 'price' => 50.00],
-            ['name' => 'Estrela', 'icon' => '✨', 'price' => 100.00],
-            ['name' => 'Diamante', 'icon' => '💎', 'price' => 500.00],
-            ['name' => 'Foguete', 'icon' => '🚀', 'price' => 1000.00],
-            ['name' => 'Super Carro', 'icon' => '🏎️', 'price' => 5000.00],
-            ['name' => 'Mansão', 'icon' => '🏰', 'price' => 10000.00],
-            ['name' => 'Jato Particular', 'icon' => '🛩️', 'price' => 20000.00],
-            ['name' => 'Planeta', 'icon' => '🪐', 'price' => 50000.00],
-            ['name' => 'Galáxia', 'icon' => '🌌', 'price' => 100000.00],
-            ['name' => 'Universo', 'icon' => '⚛️', 'price' => 200000.00],
+            ['name' => 'Rosa', 'icon' => '🌹', 'price' => 0.50],
+            ['name' => 'Café', 'icon' => '☕', 'price' => 1.00],
+            ['name' => 'Joinha', 'icon' => '👍', 'price' => 2.00],
+            ['name' => 'Fogo', 'icon' => '🔥', 'price' => 5.00],
+            ['name' => 'Cerveja', 'icon' => '🍺', 'price' => 10.00],
+            ['name' => 'Pizza', 'icon' => '🍕', 'price' => 20.00],
+            ['name' => 'Game', 'icon' => '🎮', 'price' => 50.00],
+            ['name' => 'Saxofone', 'icon' => '🎷', 'price' => 100.00],
+            ['name' => 'Guitarra', 'icon' => '🎸', 'price' => 250.00],
+            ['name' => 'Diamante Mogram', 'icon' => '💎', 'price' => 500.00],
         ];
 
         foreach ($gifts as $gift) {
-            Gift::create($gift);
+            Gift::updateOrCreate(['name' => $gift['name']], $gift);
         }
     }
 }
