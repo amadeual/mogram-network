@@ -84,7 +84,7 @@
             </div>
 
             <!-- Video Player Container (Optimized for ideal size) -->
-            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative !important; width: 100%; max-width: 920px; max-height: 600px; margin: 0 auto; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative !important; width: 100%; max-width: 720px; margin: 0 auto; aspect-ratio: 720/320; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 
                 <!-- Video Layers -->
                 <div id="video_layers" style="position: absolute; inset: 0;">
@@ -384,7 +384,11 @@
 
                 const baseUrl = 'https://web-broadcast.live-video.net/1.8.0/';
                 window.ivsBroadcaster = IVS.create({
-                    streamConfig: IVS.BASIC_LANDSCAPE,
+                    streamConfig: {
+                        maxResolution: { width: 720, height: 320 },
+                        maxFramerate: 30,
+                        maxBitrate: 2500,
+                    },
                     ingestEndpoint: IVS_INGEST_ENDPOINT,
                     wasmWorker: `${baseUrl}amazon-ivs-wasmworker.min.js?v=${Date.now()}`,
                     wasmBinary: `${baseUrl}amazon-ivs-wasmworker.min.wasm?v=${Date.now()}`
@@ -473,7 +477,7 @@
         try {
             console.log('Requesting User Media...');
             const stream = await navigator.mediaDevices.getUserMedia({
-                video: { width: 1280, height: 720 },
+                video: { width: 720, height: 320 },
                 audio: true
             });
 
@@ -612,8 +616,8 @@
         const constraints = {
             video: { 
                 facingMode: currentFacingMode || 'user',
-                width: { ideal: 1280 }, 
-                height: { ideal: 720 } 
+                width: { ideal: 720 }, 
+                height: { ideal: 320 } 
             },
             audio: { echoCancellation: true, noiseSuppression: true }
         };
