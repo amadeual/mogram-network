@@ -134,30 +134,39 @@
     </main>
 </div>
 
-<!-- Gift Modal (Consolidated Styling) -->
-<div id="gift_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center; padding: 2rem;">
-    <div style="background: #151621; width: 100%; max-width: 440px; border-radius: 32px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-            <div>
-                <h3 style="color: white; font-weight: 950; font-size: 1.25rem; margin: 0; letter-spacing: -1px;">Enviar Presente</h3>
-                <p style="color: rgba(255,255,255,0.3); font-size: 0.75rem; font-weight: 800; margin: 5px 0 0;">Seu saldo: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
-            </div>
-            <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">&times;</button>
-        </div>
+<!-- 🎁 Optimized Gift Popover (TikTok & Mogram Hybrid) -->
+<div id="gift_modal" style="display: none; position: fixed; bottom: 120px; right: 30px; z-index: 10000; width: 360px; max-width: calc(100% - 60px); animation: giftSheetUp 0.4s cubic-bezier(0.19, 1, 0.22, 1);">
+    <div style="background: rgba(21, 22, 33, 0.9); backdrop-filter: blur(25px); border-radius: 28px; border: 1.2px solid rgba(255,255,255,0.08); box-shadow: 0 40px 100px rgba(0,0,0,0.8); overflow: hidden; display: flex; flex-direction: column;">
         
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 380px; overflow-y: auto; padding-right: 8px;" class="custom-scroll">
+        <!-- Header -->
+        <div style="padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05);">
+            <div>
+                <h3 style="color: white; font-weight: 900; font-size: 1rem; margin: 0; letter-spacing: -0.5px;">Presentes</h3>
+                <div style="display: flex; align-items: center; gap: 6px; margin-top: 3px;">
+                    <div style="width: 6px; height: 6px; background: #22c55e; border-radius: 50%;"></div>
+                    <p style="color: rgba(255,255,255,0.4); font-size: 0.7rem; font-weight: 700; margin: 0;">Saldo: <span style="color: white;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
+                </div>
+            </div>
+            <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.1rem;">&times;</button>
+        </div>
+
+        <!-- Scrollable Grid (High-Density) -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; padding: 1.25rem; max-height: 320px; overflow-y: auto;" class="custom-scroll">
             @foreach($gifts as $gift)
-            <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-card" style="cursor: pointer; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px 10px; text-align: center; transition: 0.3s;">
-                <div style="font-size: 2.25rem; margin-bottom: 12px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
-                <div style="font-size: 0.75rem; font-weight: 850; color: white; margin-bottom: 6px;">{{ $gift->name }}</div>
-                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 10px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
+            <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-card-v3" style="cursor: pointer; padding: 12px 6px; text-align: center; border-radius: 18px; transition: 0.2s; border: 1px solid transparent;">
+                <div style="font-size: 1.75rem; margin-bottom: 6px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: 0.2s;" class="gift-icon-v3">{{ $gift->icon }}</div>
+                <div style="font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.5); margin-bottom: 3px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $gift->name }}</div>
+                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600;">R$ {{ number_format($gift->price, 0, ',', '.') }}</div>
             </div>
             @endforeach
         </div>
-        
-        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.25rem; border-radius: 18px; font-weight: 950; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2);">
-            ENVIAR PRESENTE
-        </button>
+
+        <!-- Footer / Action -->
+        <div style="padding: 1.25rem; background: rgba(255,255,255,0.02);">
+            <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1rem; border-radius: 16px; font-weight: 950; cursor: pointer; transition: 0.3s; font-size: 0.85rem; box-shadow: 0 10px 30px rgba(255,214,0,0.15); opacity: 0.3; text-transform: uppercase; letter-spacing: 0.5px;">
+                Enviar Agora
+            </button>
+        </div>
     </div>
 </div>
 
@@ -201,9 +210,9 @@
 
     function selectGift(id, element) {
         selectedGiftId = id;
-        document.querySelectorAll('.gift-card').forEach(el => {
-            el.style.borderColor = 'rgba(255,255,255,0.05)';
-            el.style.background = 'rgba(255,255,255,0.03)';
+        document.querySelectorAll('.gift-card-v3').forEach(el => {
+            el.style.borderColor = 'transparent';
+            el.style.background = 'transparent';
         });
         element.style.borderColor = '#ffd600';
         element.style.background = 'rgba(255,214,0,0.05)';
@@ -243,15 +252,26 @@
 
 <style>
 .main-content { margin-left: 280px; }
+
+/* 🎁 Gift Card V3 Styles */
+.gift-card-v3:hover {
+    background: rgba(255,255,255,0.05) !important;
+}
+.gift-card-v3:hover .gift-icon-v3 {
+    transform: scale(1.2) rotate(5deg);
+}
+
 @keyframes giftPulse {
     0% { transform: scale(0.95); opacity: 0.5; }
     50% { transform: scale(1.02); }
     100% { transform: scale(1); opacity: 1; }
 }
-@keyframes modalPop {
-    from { transform: scale(0.8) translateY(20px); opacity: 0; }
-    to { transform: scale(1) translateY(0); opacity: 1; }
+
+@keyframes giftSheetUp {
+    from { transform: translateY(100%) scale(0.9); opacity: 0; }
+    to   { transform: translateY(0) scale(1); opacity: 1; }
 }
+
 .custom-scroll::-webkit-scrollbar { width: 5px; }
 .custom-scroll::-webkit-scrollbar-track { background: transparent; }
 .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
