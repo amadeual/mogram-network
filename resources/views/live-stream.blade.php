@@ -123,47 +123,52 @@
                             <div style="text-align: center;">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">📷</div>
                                 <h3 style="color: white; font-weight: 800;">CÂMERA DESLIGADA</h3>
+                                            </div>
+                    @endif
+
+                    <!-- 9. Live Gift Alert (Banner) -->
+                    <div id="live_gift_alert" style="display: none; position: absolute; top: 15%; left: 50%; transform: translateX(-50%); z-index: 500; pointer-events: none;">
+                        <div style="background: rgba(0,0,0,0.8); backdrop-filter: blur(15px); border: 2px solid #ffd600; padding: 1rem 2rem; border-radius: 100px; display: flex; align-items: center; gap: 15px; box-shadow: 0 0 50px rgba(255,214,0,0.4); animation: toastDownLive 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);">
+                            <div id="alert_icon" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px #ffd600);">🌹</div>
+                            <div style="text-align: left;">
+                                <p id="alert_user" style="color: white; font-weight: 900; font-size: 0.9rem; margin: 0; line-height: 1;">Nome</p>
+                                <p id="alert_gift" style="color: #ffd600; font-weight: 800; font-size: 0.75rem; margin: 5px 0 0; text-transform: uppercase;">ENVIOU UMA ROSA!</p>
                             </div>
                         </div>
-                        <div id="ended_overlay" style="display: none; position: absolute; inset: 0; background: #0b0a15; z-index: 200; align-items: center; justify-content: center; flex-direction: column;">
-                            <div style="width: 80px; height: 80px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);">
-                                <svg width="40" height="40" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4-9h-8v2h8v-2z"/></svg>
+                    </div>
+                </div>
+
+                <!-- 8. Gift Modal (Premium Redesign) -->
+                <div id="gift_modal" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 400; align-items: center; justify-content: center; padding: 1.5rem;">
+                    <div style="background: #11131f; width: 100%; max-width: 440px; border-radius: 32px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                            <div>
+                                <h3 style="color: white; font-weight: 900; font-size: 1.25rem; margin: 0; letter-spacing: -0.5px;">Enviar Presente</h3>
+                                <p style="color: #64748b; font-size: 0.75rem; font-weight: 700; margin: 5px 0 0;">Apoie o criador agora!</p>
                             </div>
-                            <h2 style="color: white; font-weight: 900; letter-spacing: -1px; margin-bottom: 0.5rem;">Transmissão Encerrada</h2>
-                            <p style="color: #888; font-weight: 600; margin-bottom: 2rem;">Obrigado por assistir!</p>
-                            <a href="{{ route('lives') }}" style="background: #3390ec; color: white; text-decoration: none; padding: 12px 30px; border-radius: 12px; font-weight: 800;">Explorar outras lives</a>
+                            <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">&times;</button>
+                        </div>
+                        
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 350px; overflow-y: auto; padding-right: 5px;" class="custom-scroll">
+                            @foreach($gifts as $gift)
+                            <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-item-v2" style="cursor: pointer; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px 10px; text-align: center; transition: 0.3s;">
+                                <div style="font-size: 2.25rem; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
+                                <div style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 4px;">{{ $gift->name }}</div>
+                                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 8px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
+                            </div>
+                            @endforeach
+                        </div>
+                        
+                        <div id="selected_gift_summary" style="margin-bottom: 1.5rem; text-align: center; display: none;">
+                            <p style="color: #64748b; font-size: 0.75rem; font-weight: 700;">Seu saldo atual: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
                         </div>
 
-                        <!-- 8. Gift Modal (Premium Redesign) -->
-                        <div id="gift_modal" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 400; align-items: center; justify-content: center; padding: 1.5rem;">
-                            <div style="background: #11131f; width: 100%; max-width: 440px; border-radius: 32px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                                    <div>
-                                        <h3 style="color: white; font-weight: 900; font-size: 1.25rem; margin: 0; letter-spacing: -0.5px;">Enviar Presente</h3>
-                                        <p style="color: #64748b; font-size: 0.75rem; font-weight: 700; margin: 5px 0 0;">Apoie o criador agora!</p>
-                                    </div>
-                                    <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">&times;</button>
-                                </div>
-                                
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 350px; overflow-y: auto; padding-right: 5px;" class="custom-scroll">
-                                    @foreach($gifts as $gift)
-                                    <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-item-v2" style="cursor: pointer; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px 10px; text-align: center; transition: 0.3s;">
-                                        <div style="font-size: 2.25rem; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
-                                        <div style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 4px;">{{ $gift->name }}</div>
-                                        <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 8px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                                
-                                <div id="selected_gift_summary" style="margin-bottom: 1.5rem; text-align: center; display: none;">
-                                    <p style="color: #64748b; font-size: 0.75rem; font-weight: 700;">Seu saldo atual: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
-                                </div>
-
-                                <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2);">
-                                    ENVIAR PRESENTE
-                                </button>
-                            </div>
-                        </div>
+                        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2);">
+                            ENVIAR PRESENTE
+                        </button>
+                    </div>
+                </div>
+           </div>
 
                     <!-- 7. Paid Entry Overlay (Professionalized) -->
                     @if(isset($hasAccess) && !$hasAccess)
@@ -810,7 +815,26 @@
                 if (!box) return;
                 
                 const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 65;
+                const oldHtml = box.innerHTML;
                 box.innerHTML = html;
+                
+                // Detect NEW gifts to show alert
+                if (html.length > oldHtml.length) {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = html;
+                    const lastMsg = temp.querySelector('div:last-child');
+                    if (lastMsg && lastMsg.innerText.includes('enviou')) {
+                        const icon = lastMsg.querySelector('span[style*="font-size: 2rem"]')?.innerText || '🎁';
+                        const user = lastMsg.querySelector('p[style*="color: #ffd600"]')?.innerText || 'Alguém';
+                        const fullMsg = lastMsg.innerText.trim();
+                        
+                        // Prevent duplicate alerts for the same message
+                        if (window.lastGiftMsg !== fullMsg) {
+                            showLiveGiftAlert(user, icon, fullMsg);
+                            window.lastGiftMsg = fullMsg;
+                        }
+                    }
+                }
                 
                 if (wasAtBottom) {
                     box.scrollTop = box.scrollHeight;
