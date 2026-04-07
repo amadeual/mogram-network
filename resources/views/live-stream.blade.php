@@ -302,7 +302,9 @@
     window.localStream = null;
 
     function initPeer() {
-        const peerId = IS_CREATOR ? LIVE_ID : 'mogr_v_' + Math.random().toString(36).substr(2, 6);
+        // Viewer ID with timestamp to avoid ghost sessions
+        const viewerId = 'mogr_v_' + Math.random().toString(36).substr(2, 4) + Date.now().toString().substr(-4);
+        const peerId = IS_CREATOR ? LIVE_ID : viewerId;
         const peerConfig = {
             debug: 1,
             config: {
@@ -364,40 +366,35 @@
 
             updateStatus('Conectando ao Criador...');
             
-            // NEW PUSH STRATEGY: Viewer connects via Data first
-            console.log('VIEWER: Signaling presence to creator...');
-            const conn = peer.connect(LIVE_ID);
+            // Try both Data connection AND direct call for max reliability
+            console.log('VIEWER: Initiating hybrid connection...');
+            
+            const conn = peer.connect(LIVE_ID, { reliable: true });
             
             conn.on('open', () => {
-                console.log('VIEWER: Data connection open, waiting for creator to call back');
+                console.log('VIEWER: Signaling channel open');
                 updateStatus('Aguardando Fluxo...');
+                conn.send({ type: 'join', id: peer.id });
             });
 
-            conn.on('error', (err) => {
-                console.error('VIEWER: Data connection error:', err);
-                updateStatus('Erro de Conexão', '#ef4444');
-                setTimeout(tryCallCreator, 4000);
+            // Parallel attempt: direct call
+            const call = peer.call(LIVE_ID, createDummyStream());
+            if (call) manageViewerCall(call);
+
+            conn.on('error', () => {
+                console.log('VIEWER: Data connection blocked, relying on direct call');
             });
         }
 
-        peer.on('call', (call) => {
-            if (IS_CREATOR) {
-                console.log('CREATOR: Incoming call from viewer...');
-                if (window.localStream) {
-                    call.answer(window.localStream);
-                    if (!window.activeCalls) window.activeCalls = [];
-                    window.activeCalls.push(call);
-                    call.on('close', () => { window.activeCalls = window.activeCalls.filter(c => c !== call); });
-                } else {
-                    pendingCalls.push(call);
-                }
-                return;
-            }
+        function createDummyStream() {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = canvas.height = 2;
+                return canvas.captureStream(5);
+            } catch(e) { return new MediaStream(); }
+        }
 
-            console.log('VIEWER: Incoming call from creator!');
-            updateStatus('Recebendo Vídeo...');
-            call.answer(); // Answer without stream
-            
+        function manageViewerCall(call) {
             call.on('stream', (remoteStream) => {
                 console.log('VIEWER: Stream received!', remoteStream.id);
                 updateStatus('Online', '#22c55e');
@@ -410,7 +407,7 @@
                         document.getElementById('offline_view').style.display = 'none';
                         document.getElementById('video_wrapper').style.display = 'flex';
                         if (video.muted) document.getElementById('unmute_prompt').style.display = 'flex';
-                    }).catch(e => {
+                    }).catch(() => {
                         video.muted = true;
                         video.play();
                         document.getElementById('offline_view').style.display = 'none';
@@ -419,17 +416,38 @@
                     });
                 }
             });
+        }
+
+        peer.on('call', (call) => {
+            if (IS_CREATOR) {
+                console.log('CREATOR: Incoming call...');
+                if (window.localStream) {
+                    call.answer(window.localStream);
+                    if (!window.activeCalls) window.activeCalls = [];
+                    window.activeCalls.push(call);
+                } else {
+                    pendingCalls.push(call);
+                }
+                return;
+            }
+            manageViewerCall(call);
         });
 
         if (IS_CREATOR) {
             peer.on('connection', (conn) => {
-                console.log('CREATOR: Viewer joined via DataConnection:', conn.peer);
+                console.log('CREATOR: Viewer joined:', conn.peer);
+                conn.on('data', (data) => {
+                    if (data.type === 'join' && window.localStream) {
+                        console.log('CREATOR: Responding with stream to:', conn.peer);
+                        peer.call(conn.peer, window.localStream);
+                    }
+                });
+                
+                // Immediate push attempt
                 if (window.localStream) {
-                    console.log('CREATOR: Pushing stream to viewer...');
                     const call = peer.call(conn.peer, window.localStream);
                     if (!window.activeCalls) window.activeCalls = [];
                     window.activeCalls.push(call);
-                    call.on('close', () => { window.activeCalls = window.activeCalls.filter(c => c !== call); });
                 }
             });
 
@@ -800,6 +818,9 @@
         const originalHtml = btn.innerHTML;
         btn.innerHTML = 'Encerrando...';
         btn.disabled = true;
+        btn.style.background = '#ef4444';
+        btn.style.color = 'white';
+        btn.style.borderColor = '#ef4444';
 
         if (window.localStream) {
             window.localStream.getTracks().forEach(t => t.stop());
