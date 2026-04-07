@@ -331,14 +331,21 @@
         if (!IVS_INGEST_ENDPOINT || !IVS_STREAM_KEY) {
             updateStatus('Erro: IVS Config faltando', '#ef4444');
             console.error('Amazon IVS credentials missing in .env');
+            // Try fallback to local if needed, or just stop
             return;
         }
 
-        const { IVSBroadcastClient } = window.IVSBroadcastClient;
+        // Fix: Use the global namespace correctly
+        const IVS = window.IVSBroadcastClient;
+        if (!IVS) {
+            console.error('Amazon IVS Broadcast SDK not loaded');
+            updateStatus('Erro: SDK não carregado', '#ef4444');
+            return;
+        }
         
         try {
-            ivsBroadcaster = IVSBroadcastClient.create({
-                streamConfig: IVSBroadcastClient.BASIC_LANDSCAPE,
+            ivsBroadcaster = IVS.create({
+                streamConfig: IVS.BASIC_LANDSCAPE,
                 ingestEndpoint: IVS_INGEST_ENDPOINT,
             });
 
@@ -347,20 +354,25 @@
             
             updateStatus('IVS Pronto', '#22c55e');
 
-            ivsBroadcaster.on(IVSBroadcastClient.Events.ERROR, (err) => {
+            ivsBroadcaster.on(IVS.Events.ERROR, (err) => {
                 console.error('Broadcaster Error:', err);
                 updateStatus('Erro na Transmissão', '#ef4444');
             });
 
-            // Start stream automatically when camera is ready
-            ivsBroadcaster.on(IVSBroadcastClient.Events.CONNECTION_STATE_CHANGE, (state) => {
+            ivsBroadcaster.on(IVS.Events.CONNECTION_STATE_CHANGE, (state) => {
                 console.log('IVS State:', state);
                 if (state === 'CONNECTED') updateStatus('Ao Vivo (Amazon)', '#22c55e');
                 if (state === 'DISCONNECTED') updateStatus('Offline', '#ff9800');
             });
 
+            // Automatically start camera and broadcast for the creator
+            console.log('Starting IVS Camera and Broadcast...');
+            await startBroadcasting();
+
         } catch (err) {
             console.error('Broadcaster Init Failed:', err);
+            updateStatus('Erro no Broadcaster', '#ef4444');
+            showRetryUI('Não foi possível iniciar o broadcaster: ' + err.message);
         }
     }
 
@@ -406,9 +418,14 @@
 
     // Replace startCamera logic for IVS
     async function startBroadcasting() {
-        if (!ivsBroadcaster) return;
+        if (!ivsBroadcaster) {
+            console.error('Broadcaster not initialized');
+            showRetryUI('Broadcaster não inicializado.');
+            return;
+        }
 
         try {
+            console.log('Requesting User Media...');
             const stream = await navigator.mediaDevices.getUserMedia({
                 video: { width: 1280, height: 720 },
                 audio: true
@@ -417,10 +434,7 @@
             window.localStream = stream;
             
             // Add devices to IVS
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const videoDevice = devices.find((d) => d.kind === 'videoinput');
-            const audioDevice = devices.find((d) => d.kind === 'audioinput');
-
+            console.log('Adding devices to IVS Broadcaster...');
             await ivsBroadcaster.addVideoInputDevice(stream, 'camera', { index: 0 });
             await ivsBroadcaster.addAudioInputDevice(stream, 'mic');
 
@@ -433,6 +447,8 @@
                 headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
             });
 
+            // UI Updates
+            console.log('IVS Broadcast Started Successfully');
             document.getElementById('offline_view').style.display = 'none';
             document.getElementById('video_wrapper').style.display = 'flex';
             const tools = document.getElementById('broadcaster_tools');
@@ -446,6 +462,7 @@
         } catch (err) {
             console.error('Start Broadcast Error:', err);
             updateStatus('Erro de Câmera', '#ef4444');
+            showRetryUI('Erro ao acessar câmera/microfone: ' + err.message);
         }
     }
 
@@ -827,6 +844,13 @@
         }
 
         if (peer) peer.destroy();
+        if (ivsBroadcaster) {
+            try {
+                ivsBroadcaster.stopBroadcast();
+            } catch (e) {
+                console.error('Error stopping IVS:', e);
+            }
+        }
 
         fetch('{{ route('live.destroy', $live->id) }}', {
             method: 'POST',
@@ -854,19 +878,19 @@
 
     window.onbeforeunload = function() {
         if (peer) peer.destroy();
+        if (ivsBroadcaster) ivsBroadcaster.stopBroadcast();
     };
 
     // Helper to start the stream
     function initLive() {
         console.log('Initializing Mogram Live Studio...');
         try {
-            if (typeof initPeer === 'function') initPeer();
+            // Disabled legacy Peer initialization
+            // if (typeof initPeer === 'function') initPeer();
             
             if (IS_CREATOR) {
-                console.log('Creator mode detected, starting camera...');
-                setTimeout(() => {
-                    if (typeof startCamera === 'function') startCamera();
-                }, 1000);
+                console.log('Creator mode detected, IVS will handle camera start.');
+                // For IVS, we wait for initIVS to call startBroadcasting
             } else {
                 console.log('Viewer mode detected, starting chat...');
                 if (typeof startChatPolling === 'function') startChatPolling();
