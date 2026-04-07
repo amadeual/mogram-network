@@ -56,21 +56,13 @@
                             <label class="premium-label">Categoria do Conteúdo</label>
                             <div style="position: relative;">
                                 <select name="category" required class="mogram-select-v2">
-                                    <option value="" disabled selected style="background: #1a1c2e; color: white;">Selecione o nicho da sua live...</option>
-                                    <optgroup label="Cultura & Entretenimento" style="background: #1a1c2e; color: #3390ec;">
-                                        <option value="Música" style="background: #1a1c2e; color: white;">Música 🎵</option>
-                                        <option value="Gaming" style="background: #1a1c2e; color: white;">Gaming 🎮</option>
-                                        <option value="Bate-papo" style="background: #1a1c2e; color: white;">Bate-papo 💬</option>
-                                        <option value="Lifestyle" style="background: #1a1c2e; color: white;">Lifestyle ✨</option>
-                                    </optgroup>
-                                    <optgroup label="Conhecimento & Espiritualidade" style="background: #1a1c2e; color: #3390ec;">
-                                        <option value="Educação" style="background: #1a1c2e; color: white;">Educação 📚</option>
-                                        <option value="Tecnologia" style="background: #1a1c2e; color: white;">Tecnologia 💻</option>
-                                        <option value="Fé & Religião" style="background: #1a1c2e; color: white;">Fé & Religião 🙏</option>
-                                    </optgroup>
-                                    <optgroup label="Outros" style="background: #1a1c2e; color: #3390ec;">
-                                        <option value="Geral" style="background: #1a1c2e; color: white;">Geral 🌍</option>
-                                    </optgroup>
+                                    <option value="" disabled selected style="background: #1a1c2e; color: white;">Selecione a categoria...</option>
+                                    <option value="Explorar" style="background: #1a1c2e; color: white;">Explorar 🔍</option>
+                                    <option value="Música" style="background: #1a1c2e; color: white;">Música 🎵</option>
+                                    <option value="Fé & Religião" style="background: #1a1c2e; color: white;">Fé & Religião 🙏</option>
+                                    <option value="Tecnologia" style="background: #1a1c2e; color: white;">Tecnologia 💻</option>
+                                    <option value="Educação" style="background: #1a1c2e; color: white;">Educação 📚</option>
+                                    <option value="Geral" style="background: #1a1c2e; color: white;">Geral 🌍</option>
                                 </select>
                                 <div style="position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b;">
                                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
