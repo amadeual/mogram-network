@@ -1045,11 +1045,17 @@
         to { transform: scale(1) translateY(0); opacity: 1; }
     }
     
-    @media (max-width: 1200px) {
-        .left-nav { display: none !important; }
+    @media (max-width: 1300px) {
+        .left-nav { width: 80px !important; padding: 1rem 0.5rem !important; align-items: center !important; }
+        .left-nav span, .left-nav p, .left-nav a span, .left-nav nav a { display: none !important; }
+        .left-nav a { justify-content: center !important; }
     }
     
-    @media (max-width: 992px) {
+    @media (max-width: 1024px) {
+        .left-nav { display: none !important; }
+    }
+
+    @media (max-width: 768px) {
         .responsive-container { flex-direction: column !important; height: auto !important; overflow-y: auto !important; }
         .chat-sidebar { width: 100% !important; height: 500px !important; border-left: none !important; border-top: 1.5px solid rgba(255,255,255,0.05); }
         body, html { overflow-y: auto !important; height: auto !important; }
