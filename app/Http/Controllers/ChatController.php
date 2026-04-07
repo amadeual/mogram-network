@@ -90,7 +90,8 @@ class ChatController extends Controller
                 'live_id' => null, // Outside live
                 'user_id' => $sender->id,
                 'gift_id' => $gift->id,
-                'price' => $gift->price
+                'amount' => $gift->price,
+                'commission' => $platformComm
             ]);
 
             // Create message for the gift
