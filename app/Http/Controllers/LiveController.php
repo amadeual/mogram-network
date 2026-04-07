@@ -34,10 +34,18 @@ class LiveController extends Controller
         // Load access for current user
         $userAccessIds = [];
         if (Auth::check()) {
-            $userAccessIds = DB::table('live_access')
-                ->where('user_id', Auth::id())
-                ->pluck('live_id')
-                ->toArray();
+            try {
+                $userAccessIds = DB::table('live_access')
+                    ->where('user_id', Auth::id())
+                    ->pluck('live_id')
+                    ->toArray();
+            } catch (\Exception $e) {
+                // Table doesn't exist, create it auto-fallback
+                try {
+                    DB::statement("CREATE TABLE IF NOT EXISTS live_access (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, live_id INT, amount DECIMAL(10,2), created_at TIMESTAMP NULL)");
+                } catch (\Exception $ex) {}
+                $userAccessIds = [];
+            }
         }
         
         return view('lives', compact('onlineLives', 'scheduledLives', 'userAccessIds'));
