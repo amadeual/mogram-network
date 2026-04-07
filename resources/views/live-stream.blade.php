@@ -83,8 +83,8 @@
                 </div>
             </div>
 
-            <!-- Video Player Container -->
-            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative !important; width: 100%; max-width: 850px; margin: 0 auto; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <!-- Video Player Container (Optimized for ideal size) -->
+            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative !important; width: 100%; max-width: 920px; max-height: 600px; margin: 0 auto; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 
                 <!-- Video Layers -->
                 <div id="video_layers" style="position: absolute; inset: 0;">
@@ -93,9 +93,9 @@
                     <div id="video_wrapper" style="width: 100%; height: 100%; display: none; gap: 4px;">
                         <div id="main_video_slot" style="flex: 1; height: 100%; position: relative; background: #000;">
                             @if(Auth::id() == $live->user_id)
-                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: cover;"></canvas>
+                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: contain; background: #000;"></canvas>
                             @else
-                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
                             @endif
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
