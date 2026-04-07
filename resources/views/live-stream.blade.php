@@ -477,11 +477,11 @@
             
             // Add devices to IVS
             console.log('Adding devices to IVS Broadcaster...');
-            await ivsBroadcaster.addVideoInputDevice(stream, 'camera', { index: 0 });
-            await ivsBroadcaster.addAudioInputDevice(stream, 'mic');
+            await window.ivsBroadcaster.addVideoInputDevice(stream, 'camera', { index: 0 });
+            await window.ivsBroadcaster.addAudioInputDevice(stream, 'mic');
 
             console.log('Broadcasting to Amazon IVS...');
-            await ivsBroadcaster.startBroadcast(IVS_STREAM_KEY);
+            await window.ivsBroadcaster.startBroadcast(IVS_STREAM_KEY);
             
             // Sync with DB
             fetch('{{ route('live.start', $live->id) }}', {
@@ -753,8 +753,8 @@
         if (window.ivsBroadcaster) {
             try {
                 console.log('Syncing new video track with IVS...');
-                await ivsBroadcaster.removeVideoInputDevice('camera');
-                await ivsBroadcaster.addVideoInputDevice(newTrack, 'camera', { index: 0 });
+                await window.ivsBroadcaster.removeVideoInputDevice('camera');
+                await window.ivsBroadcaster.addVideoInputDevice(newTrack, 'camera', { index: 0 });
             } catch (err) {
                 console.error('IVS Track Sync Error:', err);
             }
