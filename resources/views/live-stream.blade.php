@@ -304,6 +304,7 @@
     
     let ivsBroadcaster = null;
     let ivsPlayer = null;
+    let peer = null;
     let selectedGiftId = null;
 
     function updateStatus(text, color = '#3390ec') {
@@ -472,27 +473,6 @@
     });
 
     function initPeer() { /* Disabled for Amazon IVS */ }
-                    c.on('close', () => { window.activeCalls = window.activeCalls.filter(cl => cl !== c); });
-                }
-            };
-        }
-
-        peer.on('error', (err) => {
-            console.error('Peer error type:', err.type);
-            if (err.type === 'peer-unavailable') {
-                // Handled by retry logic
-            } else if (err.type === 'id-taken') {
-                if (IS_CREATOR) {
-                    console.warn('Creator ID taken (ghost session?), retrying in 5 seconds...');
-                    setTimeout(() => window.location.reload(), 5000);
-                }
-            } else if (err.type === 'network' || err.type === 'server-error') {
-                setTimeout(() => {
-                    if (peer && !peer.destroyed) peer.reconnect();
-                }, 5000);
-            }
-        });
-    }
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast_container');
