@@ -83,7 +83,7 @@ class ChatController extends Controller
             $creatorShare = $gift->price - $platformComm;
             
             // Credit the receiver (creator)
-            $user->increment('balance', $creatorShare);
+            // Removed: $user->increment('balance', $creatorShare); // Goes only to Finance ledger
 
             // Record gift
             \App\Models\LiveGift::create([

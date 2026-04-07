@@ -172,7 +172,7 @@ class LiveController extends Controller
                 // Add to creator (20% platform commission)
                 $commission = $live->price * 0.20;
                 $creatorShare = $live->price - $commission;
-                $live->user->increment('balance', $creatorShare);
+                // Removed: $live->user->increment('balance', $creatorShare); // Goes only to Finance ledger
 
                 // Record access
                 try {
@@ -363,7 +363,7 @@ class LiveController extends Controller
             $creatorShare = $gift->price - $platformComm;
             
             // Credit the creator
-            $live->user->increment('balance', $creatorShare);
+            // Removed: $live->user->increment('balance', $creatorShare); // Goes only to Finance ledger
 
             // Record gift
             \App\Models\LiveGift::create([

@@ -129,7 +129,7 @@ class FeedController extends Controller
                 
                 // Credit seller (creator)
                 $creator = $post->user;
-                $creator->increment('balance', $post->price);
+                // Removed: $creator->increment('balance', $post->price); // Goes only to Finance ledger
 
                 // Record purchase
                 \App\Models\Purchase::create([
