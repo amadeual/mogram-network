@@ -168,10 +168,12 @@
 
                     <!-- 4. Broadcaster Tools -->
                     @if(Auth::id() == $live->user_id)
-                        <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; gap: 10px; z-index: 100;">
-                            <button onclick="toggleAudio()" id="btn_audio" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
-                            <button onclick="toggleVideo()" id="btn_video" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
-                            <button onclick="togglePause()" id="btn_pause" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">⏸</button>
+                        <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
+                            <button onclick="toggleAudio()" id="btn_audio" title="Mudar Áudio" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
+                            <button onclick="toggleVideo()" id="btn_video" title="Mudar Vídeo" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
+                            <button onclick="togglePause()" id="btn_pause" title="Pausar" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">⏸</button>
+                            <button onclick="toggleScreenShare()" id="btn_screen" title="Compartilhar Tela" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🖥️</button>
+                            <button onclick="switchCamera()" id="btn_flip" title="Trocar Câmera" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🔄</button>
                         </div>
                     @endif
 
@@ -352,6 +354,9 @@
                 console.log('Incoming call from viewer...');
                 if (window.localStream) {
                     call.answer(window.localStream);
+                    if (!window.activeCalls) window.activeCalls = [];
+                    window.activeCalls.push(call);
+                    call.on('close', () => { window.activeCalls = window.activeCalls.filter(c => c !== call); });
                 } else {
                     pendingCalls.push(call);
                 }
@@ -361,6 +366,9 @@
                 while (pendingCalls.length > 0) {
                     const c = pendingCalls.shift();
                     c.answer(window.localStream);
+                    if (!window.activeCalls) window.activeCalls = [];
+                    window.activeCalls.push(c);
+                    c.on('close', () => { window.activeCalls = window.activeCalls.filter(cl => cl !== c); });
                 }
             };
         }
@@ -387,10 +395,24 @@
     }
 
     function activateStream(stream) {
-        window.localStream = stream;
-        const video = document.getElementById('creator_video');
-        video.srcObject = stream;
-        video.play().catch(() => {});
+        if (window.localStream) {
+            const videoTrack = stream.getVideoTracks()[0];
+            replaceVideoTrack(videoTrack);
+            
+            // Audio replacement
+            const audioTrack = stream.getAudioTracks()[0];
+            const oldAudio = window.localStream.getAudioTracks()[0];
+            if (oldAudio) {
+                oldAudio.stop();
+                window.localStream.removeTrack(oldAudio);
+            }
+            window.localStream.addTrack(audioTrack);
+        } else {
+            window.localStream = stream;
+            const video = document.getElementById('creator_video');
+            video.srcObject = window.localStream;
+            video.play().catch(() => {});
+        }
 
         document.getElementById('offline_view').style.display = 'none';
         document.getElementById('video_wrapper').style.display = 'flex';
@@ -405,7 +427,10 @@
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
         });
 
-        startChatPolling();
+        if (!window.chatPollingStarted) {
+            startChatPolling();
+            window.chatPollingStarted = true;
+        }
     }
 
     function startCamera() {
@@ -415,7 +440,11 @@
         }
 
         const constraints = {
-            video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+            video: { 
+                facingMode: currentFacingMode || 'user',
+                width: { ideal: 1280 }, 
+                height: { ideal: 720 } 
+            },
             audio: { echoCancellation: true, noiseSuppression: true }
         };
 
@@ -423,10 +452,12 @@
         .then(stream => activateStream(stream))
         .catch(err => {
             console.error('Camera error:', err);
-            // Fallback to simple
-            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-            .then(s => activateStream(s))
-            .catch(() => showRetryUI('Acesso à câmera negado ou não encontrado.'));
+            // Fallback for environment
+            if (currentFacingMode === 'environment') {
+                currentFacingMode = 'user';
+                return startCamera();
+            }
+            showRetryUI('Houve um erro ao acessar a câmera: ' + err.message);
         });
     }
 
@@ -457,6 +488,10 @@
             body: JSON.stringify({ paused: willBePaused })
         });
     }
+
+    let isScreenSharing = false;
+    let currentFacingMode = 'user';
+    let activeCalls = []; // Track active PeerJS calls to replace tracks
 
     function toggleAudio() {
         if (!window.localStream) return;
@@ -490,6 +525,67 @@
                 body: JSON.stringify({ type: 'video', value: isOff })
             });
         }
+    }
+
+    async function toggleScreenShare() {
+        if (!isScreenSharing) {
+            try {
+                const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+                const videoTrack = screenStream.getVideoTracks()[0];
+                
+                replaceVideoTrack(videoTrack);
+                
+                videoTrack.onended = () => {
+                    stopScreenShare();
+                };
+                
+                isScreenSharing = true;
+                document.getElementById('btn_screen').style.background = '#3390ec';
+                document.getElementById('btn_flip').style.display = 'none'; // Can't flip screen share
+            } catch (err) {
+                console.error("Error starting screen share:", err);
+            }
+        } else {
+            stopScreenShare();
+        }
+    }
+
+    async function stopScreenShare() {
+        isScreenSharing = false;
+        document.getElementById('btn_screen').style.background = 'rgba(0,0,0,0.6)';
+        document.getElementById('btn_flip').style.display = 'block';
+        await startCamera(); // Return to camera
+    }
+
+    async function switchCamera() {
+        if (isScreenSharing) return;
+        currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
+        await startCamera();
+    }
+
+    function replaceVideoTrack(newTrack) {
+        if (!window.localStream) return;
+        
+        const oldTrack = window.localStream.getVideoTracks()[0];
+        if (oldTrack) {
+            oldTrack.stop();
+            window.localStream.removeTrack(oldTrack);
+        }
+        
+        window.localStream.addTrack(newTrack);
+        document.getElementById('creator_video').srcObject = window.localStream;
+
+        // Replace track in all active PeerJS calls
+        if (!window.activeCalls) window.activeCalls = [];
+        window.activeCalls.forEach(call => {
+            const peerConnection = call.peerConnection;
+            if (peerConnection) {
+                const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
+                if (sender) {
+                    sender.replaceTrack(newTrack);
+                }
+            }
+        });
     }
 
     function startChatPolling() {
