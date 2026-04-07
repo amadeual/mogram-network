@@ -81,7 +81,7 @@
             </div>
 
             <!-- Video Player Container (REFIXED) -->
-            <div style="background: black; border-radius: 24px; position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 
                 <!-- Video Layers -->
                 <div id="video_layers" style="position: absolute; inset: 0;">
@@ -156,6 +156,11 @@
                             <button onclick="inviteCoHost()" style="background: #3390ec; height: 44px; border-radius: 12px; border: none; padding: 0 1rem; color: white; font-weight: 800; cursor: pointer;">+ CO-HOST</button>
                         </div>
                     @endif
+
+                    <!-- Global Controls (Fullscreen) -->
+                    <button id="btn_fullscreen" onclick="toggleFullscreen()" style="position: absolute; bottom: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.5); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer; z-index: 100; transition: 0.3s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'" title="Tela Cheia">
+                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                    </button>
 
                 </div> <!-- End Layers -->
             </div> <!-- End Video Container -->
@@ -516,6 +521,27 @@
         navigator.clipboard.writeText(url).then(() => {
             showToast('Link da live copiado!');
         });
+    }
+
+    function toggleFullscreen() {
+        const container = document.getElementById('video_player_container');
+        if (!document.fullscreenElement) {
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen();
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            }
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
     }
 
     function toggleGiftModal() {
