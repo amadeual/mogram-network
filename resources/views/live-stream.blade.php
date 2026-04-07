@@ -508,19 +508,29 @@
         document.getElementById('camera_error_msg').textContent = errorMessage || '';
     }
 
-    function activateStream(stream) {
+    async function activateStream(stream) {
         if (window.localStream) {
             const videoTrack = stream.getVideoTracks()[0];
-            replaceVideoTrack(videoTrack);
+            await replaceVideoTrack(videoTrack);
             
             // Audio replacement
             const audioTrack = stream.getAudioTracks()[0];
-            const oldAudio = window.localStream.getAudioTracks()[0];
-            if (oldAudio) {
-                oldAudio.stop();
-                window.localStream.removeTrack(oldAudio);
+            if (audioTrack) {
+                const oldAudio = window.localStream.getAudioTracks()[0];
+                if (oldAudio) {
+                    oldAudio.stop();
+                    window.localStream.removeTrack(oldAudio);
+                }
+                window.localStream.addTrack(audioTrack);
+                
+                // Sync with IVS
+                if (window.ivsBroadcaster) {
+                    try {
+                        await ivsBroadcaster.removeAudioInputDevice('mic');
+                        await ivsBroadcaster.addAudioInputDevice(audioTrack, 'mic');
+                    } catch (e) { console.error('IVS Audio sync error:', e); }
+                }
             }
-            window.localStream.addTrack(audioTrack);
         } else {
             window.localStream = stream;
             const video = document.getElementById('creator_video');
@@ -666,7 +676,7 @@
                 const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
                 const videoTrack = screenStream.getVideoTracks()[0];
                 
-                replaceVideoTrack(videoTrack);
+                await replaceVideoTrack(videoTrack);
                 
                 videoTrack.onended = () => {
                     stopScreenShare();
@@ -696,8 +706,8 @@
         await startCamera();
     }
 
-    function replaceVideoTrack(newTrack) {
-        if (!window.localStream) return;
+    async function replaceVideoTrack(newTrack) {
+        if (!window.localStream || !newTrack) return;
         
         const oldTrack = window.localStream.getVideoTracks()[0];
         if (oldTrack) {
@@ -706,19 +716,23 @@
         }
         
         window.localStream.addTrack(newTrack);
-        document.getElementById('creator_video').srcObject = window.localStream;
 
-        // Replace track in all active PeerJS calls
-        if (!window.activeCalls) window.activeCalls = [];
-        window.activeCalls.forEach(call => {
-            const peerConnection = call.peerConnection;
-            if (peerConnection) {
-                const sender = peerConnection.getSenders().find(s => s.track && s.track.kind === 'video');
-                if (sender) {
-                    sender.replaceTrack(newTrack);
-                }
+        // Sync with IVS Broadcaster Composition
+        if (window.ivsBroadcaster) {
+            try {
+                console.log('Syncing new video track with IVS...');
+                await ivsBroadcaster.removeVideoInputDevice('camera');
+                await ivsBroadcaster.addVideoInputDevice(newTrack, 'camera', { index: 0 });
+            } catch (err) {
+                console.error('IVS Track Sync Error:', err);
             }
-        });
+        } else {
+            // Standard video element update (fallback/viewer mode if needed)
+            const video = document.getElementById('creator_video');
+            if (video && video.tagName === 'VIDEO') {
+                video.srcObject = window.localStream;
+            }
+        }
     }
 
     function startChatPolling() {
