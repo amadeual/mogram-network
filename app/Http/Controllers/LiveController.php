@@ -62,10 +62,18 @@ class LiveController extends Controller
             $request->validate([
                 'title' => 'required|string|max:255',
                 'description' => 'required|string|max:1000',
-                'thumbnail' => 'required|image|max:5120', // Increased limit to 5MB
+                'thumbnail' => 'required|image|max:5120',
                 'category' => 'nullable|string|max:100',
                 'is_free' => 'required',
                 'price' => 'nullable|numeric|min:0'
+            ], [
+                'title.required' => 'O título da live é obrigatório.',
+                'description.required' => 'A descrição da live é obrigatória.',
+                'thumbnail.required' => 'A imagem de capa (thumbnail) é obrigatória.',
+                'thumbnail.image' => 'O arquivo da capa deve ser uma imagem.',
+                'thumbnail.max' => 'A imagem da capa não pode ter mais de 5MB.',
+                'price.numeric' => 'O preço deve ser um número válido.',
+                'price.min' => 'O preço não pode ser menor que zero.'
             ]);
 
             if (!$request->hasFile('thumbnail')) {
