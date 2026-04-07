@@ -116,7 +116,7 @@
             
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                 @forelse($onlineLives as $live)
-                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}', '{{ $live->price }}', {{ in_array($live->id, $userAccessIds) ? 'true' : 'false' }}, '{{ $live->id }}')">
+                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}', '{{ $live->price }}', {{ (in_array($live->id, $userAccessIds) || Auth::id() == $live->user_id) ? 'true' : 'false' }}, '{{ $live->id }}', {{ Auth::id() == $live->user_id ? 'true' : 'false' }})">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
                         <div class="live-tag">LIVE</div>
@@ -162,8 +162,8 @@
                               @if($live->is_free)
                                    <button class="btn-notify">Me Avisar</button>
                                @else
-                                   @if(in_array($live->id, $userAccessIds))
-                                       <button class="btn-notify" style="border-color: #22c55e; color: #22c55e;">Inscrito</button>
+                                   @if(in_array($live->id, $userAccessIds) || Auth::id() == $live->user_id)
+                                       <button class="btn-notify" style="border-color: #22c55e; color: #22c55e;">{{ Auth::id() == $live->user_id ? 'Sua Live' : 'Inscrito' }}</button>
                                    @else
                                        <form id="buy_form_{{ $live->id }}" action="{{ route('live.buy', $live->id) }}" method="POST" style="display: none;">@csrf</form>
                                        <button type="button" class="btn-notify" onclick="showMogramConfirm('Confirmar Inscrição', 'Confirmar inscrição por R$ {{ number_format($live->price, 2) }}?', () => { showMogramLoader(); document.getElementById('buy_form_{{ $live->id }}').submit(); })" style="background: #3390ec; color: white; border: none; padding: 6px 12px; font-size: 10px;">INSCREVER (R$ {{ number_format($live->price, 0) }})</button>
@@ -242,7 +242,7 @@
 </style>
 
 <script>
-    function openPreview(url, title, desc, thumb, creator, avatar, price, hasAccess, liveId) {
+    function openPreview(url, title, desc, thumb, creator, avatar, price, hasAccess, liveId, isOwner) {
         document.getElementById('preview_img').src = thumb;
         document.getElementById('preview_avatar').src = avatar;
         document.getElementById('preview_title').innerText = title;
@@ -263,7 +263,7 @@
             priceTag.style.background = '#ffd600';
             priceTag.style.color = 'black';
             
-            if (!hasAccess) {
+            if (!hasAccess && !isOwner) {
                 joinBtn.innerText = 'PAGAR E ENTRAR (R$ ' + parseFloat(price).toFixed(2) + ')';
                 joinBtn.style.background = 'linear-gradient(135deg, #ffd600, #ff9100)';
                 joinBtn.style.color = 'black';
