@@ -105,7 +105,95 @@ class WalletController extends Controller
                 ];
             });
 
-        $history = $purchases->concat($deposits)->sortByDesc('date');
+        // History of Live Access (out)
+        $liveAccess = DB::table('live_access')
+            ->join('lives', 'live_access.live_id', '=', 'lives.id')
+            ->join('users', 'lives.user_id', '=', 'users.id')
+            ->where('live_access.user_id', $user->id)
+            ->select('live_access.*', 'lives.title as live_title', 'users.name as creator_name', 'users.username as creator_username')
+            ->get()
+            ->map(function($la) {
+                return [
+                    'type' => 'Ticket de Live',
+                    'description' => $la->live_title,
+                    'user' => $la->creator_name,
+                    'username' => $la->creator_username,
+                    'amount' => $la->amount,
+                    'direction' => 'out',
+                    'date' => $la->created_at,
+                    'status' => 'Liberado'
+                ];
+            });
+
+        // History of Gifts Sent (out)
+        $giftsSent = DB::table('live_gifts')
+            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->join('users', 'lives.user_id', '=', 'users.id')
+            ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
+            ->where('live_gifts.user_id', $user->id)
+            ->select('live_gifts.*', 'lives.title as live_title', 'users.name as creator_name', 'users.username as creator_username', 'gifts.name as gift_name')
+            ->get()
+            ->map(function($gs) {
+                return [
+                    'type' => 'Presente em Live',
+                    'description' => $gs->gift_name . ' (' . $gs->live_title . ')',
+                    'user' => $gs->creator_name,
+                    'username' => $gs->creator_username,
+                    'amount' => $gs->amount,
+                    'direction' => 'out',
+                    'date' => $gs->created_at,
+                    'status' => 'Enviado'
+                ];
+            });
+
+        $history = $purchases->concat($deposits)
+            ->concat($liveAccess)
+            ->concat($giftsSent);
+
+        // Earnings from Tickets (in)
+        $ticketEarnings = DB::table('live_access')
+            ->join('lives', 'live_access.live_id', '=', 'lives.id')
+            ->join('users', 'live_access.user_id', '=', 'users.id')
+            ->where('lives.user_id', $user->id)
+            ->select('live_access.*', 'lives.title as live_title', 'users.name as buyer_name', 'users.username as buyer_username')
+            ->get()
+            ->map(function($te) {
+                return [
+                    'type' => 'Ganho: Ticket de Live',
+                    'description' => $te->live_title,
+                    'user' => $te->buyer_name,
+                    'username' => $te->buyer_username,
+                    'amount' => $te->amount * 0.80, // Show what they actually received
+                    'direction' => 'in',
+                    'date' => $te->created_at,
+                    'status' => 'Concluído'
+                ];
+            });
+
+        // Earnings from Gifts (in)
+        $giftEarnings = DB::table('live_gifts')
+            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->join('users', 'live_gifts.user_id', '=', 'users.id')
+            ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
+            ->where('lives.user_id', $user->id)
+            ->select('live_gifts.*', 'lives.title as live_title', 'users.name as sender_name', 'users.username as sender_username', 'gifts.name as gift_name')
+            ->get()
+            ->map(function($ge) {
+                return [
+                    'type' => 'Ganho: Presente',
+                    'description' => $ge->gift_name . ' (' . $ge->live_title . ')',
+                    'user' => $ge->sender_name,
+                    'username' => $ge->sender_username,
+                    'amount' => $ge->amount * 0.80, // After platform fee
+                    'direction' => 'in',
+                    'date' => $ge->created_at,
+                    'status' => 'Recebido'
+                ];
+            });
+
+        $history = $history->concat($ticketEarnings)
+            ->concat($giftEarnings)
+            ->sortByDesc('date');
         $availableBalance = $user->balance;
 
         return view('wallet', compact('availableBalance', 'history'));
