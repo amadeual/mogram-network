@@ -359,12 +359,12 @@
             
             updateStatus('IVS Pronto', '#22c55e');
 
-            ivsBroadcaster.on(IVS.Events.ERROR, (err) => {
+            ivsBroadcaster.on('ERROR', (err) => {
                 console.error('Broadcaster Error:', err);
                 updateStatus('Erro na Transmissão', '#ef4444');
             });
 
-            ivsBroadcaster.on(IVS.Events.CONNECTION_STATE_CHANGE, (state) => {
+            ivsBroadcaster.on('CONNECTION_STATE_CHANGE', (state) => {
                 console.log('IVS State:', state);
                 if (state === 'CONNECTED') updateStatus('Ao Vivo (Amazon)', '#22c55e');
                 if (state === 'DISCONNECTED') updateStatus('Offline', '#ff9800');
@@ -393,7 +393,7 @@
         
         updateStatus('Conectando...', '#3390ec');
 
-        ivsPlayer.addEventListener(IVSPlayer.PlayerEventType.STATE_CHANGED, (state) => {
+        ivsPlayer.addEventListener('PlayerStateChanged', (state) => {
             console.log('Player State:', state);
             if (state === 'BUFFERING') updateStatus('Carregando...', '#3390ec');
             if (state === 'PLAYING') {
@@ -404,7 +404,7 @@
             if (state === 'IDLE') updateStatus('Aguardando Criador...', '#3390ec');
         });
 
-        ivsPlayer.addEventListener(IVSPlayer.PlayerEventType.ERROR, (err) => {
+        ivsPlayer.addEventListener('PlayerError', (err) => {
             console.error('Player error:', err);
             updateStatus('Erro de conexão', '#ef4444');
             // Auto-retry after 5s
