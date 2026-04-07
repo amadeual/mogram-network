@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Mogram - Explorar Lives')
+@section('title', 'Lives | Mogram')
 
 @section('content')
 <div class="dash-layout" style="background: #0b0a15;">

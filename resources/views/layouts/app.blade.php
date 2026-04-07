@@ -3,14 +3,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title', 'Mogram - Monetize sua influência sem limites')</title>
+    
+    <!-- Primary Meta Tags -->
+    <title>@yield('title', 'Mogram | Monetize sua Influência e Conteúdo Exclusivo')</title>
+    <meta name="title" content="@yield('title', 'Mogram | Monetize sua Influência e Conteúdo Exclusivo')">
+    <meta name="description" content="@yield('meta_description', 'Mogram é a plataforma definitiva para criadores de conteúdo monetizarem sua influência. Venda conteúdo exclusivo, faça lives e interaja com seus fãs sem limites.')">
+    <meta name="keywords" content="mogram, criadores de conteúdo, monetização, conteúdo exclusivo, lives, influência, redes sociais, assinatura, fãs, brasil, ganhar dinheiro online">
+    <meta name="author" content="Mogram">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="Portuguese">
+    <meta name="revisit-after" content="7 days">
+    <link rel="canonical" href="{{ url()->current() }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:title" content="@yield('title', 'Mogram | Monetize sua Influência e Conteúdo Exclusivo')">
+    <meta property="og:description" content="@yield('meta_description', 'Mogram é a plataforma definitiva para criadores de conteúdo monetizarem sua influência. Venda conteúdo exclusivo, faça lives e interaja com seus fãs sem limites.')">
+    <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ url()->current() }}">
+    <meta property="twitter:title" content="@yield('title', 'Mogram | Monetize sua Influência e Conteúdo Exclusivo')">
+    <meta property="twitter:description" content="@yield('meta_description', 'Mogram é a plataforma definitiva para criadores de conteúdo monetizarem sua influência. Venda conteúdo exclusivo, faça lives e interaja com seus fãs sem limites.')">
+    <meta property="twitter:image" content="{{ asset('images/og-image.jpg') }}">
+
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MTIiIGhlaWdodD0iNTEyIiB2aWV3Qm94PSIwIDAgNTEyIDUxMiI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJnIiB4MT0iMCUiIHkxPSIwJSIgeDI9IjEwMCUiIHkyPSIxMDAlIj48c3RvcCBvZmZzZXQ9IjAlIiBzdHlsZT0ic3RvcC1jb2xvcjojZmY4YzJkO3N0b3Atb3BhY2l0eToxIiAvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3R5bGU9InN0b3AtY29sb3I6I2ZmNGIxZitzdG9wLW9wYWNpdHk6MSIgLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0idXJsKCNnKSIgLz48cGF0aCBkPSJNMTIwIDM5MlYxMjBoODBsNTYgMTIwIDU2LTEyMGg4MHYyNzJoLTYwVjIwMGwtNzYgMTYwLTc2LTE2MHYxOTJ6IiBmaWxsPSJ3aGl0ZSIgLz48L3N2Zz4=">
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script> <!-- Optional: Using generic font awesome for icons if needed -->
+    <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script> 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Small ad-hoc styles that might not merit full CSS file inclusion yet */

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Feed Principal - Mogram')
+@section('title', 'Feed | Mogram')
 
 @section('content')
 <div class="app-layout">

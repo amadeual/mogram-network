@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
-@section('title', 'Mogram - Explore Conteúdo Exclusivo & Lives')
+@section('title', 'Mogram | A Rede Social que Valoriza o Criador de Conteúdo')
+@section('meta_description', 'Junte-se ao Mogram e transforme sua influência em receita. Explore conteúdos exclusivos, assista a lives e conecte-se com seus criadores favoritos na plataforma que mais cresce no Brasil.')
 
 @section('content')
 @include('partials.navbar')
