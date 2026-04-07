@@ -127,16 +127,16 @@ class WalletController extends Controller
 
         // History of Gifts Sent (out)
         $giftsSent = DB::table('live_gifts')
-            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
-            ->join('users', 'lives.user_id', '=', 'users.id')
+            ->leftJoin('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->join('users', 'live_gifts.receiver_id', '=', 'users.id')
             ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
             ->where('live_gifts.user_id', $user->id)
             ->select('live_gifts.*', 'lives.title as live_title', 'users.name as creator_name', 'users.username as creator_username', 'gifts.name as gift_name')
             ->get()
             ->map(function($gs) {
                 return [
-                    'type' => 'Presente em Live',
-                    'description' => $gs->gift_name . ' (' . $gs->live_title . ')',
+                    'type' => $gs->live_id ? 'Presente em Live' : 'Presente (Mimos)',
+                    'description' => $gs->live_id ? ($gs->gift_name . ' (' . $gs->live_title . ')') : $gs->gift_name,
                     'user' => $gs->creator_name,
                     'username' => $gs->creator_username,
                     'amount' => $gs->amount,
@@ -172,19 +172,19 @@ class WalletController extends Controller
 
         // Earnings from Gifts (in)
         $giftEarnings = DB::table('live_gifts')
-            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
-            ->join('users', 'live_gifts.user_id', '=', 'users.id')
+            ->leftJoin('lives', 'live_gifts.live_id', '=', 'lives.id')
+            ->join('users', 'live_gifts.user_id', '=', 'users.id') // sender
             ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
-            ->where('lives.user_id', $user->id)
+            ->where('live_gifts.receiver_id', $user->id)
             ->select('live_gifts.*', 'lives.title as live_title', 'users.name as sender_name', 'users.username as sender_username', 'gifts.name as gift_name')
             ->get()
             ->map(function($ge) {
                 return [
-                    'type' => 'Ganho: Presente',
-                    'description' => $ge->gift_name . ' (' . $ge->live_title . ')',
+                    'type' => $ge->live_id ? 'Ganho: Presente' : 'Ganho: Mimo',
+                    'description' => $ge->live_id ? ($ge->gift_name . ' (' . $ge->live_title . ')') : $ge->gift_name,
                     'user' => $ge->sender_name,
                     'username' => $ge->sender_username,
-                    'amount' => $ge->amount * 0.80, // After platform fee
+                    'amount' => $ge->amount - $ge->commission,
                     'direction' => 'in',
                     'date' => $ge->created_at,
                     'status' => 'Recebido'
