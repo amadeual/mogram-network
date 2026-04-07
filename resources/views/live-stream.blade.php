@@ -188,6 +188,9 @@
                         <div style="background: rgba(255,255,255,0.1); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
                             ❤️ <span id="likes_count_overlay">{{ $live->likes()->count() }}</span>
                         </div>
+                        <div id="connection_status_tag" style="background: rgba(51,144,236,0.3); color: #3390ec; font-size: 8px; font-weight: 900; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(51,144,236,0.3);">
+                            STATUS: INICIANDO...
+                        </div>
                     </div>
 
                     <!-- 4. Broadcaster Tools -->
@@ -309,6 +312,7 @@
                     { urls: 'stun:stun2.l.google.com:19302' },
                     { urls: 'stun:stun3.l.google.com:19302' },
                     { urls: 'stun:stun4.l.google.com:19302' },
+                    { urls: 'stun:global.stun.twilio.com:3478' }
                 ],
                 'iceCandidatePoolSize': 10
             }
@@ -342,6 +346,15 @@
             }, 10000); // Check every 10s if we still don't have a stream
         }
 
+        function updateStatus(text, color = '#3390ec') {
+            const tag = document.getElementById('connection_status_tag');
+            if (tag) {
+                tag.innerText = 'STATUS: ' + text.toUpperCase();
+                tag.style.color = color;
+                tag.style.borderColor = color;
+            }
+        }
+
         function tryCallCreator() {
             if (!peer || peer.destroyed || peer.disconnected) {
                 if (peer && peer.disconnected) peer.reconnect();
@@ -349,91 +362,27 @@
                 return;
             }
 
-            console.log('Viewer: Calling creator ID:', LIVE_ID);
+            updateStatus('Conectando ao Criador...');
             
-            // Note: PeerJS needs a stream to initiate a call. 
-            // Most browsers require a stream with tracks to fire 'stream' event on the other side.
-            let dummyStream;
-            try {
-                const canvas = document.createElement('canvas');
-                canvas.width = canvas.height = 1;
-                const ctx2d = canvas.getContext('2d');
-                ctx2d.fillStyle = 'black';
-                ctx2d.fillRect(0, 0, 1, 1);
-                dummyStream = canvas.captureStream(1);
-                
-                // Add a silent audio track
-                if (window.AudioContext || window.webkitAudioContext) {
-                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = audioCtx.createOscillator();
-                    const dst = oscillator.connect(audioCtx.createMediaStreamDestination());
-                    oscillator.start();
-                    dummyStream.addTrack(dst.stream.getAudioTracks()[0]);
-                }
-            } catch(e) {
-                dummyStream = new MediaStream();
-            }
-
-            const call = peer.call(LIVE_ID, dummyStream);
+            // NEW PUSH STRATEGY: Viewer connects via Data first
+            console.log('VIEWER: Signaling presence to creator...');
+            const conn = peer.connect(LIVE_ID);
             
-            if (!call) {
-                setTimeout(tryCallCreator, 3000);
-                return;
-            }
-
-            call.on('stream', (remoteStream) => {
-                console.log('VIEWER: Stream received from creator!', remoteStream.id);
-                const video = document.getElementById('creator_video');
-                
-                if (video.srcObject !== remoteStream) {
-                    video.srcObject = remoteStream;
-                    
-                    // Force playback refresh
-                    video.load();
-                    
-                    const playPromise = video.play();
-                    
-                    if (playPromise !== undefined) {
-                        playPromise.then(() => {
-                            console.log('VIEWER: Video playing successfully');
-                            document.getElementById('offline_view').style.display = 'none';
-                            document.getElementById('video_wrapper').style.display = 'flex';
-                            
-                            // If it's the viewer and video is muted, show the unmute button
-                            if (!IS_CREATOR && video.muted) {
-                                document.getElementById('unmute_prompt').style.display = 'flex';
-                            }
-                        }).catch(error => {
-                            console.warn('VIEWER: Autoplay failed, waiting for user interaction:', error);
-                            video.muted = true;
-                            video.play();
-                            document.getElementById('offline_view').style.display = 'none';
-                            document.getElementById('video_wrapper').style.display = 'flex';
-                            document.getElementById('unmute_prompt').style.display = 'flex';
-                        });
-                    }
-                }
+            conn.on('open', () => {
+                console.log('VIEWER: Data connection open, waiting for creator to call back');
+                updateStatus('Aguardando Fluxo...');
             });
-            
-            call.on('error', (err) => {
-                console.error('Call error:', err);
-                call.close();
-                setTimeout(tryCallCreator, 3000);
+
+            conn.on('error', (err) => {
+                console.error('VIEWER: Data connection error:', err);
+                updateStatus('Erro de Conexão', '#ef4444');
+                setTimeout(tryCallCreator, 4000);
             });
-            
-            // Timeout for unanswered calls
-            setTimeout(() => {
-                if (call && !call.open) {
-                    console.log('Call taking too long, closing and retrying...');
-                    call.close();
-                    tryCallCreator();
-                }
-            }, 10000);
         }
 
-        if (IS_CREATOR) {
-            peer.on('call', (call) => {
-                console.log('Incoming call from viewer...');
+        peer.on('call', (call) => {
+            if (IS_CREATOR) {
+                console.log('CREATOR: Incoming call from viewer...');
                 if (window.localStream) {
                     call.answer(window.localStream);
                     if (!window.activeCalls) window.activeCalls = [];
@@ -442,11 +391,52 @@
                 } else {
                     pendingCalls.push(call);
                 }
+                return;
+            }
+
+            console.log('VIEWER: Incoming call from creator!');
+            updateStatus('Recebendo Vídeo...');
+            call.answer(); // Answer without stream
+            
+            call.on('stream', (remoteStream) => {
+                console.log('VIEWER: Stream received!', remoteStream.id);
+                updateStatus('Online', '#22c55e');
+                const video = document.getElementById('creator_video');
+                
+                if (video.srcObject !== remoteStream) {
+                    video.srcObject = remoteStream;
+                    video.load();
+                    video.play().then(() => {
+                        document.getElementById('offline_view').style.display = 'none';
+                        document.getElementById('video_wrapper').style.display = 'flex';
+                        if (video.muted) document.getElementById('unmute_prompt').style.display = 'flex';
+                    }).catch(e => {
+                        video.muted = true;
+                        video.play();
+                        document.getElementById('offline_view').style.display = 'none';
+                        document.getElementById('video_wrapper').style.display = 'flex';
+                        document.getElementById('unmute_prompt').style.display = 'flex';
+                    });
+                }
+            });
+        });
+
+        if (IS_CREATOR) {
+            peer.on('connection', (conn) => {
+                console.log('CREATOR: Viewer joined via DataConnection:', conn.peer);
+                if (window.localStream) {
+                    console.log('CREATOR: Pushing stream to viewer...');
+                    const call = peer.call(conn.peer, window.localStream);
+                    if (!window.activeCalls) window.activeCalls = [];
+                    window.activeCalls.push(call);
+                    call.on('close', () => { window.activeCalls = window.activeCalls.filter(c => c !== call); });
+                }
             });
 
             window.answerPendingCalls = () => {
                 while (pendingCalls.length > 0) {
                     const c = pendingCalls.shift();
+                    console.log('CREATOR: Answering pending call...');
                     c.answer(window.localStream);
                     if (!window.activeCalls) window.activeCalls = [];
                     window.activeCalls.push(c);
