@@ -68,7 +68,7 @@ class LiveController extends Controller
             'thumbnail' => $thumbnailPath,
             'is_free' => $request->is_free,
             'price' => $request->is_free ? 0 : $request->price,
-            'status' => 'preparing',
+            'status' => 'offline',
             'started_at' => now()
         ]);
 
