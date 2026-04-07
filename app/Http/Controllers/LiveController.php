@@ -19,17 +19,8 @@ class LiveController extends Controller
 {
     public function index(Request $request)
     {
-        $cutoffDate = '2026-04-03 21:00:00';
-        $demoUserIds = [1, 2];
-        
         $onlineQuery = Live::where('status', 'online');
         $scheduledQuery = Live::where('status', 'scheduled');
-
-        // Check if user is "new" (registered after the cutoff)
-        if (Auth::check() && Auth::user()->created_at->isAfter($cutoffDate)) {
-            $onlineQuery->whereNotIn('user_id', $demoUserIds);
-            $scheduledQuery->whereNotIn('user_id', $demoUserIds);
-        }
 
         if ($request->has('category') && $request->category !== 'Explorar') {
             $onlineQuery->where('category', $request->category);
