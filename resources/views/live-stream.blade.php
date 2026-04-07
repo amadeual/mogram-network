@@ -258,37 +258,92 @@
     function initPeer() {
         // Create Peer with a fixed ID for the creator, random for viewer
         const peerId = IS_CREATOR ? LIVE_ID : 'mogram_viewer_' + Math.random().toString(36).substr(2, 9);
-        peer = new Peer(peerId);
+        
+        // Use public STUN servers to bypass some NAT issues
+        peer = new Peer(peerId, {
+            config: {
+                'iceServers': [
+                    { url: 'stun:stun.l.google.com:19302' },
+                    { url: 'stun:stun1.l.google.com:19302' },
+                ]
+            }
+        });
+
+        let pendingCalls = [];
 
         peer.on('open', (id) => {
             console.log('Peer ID:', id);
             if (!IS_CREATOR) {
-                // As a viewer, call the creator
-                console.log('Calling creator:', LIVE_ID);
-                const call = peer.call(LIVE_ID, new MediaStream()); // Send empty stream to receive creator's
-                call.on('stream', (remoteStream) => {
-                    console.log('Received creator stream!');
-                    const video = document.getElementById('creator_video');
-                    video.srcObject = remoteStream;
-                    video.play().catch(e => console.error('Video play failed:', e));
-                    
-                    document.getElementById('offline_view').style.display = 'none';
-                    document.getElementById('video_wrapper').style.display = 'flex';
-                });
-                
-                call.on('error', (err) => {
-                    console.error('Call error:', err);
-                });
+                tryCallCreator();
             }
         });
 
+        function tryCallCreator() {
+            if (!peer || peer.destroyed) return;
+            console.log('Attempting to call creator:', LIVE_ID);
+            
+            // We send an empty stream just to trigger the call and receive the creator's stream
+            const call = peer.call(LIVE_ID, new MediaStream());
+            
+            if (!call) {
+                console.log('Call failed to initiate, retrying in 3s...');
+                setTimeout(tryCallCreator, 3000);
+                return;
+            }
+
+            call.on('stream', (remoteStream) => {
+                console.log('Received creator stream!');
+                const video = document.getElementById('creator_video');
+                video.srcObject = remoteStream;
+                video.setAttribute('data-connected', 'true');
+                
+                // Handle autoplay block
+                video.play().catch(e => {
+                    console.warn('Autoplay blocked. User interaction required.');
+                    showToast('Clique no vídeo para ativar áudio/vídeo', 'info');
+                    video.muted = true; // Start muted to bypass
+                    video.play();
+                });
+                
+                document.getElementById('offline_view').style.display = 'none';
+                document.getElementById('video_wrapper').style.display = 'flex';
+            });
+            
+            call.on('error', (err) => {
+                console.error('Call error:', err);
+                setTimeout(tryCallCreator, 3000);
+            });
+
+            // If the call doesn't get a stream within 10 seconds, try again
+            setTimeout(() => {
+                if (!document.getElementById('creator_video').srcObject) {
+                    console.log('No stream received after 10s, retrying...');
+                    call.close();
+                    tryCallCreator();
+                }
+            }, 10000);
+        }
+
         if (IS_CREATOR) {
             peer.on('call', (call) => {
+                console.log('Incoming call from viewer...');
                 if (window.localStream) {
-                    console.log('Answering viewer call...');
+                    console.log('Answering immediately.');
                     call.answer(window.localStream);
+                } else {
+                    console.log('Stream not ready, queuing call.');
+                    pendingCalls.push(call);
                 }
             });
+
+            // Function to answer all queued calls once stream is ready
+            window.answerPendingCalls = () => {
+                console.log('Answering ' + pendingCalls.length + ' pending calls.');
+                while (pendingCalls.length > 0) {
+                    const c = pendingCalls.shift();
+                    c.answer(window.localStream);
+                }
+            };
         }
 
         peer.on('error', (err) => {
@@ -339,6 +394,11 @@
 
         if (typeof hideMogramLoader === 'function') hideMogramLoader();
         showToast('Câmera iniciada! Você está ao vivo.', 'success');
+        
+        // Answer anyone who was waiting for the stream
+        if (window.answerPendingCalls) {
+            window.answerPendingCalls();
+        }
         
         // Signal server that we are online
         fetch('{{ route('live.start', $live->id) }}', {
