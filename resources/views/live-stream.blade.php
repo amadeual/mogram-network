@@ -277,13 +277,14 @@
             <!-- Tab Headers (Compacted) -->
             <div style="padding: 1rem 1.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: white;">Chat ao Vivo</div>
             
-            <div id="chat_messages" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+            <div id="chat_messages" class="custom-scroll" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; scroll-behavior: smooth;">
                 @foreach($messages as $msg)
                     @include('partials.chat-message', ['message' => $msg])
                 @endforeach
             </div>
 
-            <div style="padding: 1.25rem; background: rgba(0,0,0,0.2); border-top: 1.5px solid rgba(255,255,255,0.05);">
+            <!-- Fixed Input Area -->
+            <div style="padding: 1.25rem; background: rgba(11, 13, 31, 0.95); border-top: 1.5px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
                     @foreach(['❤️','🔥','👏','🤣','😮','😭','💰','🙌'] as $emoji)
                         <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; font-size: 1.1rem;">{{ $emoji }}</span>
@@ -765,55 +766,57 @@
             }
         }
     }
-
+    
     function startChatPolling() {
+        if (window.pollingActive) return;
+        window.pollingActive = true;
+
         setInterval(() => {
-            fetch('{{ route('live.messages', $live->id) }}')
+            // 1. Fetch Status (Viewers, Likes, State)
+            fetch('{{ route('live.status', $live->id) }}')
             .then(res => res.json())
             .then(data => {
-                if(data.success) {
-                    const box = document.getElementById('chat_messages');
-                    const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 100;
-                    box.innerHTML = data.html;
-                    if (wasAtBottom) box.scrollTop = box.scrollHeight;
-                }
-            });
-
-            fetch('{{ route('live.status', $live->id) }}')
-            .then(res => {
-                if (res.status === 404) throw new Error('Ended');
-                return res.json();
-            })
-            .then(data => {
                 if (data.success) {
-                    if (data.status === 'ended') throw new Error('Ended');
+                    if (data.status === 'ended') {
+                        document.getElementById('ended_overlay').style.display = 'flex';
+                        return;
+                    }
 
-                    document.getElementById('viewer_count_overlay').innerText = data.viewer_count;
-                    document.getElementById('likes_count_overlay').innerText = data.likes_count;
+                    const vc = document.getElementById('viewer_count_overlay');
+                    const lc = document.getElementById('likes_count_overlay');
+                    if (vc) vc.innerText = data.viewer_count;
+                    if (lc) lc.innerText = data.likes_count;
                     
-                    // Sync States for Audience
-                    if (!IS_CREATOR) {
-                        document.getElementById('paused_overlay').style.display = data.is_paused ? 'flex' : 'none';
-                        document.getElementById('muted_overlay').style.display = data.is_muted ? 'flex' : 'none';
-                        document.getElementById('camera_off_overlay').style.display = data.is_camera_off ? 'flex' : 'none';
+                    const likesBtnText = document.getElementById('likes_count_text');
+                    if (likesBtnText) likesBtnText.innerText = data.likes_count > 0 ? data.likes_count : '';
 
-                        // Auto-start player if status is online but player is idle
-                        const playerState = ivsPlayer ? ivsPlayer.getState().toUpperCase() : '';
-                        if (data.status === 'online' && ivsPlayer && (playerState === 'IDLE' || playerState === 'ENDED')) {
-                            console.log('Stream is online, starting player...');
-                            if (IVS_PLAYBACK_URL) {
-                                ivsPlayer.load(IVS_PLAYBACK_URL);
-                                ivsPlayer.play();
-                            }
-                        }
+                    if (!IS_CREATOR) {
+                        const po = document.getElementById('paused_overlay');
+                        const mo = document.getElementById('muted_overlay');
+                        const co = document.getElementById('camera_off_overlay');
+                        if (po) po.style.display = data.is_paused ? 'flex' : 'none';
+                        if (mo) mo.style.display = data.is_muted ? 'flex' : 'none';
+                        if (co) co.style.display = data.is_camera_off ? 'flex' : 'none';
                     }
                 }
             })
-            .catch(err => {
-                if (err.message === 'Ended') {
-                    document.getElementById('ended_overlay').style.display = 'flex';
+            .catch(e => console.error('Status poll error:', e));
+
+            // 2. Fetch Messages
+            fetch('{{ route('live.chat.messages', $live->id) }}')
+            .then(res => res.text())
+            .then(html => {
+                const box = document.getElementById('chat_messages');
+                if (!box) return;
+                
+                const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 65;
+                box.innerHTML = html;
+                
+                if (wasAtBottom) {
+                    box.scrollTop = box.scrollHeight;
                 }
-            });
+            })
+            .catch(e => console.error('Chat poll error:', e));
         }, 3000);
     }
 
@@ -1051,5 +1054,12 @@
     .custom-scroll::-webkit-scrollbar { width: 5px; }
     .custom-scroll::-webkit-scrollbar-track { background: transparent; }
     .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+    
+    body, html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden !important;
+        height: 100vh !important;
+    }
 </style>
 @endsection
