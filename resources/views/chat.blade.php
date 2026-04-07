@@ -37,10 +37,22 @@
                         <div style="flex: 1; min-width: 0;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
                                 <h4 style="font-size: 15px; font-weight: 800; color: white; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $user->name }}</h4>
-                                <span style="font-size: 11px; color: var(--text-muted);">12:45</span>
+                                @php
+                                    $unreadCount = \App\Models\Message::where('sender_id', $user->id)
+                                        ->where('receiver_id', Auth::id())
+                                        ->where('is_read', false)
+                                        ->count();
+                                @endphp
+                                @if($unreadCount > 0)
+                                    <span style="background: #ef4444; color: white; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 950; box-shadow: 0 5px 15px rgba(239,68,68,0.3);">
+                                        {{ $unreadCount }}
+                                    </span>
+                                @else
+                                    <span style="font-size: 11px; color: var(--text-muted);">{{ $user->receivedMessages()->latest()->first()?->created_at->format('H:i') ?? '' }}</span>
+                                @endif
                             </div>
-                            <p style="font-size: 13px; color: var(--text-muted); margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
-                                Clique para abrir a conversa
+                            <p style="font-size: 13px; color: {{ $unreadCount > 0 ? 'white' : 'var(--text-muted)' }}; font-weight: {{ $unreadCount > 0 ? '700' : '500' }}; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                                {{ $user->receivedMessages()->latest()->first()?->message ?? 'Clique para abrir a conversa' }}
                             </p>
                         </div>
                     </a>

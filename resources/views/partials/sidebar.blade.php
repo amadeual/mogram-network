@@ -71,9 +71,22 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
                 Lives
             </a>
+            @php
+                $unreadChatsCount = \App\Models\Message::where('receiver_id', Auth::id())
+                    ->where('is_read', false)
+                    ->distinct('sender_id')
+                    ->count('sender_id');
+            @endphp
             <a href="{{ route('chat.index') }}" class="menu-item sidebar-nav-item {{ Route::is('chat.*') ? 'active' : '' }}">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                Chat
+                <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    @if($unreadChatsCount > 0)
+                        <span style="position: absolute; top: -6px; right: -8px; background: #ef4444; color: white; font-size: 8px; font-weight: 900; min-width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #0b0a15; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);">
+                            {{ $unreadChatsCount }}
+                        </span>
+                    @endif
+                </div>
+                <span style="margin-left: 12px;">Chat</span>
             </a>
             <a href="{{ route('purchases.index') }}" class="menu-item sidebar-nav-item {{ Route::is('purchases.*') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
