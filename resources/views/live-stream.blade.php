@@ -92,7 +92,11 @@
                     <!-- 1. Video System (Active Stream) -->
                     <div id="video_wrapper" style="width: 100%; height: 100%; display: none; gap: 4px;">
                         <div id="main_video_slot" style="flex: 1; height: 100%; position: relative; background: #000;">
-                            <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                            @if(Auth::id() == $live->user_id)
+                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: cover;"></canvas>
+                            @else
+                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                            @endif
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
                                     <div style="font-size: 3rem; margin-bottom: 1rem;">⏸️</div>
@@ -568,7 +572,9 @@
 
     function unmuteVideo() {
         const video = document.getElementById('creator_video');
-        video.muted = false;
+        if (video && video.tagName === 'VIDEO') {
+            video.muted = false;
+        }
         document.getElementById('unmute_prompt').style.display = 'none';
         
         // Ensure AudioContext is resumed for WebRTC
