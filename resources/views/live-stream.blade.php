@@ -736,6 +736,15 @@
                         document.getElementById('paused_overlay').style.display = data.is_paused ? 'flex' : 'none';
                         document.getElementById('muted_overlay').style.display = data.is_muted ? 'flex' : 'none';
                         document.getElementById('camera_off_overlay').style.display = data.is_camera_off ? 'flex' : 'none';
+
+                        // Auto-start player if status is online but player is idle
+                        if (data.status === 'online' && ivsPlayer && (ivsPlayer.getState() === 'IDLE' || ivsPlayer.getState() === 'ENDED')) {
+                            console.log('Stream is online, starting player...');
+                            if (IVS_PLAYBACK_URL) {
+                                ivsPlayer.load(IVS_PLAYBACK_URL);
+                                ivsPlayer.play();
+                            }
+                        }
                     }
                 }
             })
