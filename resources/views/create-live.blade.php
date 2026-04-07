@@ -97,37 +97,29 @@
                             <h3 style="font-size: 1.1rem; font-weight: 800; color: white;">Configuração de Acesso</h3>
                         </div>
 
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-                            <label class="access-type-card-v2">
-                                <input type="radio" name="is_free" value="1" {{ old('is_free', '1') == '1' ? 'checked' : '' }} onchange="togglePrice(this.value)" style="display: none;">
-                                <div class="card-inner">
-                                    <span class="icon">🌍</span>
-                                    <div class="text">
-                                        <p class="t">Acesso Livre</p>
-                                        <p class="d">Para todos os fãs</p>
-                                    </div>
-                                    <div class="radio-indicator"></div>
-                                </div>
-                            </label>
+                        <div style="margin-bottom: 1.5rem;">
+                            <!-- Hidden input forced to 0 for backend consistency -->
+                            <input type="hidden" name="is_free" value="0">
                             
-                            <label class="access-type-card-v2 vip">
-                                <input type="radio" name="is_free" value="0" {{ old('is_free') == '0' ? 'checked' : '' }} onchange="togglePrice(this.value)" style="display: none;">
+                            <div class="access-type-card-v2 vip checked" style="border-color: #ffd600; background: rgba(255,214,0,0.05);">
                                 <div class="card-inner">
                                     <span class="icon" style="background: rgba(255,214,0,0.1); color: #ffd600;">💎</span>
                                     <div class="text">
                                         <p class="t">Ticket VIP</p>
-                                        <p class="d">Conteúdo pago</p>
+                                        <p class="d">Conteúdo exclusivo e monetizado</p>
                                     </div>
-                                    <div class="radio-indicator"></div>
+                                    <div class="radio-indicator" style="background: #ffd600; border-color: #ffd600;">
+                                        <div style="position: absolute; top:50%; left:50%; transform: translate(-50%,-50%); width: 6px; height:6px; background:white; border-radius: 50%;"></div>
+                                    </div>
                                 </div>
-                            </label>
+                            </div>
                         </div>
 
-                        <div id="price_container" style="display: {{ old('is_free', '1') == '0' ? 'block' : 'none' }}; transform-origin: top; animation: premiumZoomIn 0.3s forwards;">
+                        <div id="price_container">
                             <label class="premium-label" style="color: #ffd600;">Valor do Ingresso (R$)</label>
                             <div style="position: relative;">
                                 <span style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); color: #ffd600; font-weight: 800; font-size: 1.1rem;">R$</span>
-                                <input type="number" name="price" step="0.01" min="1.00" placeholder="19,90" class="mogram-input-v2 @error('price') error @enderror" value="{{ old('price') }}" style="padding-left: 3rem; border-color: rgba(255, 214, 0, 0.2); color: #ffd600; font-size: 1.3rem;">
+                                <input type="number" name="price" step="0.01" min="1.00" placeholder="19,90" required class="mogram-input-v2 @error('price') error @enderror" value="{{ old('price') }}" style="padding-left: 3rem; border-color: rgba(255, 214, 0, 0.2); color: #ffd600; font-size: 1.3rem;">
                             </div>
                             @error('price') <p class="field-error" style="color: #ffd600; border-color: rgba(255,214,0,0.2);">{{ $message }}</p> @enderror
                         </div>
@@ -210,12 +202,7 @@
     }
 
     function togglePrice(val) {
-        const container = document.getElementById('price_container');
-        if (val == '0') {
-            container.style.display = 'block';
-        } else {
-            container.style.display = 'none';
-        }
+        // Obsoleted by business rule: only paid lives allowed.
     }
 </script>
 

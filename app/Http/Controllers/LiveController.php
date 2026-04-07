@@ -64,16 +64,16 @@ class LiveController extends Controller
                 'description' => 'required|string|max:1000',
                 'thumbnail' => 'required|image|max:5120',
                 'category' => 'nullable|string|max:100',
-                'is_free' => 'required',
-                'price' => 'nullable|numeric|min:0'
+                'price' => 'required|numeric|min:1.00'
             ], [
                 'title.required' => 'O título da live é obrigatório.',
                 'description.required' => 'A descrição da live é obrigatória.',
                 'thumbnail.required' => 'A imagem de capa (thumbnail) é obrigatória.',
                 'thumbnail.image' => 'O arquivo da capa deve ser uma imagem.',
                 'thumbnail.max' => 'A imagem da capa não pode ter mais de 5MB.',
+                'price.required' => 'As lives no Mogram são exclusivas. Defina um valor de ingresso.',
                 'price.numeric' => 'O preço deve ser um número válido.',
-                'price.min' => 'O preço não pode ser menor que zero.'
+                'price.min' => 'O valor mínimo para uma live é R$ 1,00.'
             ]);
 
             if (!$request->hasFile('thumbnail')) {
@@ -88,8 +88,8 @@ class LiveController extends Controller
                 'description' => $request->description,
                 'category' => $request->category ?? 'Geral',
                 'thumbnail' => $thumbnailPath,
-                'is_free' => $request->is_free == '1' ? 1 : 0,
-                'price' => $request->is_free == '1' ? 0 : ($request->price ?? 0),
+                'is_free' => 0,
+                'price' => $request->price,
                 'status' => 'offline',
                 'started_at' => now()
             ]);

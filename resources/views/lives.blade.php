@@ -29,7 +29,7 @@
                    <h2 id="preview_title" style="color: white; font-size: 1.5rem; font-weight: 800; margin: 0 0 5px;"></h2>
                    <div style="display: flex; align-items: center; gap: 10px;">
                        <p id="preview_creator" style="color: #3390ec; font-size: 0.85rem; font-weight: 700; margin: 0;"></p>
-                       <span id="preview_price" style="background: #ffd600; color: black; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Grátis</span>
+                       <span id="preview_price" style="background: #ffd600; color: black; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Ticket VIP</span>
                    </div>
                 </div>
             </div>
@@ -159,16 +159,12 @@
                         <h4 class="title">{{ $live->title }}</h4>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
                              <p style="color: #666; font-size: 0.8rem;">Por {{ $live->user->name }}</p>
-                              @if($live->is_free)
-                                   <button class="btn-notify">Me Avisar</button>
-                               @else
                                    @if(in_array($live->id, $userAccessIds) || Auth::id() == $live->user_id)
                                        <button class="btn-notify" style="border-color: #22c55e; color: #22c55e;">{{ Auth::id() == $live->user_id ? 'Sua Live' : 'Inscrito' }}</button>
                                    @else
                                        <form id="buy_form_{{ $live->id }}" action="{{ route('live.buy', $live->id) }}" method="POST" style="display: none;">@csrf</form>
                                        <button type="button" class="btn-notify" onclick="showMogramConfirm('Confirmar Inscrição', 'Confirmar inscrição por R$ {{ number_format($live->price, 2) }}?', () => { showMogramLoader(); document.getElementById('buy_form_{{ $live->id }}').submit(); })" style="background: #3390ec; color: white; border: none; padding: 6px 12px; font-size: 10px;">INSCREVER (R$ {{ number_format($live->price, 0) }})</button>
                                    @endif
-                               @endif
                         </div>
                     </div>
                 </div>
@@ -258,36 +254,29 @@
         joinBtn.style.background = 'var(--primary-blue)';
         joinBtn.removeAttribute('data-buy-form');
 
-        if (price && parseFloat(price) > 0) {
-            priceTag.innerText = 'R$ ' + parseFloat(price).toFixed(2);
-            priceTag.style.background = '#ffd600';
-            priceTag.style.color = 'black';
-            
-            if (!hasAccess && !isOwner) {
-                joinBtn.innerText = 'PAGAR E ENTRAR (R$ ' + parseFloat(price).toFixed(2) + ')';
-                joinBtn.style.background = 'linear-gradient(135deg, #ffd600, #ff9100)';
-                joinBtn.style.color = 'black';
-                joinBtn.href = 'javascript:void(0)';
-                joinBtn.onclick = function() {
-                    showMogramConfirm('Confirmar Compra', 'Será descontado R$ ' + price + ' do seu saldo para acessar esta live. Deseja continuar?', () => {
-                        const form = document.createElement('form');
-                        form.method = 'POST';
-                        form.action = '/lives/' + liveId + '/buy';
-                        form.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}">`;
-                        document.body.appendChild(form);
-                        showMogramLoader();
-                        form.submit();
-                    });
-                };
-            } else {
-                joinBtn.href = url;
-            }
+        // Set price
+        priceTag.innerText = 'R$ ' + parseFloat(price).toFixed(2);
+        priceTag.style.background = '#ffd600';
+        priceTag.style.color = 'black';
+        
+        if (!hasAccess && !isOwner) {
+            joinBtn.innerText = 'PAGAR E ENTRAR (R$ ' + parseFloat(price).toFixed(2) + ')';
+            joinBtn.style.background = 'linear-gradient(135deg, #ffd600, #ff9100)';
+            joinBtn.style.color = 'black';
+            joinBtn.href = 'javascript:void(0)';
+            joinBtn.onclick = function() {
+                showMogramConfirm('Confirmar Compra', 'Será descontado R$ ' + price + ' do seu saldo para acessar esta live. Deseja continuar?', () => {
+                    const form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = '/lives/' + liveId + '/buy';
+                    form.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}">`;
+                    document.body.appendChild(form);
+                    showMogramLoader();
+                    form.submit();
+                });
+            };
         } else {
-            priceTag.innerText = 'Grátis';
-            priceTag.style.background = '#22c55e';
-            priceTag.style.color = 'white';
             joinBtn.href = url;
-            joinBtn.style.color = 'white';
         }
         
         document.getElementById('live_preview_modal').style.display = 'flex';
