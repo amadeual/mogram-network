@@ -3,12 +3,12 @@
 @section('title', $live->title . ' - Mogram Transmissão')
 
 @section('content')
-<div class="dash-layout" style="background: #0b0a15; display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; position: fixed; inset: 0;">
+<div class="dash-layout" style="background: #0b0a15; display: flex; flex-direction: column; min-height: 100vh; width: 100%;">
     <!-- Main Stream Layout -->
     <!-- Amazon IVS SDKs -->
     <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
-    <div style="display: flex; flex: 1; height: 100%; overflow: hidden; width: 100%; position: relative;" class="responsive-container">
+    <div class="live-grid-container">
         <!-- Sidebar Navigation -->
         <aside class="left-nav" style="width: 240px; flex-shrink: 0; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
@@ -50,7 +50,7 @@
         </aside>
 
         <!-- Stream Area -->
-        <main style="flex: 1; display: flex; flex-direction: column; overflow-y: auto; padding: 0 1.25rem; min-width: 0;">
+        <main class="stream-area">
             <!-- Creator Header -->
             <div style="padding: 1.5rem 0; display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; gap: 1.25rem; align-items: center;">
@@ -137,7 +137,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+
 
                 <!-- 8. Gift Modal (Premium Redesign) -->
                 <div id="gift_modal" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 400; align-items: center; justify-content: center; padding: 1.5rem;">
@@ -169,7 +169,7 @@
                         </button>
                     </div>
                 </div>
-           </div>
+
 
                     <!-- 7. Paid Entry Overlay (Professionalized) -->
                     @if(isset($hasAccess) && !$hasAccess)
@@ -197,7 +197,7 @@
                         </div>
                     </div>
                     @endif
-                    </div>
+
 
                     <!-- 2. Offline / Start Prompt Layer -->
                     <div id="offline_view" style="width: 100%; height: 100%; position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 150; background: #0b0a15;">
@@ -1094,9 +1094,59 @@
     body, html {
         margin: 0;
         padding: 0;
-        overflow: hidden !important;
-        height: 100vh !important;
-        width: 100vw !important;
+        background: #0b0a15;
+        overflow-x: hidden;
+    }
+
+    .live-grid-container {
+        display: grid;
+        grid-template-columns: 240px 1fr 320px;
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    main.stream-area {
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+        padding: 0 1.5rem;
+        background: #0b0a15;
+        min-width: 0;
+    }
+
+    #video_player_container {
+        position: relative !important;
+        width: 100%;
+        max-width: 900px;
+        aspect-ratio: 16/9;
+        margin: 0 auto;
+        background: #000;
+        border-radius: 24px;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    /* Adjust tools and overlays to be consistent */
+    #broadcaster_tools, #btn_fullscreen, .stream-overlays-container {
+        pointer-events: auto;
+    }
+
+    @media (max-width: 1300px) {
+        .live-grid-container { grid-template-columns: 80px 1fr 300px; }
+        .left-nav span, .left-nav p { display: none !important; }
+    }
+
+    @media (max-width: 1024px) {
+        .live-grid-container { grid-template-columns: 80px 1fr; }
+        .chat-sidebar { display: none; }
+    }
+
+    @media (max-width: 768px) {
+        .live-grid-container { display: flex; flex-direction: column; height: auto; overflow: auto; }
+        .left-nav { display: none !important; }
+        #video_player_container { border-radius: 0; }
+        .chat-sidebar { display: flex; width: 100% !important; min-height: 500px; }
     }
 </style>
 @endsection
