@@ -22,7 +22,9 @@
     @endauth
 
     @yield('content')
-    @include('partials.notifications')
+    @auth
+        @include('partials.notifications')
+    @endauth
     @include('partials.premium-loader')
     
     <!-- Custom Modal/Dialog -->

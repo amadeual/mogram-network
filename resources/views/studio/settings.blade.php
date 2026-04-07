@@ -53,7 +53,7 @@
                         </div>
                         <div>
                             <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Nome de Usuário</label>
-                            <input type="text" value="@ {{ $user->username }}" disabled
+                            <input type="text" value="@{{ $user->username }}" disabled
                                    style="width: 100%; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 0.875rem 1.25rem; color: var(--text-muted); font-weight: 700; cursor: not-allowed;">
                         </div>
                     </div>

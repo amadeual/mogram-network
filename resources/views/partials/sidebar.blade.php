@@ -21,8 +21,8 @@
         </div>
 
         {{-- Notification shortcut --}}
-        <div style="width: 44px; display:flex; justify-content:center;">
-            <div style="width:8px;height:8px;background:#3390ec;border-radius:50%;box-shadow:0 0 8px #3390ec;"></div>
+        <div class="notif-bell" style="width: 44px; display:flex; justify-content:center; cursor:pointer;" onclick="toggleNotifs()">
+            <div class="notif-badge" style="width:8px;height:8px;background:#3390ec;border-radius:50%;box-shadow:0 0 8px #3390ec; display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'block' : 'none' }};"></div>
         </div>
     </div>
 
@@ -102,7 +102,7 @@
             @endif
             <div style="flex: 1; min-width: 0;">
                 <p style="font-size: 13px; font-weight: 700; color: white; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ Auth::user()->name }}</p>
-                <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@ {{ Auth::user()->username }}</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
             </div>
             <form action="{{ route('logout') }}" method="POST">
                 @csrf

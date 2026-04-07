@@ -24,7 +24,7 @@
             
             <h1 style="font-size: 2rem; font-weight: 950; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">{{ $user->name }}</h1>
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1.5rem;">
-                <span style="font-size: 12px; color: var(--primary-blue); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: rgba(51, 144, 236, 0.1); padding: 4px 12px; border-radius: 20px;">@ {{ $user->username }}</span>
+                <span style="font-size: 12px; color: var(--primary-blue); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: rgba(51, 144, 236, 0.1); padding: 4px 12px; border-radius: 20px;">@<span>{{ $user->username }}</span></span>
                 <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">•</span>
                 <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">{{ $user->category ?: 'Membro Mogram' }}</span>
             </div>

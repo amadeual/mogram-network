@@ -10,7 +10,7 @@
             <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
             <div>
                 <h4 style="font-size: 15px; font-weight: 700; color: white; margin: 0;">{{ Auth::user()->name }}</h4>
-                <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@ {{ Auth::user()->username }}</p>
+                <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
             </div>
         </div>
         

@@ -17,7 +17,7 @@
             <div style="display: flex; gap: 1.5rem; align-items: center;">
                  <button class="notif-bell" onclick="toggleNotifs()" style="background: rgba(255,255,255,0.05); border: none; width: 44px; height: 44px; border-radius: 12px; color: #888; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative;" onmouseover="this.style.background='rgba(51,144,236,0.1)'; this.style.color='var(--primary-blue)'">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    <div style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; border: 2px solid #0b0a15;"></div>
+                    <div style="position: absolute; top: 10px; right: 10px; width: 8px; height: 8px; background: #ef4444; border-radius: 50%; border: 2px solid #0b0a15; display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'block' : 'none' }};"></div>
                 </button>
                 <button class="btn-studio" onclick="window.location.href='/lives/create'">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg> Iniciar Transmissão
@@ -86,7 +86,7 @@
                             <img src="{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-blue);">
                             <div style="flex: 1;">
                                 <h4 class="title">{{ $live->title }}</h4>
-                                <p style="color: #666; font-size: 0.8rem; font-weight: 700;">@ {{ $live->user->username }}</p>
+                                <p style="color: #666; font-size: 0.8rem; font-weight: 700;">@<span>{{ $live->user->username }}</span></p>
                             </div>
                         </div>
                     </div>

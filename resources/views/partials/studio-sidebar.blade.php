@@ -49,7 +49,7 @@
         @endif
         <div>
             <h4 style="font-size: 15px; font-weight: 700; color: white; margin: 0;">{{ Auth::user()->name }}</h4>
-            <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@ {{ Auth::user()->username }}</p>
+            <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
         </div>
     </a>
     
