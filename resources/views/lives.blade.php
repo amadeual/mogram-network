@@ -53,6 +53,21 @@
             </div>
         </header>
 
+        <!-- Custom Confirmation Modal -->
+        <div id="mogram_confirm_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 10002; align-items: center; justify-content: center; padding: 2rem;">
+            <div style="background: #1a1c2e; width: 100%; max-width: 400px; border-radius: 24px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.05); text-align: center; box-shadow: 0 40px 100px rgba(0,0,0,0.9);">
+                <div id="confirm_icon" style="width: 60px; height: 60px; background: rgba(51,144,236,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; color: #3390ec;">
+                    <svg width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <h3 id="confirm_title" style="color: white; font-weight: 800; font-size: 1.25rem; margin-bottom: 0.5rem;">Confirmar Ação</h3>
+                <p id="confirm_msg" style="color: #888; font-size: 0.9rem; line-height: 1.5; margin-bottom: 2rem; font-weight: 600;"></p>
+                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                    <button id="confirm_btn_yes" style="background: #3390ec; color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#2b7bcc'" onmouseout="this.style.background='#3390ec'">Sim, continuar</button>
+                    <button id="confirm_btn_no" style="background: transparent; color: #555; border: none; padding: 0.8rem; border-radius: 12px; font-weight: 700; cursor: pointer;" onmouseover="this.style.color='#888'" onmouseout="this.style.color='#555'">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
         <!-- Categories / Filters (TikTok Style) -->
         <div style="display: flex; gap: 1rem; margin-bottom: 3rem; overflow-x: auto; padding-bottom: 10px;">
             <a href="?category=Explorar" class="filter-pill {{ request('category', 'Explorar') == 'Explorar' ? 'active' : '' }}" style="text-decoration: none;">Explorar</a>
@@ -150,10 +165,8 @@
                                    @if(in_array($live->id, $userAccessIds))
                                        <button class="btn-notify" style="border-color: #22c55e; color: #22c55e;">Inscrito</button>
                                    @else
-                                       <form action="{{ route('live.buy', $live->id) }}" method="POST">
-                                           @csrf
-                                           <button type="submit" class="btn-notify" onclick="return confirm('Confirmar inscrição por R$ {{ number_format($live->price, 2) }}?')" style="background: #3390ec; color: white; border: none; padding: 6px 12px; font-size: 10px;">INSCREVER (R$ {{ number_format($live->price, 0) }})</button>
-                                       </form>
+                                       <form id="buy_form_{{ $live->id }}" action="{{ route('live.buy', $live->id) }}" method="POST" style="display: none;">@csrf</form>
+                                       <button type="button" class="btn-notify" onclick="showMogramConfirm('Confirmar Inscrição', 'Confirmar inscrição por R$ {{ number_format($live->price, 2) }}?', () => { showMogramLoader(); document.getElementById('buy_form_{{ $live->id }}').submit(); })" style="background: #3390ec; color: white; border: none; padding: 6px 12px; font-size: 10px;">INSCREVER (R$ {{ number_format($live->price, 0) }})</button>
                                    @endif
                                @endif
                         </div>
@@ -256,7 +269,7 @@
                 joinBtn.style.color = 'black';
                 joinBtn.href = 'javascript:void(0)';
                 joinBtn.onclick = function() {
-                    if (confirm('Será descontado R$ ' + price + ' do seu saldo para acessar esta live. Deseja continuar?')) {
+                    showMogramConfirm('Confirmar Compra', 'Será descontado R$ ' + price + ' do seu saldo para acessar esta live. Deseja continuar?', () => {
                         const form = document.createElement('form');
                         form.method = 'POST';
                         form.action = '/lives/' + liveId + '/buy';
@@ -264,7 +277,7 @@
                         document.body.appendChild(form);
                         showMogramLoader();
                         form.submit();
-                    }
+                    });
                 };
             } else {
                 joinBtn.href = url;
@@ -297,9 +310,30 @@
     // Close on click outside
     window.onclick = function(event) {
         const modal = document.getElementById('live_preview_modal');
-        if (event.target == modal) {
-            closePreview();
-        }
+        const confirmModal = document.getElementById('mogram_confirm_modal');
+        if (event.target == modal) closePreview();
+        if (confirmModal && event.target == confirmModal) closeConfirm();
+    }
+
+    function showMogramConfirm(title, message, onConfirm) {
+        const modal = document.getElementById('mogram_confirm_modal');
+        document.getElementById('confirm_title').innerText = title;
+        document.getElementById('confirm_msg').innerText = message;
+        
+        const okBtn = document.getElementById('confirm_btn_yes');
+        const noBtn = document.getElementById('confirm_btn_no');
+        
+        noBtn.onclick = closeConfirm;
+        okBtn.onclick = () => {
+            closeConfirm();
+            onConfirm();
+        };
+        
+        modal.style.display = 'flex';
+    }
+
+    function closeConfirm() {
+        document.getElementById('mogram_confirm_modal').style.display = 'none';
     }
 </script>
 @endsection
