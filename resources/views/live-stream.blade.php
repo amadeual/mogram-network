@@ -70,7 +70,7 @@
                 
                 <div style="display: flex; gap: 12px; align-items: center;">
                     @if(Auth::id() == $live->user_id)
-                    <button onclick="deleteLive()" style="background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.2); padding: 0.75rem 1rem; border-radius: 12px; color: #ef4444; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <button id="end_live_btn" onclick="deleteLive(this)" style="background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.2); padding: 0.75rem 1rem; border-radius: 12px; color: #ef4444; font-weight: 800; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 8px;">
                         <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
                         Encerrar
                     </button>
@@ -591,14 +591,46 @@
         }).then(() => { toggleGiftModal(); showToast('Enviado!'); });
     }
 
-    function deleteLive() {
-        if (confirm('Encerrar live?')) {
-            fetch('{{ route('live.destroy', $live->id) }}', {
-                method: 'DELETE',
-                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
-            }).then(() => window.location.href = '/lives');
+    function deleteLive(btn) {
+        if (!confirm('Deseja realmente encerrar esta transmissão agora?')) return;
+        
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = 'Encerrando...';
+        btn.disabled = true;
+
+        if (window.localStream) {
+            window.localStream.getTracks().forEach(t => t.stop());
         }
+
+        if (peer) peer.destroy();
+
+        fetch('{{ route('live.destroy', $live->id) }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ _method: 'DELETE' })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = '{{ route('lives') }}';
+            } else {
+                alert('Erro ao encerrar: ' + (data.message || 'Desconhecido'));
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            }
+        })
+        .catch(err => {
+            console.error('Error ending live:', err);
+            window.location.href = '{{ route('lives') }}';
+        });
     }
+
+    window.onbeforeunload = function() {
+        if (peer) peer.destroy();
+    };
 
     // Helper to start the stream
     function initLive() {
