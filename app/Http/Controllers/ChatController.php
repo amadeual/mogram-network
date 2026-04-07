@@ -44,7 +44,8 @@ class ChatController extends Controller
                ->where('receiver_id', $userId)
                ->update(['is_read' => true]);
 
-        return view('chat-show', compact('user', 'messages'));
+        $gifts = \App\Models\Gift::all();
+        return view('chat-show', compact('user', 'messages', 'gifts'));
     }
 
     public function sendMessage(Request $request, User $user)
@@ -60,5 +61,46 @@ class ChatController extends Controller
         ]);
 
         return back();
+    }
+
+    public function sendGift(Request $request, User $user)
+    {
+        $request->validate(['gift_id' => 'required|exists:gifts,id']);
+        
+        $sender = Auth::user();
+        $gift = \App\Models\Gift::find($request->gift_id);
+
+        if ($sender->balance < $gift->price) {
+            return response()->json(['success' => false, 'message' => 'Saldo insuficiente']);
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($sender, $gift, $user) {
+            // Deduct from sender
+            $sender->decrement('balance', $gift->price);
+            
+            // Platform commission (20%)
+            $platformComm = $gift->price * 0.20;
+            $creatorShare = $gift->price - $platformComm;
+            
+            // Credit the receiver (creator)
+            $user->increment('balance', $creatorShare);
+
+            // Record gift
+            \App\Models\LiveGift::create([
+                'live_id' => null, // Outside live
+                'user_id' => $sender->id,
+                'gift_id' => $gift->id,
+                'price' => $gift->price
+            ]);
+
+            // Create message for the gift
+            Message::create([
+                'sender_id' => $sender->id,
+                'receiver_id' => $user->id,
+                'message' => "🎁 enviou " . $gift->icon . " " . $gift->name . "!"
+            ]);
+        });
+
+        return response()->json(['success' => true]);
     }
 }

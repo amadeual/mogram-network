@@ -70,11 +70,25 @@
                 <!-- Messages -->
                 <div id="chat_messages" style="flex: 1; overflow-y: auto; padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
                     @foreach($messages as $msg)
-                        <div style="display: flex; flex-direction: column; align-items: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }}; max-width: 80%;">
-                            <div style="background: {{ $msg->sender_id == Auth::id() ? 'var(--primary-blue)' : 'rgba(255,255,255,0.05)' }}; padding: 1rem 1.25rem; border-radius: {{ $msg->sender_id == Auth::id() ? '20px 20px 4px 20px' : '20px 20px 20px 4px' }}; color: white; font-size: 15px; line-height: 1.5; font-weight: 500; align-self: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }};">
-                                {!! nl2br(e($msg->message)) !!}
-                            </div>
-                            <span style="font-size: 10px; color: var(--text-muted); margin-top: 6px; font-weight: 800;">{{ $msg->created_at->format('H:i') }}</span>
+                        <div style="display: flex; flex-direction: column; align-items: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }}; max-width: 80%; margin-bottom: 10px;">
+                            @php $isGift = str_contains($msg->message, '🎁 enviou'); @endphp
+                            
+                            @if($isGift)
+                                <div style="background: linear-gradient(135deg, rgba(255, 214, 0, 0.2), rgba(255, 145, 0, 0.1)); border: 2px solid #ffd600; padding: 1.25rem; border-radius: 24px; color: white; box-shadow: 0 10px 30px rgba(255,214,0,0.2); animation: giftPulse 1s ease-out; display: flex; align-items: center; gap: 15px; align-self: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }};">
+                                    <div style="font-size: 2.5rem; filter: drop-shadow(0 0 10px rgba(255,214,0,0.5));">
+                                        {{ Str::after(Str::before($msg->message, '!'), 'enviou ') }}
+                                    </div>
+                                    <div>
+                                        <p style="margin: 0; color: #ffd600; font-weight: 950; font-size: 1rem;">{{ $msg->message }}</p>
+                                        <p style="margin: 0; color: rgba(255,214,0,0.7); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Presente de Apoio</p>
+                                    </div>
+                                </div>
+                            @else
+                                <div style="background: {{ $msg->sender_id == Auth::id() ? '#3390ec' : 'rgba(255,255,255,0.05)' }}; padding: 1rem 1.25rem; border-radius: {{ $msg->sender_id == Auth::id() ? '20px 20px 4px 20px' : '20px 20px 20px 4px' }}; color: white; font-size: 15px; line-height: 1.5; font-weight: 500; align-self: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }};">
+                                    {!! nl2br(e($msg->message)) !!}
+                                </div>
+                            @endif
+                            <span style="font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 6px; font-weight: 800; align-self: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }};">{{ $msg->created_at->format('H:i') }}</span>
                         </div>
                     @endforeach
                 </div>
@@ -87,6 +101,9 @@
                         <div style="display: flex; gap: 12px; color: var(--text-muted);">
                             <button type="button" style="background: none; border: none; padding: 0; color: inherit; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='inherit'">
                                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.51a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                            </button>
+                            <button type="button" onclick="toggleGiftModal()" style="background: none; border: none; padding: 0; color: #ffd600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                                <span style="font-size: 20px;">🎁</span>
                             </button>
                             <div style="position: relative;">
                                 <button type="button" onclick="toggleEmojiPicker()" style="background: none; border: none; padding: 0; color: inherit; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='inherit'">
@@ -115,6 +132,33 @@
 
         </div>
     </main>
+</div>
+
+<!-- Gift Modal (Consolidated Styling) -->
+<div id="gift_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center; padding: 2rem;">
+    <div style="background: #151621; width: 100%; max-width: 440px; border-radius: 32px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h3 style="color: white; font-weight: 950; font-size: 1.25rem; margin: 0; letter-spacing: -1px;">Enviar Presente</h3>
+                <p style="color: rgba(255,255,255,0.3); font-size: 0.75rem; font-weight: 800; margin: 5px 0 0;">Seu saldo: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
+            </div>
+            <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 36px; height: 36px; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 380px; overflow-y: auto; padding-right: 8px;" class="custom-scroll">
+            @foreach($gifts as $gift)
+            <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-card" style="cursor: pointer; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px 10px; text-align: center; transition: 0.3s;">
+                <div style="font-size: 2.25rem; margin-bottom: 12px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
+                <div style="font-size: 0.75rem; font-weight: 850; color: white; margin-bottom: 6px;">{{ $gift->name }}</div>
+                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 10px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
+            </div>
+            @endforeach
+        </div>
+        
+        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.25rem; border-radius: 18px; font-weight: 950; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2);">
+            ENVIAR PRESENTE
+        </button>
+    </div>
 </div>
 
 <script>
@@ -147,10 +191,71 @@
     document.getElementById('chat_form').addEventListener('submit', function() {
         setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
     });
+
+    let selectedGiftId = null;
+
+    function toggleGiftModal() {
+        const modal = document.getElementById('gift_modal');
+        modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function selectGift(id, element) {
+        selectedGiftId = id;
+        document.querySelectorAll('.gift-card').forEach(el => {
+            el.style.borderColor = 'rgba(255,255,255,0.05)';
+            el.style.background = 'rgba(255,255,255,0.03)';
+        });
+        element.style.borderColor = '#ffd600';
+        element.style.background = 'rgba(255,214,0,0.05)';
+        
+        const btn = document.getElementById('send_gift_btn');
+        btn.disabled = false;
+        btn.style.opacity = '1';
+    }
+
+    function confirmSendGift() {
+        if (!selectedGiftId) return;
+        
+        const btn = document.getElementById('send_gift_btn');
+        btn.disabled = true;
+        btn.innerText = 'ENVIANDO...';
+
+        fetch('{{ route('chat.gift', $user->id) }}', {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ gift_id: selectedGiftId })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                window.location.reload(); // Simple reload for simplicity in regular chat
+            } else {
+                alert(data.message || 'Erro ao enviar presente');
+                btn.disabled = false;
+                btn.innerText = 'ENVIAR PRESENTE';
+            }
+        });
+    }
 </script>
 
 <style>
 .main-content { margin-left: 280px; }
+@keyframes giftPulse {
+    0% { transform: scale(0.95); opacity: 0.5; }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); opacity: 1; }
+}
+@keyframes modalPop {
+    from { transform: scale(0.8) translateY(20px); opacity: 0; }
+    to { transform: scale(1) translateY(0); opacity: 1; }
+}
+.custom-scroll::-webkit-scrollbar { width: 5px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
 @media (max-width: 991px) {
     .main-content { margin-left: 0 !important; }
     .chat-list-sidebar { display: none !important; }
