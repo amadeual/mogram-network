@@ -3,12 +3,12 @@
 @section('title', $live->title . ' - Mogram Transmissão')
 
 @section('content')
-<div class="dash-layout" style="background: #0b0a15; display: flex; flex-direction: column; overflow: hidden;">
+<div class="dash-layout" style="background: #0b0a15; display: flex; flex-direction: column; height: 100vh; width: 100vw; overflow: hidden; position: fixed; inset: 0;">
     <!-- Main Stream Layout -->
     <!-- Amazon IVS SDKs -->
     <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
-    <div style="display: flex; flex: 1; height: calc(100vh - 55px); overflow: hidden; width: 100%;" class="responsive-container">
+    <div style="display: flex; flex: 1; height: 100%; overflow: hidden; width: 100%; position: relative;" class="responsive-container">
         <!-- Sidebar Navigation -->
         <aside class="left-nav" style="width: 240px; flex-shrink: 0; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
@@ -1094,8 +1094,9 @@
     body, html {
         margin: 0;
         padding: 0;
-        overflow: hidden;
-        height: 100vh;
+        overflow: hidden !important;
+        height: 100vh !important;
+        width: 100vw !important;
     }
 </style>
 @endsection
