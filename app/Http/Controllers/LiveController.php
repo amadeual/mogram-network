@@ -391,6 +391,6 @@ class LiveController extends Controller
         foreach($messages as $msg) {
             $html .= view('partials.chat-message', ['message' => $msg, 'live' => $live])->render();
         }
-        return response()->json(['success' => true, 'html' => $html]);
+        return response($html)->header('Content-Type', 'text/html');
     }
 }

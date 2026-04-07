@@ -93,7 +93,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lives/{live}/start', [LiveController::class, 'start'])->name('live.start');
     Route::get('/lives/{live}/status', [LiveController::class, 'status'])->name('live.status');
     Route::post('/lives/{live}/chat', [LiveController::class, 'sendMessage'])->name('live.chat');
-    Route::get('/lives/{live}/messages', [LiveController::class, 'getMessages'])->name('live.messages');
+    Route::get('/lives/{live}/messages', [LiveController::class, 'getMessages'])->name('live.chat.messages');
     Route::post('/lives/{live}/gift', [LiveController::class, 'sendGift'])->name('live.gift');
     Route::post('/lives/{live}/like', [LiveController::class, 'toggleLike'])->name('live.like');
     Route::post('/lives/{live}/pause', [LiveController::class, 'togglePause'])->name('live.pause');
