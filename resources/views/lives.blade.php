@@ -11,9 +11,34 @@
         <!-- Trending Header -->
         <header style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem;">
             <div>
-                <h1 style="font-size: 2.5rem; font-weight: 900; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">Explorar <span style="color: var(--primary-blue);">Lives</span></h1>
-                <p style="color: #888; font-size: 1rem; font-weight: 600;">Descubra talentos e interaja em tempo real.</p>
+        <h1 style="font-size: 2.5rem; font-weight: 900; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">Explorar <span style="color: var(--primary-blue);">Lives</span></h1>
+        <p style="color: #888; font-size: 1rem; font-weight: 600;">Descubra talentos e interaja em tempo real.</p>
+    </div>
+    
+    <!-- Inline Preview Helper (for later reference) -->
+    <div id="live_preview_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 10001; align-items: center; justify-content: center; padding: 2rem;">
+        <div style="background: #1a1c2e; width: 550px; border-radius: 30px; padding: 2.5rem; border: 1.5px solid rgba(255,255,255,0.05); position: relative; box-shadow: 0 30px 60px rgba(0,0,0,0.8);">
+            <div id="preview_thumb" style="width: 100%; aspect-ratio: 16/9; border-radius: 20px; overflow: hidden; margin-bottom: 2rem; position: relative; border: 2px solid rgba(255,255,255,0.03);">
+                <img id="preview_img" src="" style="width: 100%; height: 100%; object-fit: cover;">
+                <div style="position: absolute; top: 1rem; left: 1rem; background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">AO VIVO</div>
             </div>
+            
+            <div style="display: flex; gap: 15px; align-items: start; margin-bottom: 1.5rem;">
+                <img id="preview_avatar" src="" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #3390ec;">
+                <div style="flex: 1;">
+                   <h2 id="preview_title" style="color: white; font-size: 1.5rem; font-weight: 800; margin: 0 0 5px;"></h2>
+                   <p id="preview_creator" style="color: #3390ec; font-size: 0.85rem; font-weight: 700; margin: 0;"></p>
+                </div>
+            </div>
+            
+            <p id="preview_desc" style="color: #888; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2.5rem; max-height: 150px; overflow-y: auto; padding-right: 10px;"></p>
+            
+            <div style="display: flex; gap: 1rem;">
+                <a id="preview_join_btn" href="" onclick="showMogramLoader()" style="flex: 1; background: var(--primary-blue); color: white; text-align: center; text-decoration: none; padding: 1.25rem; border-radius: 20px; font-weight: 800; transition: 0.3s; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3);">ENTRAR AGORA</a>
+                <button onclick="closePreview()" style="background: rgba(255,255,255,0.05); color: #888; border: none; padding: 1rem 1.5rem; border-radius: 20px; font-weight: 700; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">Cancelar</button>
+            </div>
+        </div>
+    </div>
             <div style="display: flex; gap: 1.5rem; align-items: center;">
                  <button class="notif-bell" onclick="toggleNotifs()" style="background: rgba(255,255,255,0.05); border: none; width: 44px; height: 44px; border-radius: 12px; color: #888; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; position: relative;" onmouseover="this.style.background='rgba(51,144,236,0.1)'; this.style.color='var(--primary-blue)'">
                     <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -73,7 +98,7 @@
             
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                 @forelse($onlineLives as $live)
-                <div class="live-card-modern" onclick="showMogramLoader(); window.location.href='{{ route('live.watch', $live->id) }}'">
+                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}')">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
                         <div class="live-tag">LIVE</div>
@@ -82,11 +107,12 @@
                         </div>
                     </div>
                     <div class="info">
-                        <div style="display: flex; gap: 12px; align-items: center;">
+                        <div style="display: flex; gap: 12px; align-items: start;">
                             <img src="{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-blue);">
                             <div style="flex: 1;">
                                 <h4 class="title">{{ $live->title }}</h4>
-                                <p style="color: #666; font-size: 0.8rem; font-weight: 700;">@<span>{{ $live->user->username }}</span></p>
+                                <p style="color: #666; font-size: 0.8rem; font-weight: 700; margin-bottom: 8px;">@<span>{{ $live->user->username }}</span></p>
+                                <p class="desc-snippet">{{ Str::limit($live->description, 60) }}</p>
                             </div>
                         </div>
                     </div>
@@ -184,5 +210,31 @@
     .btn-notify { background: transparent; border: 1.5px solid #3390ec; color: #3390ec; font-size: 0.7rem; font-weight: 800; padding: 5px 12px; border-radius: 8px; cursor: pointer; }
 
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    .desc-snippet { color: #888; font-size: 0.75rem; font-weight: 600; line-height: 1.4; margin: 0; }
 </style>
+
+<script>
+    function openPreview(url, title, desc, thumb, creator, avatar) {
+        document.getElementById('preview_img').src = thumb;
+        document.getElementById('preview_avatar').src = avatar;
+        document.getElementById('preview_title').innerText = title;
+        document.getElementById('preview_creator').innerText = 'Por ' + creator;
+        document.getElementById('preview_desc').innerText = desc || 'Nenhuma descrição disponível.';
+        document.getElementById('preview_join_btn').href = url;
+        document.getElementById('live_preview_modal').style.display = 'flex';
+    }
+
+    function closePreview() {
+        document.getElementById('live_preview_modal').style.display = 'none';
+    }
+
+    // Close on click outside
+    window.onclick = function(event) {
+        const modal = document.getElementById('live_preview_modal');
+        if (event.target == modal) {
+            closePreview();
+        }
+    }
+</script>
 @endsection
