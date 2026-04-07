@@ -395,13 +395,14 @@
 
         ivsPlayer.addEventListener('PlayerStateChanged', (state) => {
             console.log('Player State:', state);
-            if (state === 'BUFFERING') updateStatus('Carregando...', '#3390ec');
-            if (state === 'PLAYING') {
+            const s = state.toUpperCase();
+            if (s === 'BUFFERING') updateStatus('Carregando...', '#3390ec');
+            if (s === 'PLAYING') {
                 updateStatus('Ao Vivo', '#22c55e');
                 document.getElementById('offline_view').style.display = 'none';
                 document.getElementById('video_wrapper').style.display = 'flex';
             }
-            if (state === 'IDLE') updateStatus('Aguardando Criador...', '#3390ec');
+            if (s === 'IDLE') updateStatus('Aguardando Criador...', '#3390ec');
         });
 
         ivsPlayer.addEventListener('PlayerError', (err) => {
@@ -738,7 +739,8 @@
                         document.getElementById('camera_off_overlay').style.display = data.is_camera_off ? 'flex' : 'none';
 
                         // Auto-start player if status is online but player is idle
-                        if (data.status === 'online' && ivsPlayer && (ivsPlayer.getState() === 'IDLE' || ivsPlayer.getState() === 'ENDED')) {
+                        const playerState = ivsPlayer ? ivsPlayer.getState().toUpperCase() : '';
+                        if (data.status === 'online' && ivsPlayer && (playerState === 'IDLE' || playerState === 'ENDED')) {
                             console.log('Stream is online, starting player...');
                             if (IVS_PLAYBACK_URL) {
                                 ivsPlayer.load(IVS_PLAYBACK_URL);
