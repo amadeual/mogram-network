@@ -304,10 +304,13 @@
             debug: 1,
             config: {
                 'iceServers': [
-                    { url: 'stun:stun.l.google.com:19302' },
-                    { url: 'stun:stun1.l.google.com:19302' },
-                    { url: 'stun:stun2.l.google.com:19302' },
-                ]
+                    { urls: 'stun:stun.l.google.com:19302' },
+                    { urls: 'stun:stun1.l.google.com:19302' },
+                    { urls: 'stun:stun2.l.google.com:19302' },
+                    { urls: 'stun:stun3.l.google.com:19302' },
+                    { urls: 'stun:stun4.l.google.com:19302' },
+                ],
+                'iceCandidatePoolSize': 10
             }
         };
 
@@ -323,9 +326,21 @@
         peer.on('open', (id) => {
             console.log('Peer connected with ID:', id);
             if (!IS_CREATOR) {
-                setTimeout(tryCallCreator, 1500);
+                // Viewer starts calling
+                setTimeout(tryCallCreator, 1000);
             }
         });
+
+        // Global interval for viewers who are waiting for stream
+        if (!IS_CREATOR) {
+            setInterval(() => {
+                const video = document.getElementById('creator_video');
+                if (!video.srcObject && peer && peer.open) {
+                    console.log('No stream detected, retrying call...');
+                    tryCallCreator();
+                }
+            }, 10000); // Check every 10s if we still don't have a stream
+        }
 
         function tryCallCreator() {
             if (!peer || peer.destroyed || peer.disconnected) {
@@ -342,12 +357,16 @@
             try {
                 const canvas = document.createElement('canvas');
                 canvas.width = canvas.height = 1;
-                dummyStream = canvas.captureStream();
-                // Add a silent audio track if possible
+                const ctx2d = canvas.getContext('2d');
+                ctx2d.fillStyle = 'black';
+                ctx2d.fillRect(0, 0, 1, 1);
+                dummyStream = canvas.captureStream(1);
+                
+                // Add a silent audio track
                 if (window.AudioContext || window.webkitAudioContext) {
-                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                    const oscillator = ctx.createOscillator();
-                    const dst = oscillator.connect(ctx.createMediaStreamDestination());
+                    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = audioCtx.createOscillator();
+                    const dst = oscillator.connect(audioCtx.createMediaStreamDestination());
                     oscillator.start();
                     dummyStream.addTrack(dst.stream.getAudioTracks()[0]);
                 }
@@ -384,8 +403,18 @@
             
             call.on('error', (err) => {
                 console.error('Call error:', err);
-                setTimeout(tryCallCreator, 4000);
+                call.close();
+                setTimeout(tryCallCreator, 3000);
             });
+            
+            // Timeout for unanswered calls
+            setTimeout(() => {
+                if (call && !call.open) {
+                    console.log('Call taking too long, closing and retrying...');
+                    call.close();
+                    tryCallCreator();
+                }
+            }, 10000);
         }
 
         if (IS_CREATOR) {
@@ -414,7 +443,18 @@
 
         peer.on('error', (err) => {
             console.error('Peer error type:', err.type);
-            if (err.type === 'peer-unavailable') { /* Ignore, handled by retry */ }
+            if (err.type === 'peer-unavailable') {
+                // Handled by retry logic
+            } else if (err.type === 'id-taken') {
+                if (IS_CREATOR) {
+                    console.warn('Creator ID taken (ghost session?), retrying in 5 seconds...');
+                    setTimeout(() => window.location.reload(), 5000);
+                }
+            } else if (err.type === 'network' || err.type === 'server-error') {
+                setTimeout(() => {
+                    if (peer && !peer.destroyed) peer.reconnect();
+                }, 5000);
+            }
         });
     }
 
@@ -504,6 +544,13 @@
         const video = document.getElementById('creator_video');
         video.muted = false;
         document.getElementById('unmute_prompt').style.display = 'none';
+        
+        // Ensure AudioContext is resumed for WebRTC
+        if (window.AudioContext || window.webkitAudioContext) {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            if (ctx.state === 'suspended') ctx.resume();
+        }
+        
         showToast('Áudio ativado!', 'success');
     }
 
