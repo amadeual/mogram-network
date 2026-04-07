@@ -23,10 +23,10 @@
             <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <p style="font-size: 0.65rem; font-weight: 800; color: #555; text-transform: uppercase;">Menu Principal</p>
                 <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; gap: 12px; color: #888; text-decoration: none; padding: 0.8rem; border-radius: 12px; font-weight: 700; transition: 0.3s;" onmouseover="this.style.background='rgba(51,144,236,0.1)'; this.style.color='white'">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> Home
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> <span>Home</span>
                 </a>
                 <a href="{{ route('lives') }}" style="display: flex; align-items: center; gap: 12px; color: white; text-decoration: none; padding: 0.8rem; border-radius: 12px; font-weight: 700; background: #1a1c2e;">
-                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg> Lives
+                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg> <span>Lives</span>
                 </a>
             </nav>
 
@@ -1070,12 +1070,6 @@
     @keyframes modalPop {
         from { transform: scale(0.8) translateY(20px); opacity: 0; }
         to { transform: scale(1) translateY(0); opacity: 1; }
-    }
-    
-    @media (max-width: 1300px) {
-        .left-nav { width: 80px !important; padding: 1rem 0.5rem !important; align-items: center !important; }
-        .left-nav span, .left-nav p, .left-nav a span, .left-nav nav a { display: none !important; }
-        .left-nav a { justify-content: center !important; }
     }
     
     @media (max-width: 1024px) {
