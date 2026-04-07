@@ -81,7 +81,7 @@
                 </div>
             </div>
 
-            <!-- Video Player Container (REFIXED) -->
+            <!-- Video Player Container -->
             <div id="video_player_container" style="background: black; border-radius: 24px; position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 
                 <!-- Video Layers -->
@@ -99,9 +99,6 @@
                             </div>
                         </div>
                         <div id="cohost_slot" style="display: none; width: 40%; height: 100%; position: relative; background: #111; border-left: 2px solid #000;">
-                            <div id="cohost_waiting" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;">
-                                <div class="loader" style="width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); border-top-color: #3390ec; border-radius: 50%; animation: spin 1s linear infinite;"></div>
-                            </div>
                             <video id="cohost_video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
                         </div>
                     </div>
@@ -131,7 +128,7 @@
                         </div>
                     </div>
 
-                    <!-- 3. Overlays (Live Tag, Stats) -->
+                    <!-- 3. Overlays -->
                     <div style="position: absolute; top: 1.5rem; left: 1.5rem; display: flex; gap: 10px; z-index: 60;">
                         <div style="background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">AO VIVO</div>
                         <div style="background: rgba(0,0,0,0.5); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
@@ -141,50 +138,40 @@
                         <div style="background: rgba(255,255,255,0.1); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
                             ❤️ <span id="likes_count_overlay">{{ $live->likes()->count() }}</span>
                         </div>
-                        @if(Auth::id() == $live->user_id)
-                            <div style="background: #3390ec; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">
-                                LUCRO: R$ <span id="live_earnings">0,00</span>
-                            </div>
-                        @endif
                     </div>
 
-                    <!-- 4. Broadcaster Tools (IN THE RIGHT PLACE) -->
+                    <!-- 4. Broadcaster Tools -->
                     @if(Auth::id() == $live->user_id)
                         <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; gap: 10px; z-index: 100;">
                             <button onclick="toggleAudio()" id="btn_audio" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
                             <button onclick="toggleVideo()" id="btn_video" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
                             <button onclick="togglePause()" id="btn_pause" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">⏸</button>
-                            <button onclick="inviteCoHost()" style="background: #3390ec; height: 44px; border-radius: 12px; border: none; padding: 0 1rem; color: white; font-weight: 800; cursor: pointer;">+ CO-HOST</button>
                         </div>
                     @endif
 
-                    <!-- Global Controls (Fullscreen) -->
-                    <button id="btn_fullscreen" onclick="toggleFullscreen()" style="position: absolute; bottom: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.5); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer; z-index: 100; transition: 0.3s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='rgba(0,0,0,0.8)'" onmouseout="this.style.background='rgba(0,0,0,0.5)'" title="Tela Cheia">
+                    <button id="btn_fullscreen" onclick="toggleFullscreen()" style="position: absolute; bottom: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.5); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;">
                         <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
                     </button>
+                </div>
+            </div>
 
-                </div> <!-- End Layers -->
-            </div> <!-- End Video Container -->
-
-            <!-- Bottom Interaction Bar -->
+            <!-- Interaction Bar -->
             <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 0.5rem; display: flex; gap: 0.5rem; border: 1px solid rgba(255,255,255,0.05);">
                 @php
                     $hasLiked = Auth::check() ? $live->likes()->where('user_id', Auth::id())->exists() : false;
                 @endphp
-                <button onclick="toggleLikeLive()" id="btn_like_live" style="flex: 1; height: 60px; background: transparent; border: none; color: {{ $hasLiked ? '#ef4444' : '#8fb1bf' }}; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <button onclick="toggleLikeLive()" id="btn_like_live" style="flex: 1; height: 60px; background: transparent; border: none; color: {{ $hasLiked ? '#ef4444' : '#8fb1bf' }}; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
                     <svg width="20" height="20" fill="{{ $hasLiked ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                     <span>CURTIR <span id="likes_count_text" style="font-size: 0.75rem; opacity: 0.7;">{{ $live->likes()->count() > 0 ? $live->likes()->count() : '' }}</span></span>
                 </button>
 
                 @if(Auth::id() != $live->user_id)
-                    <div style="width: 1px; background: rgba(255,255,255,0.05);"></div>
-                    <button onclick="toggleGiftModal()" style="flex: 1; color: #ffd600; font-weight: 800; background: transparent; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <button onclick="toggleGiftModal()" style="flex: 1; color: #ffd600; font-weight: 800; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
                         <span>🎁</span> PRESENTEAR
                     </button>
                 @endif
 
-                <div style="width: 1px; background: rgba(255,255,255,0.05);"></div>
-                <button onclick="shareLive()" style="flex: 1; color: #8fb1bf; font-weight: 800; background: transparent; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                <button onclick="shareLive()" style="flex: 1; color: #8fb1bf; font-weight: 800; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;">
                     <span>🔗</span> COMPARTILHAR
                 </button>
             </div>
@@ -192,10 +179,7 @@
 
         <!-- Right Side: Chat Area -->
         <aside style="width: 400px; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
-            <div style="padding: 1.25rem; border-bottom: 1.5px solid rgba(255,255,255,0.05); font-weight: 900; color: white; display: flex; justify-content: space-between;">
-                <span>Chat ao Vivo</span>
-                <span style="color: #3390ec;">• {{ count($messages) }}</span>
-            </div>
+            <div style="padding: 1.25rem; border-bottom: 1.5px solid rgba(255,255,255,0.05); font-weight: 900; color: white;">Chat ao Vivo</div>
             
             <div id="chat_messages" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
                 @foreach($messages as $msg)
@@ -204,24 +188,15 @@
             </div>
 
             <div style="padding: 1.25rem; background: rgba(0,0,0,0.2); border-top: 1.5px solid rgba(255,255,255,0.05);">
-                @if(Auth::id() != $live->user_id)
-                <div onclick="alert('Funcionalidade VIP em breve!')" style="background: linear-gradient(45deg, #3390ec, #00d2ff); padding: 10px; border-radius: 16px; margin-bottom: 1rem; color: white; font-weight: 900; text-align: center; cursor: pointer; font-size: 0.75rem; box-shadow: 0 5px 15px rgba(51, 144, 236, 0.3);">
-                    TORNE-SE VIP • R$ 19,90
-                </div>
-                @endif
-                
-                <!-- Emoji Bar -->
-                <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding: 0 5px;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
                     @foreach(['❤️','🔥','👏','🤣','😮','😭','💰','🙌'] as $emoji)
-                        <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; font-size: 1.1rem; transition: 0.2s;" onmouseover="this.style.scale='1.3'" onmouseout="this.style.scale='1'">{{ $emoji }}</span>
+                        <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; font-size: 1.1rem;">{{ $emoji }}</span>
                     @endforeach
                 </div>
 
                 <div style="display: flex; gap: 10px;">
-                    <div style="position: relative; flex: 1;">
-                        <input type="text" id="chat_input" placeholder="Diga algo..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 15px; color: white; outline: none; transition: 0.3s; font-size: 0.9rem;" onfocus="this.style.borderColor='#3390ec'; this.style.background='rgba(51,144,236,0.05)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.background='rgba(255,255,255,0.05)'">
-                    </div>
-                    <button onclick="sendChatMessage()" id="btn_send_chat" style="background: #3390ec; border: none; width: 48px; height: 48px; border-radius: 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    <input type="text" id="chat_input" placeholder="Diga algo..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 15px; color: white; outline: none;">
+                    <button onclick="sendChatMessage()" id="btn_send_chat" style="background: #3390ec; border: none; width: 48px; border-radius: 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
                         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                     </button>
                 </div>
@@ -230,7 +205,7 @@
     </div>
 </div>
 
-<!-- Scripts & Modals -->
+<!-- Scripts -->
 <div id="gift_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 2rem;">
     <div style="background: #1a1c2e; width: 400px; border-radius: 24px; padding: 2rem;">
         <h3 style="color: white; margin-bottom: 1.5rem;">Enviar Presente</h3>
@@ -254,91 +229,91 @@
     const IS_CREATOR = {{ Auth::id() == $live->user_id ? 'true' : 'false' }};
     const LIVE_ID = 'mogram_live_{{ $live->id }}';
     let peer = null;
+    window.localStream = null;
 
     function initPeer() {
-        // Create Peer with a fixed ID for the creator, random for viewer
-        const peerId = IS_CREATOR ? LIVE_ID : 'mogram_viewer_' + Math.random().toString(36).substr(2, 9);
-        
-        // Use public STUN servers to bypass some NAT issues
-        peer = new Peer(peerId, {
+        const peerId = IS_CREATOR ? LIVE_ID : 'mogr_v_' + Math.random().toString(36).substr(2, 6);
+        const peerConfig = {
+            debug: 1,
             config: {
                 'iceServers': [
                     { url: 'stun:stun.l.google.com:19302' },
                     { url: 'stun:stun1.l.google.com:19302' },
+                    { url: 'stun:stun2.l.google.com:19302' },
                 ]
             }
-        });
+        };
+
+        try {
+            peer = new Peer(peerId, peerConfig);
+        } catch (e) {
+            console.error('Peer creation failed:', e);
+            return;
+        }
 
         let pendingCalls = [];
 
         peer.on('open', (id) => {
-            console.log('Peer ID:', id);
+            console.log('Peer connected with ID:', id);
             if (!IS_CREATOR) {
-                tryCallCreator();
+                setTimeout(tryCallCreator, 1500);
             }
         });
 
         function tryCallCreator() {
-            if (!peer || peer.destroyed) return;
+            if (!peer || peer.destroyed || peer.disconnected) {
+                if (peer && peer.disconnected) peer.reconnect();
+                setTimeout(tryCallCreator, 3000);
+                return;
+            }
+
             console.log('Attempting to call creator:', LIVE_ID);
             
-            // We send an empty stream just to trigger the call and receive the creator's stream
-            const call = peer.call(LIVE_ID, new MediaStream());
+            // PeerJS requires a stream, so we provide an empty one to receive
+            const canvas = document.createElement('canvas');
+            canvas.width = canvas.height = 1;
+            const dummyStream = canvas.captureStream();
+
+            const call = peer.call(LIVE_ID, dummyStream);
             
             if (!call) {
-                console.log('Call failed to initiate, retrying in 3s...');
                 setTimeout(tryCallCreator, 3000);
                 return;
             }
 
             call.on('stream', (remoteStream) => {
-                console.log('Received creator stream!');
+                console.log('Received stream from creator!');
                 const video = document.getElementById('creator_video');
-                video.srcObject = remoteStream;
-                video.setAttribute('data-connected', 'true');
-                
-                // Handle autoplay block
-                video.play().catch(e => {
-                    console.warn('Autoplay blocked. User interaction required.');
-                    showToast('Clique no vídeo para ativar áudio/vídeo', 'info');
-                    video.muted = true; // Start muted to bypass
-                    video.play();
-                });
-                
-                document.getElementById('offline_view').style.display = 'none';
-                document.getElementById('video_wrapper').style.display = 'flex';
+                if (video.srcObject !== remoteStream) {
+                    video.srcObject = remoteStream;
+                    video.play().then(() => {
+                        document.getElementById('offline_view').style.display = 'none';
+                        document.getElementById('video_wrapper').style.display = 'flex';
+                    }).catch(e => {
+                        console.warn('Autoplay blocked, unmuting might be needed');
+                        video.muted = true;
+                        video.play();
+                    });
+                }
             });
             
             call.on('error', (err) => {
                 console.error('Call error:', err);
-                setTimeout(tryCallCreator, 3000);
+                setTimeout(tryCallCreator, 4000);
             });
-
-            // If the call doesn't get a stream within 10 seconds, try again
-            setTimeout(() => {
-                if (!document.getElementById('creator_video').srcObject) {
-                    console.log('No stream received after 10s, retrying...');
-                    call.close();
-                    tryCallCreator();
-                }
-            }, 10000);
         }
 
         if (IS_CREATOR) {
             peer.on('call', (call) => {
                 console.log('Incoming call from viewer...');
                 if (window.localStream) {
-                    console.log('Answering immediately.');
                     call.answer(window.localStream);
                 } else {
-                    console.log('Stream not ready, queuing call.');
                     pendingCalls.push(call);
                 }
             });
 
-            // Function to answer all queued calls once stream is ready
             window.answerPendingCalls = () => {
-                console.log('Answering ' + pendingCalls.length + ' pending calls.');
                 while (pendingCalls.length > 0) {
                     const c = pendingCalls.shift();
                     c.answer(window.localStream);
@@ -347,29 +322,24 @@
         }
 
         peer.on('error', (err) => {
-            console.error('Peer error:', err.type, err.message);
-            if (err.type === 'peer-unavailable' && !IS_CREATOR) {
-                // Creator not online yet
-            }
+            console.error('Peer error type:', err.type);
+            if (err.type === 'peer-unavailable') { /* Ignore, handled by retry */ }
         });
     }
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast_container');
         const toast = document.createElement('div');
-        toast.style.cssText = `background: ${type === 'success' ? '#3390ec' : '#ef4444'}; color: white; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; font-weight: 800; animation: slideIn 0.3s forwards;`;
+        toast.style.cssText = `background: ${type === 'success' ? '#3390ec' : '#ef4444'}; color: white; padding: 1rem; border-radius: 12px; margin-bottom: 1rem; font-weight: 800;`;
         toast.innerText = message;
         container.appendChild(toast);
         setTimeout(() => toast.remove(), 4000);
     }
 
     function showRetryUI(errorMessage) {
-        const loading = document.getElementById('camera_loading');
-        const retry = document.getElementById('camera_retry');
-        const errorMsg = document.getElementById('camera_error_msg');
-        if (loading) loading.style.display = 'none';
-        if (retry) retry.style.display = 'block';
-        if (errorMsg) errorMsg.textContent = errorMessage || '';
+        document.getElementById('camera_loading').style.display = 'none';
+        document.getElementById('camera_retry').style.display = 'block';
+        document.getElementById('camera_error_msg').textContent = errorMessage || '';
     }
 
     function activateStream(stream) {
@@ -384,23 +354,8 @@
         const tools = document.getElementById('broadcaster_tools');
         if (tools) tools.style.display = 'flex';
 
-        // Update audio/video button states based on available tracks
-        const audioBtn = document.getElementById('btn_audio');
-        const videoBtn = document.getElementById('btn_video');
-        const hasAudio = stream.getAudioTracks().length > 0;
-        const hasVideo = stream.getVideoTracks().length > 0;
-        if (audioBtn) audioBtn.style.background = hasAudio ? 'rgba(0,0,0,0.6)' : '#ef4444';
-        if (videoBtn) videoBtn.style.background = hasVideo ? 'rgba(0,0,0,0.6)' : '#ef4444';
-
-        if (typeof hideMogramLoader === 'function') hideMogramLoader();
-        showToast('Câmera iniciada! Você está ao vivo.', 'success');
+        if (window.answerPendingCalls) window.answerPendingCalls();
         
-        // Answer anyone who was waiting for the stream
-        if (window.answerPendingCalls) {
-            window.answerPendingCalls();
-        }
-        
-        // Signal server that we are online
         fetch('{{ route('live.start', $live->id) }}', {
             method: 'POST',
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
@@ -410,245 +365,115 @@
     }
 
     function startCamera() {
-        // Check for secure context (HTTPS or localhost)
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            showRetryUI('Seu navegador não suporta acesso à câmera. Use HTTPS ou um navegador moderno.');
-            showToast('Câmera não disponível neste navegador/conexão.', 'error');
+            showRetryUI('Câmera não suportada neste navegador.');
             return;
         }
 
-        if (typeof showMogramLoader === 'function') showMogramLoader();
+        const constraints = {
+            video: { width: { ideal: 1280 }, height: { ideal: 720 } },
+            audio: { echoCancellation: true, noiseSuppression: true }
+        };
 
-        // Try video + audio first
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } }, audio: true })
-        .then(stream => {
-            activateStream(stream);
-        })
+        navigator.mediaDevices.getUserMedia(constraints)
+        .then(stream => activateStream(stream))
         .catch(err => {
-            console.warn('Full media failed, trying video only:', err.name);
-            // Fallback: try video only
-            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-            .then(stream => {
-                activateStream(stream);
-                showToast('Câmera iniciada sem áudio (microfone não disponível).', 'success');
-            })
-            .catch(err2 => {
-                console.warn('Video only failed, trying audio only:', err2.name);
-                // Fallback: try audio only
-                navigator.mediaDevices.getUserMedia({ video: false, audio: true })
-                .then(stream => {
-                    activateStream(stream);
-                    showToast('Apenas áudio disponível (câmera não encontrada).', 'success');
-                })
-                .catch(err3 => {
-                    console.error('All media failed:', err3.name, err3.message);
-                    if (typeof hideMogramLoader === 'function') hideMogramLoader();
-                    
-                    let errorMsg = 'Erro ao acessar câmera/microfone.';
-                    if (err3.name === 'NotAllowedError' || err3.name === 'PermissionDeniedError') {
-                        errorMsg = 'Permissão negada. Permita o acesso à câmera nas configurações do navegador.';
-                    } else if (err3.name === 'NotFoundError' || err3.name === 'DevicesNotFoundError') {
-                        errorMsg = 'Nenhuma câmera ou microfone encontrado no dispositivo.';
-                    } else if (err3.name === 'NotReadableError' || err3.name === 'TrackStartError') {
-                        errorMsg = 'Câmera em uso por outro aplicativo. Feche outros apps e tente novamente.';
-                    } else if (err3.name === 'OverconstrainedError') {
-                        errorMsg = 'Câmera não suporta a resolução solicitada.';
-                    } else if (window.location.protocol !== 'https:' && window.location.hostname !== 'localhost') {
-                        errorMsg = 'Câmera requer conexão segura (HTTPS). Contate o administrador.';
-                    }
-
-                    showRetryUI(errorMsg);
-                    showToast(errorMsg, 'error');
-                });
-            });
+            console.error('Camera error:', err);
+            // Fallback to simple
+            navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+            .then(s => activateStream(s))
+            .catch(() => showRetryUI('Acesso à câmera negado ou não encontrado.'));
         });
     }
 
     function togglePause() {
         const overlay = document.getElementById('paused_overlay');
-        const btn = document.getElementById('btn_pause');
-        if (!overlay || !btn) return;
-        
         const isPaused = overlay.style.display === 'flex';
         overlay.style.display = isPaused ? 'none' : 'flex';
-        btn.style.background = isPaused ? 'rgba(0,0,0,0.6)' : '#ef4444';
-        
-        // Actually pause/resume the stream tracks
         if (window.localStream) {
-            window.localStream.getVideoTracks().forEach(t => t.enabled = isPaused);
-            window.localStream.getAudioTracks().forEach(t => t.enabled = isPaused);
+            window.localStream.getTracks().forEach(t => t.enabled = isPaused);
         }
-        
-        showToast(isPaused ? 'Live retomada!' : 'Live pausada');
-    }
-
-    function inviteCoHost() {
-        document.getElementById('cohost_slot').style.display = 'block';
-        showToast('Convidando co-host...');
-        setTimeout(() => {
-            document.getElementById('cohost_waiting').style.display = 'none';
-            document.getElementById('cohost_video').style.display = 'block';
-            showToast('Co-host entrou!');
-        }, 3000);
     }
 
     function toggleAudio() {
         if (!window.localStream) return;
-        const tracks = window.localStream.getAudioTracks();
-        if (tracks.length === 0) { showToast('Nenhum microfone disponível.', 'error'); return; }
-        const t = tracks[0];
-        t.enabled = !t.enabled;
-        document.getElementById('btn_audio').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
-        showToast(t.enabled ? 'Microfone ligado' : 'Microfone desligado');
+        const t = window.localStream.getAudioTracks()[0];
+        if (t) {
+            t.enabled = !t.enabled;
+            document.getElementById('btn_audio').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
+        }
     }
 
     function toggleVideo() {
         if (!window.localStream) return;
-        const tracks = window.localStream.getVideoTracks();
-        if (tracks.length === 0) { showToast('Nenhuma câmera disponível.', 'error'); return; }
-        const t = tracks[0];
-        t.enabled = !t.enabled;
-        document.getElementById('btn_video').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
-        showToast(t.enabled ? 'Câmera ligada' : 'Câmera desligada');
+        const t = window.localStream.getVideoTracks()[0];
+        if (t) {
+            t.enabled = !t.enabled;
+            document.getElementById('btn_video').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
+        }
     }
 
     function startChatPolling() {
-        // Chat & Stats Polling
         setInterval(() => {
-            // Check messages
             fetch('{{ route('live.messages', $live->id) }}')
             .then(res => res.json())
             .then(data => {
                 if(data.success) {
-                    const chatBox = document.getElementById('chat_messages');
-                    const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 100;
-                    chatBox.innerHTML = data.html;
-                    if (isScrolledToBottom) chatBox.scrollTop = chatBox.scrollHeight;
+                    const box = document.getElementById('chat_messages');
+                    const wasAtBottom = box.scrollHeight - box.clientHeight <= box.scrollTop + 100;
+                    box.innerHTML = data.html;
+                    if (wasAtBottom) box.scrollTop = box.scrollHeight;
                 }
-            }).catch(() => {});
+            });
 
-            // Polling Stats (Viewers, Likes)
             fetch('{{ route('live.status', $live->id) }}')
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                   if (document.getElementById('viewer_count_overlay')) document.getElementById('viewer_count_overlay').innerText = data.viewer_count;
-                   if (document.getElementById('likes_count_overlay')) document.getElementById('likes_count_overlay').innerText = data.likes_count;
-                   if (document.getElementById('likes_count_text')) document.getElementById('likes_count_text').innerText = data.likes_count > 0 ? data.likes_count : '';
-                   
-                   if (!IS_CREATOR && data.status === 'offline' && data.status_changed) {
-                       window.location.reload();
-                   }
+                    document.getElementById('viewer_count_overlay').innerText = data.viewer_count;
+                    document.getElementById('likes_count_overlay').innerText = data.likes_count;
                 }
-            }).catch(() => {});
+            });
         }, 3000);
     }
 
-    function checkLiveStatus() {
-        fetch('{{ route('live.status', $live->id) }}')
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'online') {
-                window.location.reload();
-            }
-        }).catch(() => {});
-    }
-
     function insertEmoji(emoji) {
-        const input = document.getElementById('chat_input');
-        input.value += emoji;
-        input.focus();
+        document.getElementById('chat_input').value += emoji;
     }
 
     function sendChatMessage() {
         const input = document.getElementById('chat_input');
-        const btn = document.getElementById('btn_send_chat');
         const message = input.value.trim();
         if(!message) return;
-
-        btn.disabled = true;
-        btn.style.opacity = '0.5';
-        input.value = ''; // Eagerly clear input for better UX
+        input.value = '';
 
         fetch('{{ route('live.chat', $live->id) }}', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'X-Requested-With': 'XMLHttpRequest'
-            },
+            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             body: JSON.stringify({message: message})
-        })
-        .then(res => res.ok ? res.json() : Promise.reject(res))
-        .then(data => { 
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            // Immediate chat refresh
-            fetch('{{ route('live.messages', $live->id) }}')
-                .then(res => res.json())
-                .then(d => { if(d.success) document.getElementById('chat_messages').innerHTML = d.html; });
-        })
-        .catch(() => {
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            input.value = message; // Restore if it failed
-            showToast('Erro ao enviar mensagem. Tente novamente.', 'error');
         });
     }
 
-    // Handle Enter mapping
-    document.getElementById('chat_input').addEventListener('keypress', function(e) {
+    document.getElementById('chat_input').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendChatMessage();
     });
 
     function toggleLikeLive() {
-        const btn = document.getElementById('btn_like_live');
         fetch('{{ route('live.like', $live->id) }}', {
             method: 'POST',
             headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                btn.style.color = data.liked ? '#ef4444' : '#8fb1bf';
-                const svg = btn.querySelector('svg');
-                svg.setAttribute('fill', data.liked ? 'currentColor' : 'none');
-                if (document.getElementById('likes_count_text')) document.getElementById('likes_count_text').innerText = data.likes_count > 0 ? data.likes_count : '';
-                if (document.getElementById('likes_count_overlay')) document.getElementById('likes_count_overlay').innerText = data.likes_count;
-                
-                if (data.liked) {
-                   showToast('Você curtiu a live!');
-                }
-            }
         });
     }
 
     function shareLive() {
-        const url = window.location.href;
-        navigator.clipboard.writeText(url).then(() => {
-            showToast('Link da live copiado!');
-        });
+        navigator.clipboard.writeText(window.location.href);
+        showToast('Link copiado!');
     }
 
     function toggleFullscreen() {
-        const container = document.getElementById('video_player_container');
-        if (!document.fullscreenElement) {
-            if (container.requestFullscreen) {
-                container.requestFullscreen();
-            } else if (container.webkitRequestFullscreen) {
-                container.webkitRequestFullscreen();
-            } else if (container.msRequestFullscreen) {
-                container.msRequestFullscreen();
-            }
-        } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.msExitFullscreen) {
-                document.msExitFullscreen();
-            }
-        }
+        const c = document.getElementById('video_player_container');
+        if (!document.fullscreenElement) c.requestFullscreen();
+        else document.exitFullscreen();
     }
 
     function toggleGiftModal() {
@@ -656,13 +481,10 @@
         m.style.display = m.style.display === 'none' ? 'flex' : 'none';
     }
 
-    function selectGift(id, price, name) {
+    function selectGift(id) {
         selectedGiftId = id;
-        document.querySelectorAll('.gift-card').forEach(c => c.style.borderColor = 'transparent');
-        document.getElementById('gift_'+id).style.borderColor = '#3390ec';
-        const btn = document.getElementById('send_gift_btn');
-        btn.disabled = false;
-        btn.style.opacity = '1';
+        document.getElementById('send_gift_btn').disabled = false;
+        document.getElementById('send_gift_btn').style.opacity = '1';
     }
 
     function confirmSendGift() {
@@ -670,37 +492,26 @@
             method: 'POST',
             headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             body: JSON.stringify({gift_id: selectedGiftId})
-        }).then(() => { toggleGiftModal(); showToast('Presente enviado!'); });
+        }).then(() => { toggleGiftModal(); showToast('Enviado!'); });
     }
 
     function deleteLive() {
-        openMogramModal('Encerrar Live', 'Tem certeza que deseja encerrar a transmissão? Esta ação não pode ser desfeita.', () => {
-            // Stop all media tracks
-            if (window.localStream) {
-                window.localStream.getTracks().forEach(t => t.stop());
-            }
+        if (confirm('Encerrar live?')) {
             fetch('{{ route('live.destroy', $live->id) }}', {
                 method: 'DELETE',
                 headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
             }).then(() => window.location.href = '/lives');
-        });
+        }
     }
 
-    // AUTO-START: If the current user is the creator, auto-start the camera on page load
     document.addEventListener('DOMContentLoaded', () => {
         initPeer();
-        if (IS_CREATOR) {
-            // Small delay to ensure DOM is fully ready
-            setTimeout(() => startCamera(), 500);
-        } else {
-            // For viewers, start chat polling immediately
-            startChatPolling();
-        }
+        if (IS_CREATOR) setTimeout(startCamera, 500);
+        else startChatPolling();
     });
 </script>
 
 <style>
-    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 </style>
 @endsection
