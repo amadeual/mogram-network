@@ -119,7 +119,7 @@
                             <label class="premium-label" style="color: #ffd600;">Valor do Ingresso (R$)</label>
                             <div style="position: relative;">
                                 <span style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); color: #ffd600; font-weight: 800; font-size: 1.1rem;">R$</span>
-                                <input type="number" name="price" step="0.01" min="1.00" placeholder="19,90" required class="mogram-input-v2 @error('price') error @enderror" value="{{ old('price') }}" style="padding-left: 3rem; border-color: rgba(255, 214, 0, 0.2); color: #ffd600; font-size: 1.3rem;">
+                                <input type="number" name="price" step="0.01" min="5.00" placeholder="5,00" required class="mogram-input-v2 @error('price') error @enderror" value="{{ old('price') }}" style="padding-left: 3rem; border-color: rgba(255, 214, 0, 0.2); color: #ffd600; font-size: 1.3rem;">
                             </div>
                             @error('price') <p class="field-error" style="color: #ffd600; border-color: rgba(255,214,0,0.2);">{{ $message }}</p> @enderror
                         </div>

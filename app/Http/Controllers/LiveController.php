@@ -64,7 +64,7 @@ class LiveController extends Controller
                 'description' => 'required|string|max:1000',
                 'thumbnail' => 'required|image|max:5120',
                 'category' => 'nullable|string|max:100',
-                'price' => 'required|numeric|min:1.00'
+                'price' => 'required|numeric|min:5.00'
             ], [
                 'title.required' => 'O título da live é obrigatório.',
                 'description.required' => 'A descrição da live é obrigatória.',
@@ -73,7 +73,7 @@ class LiveController extends Controller
                 'thumbnail.max' => 'A imagem da capa não pode ter mais de 5MB.',
                 'price.required' => 'As lives no Mogram são exclusivas. Defina um valor de ingresso.',
                 'price.numeric' => 'O preço deve ser um número válido.',
-                'price.min' => 'O valor mínimo para uma live é R$ 1,00.'
+                'price.min' => 'O valor mínimo para uma live é R$ 5,00.'
             ]);
 
             if (!$request->hasFile('thumbnail')) {
