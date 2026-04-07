@@ -8,9 +8,9 @@
     <!-- Amazon IVS SDKs -->
     <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
-    <div style="display: flex; flex: 1; height: calc(100vh - 55px);">
+    <div style="display: flex; flex: 1; height: calc(100vh - 55px); overflow: hidden;" class="responsive-container">
         <!-- Sidebar Navigation -->
-        <aside style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
+        <aside class="left-nav" style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512">
                     <defs><linearGradient id="streamLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -273,7 +273,7 @@
         </main>
 
         <!-- Right Side: Chat Area -->
-        <aside style="width: 380px; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+        <aside class="chat-sidebar" style="width: 380px; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
             <!-- Tab Headers (Compacted) -->
             <div style="padding: 1rem 1.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: white;">Chat ao Vivo</div>
             
@@ -1045,10 +1045,14 @@
         to { transform: scale(1) translateY(0); opacity: 1; }
     }
     
-    .gift-item-v2:hover {
-        transform: translateY(-5px);
-        background: rgba(255,255,255,0.05) !important;
-        border-color: rgba(255,255,255,0.2) !important;
+    @media (max-width: 1200px) {
+        .left-nav { display: none !important; }
+    }
+    
+    @media (max-width: 992px) {
+        .responsive-container { flex-direction: column !important; height: auto !important; overflow-y: auto !important; }
+        .chat-sidebar { width: 100% !important; height: 500px !important; border-left: none !important; border-top: 1.5px solid rgba(255,255,255,0.05); }
+        body, html { overflow-y: auto !important; height: auto !important; }
     }
     
     .custom-scroll::-webkit-scrollbar { width: 5px; }
@@ -1058,8 +1062,8 @@
     body, html {
         margin: 0;
         padding: 0;
-        overflow: hidden !important;
-        height: 100vh !important;
+        overflow: hidden;
+        height: 100vh;
     }
 </style>
 @endsection
