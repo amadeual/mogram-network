@@ -263,16 +263,22 @@
         function tryCallCreator() {
             if (!peer || peer.destroyed || peer.disconnected) {
                 if (peer && peer.disconnected) peer.reconnect();
-                setTimeout(tryCallCreator, 3000);
+                setTimeout(tryCallCreator, 2000);
                 return;
             }
 
-            console.log('Attempting to call creator:', LIVE_ID);
+            console.log('Viewer: Calling creator ID:', LIVE_ID);
             
-            // PeerJS requires a stream, so we provide an empty one to receive
-            const canvas = document.createElement('canvas');
-            canvas.width = canvas.height = 1;
-            const dummyStream = canvas.captureStream();
+            // To receive, we MUST send a stream in most PeerJS versions.
+            // Using a basic MediaStream if captureStream fails.
+            let dummyStream;
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = canvas.height = 1;
+                dummyStream = canvas.captureStream();
+            } catch(e) {
+                dummyStream = new MediaStream();
+            }
 
             const call = peer.call(LIVE_ID, dummyStream);
             
@@ -504,11 +510,17 @@
         }
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    // Helper to start the stream
+    function initLive() {
         initPeer();
-        if (IS_CREATOR) setTimeout(startCamera, 500);
-        else startChatPolling();
-    });
+        if (IS_CREATOR) {
+            setTimeout(startCamera, 1000);
+        } else {
+            startChatPolling();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', initLive);
 </script>
 
 <style>

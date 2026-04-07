@@ -229,6 +229,16 @@
         document.getElementById('live_preview_modal').style.display = 'none';
     }
 
+    function showMogramLoader() {
+        if (window.parent && typeof window.parent.showMogramLoader === 'function') {
+            window.parent.showMogramLoader();
+        } else if (typeof window.showMogramLoader === 'function') {
+            window.showMogramLoader();
+        } else {
+            console.log('Loader called but not defined.');
+        }
+    }
+
     // Close on click outside
     window.onclick = function(event) {
         const modal = document.getElementById('live_preview_modal');
