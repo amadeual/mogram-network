@@ -8,7 +8,7 @@
     <!-- Amazon IVS SDKs -->
     <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
-    <div style="display: flex; flex: 1; height: calc(100vh - 60px);">
+    <div style="display: flex; flex: 1; height: calc(100vh - 55px);">
         <!-- Sidebar Navigation -->
         <aside style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
@@ -243,8 +243,9 @@
         </main>
 
         <!-- Right Side: Chat Area -->
-        <aside style="width: 400px; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
-            <div style="padding: 1.25rem; border-bottom: 1.5px solid rgba(255,255,255,0.05); font-weight: 900; color: white;">Chat ao Vivo</div>
+        <aside style="width: 380px; background: #0b0a15; border-left: 1.5px solid rgba(255,255,255,0.05); display: flex; flex-direction: column;">
+            <!-- Tab Headers (Compacted) -->
+            <div style="padding: 1rem 1.5rem 0.75rem; display: flex; justify-content: space-between; align-items: center; font-weight: 900; color: white;">Chat ao Vivo</div>
             
             <div id="chat_messages" style="flex: 1; overflow-y: auto; padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
                 @foreach($messages as $msg)
@@ -948,6 +949,11 @@
 
 <style>
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    .dash-layout {
+        padding-top: 0 !important;
+        margin-top: 0 !important;
+    }
     
     /* Position the success toast near the live player for better context */
     #global-toast {
