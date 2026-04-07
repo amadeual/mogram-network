@@ -5,6 +5,7 @@
 @section('content')
 <div class="dash-layout" style="background: #0b0a15; display: flex; flex-direction: column; overflow: hidden;">
     <!-- Main Stream Layout -->
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <div style="display: flex; flex: 1; height: calc(100vh - 60px);">
         <!-- Sidebar Navigation -->
         <aside style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
@@ -89,7 +90,7 @@
                     <!-- 1. Video System (Active Stream) -->
                     <div id="video_wrapper" style="width: 100%; height: 100%; display: {{ $live->status == 'online' ? 'flex' : 'none' }}; gap: 4px;">
                         <div id="main_video_slot" style="flex: 1; height: 100%; position: relative; background: #000;">
-                            <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
+                            <video id="creator_video" autoplay playsinline {{ Auth::id() == $live->user_id ? 'muted' : '' }} style="width: 100%; height: 100%; object-fit: cover;"></video>
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
                                     <div style="font-size: 3rem; margin-bottom: 1rem;">⏸️</div>
@@ -251,6 +252,52 @@
 <script>
     let selectedGiftId = null;
     const IS_CREATOR = {{ Auth::id() == $live->user_id ? 'true' : 'false' }};
+    const LIVE_ID = 'mogram_live_{{ $live->id }}';
+    let peer = null;
+
+    function initPeer() {
+        // Create Peer with a fixed ID for the creator, random for viewer
+        const peerId = IS_CREATOR ? LIVE_ID : 'mogram_viewer_' + Math.random().toString(36).substr(2, 9);
+        peer = new Peer(peerId);
+
+        peer.on('open', (id) => {
+            console.log('Peer ID:', id);
+            if (!IS_CREATOR) {
+                // As a viewer, call the creator
+                console.log('Calling creator:', LIVE_ID);
+                const call = peer.call(LIVE_ID, new MediaStream()); // Send empty stream to receive creator's
+                call.on('stream', (remoteStream) => {
+                    console.log('Received creator stream!');
+                    const video = document.getElementById('creator_video');
+                    video.srcObject = remoteStream;
+                    video.play().catch(e => console.error('Video play failed:', e));
+                    
+                    document.getElementById('offline_view').style.display = 'none';
+                    document.getElementById('video_wrapper').style.display = 'flex';
+                });
+                
+                call.on('error', (err) => {
+                    console.error('Call error:', err);
+                });
+            }
+        });
+
+        if (IS_CREATOR) {
+            peer.on('call', (call) => {
+                if (window.localStream) {
+                    console.log('Answering viewer call...');
+                    call.answer(window.localStream);
+                }
+            });
+        }
+
+        peer.on('error', (err) => {
+            console.error('Peer error:', err.type, err.message);
+            if (err.type === 'peer-unavailable' && !IS_CREATOR) {
+                // Creator not online yet
+            }
+        });
+    }
 
     function showToast(message, type = 'success') {
         const container = document.getElementById('toast_container');
@@ -581,6 +628,7 @@
 
     // AUTO-START: If the current user is the creator, auto-start the camera on page load
     document.addEventListener('DOMContentLoaded', () => {
+        initPeer();
         if (IS_CREATOR) {
             // Small delay to ensure DOM is fully ready
             setTimeout(() => startCamera(), 500);
