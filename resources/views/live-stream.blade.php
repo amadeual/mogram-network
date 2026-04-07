@@ -123,8 +123,9 @@
                             <div style="text-align: center;">
                                 <div style="font-size: 3rem; margin-bottom: 1rem;">📷</div>
                                 <h3 style="color: white; font-weight: 800;">CÂMERA DESLIGADA</h3>
-                                            </div>
-                    @endif
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- 9. Live Gift Alert (Banner) -->
                     <div id="live_gift_alert" style="display: none; position: absolute; top: 15%; left: 50%; transform: translateX(-50%); z-index: 500; pointer-events: none;">
