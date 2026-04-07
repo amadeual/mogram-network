@@ -84,7 +84,7 @@
             </div>
 
             <!-- Video Player Container -->
-            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative; width: 100%; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative; width: 100%; max-width: 850px; max-height: 480px; margin: 0 auto; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 
                 <!-- Video Layers -->
                 <div id="video_layers" style="position: absolute; inset: 0;">
