@@ -8,9 +8,9 @@
     <!-- Amazon IVS SDKs -->
     <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
     <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
-    <div class="live-grid-container">
+    <div style="display: flex; height: calc(100vh - 55px); width: 100%; overflow: hidden;" class="responsive-container">
         <!-- Sidebar Navigation -->
-        <aside class="left-nav" style="width: 240px; flex-shrink: 0; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem;">
+        <aside class="left-nav" style="width: 240px; flex-shrink: 0; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem; height: 100%; overflow-y: auto;">
             <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 2rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 512 512">
                     <defs><linearGradient id="streamLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -50,7 +50,7 @@
         </aside>
 
         <!-- Stream Area -->
-        <main class="stream-area">
+        <main style="flex-grow: 1; flex-shrink: 1; flex-basis: 0%; min-width: 0; display: flex; flex-direction: column; background: #0b0a15; height: 100%; overflow-y: auto; padding: 0 1.5rem;">
             <!-- Creator Header -->
             <div style="padding: 1.5rem 0; display: flex; align-items: center; justify-content: space-between;">
                 <div style="display: flex; gap: 1.25rem; align-items: center;">
@@ -84,7 +84,7 @@
             </div>
 
             <!-- Video Player Container -->
-            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative; width: 100%; max-width: 850px; max-height: 480px; margin: 0 auto; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
+            <div id="video_player_container" style="background: black; border-radius: 24px; position: relative !important; width: 100%; max-width: 850px; margin: 0 auto; aspect-ratio: 16/9; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5);">
                 
                 <!-- Video Layers -->
                 <div id="video_layers" style="position: absolute; inset: 0;">
@@ -103,6 +103,32 @@
                                     <h3 style="color: white; font-weight: 800; text-transform: uppercase;">Transmissão Pausada</h3>
                                 </div>
                             </div>
+                            
+                            <!-- Internal Tools Overlays (Moved here for better containment) -->
+                            <div style="position: absolute; top: 1.5rem; left: 1.5rem; display: flex; gap: 10px; z-index: 60;">
+                                <div style="background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">AO VIVO</div>
+                                <div style="background: rgba(0,0,0,0.5); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
+                                    <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> 
+                                    <span id="viewer_count_overlay">{{ count($messages->unique('user_id')) }}</span>
+                                </div>
+                                <div id="connection_status_tag" style="background: rgba(51,144,236,0.3); color: #3390ec; font-size: 8px; font-weight: 900; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(51,144,236,0.3);">
+                                    STATUS: INICIANDO...
+                                </div>
+                            </div>
+
+                            @if(Auth::id() == $live->user_id)
+                                <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
+                                    <button onclick="toggleAudio()" id="btn_audio" title="Mudar Áudio" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
+                                    <button onclick="toggleVideo()" id="btn_video" title="Mudar Vídeo" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
+                                    <button onclick="togglePause()" id="btn_pause" title="Pausar" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">⏸</button>
+                                    <button onclick="toggleScreenShare()" id="btn_screen" title="Compartilhar Tela" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🖥️</button>
+                                    <button onclick="switchCamera()" id="btn_flip" title="Trocar Câmera" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🔄</button>
+                                </div>
+                            @endif
+
+                            <button id="btn_fullscreen" onclick="toggleFullscreen()" style="position: absolute; bottom: 1rem; right: 1rem; background: rgba(0,0,0,0.5); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;">
+                                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+                            </button>
                         </div>
                         <div id="cohost_slot" style="display: none; width: 40%; height: 100%; position: relative; background: #111; border-left: 2px solid #000;">
                             <video id="cohost_video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
@@ -224,35 +250,7 @@
                         </div>
                     </div>
 
-                    <!-- 3. Overlays -->
-                    <div style="position: absolute; top: 1.5rem; left: 1.5rem; display: flex; gap: 10px; z-index: 60;">
-                        <div style="background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">AO VIVO</div>
-                        <div style="background: rgba(0,0,0,0.5); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
-                            <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> 
-                            <span id="viewer_count_overlay">{{ count($messages->unique('user_id')) }}</span>
-                        </div>
-                        <div style="background: rgba(255,255,255,0.1); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
-                            ❤️ <span id="likes_count_overlay">{{ $live->likes()->count() }}</span>
-                        </div>
-                        <div id="connection_status_tag" style="background: rgba(51,144,236,0.3); color: #3390ec; font-size: 8px; font-weight: 900; padding: 4px 10px; border-radius: 6px; border: 1px solid rgba(51,144,236,0.3);">
-                            STATUS: INICIANDO...
-                        </div>
-                    </div>
 
-                    <!-- 4. Broadcaster Tools -->
-                    @if(Auth::id() == $live->user_id)
-                        <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
-                            <button onclick="toggleAudio()" id="btn_audio" title="Mudar Áudio" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
-                            <button onclick="toggleVideo()" id="btn_video" title="Mudar Vídeo" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
-                            <button onclick="togglePause()" id="btn_pause" title="Pausar" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">⏸</button>
-                            <button onclick="toggleScreenShare()" id="btn_screen" title="Compartilhar Tela" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🖥️</button>
-                            <button onclick="switchCamera()" id="btn_flip" title="Trocar Câmera" style="background: rgba(0,0,0,0.6); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🔄</button>
-                        </div>
-                    @endif
-
-                    <button id="btn_fullscreen" onclick="toggleFullscreen()" style="position: absolute; bottom: 1.5rem; right: 1.5rem; background: rgba(0,0,0,0.5); width: 44px; height: 44px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer; z-index: 100; display: flex; align-items: center; justify-content: center;">
-                        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
-                    </button>
                 </div>
             </div>
 
@@ -1095,58 +1093,20 @@
         margin: 0;
         padding: 0;
         background: #0b0a15;
-        overflow-x: hidden;
-    }
-
-    .live-grid-container {
-        display: grid;
-        grid-template-columns: 240px 1fr 320px;
-        height: 100vh;
-        width: 100%;
         overflow: hidden;
     }
-
-    main.stream-area {
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto;
-        padding: 0 1.5rem;
-        background: #0b0a15;
-        min-width: 0;
-    }
-
-    #video_player_container {
-        position: relative !important;
-        width: 100%;
-        max-width: 900px;
-        aspect-ratio: 16/9;
-        margin: 0 auto;
-        background: #000;
-        border-radius: 24px;
-        overflow: hidden;
-        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-    }
-
-    /* Adjust tools and overlays to be consistent */
-    #broadcaster_tools, #btn_fullscreen, .stream-overlays-container {
-        pointer-events: auto;
-    }
-
-    @media (max-width: 1300px) {
-        .live-grid-container { grid-template-columns: 80px 1fr 300px; }
+    
+    @media (max-width: 1400px) {
+        .left-nav { width: 80px !important; }
         .left-nav span, .left-nav p { display: none !important; }
     }
 
-    @media (max-width: 1024px) {
-        .live-grid-container { grid-template-columns: 80px 1fr; }
-        .chat-sidebar { display: none; }
+    @media (max-width: 1100px) {
+        .chat-sidebar { width: 280px !important; }
     }
 
-    @media (max-width: 768px) {
-        .live-grid-container { display: flex; flex-direction: column; height: auto; overflow: auto; }
-        .left-nav { display: none !important; }
-        #video_player_container { border-radius: 0; }
-        .chat-sidebar { display: flex; width: 100% !important; min-height: 500px; }
+    @media (max-width: 900px) {
+        .chat-sidebar { display: none !important; }
     }
 </style>
 @endsection
