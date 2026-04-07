@@ -58,28 +58,37 @@ class LiveController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
-            'thumbnail' => 'required|image|max:2048',
-            'category' => 'nullable|string|max:100',
-            'is_free' => 'required|boolean',
-            'price' => 'nullable|numeric|min:0'
-        ]);
+        try {
+            $request->validate([
+                'title' => 'required|string|max:255',
+                'description' => 'required|string|max:1000',
+                'thumbnail' => 'required|image|max:5120', // Increased limit to 5MB
+                'category' => 'nullable|string|max:100',
+                'is_free' => 'required',
+                'price' => 'nullable|numeric|min:0'
+            ]);
 
-        $thumbnailPath = $request->file('thumbnail')->store('live_thumbnails', 'public');
+            if (!$request->hasFile('thumbnail')) {
+                return back()->withErrors(['thumbnail' => 'Você deve selecionar uma imagem de capa.'])->withInput();
+            }
 
-        $live = Live::create([
-            'user_id' => Auth::id(),
-            'title' => $request->title,
-            'description' => $request->description,
-            'category' => $request->category ?? 'Geral',
-            'thumbnail' => $thumbnailPath,
-            'is_free' => $request->is_free,
-            'price' => $request->is_free ? 0 : $request->price,
-            'status' => 'offline',
-            'started_at' => now()
-        ]);
+            $thumbnailPath = $request->file('thumbnail')->store('live_thumbnails', 'public');
+
+            $live = Live::create([
+                'user_id' => Auth::id(),
+                'title' => $request->title,
+                'description' => $request->description,
+                'category' => $request->category ?? 'Geral',
+                'thumbnail' => $thumbnailPath,
+                'is_free' => $request->is_free == '1' ? 1 : 0,
+                'price' => $request->is_free == '1' ? 0 : ($request->price ?? 0),
+                'status' => 'offline',
+                'started_at' => now()
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Erro ao criar live: ' . $e->getMessage());
+            return back()->withErrors(['error' => 'Erro ao processar os dados: ' . $e->getMessage()])->withInput();
+        }
 
         try {
             Mail::to(Auth::user()->email)->send(new LiveStartedMail($live));

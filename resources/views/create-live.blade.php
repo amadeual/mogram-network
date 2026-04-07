@@ -181,7 +181,7 @@
 
                     <!-- Action Button Container -->
                     <div style="margin-top: 0.5rem;">
-                        <button type="submit" form="live-form" class="mogram-btn-stream">
+                        <button type="submit" form="live-form" class="mogram-btn-stream" id="submit-btn" onclick="this.innerHTML='PROCESSANDO...'; this.style.opacity='0.5'; this.style.pointerEvents='none';">
                             <span class="live-blink"></span>
                             INICIAR LIVE AGORA
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
