@@ -101,6 +101,14 @@
                         <div id="cohost_slot" style="display: none; width: 40%; height: 100%; position: relative; background: #111; border-left: 2px solid #000;">
                             <video id="cohost_video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
                         </div>
+                        
+                        <!-- 5. Unmute Prompt Layer (For Viewers) -->
+                        <div id="unmute_prompt" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 80; align-items: center; justify-content: center; cursor: pointer;" onclick="unmuteVideo()">
+                            <div style="background: var(--primary-blue); color: white; padding: 1rem 2rem; border-radius: 50px; font-weight: 800; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.4);">
+                                <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                                CLIQUE PARA ATIVAR O SOM
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 2. Offline / Start Prompt Layer -->
@@ -269,13 +277,21 @@
 
             console.log('Viewer: Calling creator ID:', LIVE_ID);
             
-            // To receive, we MUST send a stream in most PeerJS versions.
-            // Using a basic MediaStream if captureStream fails.
+            // Note: PeerJS needs a stream to initiate a call. 
+            // Most browsers require a stream with tracks to fire 'stream' event on the other side.
             let dummyStream;
             try {
                 const canvas = document.createElement('canvas');
                 canvas.width = canvas.height = 1;
                 dummyStream = canvas.captureStream();
+                // Add a silent audio track if possible
+                if (window.AudioContext || window.webkitAudioContext) {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const oscillator = ctx.createOscillator();
+                    const dst = oscillator.connect(ctx.createMediaStreamDestination());
+                    oscillator.start();
+                    dummyStream.addTrack(dst.stream.getAudioTracks()[0]);
+                }
             } catch(e) {
                 dummyStream = new MediaStream();
             }
@@ -293,12 +309,16 @@
                 if (video.srcObject !== remoteStream) {
                     video.srcObject = remoteStream;
                     video.play().then(() => {
+                        console.log('Playback success');
                         document.getElementById('offline_view').style.display = 'none';
                         document.getElementById('video_wrapper').style.display = 'flex';
                     }).catch(e => {
                         console.warn('Autoplay blocked, unmuting might be needed');
                         video.muted = true;
                         video.play();
+                        document.getElementById('offline_view').style.display = 'none';
+                        document.getElementById('video_wrapper').style.display = 'flex';
+                        document.getElementById('unmute_prompt').style.display = 'flex';
                     });
                 }
             });
@@ -392,13 +412,32 @@
         });
     }
 
+    function unmuteVideo() {
+        const video = document.getElementById('creator_video');
+        video.muted = false;
+        document.getElementById('unmute_prompt').style.display = 'none';
+        showToast('Áudio ativado!', 'success');
+    }
+
     function togglePause() {
         const overlay = document.getElementById('paused_overlay');
-        const isPaused = overlay.style.display === 'flex';
-        overlay.style.display = isPaused ? 'none' : 'flex';
+        const isCurrentlyPaused = overlay.style.display === 'flex';
+        const willBePaused = !isCurrentlyPaused;
+
+        overlay.style.display = willBePaused ? 'flex' : 'none';
+        document.getElementById('btn_pause').style.background = willBePaused ? '#ef4444' : 'rgba(0,0,0,0.6)';
+        
         if (window.localStream) {
-            window.localStream.getTracks().forEach(t => t.enabled = isPaused);
+            window.localStream.getVideoTracks().forEach(t => t.enabled = !willBePaused);
+            window.localStream.getAudioTracks().forEach(t => t.enabled = !willBePaused);
         }
+
+        // Broadcast to server (we use the existing start route or a generic toggle)
+        fetch('/lives/' + {{ $live->id }} + '/pause', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+            body: JSON.stringify({ paused: willBePaused })
+        });
     }
 
     function toggleAudio() {
@@ -438,6 +477,16 @@
                 if (data.success) {
                     document.getElementById('viewer_count_overlay').innerText = data.viewer_count;
                     document.getElementById('likes_count_overlay').innerText = data.likes_count;
+                    
+                    // Sync Pause State for Audience
+                    if (!IS_CREATOR) {
+                        const overlay = document.getElementById('paused_overlay');
+                        if (data.is_paused) {
+                            overlay.style.display = 'flex';
+                        } else {
+                            overlay.style.display = 'none';
+                        }
+                    }
                 }
             });
         }, 3000);

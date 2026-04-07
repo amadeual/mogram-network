@@ -9,7 +9,7 @@ class Live extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'description', 'thumbnail', 'is_free', 'price', 'status', 'started_at', 'ended_at'];
+    protected $fillable = ['user_id', 'title', 'description', 'thumbnail', 'is_free', 'price', 'status', 'started_at', 'ended_at', 'is_paused'];
 
     protected $casts = [
         'started_at' => 'datetime',
