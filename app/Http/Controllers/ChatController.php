@@ -89,6 +89,7 @@ class ChatController extends Controller
             \App\Models\LiveGift::create([
                 'live_id' => null, // Outside live
                 'user_id' => $sender->id,
+                'receiver_id' => $user->id,
                 'gift_id' => $gift->id,
                 'amount' => $gift->price,
                 'commission' => $platformComm

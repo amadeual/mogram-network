@@ -20,8 +20,7 @@ class StudioController extends Controller
         
         $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
         $liveRevenue = DB::table('live_gifts')
-            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
-            ->where('lives.user_id', Auth::id())
+            ->where('receiver_id', Auth::id())
             ->sum(DB::raw('amount - commission'));
         
         $totalRevenue = $postRevenue + $liveRevenue;
@@ -37,8 +36,7 @@ class StudioController extends Controller
         
         $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
         $liveRevenue = DB::table('live_gifts')
-            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
-            ->where('lives.user_id', Auth::id())
+            ->where('receiver_id', Auth::id())
             ->sum(DB::raw('amount - commission'));
             
         $totalRevenue = $postRevenue + $liveRevenue;
@@ -53,8 +51,7 @@ class StudioController extends Controller
         
         $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
         $liveRevenue = DB::table('live_gifts')
-            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
-            ->where('lives.user_id', Auth::id())
+            ->where('receiver_id', Auth::id())
             ->sum(DB::raw('amount - commission'));
             
         $totalRevenue = $postRevenue + $liveRevenue;
@@ -95,13 +92,12 @@ class StudioController extends Controller
             ->select('purchases.amount', 'purchases.created_at', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
             ->get();
 
-        // Live Gifts (Lives)
+        // Live Gifts (Lives & Chat)
         $liveGifts = DB::table('live_gifts')
-            ->join('lives', 'live_gifts.live_id', '=', 'lives.id')
             ->join('users', 'live_gifts.user_id', '=', 'users.id')
             ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
-            ->where('lives.user_id', Auth::id())
-            ->select('live_gifts.amount', 'live_gifts.commission', 'live_gifts.created_at', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
+            ->where('live_gifts.receiver_id', Auth::id())
+            ->select('live_gifts.amount', 'live_gifts.commission', 'live_gifts.live_id', 'live_gifts.created_at', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
             ->get();
 
         $withdrawals = Withdrawal::where('user_id', Auth::id())->latest()->get();
@@ -123,7 +119,7 @@ class StudioController extends Controller
 
         foreach ($liveGifts as $gift) {
             $history->push([
-                'type' => 'Lives',
+                'type' => $gift->live_id ? 'Lives' : 'Mimos',
                 'description' => $gift->gift_name,
                 'user' => $gift->sender_name,
                 'username' => $gift->sender_username,

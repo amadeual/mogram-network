@@ -369,8 +369,10 @@ class LiveController extends Controller
             \App\Models\LiveGift::create([
                 'live_id' => $live->id,
                 'user_id' => $user->id,
+                'receiver_id' => $live->user_id,
                 'gift_id' => $gift->id,
-                'price' => $gift->price
+                'amount' => $gift->price,
+                'commission' => $platformComm
             ]);
 
             // Create special chat message for the gift
