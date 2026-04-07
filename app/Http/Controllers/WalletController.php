@@ -148,73 +148,9 @@ class WalletController extends Controller
 
         $history = $purchases->concat($deposits)
             ->concat($liveAccess)
-            ->concat($giftsSent);
-
-        // Earnings from Tickets (in)
-        $ticketEarnings = DB::table('live_access')
-            ->join('lives', 'live_access.live_id', '=', 'lives.id')
-            ->join('users', 'live_access.user_id', '=', 'users.id')
-            ->where('lives.user_id', $user->id)
-            ->select('live_access.*', 'lives.title as live_title', 'users.name as buyer_name', 'users.username as buyer_username')
-            ->get()
-            ->map(function($te) {
-                return [
-                    'type' => 'Ganho: Ticket de Live',
-                    'description' => $te->live_title,
-                    'user' => $te->buyer_name,
-                    'username' => $te->buyer_username,
-                    'amount' => $te->amount * 0.80, // Show what they actually received
-                    'direction' => 'in',
-                    'date' => $te->created_at,
-                    'status' => 'Concluído'
-                ];
-            });
-
-        // Earnings from Gifts (in)
-        $giftEarnings = DB::table('live_gifts')
-            ->leftJoin('lives', 'live_gifts.live_id', '=', 'lives.id')
-            ->join('users', 'live_gifts.user_id', '=', 'users.id') // sender
-            ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
-            ->where('live_gifts.receiver_id', $user->id)
-            ->select('live_gifts.*', 'lives.title as live_title', 'users.name as sender_name', 'users.username as sender_username', 'gifts.name as gift_name')
-            ->get()
-            ->map(function($ge) {
-                return [
-                    'type' => $ge->live_id ? 'Ganho: Presente' : 'Ganho: Mimo',
-                    'description' => $ge->live_id ? ($ge->gift_name . ' (' . $ge->live_title . ')') : $ge->gift_name,
-                    'user' => $ge->sender_name,
-                    'username' => $ge->sender_username,
-                    'amount' => $ge->amount - $ge->commission,
-                    'direction' => 'in',
-                    'date' => $ge->created_at,
-                    'status' => 'Recebido'
-                ];
-            });
-
-        // Earnings from Content Sales (in)
-        $contentEarnings = DB::table('purchases')
-            ->join('posts', 'purchases.post_id', '=', 'posts.id')
-            ->join('users', 'purchases.user_id', '=', 'users.id')
-            ->where('posts.user_id', $user->id)
-            ->select('purchases.*', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
-            ->get()
-            ->map(function($ce) {
-                return [
-                    'type' => 'Ganho: Venda de Conteúdo',
-                    'description' => $ce->post_title,
-                    'user' => $ce->buyer_name,
-                    'username' => $ce->buyer_username,
-                    'amount' => $ce->amount, // Usually full amount in this platform? Let's assume as recorded
-                    'direction' => 'in',
-                    'date' => $ce->created_at,
-                    'status' => 'Concluído'
-                ];
-            });
-
-        $history = $history->concat($ticketEarnings)
-            ->concat($giftEarnings)
-            ->concat($contentEarnings)
+            ->concat($giftsSent)
             ->sortByDesc('date');
+
         $availableBalance = $user->balance;
 
         return view('wallet', compact('availableBalance', 'history'));
