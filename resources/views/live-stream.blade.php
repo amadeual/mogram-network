@@ -135,28 +135,32 @@
                         </div>
 
                         <!-- 7. Paid Entry Overlay -->
-                        @if(isset($hasAccess) && !$hasAccess)
-                        <div id="payment_overlay" style="position: absolute; inset: 0; background: #0b0a15; z-index: 300; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem; text-align: center;">
-                            <div style="width: 100px; height: 100px; background: rgba(255, 214, 0, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; border: 2px solid #ffd600; box-shadow: 0 0 50px rgba(255, 214, 0, 0.2);">
-                                <span style="font-size: 3rem;">💎</span>
+                    <!-- 7. Paid Entry Overlay (Professionalized) -->
+                    @if(isset($hasAccess) && !$hasAccess)
+                    <div id="payment_overlay" style="position: absolute; inset: 0; background: rgba(11, 10, 21, 0.85); backdrop-filter: blur(25px); z-index: 300; display: flex; align-items: center; justify-content: center; padding: 2rem;">
+                        <div style="background: rgba(255, 255, 255, 0.03); border: 1.5px solid rgba(255, 255, 255, 0.07); padding: 2.5rem; border-radius: 32px; width: 100%; max-width: 400px; text-align: center; box-shadow: 0 30px 100px rgba(0,0,0,0.8);">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, rgba(255,214,0,0.1), rgba(255,145,0,0.1)); border-radius: 24px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.5rem; border: 2px solid rgba(255,214,0,0.3); color: #ffd600;">
+                                <svg width="35" height="35" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                             </div>
-                            <h2 style="color: white; font-weight: 900; font-size: 1.75rem; margin-bottom: 0.5rem; letter-spacing: -1px;">Transmissão VIP</h2>
-                            <p style="color: #888; font-weight: 600; max-width: 300px; margin-bottom: 2rem;">Esta é uma live exclusiva para apoiadores. Adquira seu ticket para entrar agora.</p>
+                            <h2 style="color: white; font-weight: 900; font-size: 1.5rem; margin-bottom: 0.5rem; letter-spacing: -1px;">Conteúdo Exclusivo</h2>
+                            <p style="color: #64748b; font-weight: 600; font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.5;">Esta transmissão está disponível apenas para apoiadores que adquirirem o acesso VIP.</p>
                             
-                            <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem 2rem; border-radius: 20px; margin-bottom: 2rem; min-width: 200px;">
-                                <p style="color: #ffd600; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Valor Total</p>
-                                <p style="color: white; font-size: 2rem; font-weight: 900;">R$ {{ number_format($live->price, 2, ',', '.') }}</p>
+                            <div style="background: rgba(255,214,0,0.05); border: 1px dashed rgba(255,214,0,0.2); padding: 1.25rem; border-radius: 20px; margin-bottom: 2rem;">
+                                <p style="color: #64748b; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Acesso Individual</p>
+                                <p style="color: #ffd600; font-size: 1.75rem; font-weight: 940;">R$ {{ number_format($live->price, 2, ',', '.') }}</p>
                             </div>
 
                             <form action="{{ route('live.buy', $live->id) }}" method="POST">
                                 @csrf
-                                <button type="submit" style="background: linear-gradient(135deg, #ffd600, #ff9100); border: none; padding: 1rem 3rem; border-radius: 12px; color: black; font-weight: 900; cursor: pointer; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.3); transition: 0.3s;" onmouseover="this.style.scale='1.05'" onmouseout="this.style.scale='1'">
-                                    COMPRAR TICKET AGORA
+                                <button type="submit" style="width: 100%; background: #ffd600; border: none; padding: 1.1rem; border-radius: 16px; color: black; font-weight: 900; cursor: pointer; font-size: 0.95rem; box-shadow: 0 10px 40px rgba(255,214,0,0.2); transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 45px rgba(255,214,0,0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 40px rgba(255,214,0,0.2)'">
+                                    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                                    COMPRAR AGORA
                                 </button>
                             </form>
-                            <a href="{{ route('lives') }}" style="margin-top: 1.5rem; color: #64748b; text-decoration: none; font-weight: 700; font-size: 0.9rem;">Voltar para Explorar</a>
+                            <a href="{{ route('lives') }}" style="display: block; margin-top: 1.5rem; color: #555; text-decoration: none; font-weight: 800; font-size: 0.8rem; transition: 0.3s;" onmouseover="this.style.color='white'">VOLTAR PARA EXPLORAR</a>
                         </div>
-                        @endif
+                    </div>
+                    @endif
                     </div>
 
                     <!-- 2. Offline / Start Prompt Layer -->
@@ -944,5 +948,21 @@
 
 <style>
     @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    
+    /* Position the success toast near the live player for better context */
+    #global-toast {
+        bottom: auto !important;
+        top: 2rem !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        background: #22c55e !important; /* Green for success */
+        box-shadow: 0 20px 40px rgba(34, 197, 94, 0.4) !important;
+        animation: toastDownLive 0.4s cubic-bezier(1,-0.57,0,1.96) !important;
+    }
+
+    @keyframes toastDownLive { 
+        from { transform: translate(-50%, -40px); opacity: 0; } 
+        to { transform: translate(-50%, 0); opacity: 1; } 
+    }
 </style>
 @endsection
