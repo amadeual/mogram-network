@@ -451,11 +451,11 @@
             
             // Add devices to IVS
             console.log('Adding devices to IVS Broadcaster...');
-            const videoTrack = stream.getVideoTracks()[0];
-            const audioTrack = stream.getAudioTracks()[0];
-            
-            if (videoTrack) await ivsBroadcaster.addVideoInputDevice(videoTrack, 'camera', { index: 0 });
-            if (audioTrack) await ivsBroadcaster.addAudioInputDevice(audioTrack, 'mic');
+            // In v1.8.0, addVideoInputDevice/addAudioInputDevice typically expect the full MediaStream
+            if (stream) {
+                await ivsBroadcaster.addVideoInputDevice(stream, 'camera', { index: 0 });
+                await ivsBroadcaster.addAudioInputDevice(stream, 'mic');
+            }
 
             console.log('Broadcasting to Amazon IVS...');
             await ivsBroadcaster.startBroadcast(IVS_STREAM_KEY);
