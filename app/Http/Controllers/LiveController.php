@@ -253,10 +253,45 @@ class LiveController extends Controller
 
     public function status(Live $live)
     {
+        // Real-time viewer tracking (Heartbeat)
+        if (Auth::check()) {
+            try {
+                DB::table('live_viewers')->updateOrInsert(
+                    ['live_id' => $live->id, 'user_id' => Auth::id()],
+                    ['last_seen_at' => now(), 'updated_at' => now()]
+                );
+            } catch (\Exception $e) {
+                // Auto-create table if missing
+                try {
+                    DB::statement("CREATE TABLE IF NOT EXISTS live_viewers (
+                        id INT AUTO_INCREMENT PRIMARY KEY,
+                        live_id INT,
+                        user_id INT,
+                        last_seen_at TIMESTAMP NULL,
+                        updated_at TIMESTAMP NULL,
+                        UNIQUE(live_id, user_id)
+                    )");
+                    DB::table('live_viewers')->updateOrInsert(
+                        ['live_id' => $live->id, 'user_id' => Auth::id()],
+                        ['last_seen_at' => now(), 'updated_at' => now()]
+                    );
+                } catch (\Exception $ex) {}
+            }
+        }
+
+        // Count viewers active in the last 30 seconds
+        $realViewers = 0;
+        try {
+            $realViewers = DB::table('live_viewers')
+                ->where('live_id', $live->id)
+                ->where('last_seen_at', '>=', now()->subSeconds(30))
+                ->count();
+        } catch (\Exception $e) {}
+
         return response()->json([
             'success' => true,
             'status' => $live->status,
-            'viewer_count' => count($live->chats->unique('user_id')),
+            'viewer_count' => max($realViewers, 0),
             'likes_count' => $live->likes()->count(),
             'is_paused' => (bool)$live->is_paused,
             'is_muted' => (bool)$live->is_muted,
