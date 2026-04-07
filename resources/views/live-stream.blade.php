@@ -17,7 +17,7 @@
                     <rect width="512" height="512" rx="100" fill="url(#streamLogoGrad)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
-                <span style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -1px;">Mogram</span>
+                <span style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -1px;" class="logo-text">Mogram</span>
             </div>
 
             <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
@@ -1096,17 +1096,39 @@
         overflow: hidden;
     }
     
-    @media (max-width: 1400px) {
-        .left-nav { width: 80px !important; }
-        .left-nav span, .left-nav p { display: none !important; }
+    .responsive-container {
+        display: flex;
+        width: 100%;
+        max-width: 100vw;
+        height: calc(100vh - 55px);
+        overflow: hidden;
+        position: relative;
+    }
+
+    /* Fixed Sidebar for low-res/high-zoom */
+    @media (max-width: 1366px) {
+        .left-nav { 
+            width: 70px !important; 
+            padding: 1rem 0.5rem !important; 
+            align-items: center !important;
+        }
+        .left-nav span, .left-nav p, .left-nav h2, .left-nav .logo-text { display: none !important; }
+        .left-nav a { justify-content: center !important; padding: 0.8rem 0 !important; width: 50px; }
+        .left-nav svg { margin: 0 !important; width: 28px !important; height: 28px !important; }
     }
 
     @media (max-width: 1100px) {
         .chat-sidebar { width: 280px !important; }
     }
 
-    @media (max-width: 900px) {
+    @media (max-width: 980px) {
         .chat-sidebar { display: none !important; }
+    }
+
+    /* Main Area flexibility */
+    main {
+        flex: 1;
+        min-width: 0;
     }
 </style>
 @endsection
