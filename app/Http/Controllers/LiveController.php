@@ -28,10 +28,19 @@ class LiveController extends Controller
             $scheduledQuery->where('category', $request->category);
         }
 
-        $onlineLives = $onlineQuery->latest()->get();
-        $scheduledLives = $scheduledQuery->latest()->get();
+        $onlineLives = $onlineQuery->with(['user', 'chats'])->latest()->get();
+        $scheduledLives = $scheduledQuery->with('user')->latest()->get();
         
-        return view('lives', compact('onlineLives', 'scheduledLives'));
+        // Load access for current user
+        $userAccessIds = [];
+        if (Auth::check()) {
+            $userAccessIds = DB::table('live_access')
+                ->where('user_id', Auth::id())
+                ->pluck('live_id')
+                ->toArray();
+        }
+        
+        return view('lives', compact('onlineLives', 'scheduledLives', 'userAccessIds'));
     }
 
     public function create()

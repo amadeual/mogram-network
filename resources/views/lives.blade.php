@@ -101,7 +101,7 @@
             
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                 @forelse($onlineLives as $live)
-                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}', '{{ $live->price }}')">
+                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}', '{{ $live->price }}', {{ in_array($live->id, $userAccessIds) ? 'true' : 'false' }}, '{{ $live->id }}')">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
                         <div class="live-tag">LIVE</div>
@@ -144,7 +144,18 @@
                         <h4 class="title">{{ $live->title }}</h4>
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem;">
                              <p style="color: #666; font-size: 0.8rem;">Por {{ $live->user->name }}</p>
-                             <button class="btn-notify">Me Avisar</button>
+                              @if($live->is_free)
+                                   <button class="btn-notify">Me Avisar</button>
+                               @else
+                                   @if(in_array($live->id, $userAccessIds))
+                                       <button class="btn-notify" style="border-color: #22c55e; color: #22c55e;">Inscrito</button>
+                                   @else
+                                       <form action="{{ route('live.buy', $live->id) }}" method="POST">
+                                           @csrf
+                                           <button type="submit" class="btn-notify" onclick="return confirm('Confirmar inscrição por R$ {{ number_format($live->price, 2) }}?')" style="background: #3390ec; color: white; border: none; padding: 6px 12px; font-size: 10px;">INSCREVER (R$ {{ number_format($live->price, 0) }})</button>
+                                       </form>
+                                   @endif
+                               @endif
                         </div>
                     </div>
                 </div>
@@ -218,23 +229,52 @@
 </style>
 
 <script>
-    function openPreview(url, title, desc, thumb, creator, avatar, price) {
+    function openPreview(url, title, desc, thumb, creator, avatar, price, hasAccess, liveId) {
         document.getElementById('preview_img').src = thumb;
         document.getElementById('preview_avatar').src = avatar;
         document.getElementById('preview_title').innerText = title;
         document.getElementById('preview_creator').innerText = 'Por ' + creator;
         document.getElementById('preview_desc').innerText = desc || 'Nenhuma descrição disponível.';
-        document.getElementById('preview_join_btn').href = url;
         
+        const joinBtn = document.getElementById('preview_join_btn');
         const priceTag = document.getElementById('preview_price');
+        
+        // Reset button
+        joinBtn.onclick = function() { showMogramLoader(); closePreview(); };
+        joinBtn.innerText = 'ENTRAR AGORA';
+        joinBtn.style.background = 'var(--primary-blue)';
+        joinBtn.removeAttribute('data-buy-form');
+
         if (price && parseFloat(price) > 0) {
             priceTag.innerText = 'R$ ' + parseFloat(price).toFixed(2);
             priceTag.style.background = '#ffd600';
             priceTag.style.color = 'black';
+            
+            if (!hasAccess) {
+                joinBtn.innerText = 'PAGAR E ENTRAR (R$ ' + parseFloat(price).toFixed(2) + ')';
+                joinBtn.style.background = 'linear-gradient(135deg, #ffd600, #ff9100)';
+                joinBtn.style.color = 'black';
+                joinBtn.href = 'javascript:void(0)';
+                joinBtn.onclick = function() {
+                    if (confirm('Será descontado R$ ' + price + ' do seu saldo para acessar esta live. Deseja continuar?')) {
+                        const form = document.createElement('form');
+                        form.method = 'POST';
+                        form.action = '/lives/' + liveId + '/buy';
+                        form.innerHTML = `<input type="hidden" name="_token" value="{{ csrf_token() }}">`;
+                        document.body.appendChild(form);
+                        showMogramLoader();
+                        form.submit();
+                    }
+                };
+            } else {
+                joinBtn.href = url;
+            }
         } else {
             priceTag.innerText = 'Grátis';
             priceTag.style.background = '#22c55e';
             priceTag.style.color = 'white';
+            joinBtn.href = url;
+            joinBtn.style.color = 'white';
         }
         
         document.getElementById('live_preview_modal').style.display = 'flex';
