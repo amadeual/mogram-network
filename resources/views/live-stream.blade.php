@@ -88,9 +88,9 @@
                 <div id="video_layers" style="position: absolute; inset: 0;">
                     
                     <!-- 1. Video System (Active Stream) -->
-                    <div id="video_wrapper" style="width: 100%; height: 100%; display: {{ $live->status == 'online' ? 'flex' : 'none' }}; gap: 4px;">
+                    <div id="video_wrapper" style="width: 100%; height: 100%; display: none; gap: 4px;">
                         <div id="main_video_slot" style="flex: 1; height: 100%; position: relative; background: #000;">
-                            <video id="creator_video" autoplay playsinline {{ Auth::id() == $live->user_id ? 'muted' : '' }} style="width: 100%; height: 100%; object-fit: cover;"></video>
+                            <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: cover;"></video>
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
                                     <div style="font-size: 3rem; margin-bottom: 1rem;">⏸️</div>
@@ -154,7 +154,7 @@
                     </div>
 
                     <!-- 2. Offline / Start Prompt Layer -->
-                    <div id="offline_view" style="width: 100%; height: 100%; position: absolute; inset: 0; display: {{ $live->status == 'online' && Auth::id() != $live->user_id ? 'none' : 'flex' }}; flex-direction: column; align-items: center; justify-content: center;">
+                    <div id="offline_view" style="width: 100%; height: 100%; position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 150; background: #0b0a15;">
                         <img src="{{ Storage::url($live->thumbnail) }}" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.3;">
                         <div style="position: relative; z-index: 5; text-align: center;">
                             @if(Auth::id() == $live->user_id)
@@ -382,22 +382,36 @@
             }
 
             call.on('stream', (remoteStream) => {
-                console.log('Received stream from creator!');
+                console.log('VIEWER: Stream received from creator!', remoteStream.id);
                 const video = document.getElementById('creator_video');
+                
                 if (video.srcObject !== remoteStream) {
                     video.srcObject = remoteStream;
-                    video.play().then(() => {
-                        console.log('Playback success');
-                        document.getElementById('offline_view').style.display = 'none';
-                        document.getElementById('video_wrapper').style.display = 'flex';
-                    }).catch(e => {
-                        console.warn('Autoplay blocked, unmuting might be needed');
-                        video.muted = true;
-                        video.play();
-                        document.getElementById('offline_view').style.display = 'none';
-                        document.getElementById('video_wrapper').style.display = 'flex';
-                        document.getElementById('unmute_prompt').style.display = 'flex';
-                    });
+                    
+                    // Force playback refresh
+                    video.load();
+                    
+                    const playPromise = video.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            console.log('VIEWER: Video playing successfully');
+                            document.getElementById('offline_view').style.display = 'none';
+                            document.getElementById('video_wrapper').style.display = 'flex';
+                            
+                            // If it's the viewer and video is muted, show the unmute button
+                            if (!IS_CREATOR && video.muted) {
+                                document.getElementById('unmute_prompt').style.display = 'flex';
+                            }
+                        }).catch(error => {
+                            console.warn('VIEWER: Autoplay failed, waiting for user interaction:', error);
+                            video.muted = true;
+                            video.play();
+                            document.getElementById('offline_view').style.display = 'none';
+                            document.getElementById('video_wrapper').style.display = 'flex';
+                            document.getElementById('unmute_prompt').style.display = 'flex';
+                        });
+                    }
                 }
             });
             
@@ -499,6 +513,13 @@
         const tools = document.getElementById('broadcaster_tools');
         if (tools) tools.style.display = 'flex';
 
+        if (IS_CREATOR) {
+            console.log('CREATOR: Streaming to server...');
+            showToast('Sua live está ativa!', 'success');
+        } else {
+            console.log('VIEWER: Connection established, waiting for stream data...');
+        }
+        
         if (window.answerPendingCalls) window.answerPendingCalls();
         
         fetch('{{ route('live.start', $live->id) }}', {
