@@ -451,26 +451,36 @@
     function sendChatMessage() {
         const input = document.getElementById('chat_input');
         const btn = document.getElementById('btn_send_chat');
-        if(!input.value.trim()) return;
+        const message = input.value.trim();
+        if(!message) return;
 
         btn.disabled = true;
         btn.style.opacity = '0.5';
+        input.value = ''; // Eagerly clear input for better UX
 
         fetch('{{ route('live.chat', $live->id) }}', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
-            body: JSON.stringify({message: input.value})
-        }).then(res => res.json()).then(data => { 
-            input.value = ''; 
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify({message: message})
+        })
+        .then(res => res.ok ? res.json() : Promise.reject(res))
+        .then(data => { 
             btn.disabled = false;
             btn.style.opacity = '1';
             // Immediate chat refresh
             fetch('{{ route('live.messages', $live->id) }}')
                 .then(res => res.json())
                 .then(d => { if(d.success) document.getElementById('chat_messages').innerHTML = d.html; });
-        }).catch(() => {
+        })
+        .catch(() => {
             btn.disabled = false;
             btn.style.opacity = '1';
+            input.value = message; // Restore if it failed
+            showToast('Erro ao enviar mensagem. Tente novamente.', 'error');
         });
     }
 
