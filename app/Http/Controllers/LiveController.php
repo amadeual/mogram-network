@@ -8,6 +8,7 @@ use App\Models\Live;
 use App\Models\LiveChat;
 use App\Models\Gift;
 use App\Models\LiveGift;
+use App\Models\LiveLike;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -128,7 +129,33 @@ class LiveController extends Controller
     {
         return response()->json([
             'success' => true,
-            'status' => $live->status
+            'status' => $live->status,
+            'viewer_count' => count($live->chats->unique('user_id')),
+            'likes_count' => $live->likes()->count()
+        ]);
+    }
+
+    public function toggleLike(Live $live)
+    {
+        $like = LiveLike::where('user_id', Auth::id())
+                        ->where('live_id', $live->id)
+                        ->first();
+
+        if ($like) {
+            $like->delete();
+            $liked = false;
+        } else {
+            LiveLike::create([
+                'user_id' => Auth::id(),
+                'live_id' => $live->id
+            ]);
+            $liked = true;
+        }
+
+        return response()->json([
+            'success' => true,
+            'liked' => $liked,
+            'likes_count' => $live->likes()->count()
         ]);
     }
 

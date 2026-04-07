@@ -27,4 +27,9 @@ class Live extends Model
     {
         return $this->hasMany(LiveChat::class);
     }
+
+    public function likes()
+    {
+        return $this->hasMany(LiveLike::class);
+    }
 }

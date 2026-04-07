@@ -135,11 +135,14 @@
                         <div style="background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">AO VIVO</div>
                         <div style="background: rgba(0,0,0,0.5); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
                             <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg> 
-                            <span id="viewer_count">{{ count($messages->unique('user_id')) }}</span>
+                            <span id="viewer_count_overlay">{{ count($messages->unique('user_id')) }}</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.1); color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; display: flex; align-items: center; gap: 5px;">
+                            ❤️ <span id="likes_count_overlay">{{ $live->likes()->count() }}</span>
                         </div>
                         @if(Auth::id() == $live->user_id)
-                            <div style="background: rgba(51, 144, 236, 0.2); color: #3390ec; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px; border: 1px solid #3390ec;">
-                                GANHOS: R$ <span id="live_earnings">0,00</span>
+                            <div style="background: #3390ec; color: white; font-size: 10px; font-weight: 900; padding: 4px 10px; border-radius: 6px;">
+                                LUCRO: R$ <span id="live_earnings">0,00</span>
                             </div>
                         @endif
                     </div>
@@ -158,12 +161,26 @@
             </div> <!-- End Video Container -->
 
             <!-- Bottom Interaction Bar -->
-            <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.02); border-radius: 20px; padding: 0.5rem; display: flex; gap: 0.5rem;">
-                <button style="flex: 1; height: 60px; background: transparent; border: none; color: #8fb1bf; font-weight: 800; cursor: pointer;">CURTIR</button>
+            <div style="margin-top: 1.5rem; background: rgba(255,255,255,0.03); border-radius: 20px; padding: 0.5rem; display: flex; gap: 0.5rem; border: 1px solid rgba(255,255,255,0.05);">
+                @php
+                    $hasLiked = Auth::check() ? $live->likes()->where('user_id', Auth::id())->exists() : false;
+                @endphp
+                <button onclick="toggleLikeLive()" id="btn_like_live" style="flex: 1; height: 60px; background: transparent; border: none; color: {{ $hasLiked ? '#ef4444' : '#8fb1bf' }}; font-weight: 800; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <svg width="20" height="20" fill="{{ $hasLiked ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span>CURTIR <span id="likes_count_text" style="font-size: 0.75rem; opacity: 0.7;">{{ $live->likes()->count() > 0 ? $live->likes()->count() : '' }}</span></span>
+                </button>
+
+                @if(Auth::id() != $live->user_id)
+                    <div style="width: 1px; background: rgba(255,255,255,0.05);"></div>
+                    <button onclick="toggleGiftModal()" style="flex: 1; color: #ffd600; font-weight: 800; background: transparent; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                        <span>🎁</span> PRESENTEAR
+                    </button>
+                @endif
+
                 <div style="width: 1px; background: rgba(255,255,255,0.05);"></div>
-                <button onclick="toggleGiftModal()" style="flex: 1; color: #ffd600; font-weight: 800; background: transparent; border: none; cursor: pointer;">PRESENTEAR</button>
-                <div style="width: 1px; background: rgba(255,255,255,0.05);"></div>
-                <button style="flex: 1; color: #8fb1bf; font-weight: 800; background: transparent; border: none; cursor: pointer;">COMPARTILHAR</button>
+                <button onclick="shareLive()" style="flex: 1; color: #8fb1bf; font-weight: 800; background: transparent; border: none; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <span>🔗</span> COMPARTILHAR
+                </button>
             </div>
         </main>
 
@@ -180,15 +197,27 @@
                 @endforeach
             </div>
 
-            <div style="padding: 1.5rem; background: rgba(0,0,0,0.2);">
+            <div style="padding: 1.25rem; background: rgba(0,0,0,0.2); border-top: 1.5px solid rgba(255,255,255,0.05);">
                 @if(Auth::id() != $live->user_id)
-                <div style="background: #3390ec; padding: 12px; border-radius: 12px; margin-bottom: 1rem; color: white; font-weight: 800; text-align: center; cursor: pointer;">
-                    Torne-se VIP • R$ 19,90
+                <div onclick="alert('Funcionalidade VIP em breve!')" style="background: linear-gradient(45deg, #3390ec, #00d2ff); padding: 10px; border-radius: 16px; margin-bottom: 1rem; color: white; font-weight: 900; text-align: center; cursor: pointer; font-size: 0.75rem; box-shadow: 0 5px 15px rgba(51, 144, 236, 0.3);">
+                    TORNE-SE VIP • R$ 19,90
                 </div>
                 @endif
+                
+                <!-- Emoji Bar -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem; padding: 0 5px;">
+                    @foreach(['❤️','🔥','👏','🤣','😮','😭','💰','🙌'] as $emoji)
+                        <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; font-size: 1.1rem; transition: 0.2s;" onmouseover="this.style.scale='1.3'" onmouseout="this.style.scale='1'">{{ $emoji }}</span>
+                    @endforeach
+                </div>
+
                 <div style="display: flex; gap: 10px;">
-                    <input type="text" id="chat_input" placeholder="Diga algo..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px; color: white; outline: none;">
-                    <button onclick="sendChatMessage()" style="background: #3390ec; border: none; width: 44px; height: 44px; border-radius: 12px; color: white; cursor: pointer;">➤</button>
+                    <div style="position: relative; flex: 1;">
+                        <input type="text" id="chat_input" placeholder="Diga algo..." style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 15px; color: white; outline: none; transition: 0.3s; font-size: 0.9rem;" onfocus="this.style.borderColor='#3390ec'; this.style.background='rgba(51,144,236,0.05)'" onblur="this.style.borderColor='rgba(255,255,255,0.1)'; this.style.background='rgba(255,255,255,0.05)'">
+                    </div>
+                    <button onclick="sendChatMessage()" id="btn_send_chat" style="background: #3390ec; border: none; width: 48px; height: 48px; border-radius: 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    </button>
                 </div>
             </div>
         </aside>
@@ -372,17 +401,35 @@
     }
 
     function startChatPolling() {
+        // Chat & Stats Polling
         setInterval(() => {
+            // Check messages
             fetch('{{ route('live.messages', $live->id) }}')
             .then(res => res.json())
             .then(data => {
-                if(data.success) document.getElementById('chat_messages').innerHTML = data.html;
+                if(data.success) {
+                    const chatBox = document.getElementById('chat_messages');
+                    const isScrolledToBottom = chatBox.scrollHeight - chatBox.clientHeight <= chatBox.scrollTop + 100;
+                    chatBox.innerHTML = data.html;
+                    if (isScrolledToBottom) chatBox.scrollTop = chatBox.scrollHeight;
+                }
+            }).catch(() => {});
+
+            // Polling Stats (Viewers, Likes)
+            fetch('{{ route('live.status', $live->id) }}')
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                   if (document.getElementById('viewer_count_overlay')) document.getElementById('viewer_count_overlay').innerText = data.viewer_count;
+                   if (document.getElementById('likes_count_overlay')) document.getElementById('likes_count_overlay').innerText = data.likes_count;
+                   if (document.getElementById('likes_count_text')) document.getElementById('likes_count_text').innerText = data.likes_count > 0 ? data.likes_count : '';
+                   
+                   if (!IS_CREATOR && data.status === 'offline' && data.status_changed) {
+                       window.location.reload();
+                   }
+                }
             }).catch(() => {});
         }, 3000);
-
-        if (!IS_CREATOR) {
-            setInterval(checkLiveStatus, 5000);
-        }
     }
 
     function checkLiveStatus() {
@@ -395,14 +442,70 @@
         }).catch(() => {});
     }
 
+    function insertEmoji(emoji) {
+        const input = document.getElementById('chat_input');
+        input.value += emoji;
+        input.focus();
+    }
+
     function sendChatMessage() {
         const input = document.getElementById('chat_input');
+        const btn = document.getElementById('btn_send_chat');
         if(!input.value.trim()) return;
+
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+
         fetch('{{ route('live.chat', $live->id) }}', {
             method: 'POST',
             headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             body: JSON.stringify({message: input.value})
-        }).then(() => { input.value = ''; });
+        }).then(res => res.json()).then(data => { 
+            input.value = ''; 
+            btn.disabled = false;
+            btn.style.opacity = '1';
+            // Immediate chat refresh
+            fetch('{{ route('live.messages', $live->id) }}')
+                .then(res => res.json())
+                .then(d => { if(d.success) document.getElementById('chat_messages').innerHTML = d.html; });
+        }).catch(() => {
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        });
+    }
+
+    // Handle Enter mapping
+    document.getElementById('chat_input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') sendChatMessage();
+    });
+
+    function toggleLikeLive() {
+        const btn = document.getElementById('btn_like_live');
+        fetch('{{ route('live.like', $live->id) }}', {
+            method: 'POST',
+            headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                btn.style.color = data.liked ? '#ef4444' : '#8fb1bf';
+                const svg = btn.querySelector('svg');
+                svg.setAttribute('fill', data.liked ? 'currentColor' : 'none');
+                if (document.getElementById('likes_count_text')) document.getElementById('likes_count_text').innerText = data.likes_count > 0 ? data.likes_count : '';
+                if (document.getElementById('likes_count_overlay')) document.getElementById('likes_count_overlay').innerText = data.likes_count;
+                
+                if (data.liked) {
+                   showToast('Você curtiu a live!');
+                }
+            }
+        });
+    }
+
+    function shareLive() {
+        const url = window.location.href;
+        navigator.clipboard.writeText(url).then(() => {
+            showToast('Link da live copiado!');
+        });
     }
 
     function toggleGiftModal() {
