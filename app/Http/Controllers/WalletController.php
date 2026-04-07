@@ -191,8 +191,29 @@ class WalletController extends Controller
                 ];
             });
 
+        // Earnings from Content Sales (in)
+        $contentEarnings = DB::table('purchases')
+            ->join('posts', 'purchases.post_id', '=', 'posts.id')
+            ->join('users', 'purchases.user_id', '=', 'users.id')
+            ->where('posts.user_id', $user->id)
+            ->select('purchases.*', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
+            ->get()
+            ->map(function($ce) {
+                return [
+                    'type' => 'Ganho: Venda de Conteúdo',
+                    'description' => $ce->post_title,
+                    'user' => $ce->buyer_name,
+                    'username' => $ce->buyer_username,
+                    'amount' => $ce->amount, // Usually full amount in this platform? Let's assume as recorded
+                    'direction' => 'in',
+                    'date' => $ce->created_at,
+                    'status' => 'Concluído'
+                ];
+            });
+
         $history = $history->concat($ticketEarnings)
             ->concat($giftEarnings)
+            ->concat($contentEarnings)
             ->sortByDesc('date');
         $availableBalance = $user->balance;
 

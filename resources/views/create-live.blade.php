@@ -25,6 +25,20 @@
         <form action="{{ route('live.store') }}" method="POST" enctype="multipart/form-data" id="live-form">
             @csrf
             
+            @if ($errors->any())
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 1rem; margin-bottom: 2rem; animation: premiumZoomIn 0.3s forwards;">
+                <p style="color: #ef4444; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; gap: 8px; margin-bottom: 0.5rem;">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Ops! Verifique os campos abaixo:
+                </p>
+                <ul style="color: #ef4444; font-size: 0.75rem; font-weight: 600; padding-left: 1.5rem; margin: 0;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            
             <div class="responsive-grid">
                 
                 <!-- Left: Form Details -->
@@ -42,32 +56,35 @@
                         <!-- Title Input -->
                         <div style="margin-bottom: 1rem;">
                             <label class="premium-label">Título da Transmissão</label>
-                            <input type="text" name="title" required maxlength="100" placeholder="Ex: Show Acústico Exclusivo para Fãs! 🎸" class="mogram-input-v2">
+                            <input type="text" name="title" required maxlength="100" placeholder="Ex: Show Acústico Exclusivo para Fãs! 🎸" class="mogram-input-v2 @error('title') error @enderror" value="{{ old('title') }}">
+                            @error('title') <p class="field-error">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Description Input -->
                         <div style="margin-bottom: 1rem;">
                             <label class="premium-label">Descrição (O que esperar?)</label>
-                            <textarea name="description" required maxlength="1000" placeholder="Diga ao seu público sobre o que será a live..." class="mogram-input-v2" style="min-height: 80px; resize: none;"></textarea>
+                            <textarea name="description" required maxlength="1000" placeholder="Diga ao seu público sobre o que será a live..." class="mogram-input-v2 @error('description') error @enderror" style="min-height: 80px; resize: none;">{{ old('description') }}</textarea>
+                            @error('description') <p class="field-error">{{ $message }}</p> @enderror
                         </div>
 
                         <!-- Dynamic Category Select -->
                         <div>
                             <label class="premium-label">Categoria do Conteúdo</label>
                             <div style="position: relative;">
-                                <select name="category" required class="mogram-select-v2">
-                                    <option value="" disabled selected style="background: #1a1c2e; color: white;">Selecione a categoria...</option>
-                                    <option value="Explorar" style="background: #1a1c2e; color: white;">Explorar 🔍</option>
-                                    <option value="Música" style="background: #1a1c2e; color: white;">Música 🎵</option>
-                                    <option value="Fé & Religião" style="background: #1a1c2e; color: white;">Fé & Religião 🙏</option>
-                                    <option value="Tecnologia" style="background: #1a1c2e; color: white;">Tecnologia 💻</option>
-                                    <option value="Educação" style="background: #1a1c2e; color: white;">Educação 📚</option>
-                                    <option value="Geral" style="background: #1a1c2e; color: white;">Geral 🌍</option>
+                                <select name="category" required class="mogram-select-v2 @error('category') error @enderror">
+                                    <option value="" disabled {{ !old('category') ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Selecione a categoria...</option>
+                                    <option value="Explorar" {{ old('category') == 'Explorar' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Explorar 🔍</option>
+                                    <option value="Música" {{ old('category') == 'Música' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Música 🎵</option>
+                                    <option value="Fé & Religião" {{ old('category') == 'Fé & Religião' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Fé & Religião 🙏</option>
+                                    <option value="Tecnologia" {{ old('category') == 'Tecnologia' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Tecnologia 💻</option>
+                                    <option value="Educação" {{ old('category') == 'Educação' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Educação 📚</option>
+                                    <option value="Geral" {{ old('category') == 'Geral' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Geral 🌍</option>
                                 </select>
                                 <div style="position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b;">
                                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>
                                 </div>
                             </div>
+                            @error('category') <p class="field-error">{{ $message }}</p> @enderror
                         </div>
                     </div>
 
@@ -82,7 +99,7 @@
 
                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
                             <label class="access-type-card-v2">
-                                <input type="radio" name="is_free" value="1" checked onchange="togglePrice(this.value)" style="display: none;">
+                                <input type="radio" name="is_free" value="1" {{ old('is_free', '1') == '1' ? 'checked' : '' }} onchange="togglePrice(this.value)" style="display: none;">
                                 <div class="card-inner">
                                     <span class="icon">🌍</span>
                                     <div class="text">
@@ -94,7 +111,7 @@
                             </label>
                             
                             <label class="access-type-card-v2 vip">
-                                <input type="radio" name="is_free" value="0" onchange="togglePrice(this.value)" style="display: none;">
+                                <input type="radio" name="is_free" value="0" {{ old('is_free') == '0' ? 'checked' : '' }} onchange="togglePrice(this.value)" style="display: none;">
                                 <div class="card-inner">
                                     <span class="icon" style="background: rgba(255,214,0,0.1); color: #ffd600;">💎</span>
                                     <div class="text">
@@ -106,12 +123,13 @@
                             </label>
                         </div>
 
-                        <div id="price_container" style="display: none; transform-origin: top; animation: premiumZoomIn 0.3s forwards;">
+                        <div id="price_container" style="display: {{ old('is_free', '1') == '0' ? 'block' : 'none' }}; transform-origin: top; animation: premiumZoomIn 0.3s forwards;">
                             <label class="premium-label" style="color: #ffd600;">Valor do Ingresso (R$)</label>
                             <div style="position: relative;">
                                 <span style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); color: #ffd600; font-weight: 800; font-size: 1.1rem;">R$</span>
-                                <input type="number" name="price" step="0.01" min="1.00" placeholder="19,90" class="mogram-input-v2" style="padding-left: 3rem; border-color: rgba(255, 214, 0, 0.2); color: #ffd600; font-size: 1.3rem;">
+                                <input type="number" name="price" step="0.01" min="1.00" placeholder="19,90" class="mogram-input-v2 @error('price') error @enderror" value="{{ old('price') }}" style="padding-left: 3rem; border-color: rgba(255, 214, 0, 0.2); color: #ffd600; font-size: 1.3rem;">
                             </div>
+                            @error('price') <p class="field-error" style="color: #ffd600; border-color: rgba(255,214,0,0.2);">{{ $message }}</p> @enderror
                         </div>
                     </div>
                 </div>
@@ -126,7 +144,7 @@
                             <span style="font-size: 0.6rem; background: rgba(51, 144, 236, 0.1); color: var(--primary-blue); padding: 3px 8px; border-radius: 6px; font-weight: 900;">16:9</span>
                         </div>
 
-                        <label for="thumbnail" class="thumbnail-upload-box" id="thumb_box">
+                        <label for="thumbnail" class="thumbnail-upload-box @error('thumbnail') error @enderror" id="thumb_box">
                             <div id="thumb_placeholder">
                                 <div class="upload-icon">
                                     <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
@@ -135,6 +153,7 @@
                             </div>
                         </label>
                         <input type="file" name="thumbnail" id="thumbnail" hidden accept="image/*" onchange="previewThumb(this)">
+                        @error('thumbnail') <p class="field-error">{{ $message }}</p> @enderror
                     </div>
 
                     <!-- Audience Prediction Card -->
@@ -251,6 +270,12 @@
     }
     .mogram-input-v2:focus { border-color: var(--primary-blue); box-shadow: 0 0 15px rgba(51, 144, 236, 0.1); }
     .mogram-input-v2::placeholder { color: #334155; }
+    .mogram-input-v2.error { border-color: #ef4444; background: rgba(239, 68, 68, 0.05); }
+
+    .field-error {
+        color: #ef4444; font-size: 0.65rem; font-weight: 700; margin-top: 6px; text-transform: uppercase;
+        letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; border-left: 2px solid #ef4444; padding-left: 8px;
+    }
 
     .mogram-select-v2 {
         width: 100%;
