@@ -101,11 +101,10 @@ class LiveController extends Controller
             return response()->json(['success' => false, 'message' => 'Não autorizado'], 403);
         }
 
-        if ($live->thumbnail) {
-            Storage::disk('public')->delete($live->thumbnail);
-        }
-
-        $live->delete();
+        // Set status to ended instead of hard delete immediately to show overlay
+        $live->update(['status' => 'ended']);
+        
+        // Optional: delete after some time or just leave it for history
         return response()->json(['success' => true]);
     }
 
@@ -128,15 +127,36 @@ class LiveController extends Controller
         try {
             $live->update(['is_paused' => $request->paused]);
         } catch (\Exception $e) {
-            // Check if column exists, if not, try to create it via SQL
             try {
                 DB::statement("ALTER TABLE lives ADD COLUMN is_paused TINYINT(1) DEFAULT 0");
                 $live->update(['is_paused' => $request->paused]);
             } catch (\Exception $e2) {
-                return response()->json(['success' => false, 'error' => $e2->getMessage()]);
+                return response()->json(['success' => false]);
             }
         }
         
+        return response()->json(['success' => true]);
+    }
+
+    public function toggleMedia(Request $request, Live $live)
+    {
+        if (Auth::id() != $live->user_id) {
+            return response()->json(['success' => false], 403);
+        }
+
+        $field = $request->type === 'audio' ? 'is_muted' : 'is_camera_off';
+        
+        try {
+            $live->update([$field => $request->value]);
+        } catch (\Exception $e) {
+            try {
+                DB::statement("ALTER TABLE lives ADD COLUMN is_muted TINYINT(1) DEFAULT 0");
+                DB::statement("ALTER TABLE lives ADD COLUMN is_camera_off TINYINT(1) DEFAULT 0");
+                $live->update([$field => $request->value]);
+            } catch (\Exception $e2) {
+                return response()->json(['success' => false]);
+            }
+        }
         return response()->json(['success' => true]);
     }
 
@@ -147,7 +167,9 @@ class LiveController extends Controller
             'status' => $live->status,
             'viewer_count' => count($live->chats->unique('user_id')),
             'likes_count' => $live->likes()->count(),
-            'is_paused' => (bool)$live->is_paused
+            'is_paused' => (bool)$live->is_paused,
+            'is_muted' => (bool)$live->is_muted,
+            'is_camera_off' => (bool)$live->is_camera_off
         ]);
     }
 

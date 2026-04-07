@@ -102,12 +102,30 @@
                             <video id="cohost_video" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
                         </div>
                         
-                        <!-- 5. Unmute Prompt Layer (For Viewers) -->
                         <div id="unmute_prompt" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 80; align-items: center; justify-content: center; cursor: pointer;" onclick="unmuteVideo()">
                             <div style="background: var(--primary-blue); color: white; padding: 1rem 2rem; border-radius: 50px; font-weight: 800; display: flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.4);">
                                 <svg width="24" height="24" fill="currentColor" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
                                 CLIQUE PARA ATIVAR O SOM
                             </div>
+                        </div>
+
+                        <!-- 6. Media Status Overlays -->
+                        <div id="muted_overlay" style="display: none; position: absolute; top: 1rem; right: 1rem; background: #ef4444; color: white; font-size: 10px; font-weight: 900; padding: 6px 12px; border-radius: 20px; z-index: 90; align-items: center; gap: 6px;">
+                            <span>🔇</span> MICROFONE MUTADO
+                        </div>
+                        <div id="camera_off_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.8); z-index: 70; align-items: center; justify-content: center;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">📷</div>
+                                <h3 style="color: white; font-weight: 800;">CÂMERA DESLIGADA</h3>
+                            </div>
+                        </div>
+                        <div id="ended_overlay" style="display: none; position: absolute; inset: 0; background: #0b0a15; z-index: 200; align-items: center; justify-content: center; flex-direction: column;">
+                            <div style="width: 80px; height: 80px; background: #ef4444; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);">
+                                <svg width="40" height="40" fill="white" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4-9h-8v2h8v-2z"/></svg>
+                            </div>
+                            <h2 style="color: white; font-weight: 900; letter-spacing: -1px; margin-bottom: 0.5rem;">Transmissão Encerrada</h2>
+                            <p style="color: #888; font-weight: 600; margin-bottom: 2rem;">Obrigado por assistir!</p>
+                            <a href="{{ route('lives') }}" style="background: #3390ec; color: white; text-decoration: none; padding: 12px 30px; border-radius: 12px; font-weight: 800;">Explorar outras lives</a>
                         </div>
                     </div>
 
@@ -445,7 +463,15 @@
         const t = window.localStream.getAudioTracks()[0];
         if (t) {
             t.enabled = !t.enabled;
+            const isMuted = !t.enabled;
             document.getElementById('btn_audio').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
+            document.getElementById('muted_overlay').style.display = isMuted ? 'flex' : 'none';
+            
+            fetch('/lives/' + {{ $live->id }} + '/media', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                body: JSON.stringify({ type: 'audio', value: isMuted })
+            });
         }
     }
 
@@ -454,7 +480,15 @@
         const t = window.localStream.getVideoTracks()[0];
         if (t) {
             t.enabled = !t.enabled;
+            const isOff = !t.enabled;
             document.getElementById('btn_video').style.background = t.enabled ? 'rgba(0,0,0,0.6)' : '#ef4444';
+            document.getElementById('camera_off_overlay').style.display = isOff ? 'flex' : 'none';
+
+            fetch('/lives/' + {{ $live->id }} + '/media', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
+                body: JSON.stringify({ type: 'video', value: isOff })
+            });
         }
     }
 
@@ -472,21 +506,28 @@
             });
 
             fetch('{{ route('live.status', $live->id) }}')
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 404) throw new Error('Ended');
+                return res.json();
+            })
             .then(data => {
                 if (data.success) {
+                    if (data.status === 'ended') throw new Error('Ended');
+
                     document.getElementById('viewer_count_overlay').innerText = data.viewer_count;
                     document.getElementById('likes_count_overlay').innerText = data.likes_count;
                     
-                    // Sync Pause State for Audience
+                    // Sync States for Audience
                     if (!IS_CREATOR) {
-                        const overlay = document.getElementById('paused_overlay');
-                        if (data.is_paused) {
-                            overlay.style.display = 'flex';
-                        } else {
-                            overlay.style.display = 'none';
-                        }
+                        document.getElementById('paused_overlay').style.display = data.is_paused ? 'flex' : 'none';
+                        document.getElementById('muted_overlay').style.display = data.is_muted ? 'flex' : 'none';
+                        document.getElementById('camera_off_overlay').style.display = data.is_camera_off ? 'flex' : 'none';
                     }
+                }
+            })
+            .catch(err => {
+                if (err.message === 'Ended') {
+                    document.getElementById('ended_overlay').style.display = 'flex';
                 }
             });
         }, 3000);
