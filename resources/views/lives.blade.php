@@ -27,7 +27,10 @@
                 <img id="preview_avatar" src="" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid #3390ec;">
                 <div style="flex: 1;">
                    <h2 id="preview_title" style="color: white; font-size: 1.5rem; font-weight: 800; margin: 0 0 5px;"></h2>
-                   <p id="preview_creator" style="color: #3390ec; font-size: 0.85rem; font-weight: 700; margin: 0;"></p>
+                   <div style="display: flex; align-items: center; gap: 10px;">
+                       <p id="preview_creator" style="color: #3390ec; font-size: 0.85rem; font-weight: 700; margin: 0;"></p>
+                       <span id="preview_price" style="background: #ffd600; color: black; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Grátis</span>
+                   </div>
                 </div>
             </div>
             
@@ -98,7 +101,7 @@
             
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
                 @forelse($onlineLives as $live)
-                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}')">
+                <div class="live-card-modern" onclick="openPreview('{{ route('live.watch', $live->id) }}', '{{ addslashes($live->title) }}', '{{ addslashes(Str::limit($live->description, 500)) }}', '{{ Storage::url($live->thumbnail) }}', '{{ $live->user->name }}', '{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$live->user->name }}', '{{ $live->price }}')">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
                         <div class="live-tag">LIVE</div>
@@ -215,13 +218,25 @@
 </style>
 
 <script>
-    function openPreview(url, title, desc, thumb, creator, avatar) {
+    function openPreview(url, title, desc, thumb, creator, avatar, price) {
         document.getElementById('preview_img').src = thumb;
         document.getElementById('preview_avatar').src = avatar;
         document.getElementById('preview_title').innerText = title;
         document.getElementById('preview_creator').innerText = 'Por ' + creator;
         document.getElementById('preview_desc').innerText = desc || 'Nenhuma descrição disponível.';
         document.getElementById('preview_join_btn').href = url;
+        
+        const priceTag = document.getElementById('preview_price');
+        if (price && parseFloat(price) > 0) {
+            priceTag.innerText = 'R$ ' + parseFloat(price).toFixed(2);
+            priceTag.style.background = '#ffd600';
+            priceTag.style.color = 'black';
+        } else {
+            priceTag.innerText = 'Grátis';
+            priceTag.style.background = '#22c55e';
+            priceTag.style.color = 'white';
+        }
+        
         document.getElementById('live_preview_modal').style.display = 'flex';
     }
 

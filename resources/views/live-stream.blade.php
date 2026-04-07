@@ -127,6 +127,30 @@
                             <p style="color: #888; font-weight: 600; margin-bottom: 2rem;">Obrigado por assistir!</p>
                             <a href="{{ route('lives') }}" style="background: #3390ec; color: white; text-decoration: none; padding: 12px 30px; border-radius: 12px; font-weight: 800;">Explorar outras lives</a>
                         </div>
+
+                        <!-- 7. Paid Entry Overlay -->
+                        @if(isset($hasAccess) && !$hasAccess)
+                        <div id="payment_overlay" style="position: absolute; inset: 0; background: #0b0a15; z-index: 300; display: flex; align-items: center; justify-content: center; flex-direction: column; padding: 2rem; text-align: center;">
+                            <div style="width: 100px; height: 100px; background: rgba(255, 214, 0, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; border: 2px solid #ffd600; box-shadow: 0 0 50px rgba(255, 214, 0, 0.2);">
+                                <span style="font-size: 3rem;">💎</span>
+                            </div>
+                            <h2 style="color: white; font-weight: 900; font-size: 1.75rem; margin-bottom: 0.5rem; letter-spacing: -1px;">Transmissão VIP</h2>
+                            <p style="color: #888; font-weight: 600; max-width: 300px; margin-bottom: 2rem;">Esta é uma live exclusiva para apoiadores. Adquira seu ticket para entrar agora.</p>
+                            
+                            <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem 2rem; border-radius: 20px; margin-bottom: 2rem; min-width: 200px;">
+                                <p style="color: #ffd600; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Valor Total</p>
+                                <p style="color: white; font-size: 2rem; font-weight: 900;">R$ {{ number_format($live->price, 2, ',', '.') }}</p>
+                            </div>
+
+                            <form action="{{ route('live.buy', $live->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" style="background: linear-gradient(135deg, #ffd600, #ff9100); border: none; padding: 1rem 3rem; border-radius: 12px; color: black; font-weight: 900; cursor: pointer; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.3); transition: 0.3s;" onmouseover="this.style.scale='1.05'" onmouseout="this.style.scale='1'">
+                                    COMPRAR TICKET AGORA
+                                </button>
+                            </form>
+                            <a href="{{ route('lives') }}" style="margin-top: 1.5rem; color: #64748b; text-decoration: none; font-weight: 700; font-size: 0.9rem;">Voltar para Explorar</a>
+                        </div>
+                        @endif
                     </div>
 
                     <!-- 2. Offline / Start Prompt Layer -->

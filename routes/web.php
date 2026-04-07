@@ -98,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/lives/{live}/like', [LiveController::class, 'toggleLike'])->name('live.like');
     Route::post('/lives/{live}/pause', [LiveController::class, 'togglePause'])->name('live.pause');
     Route::post('/lives/{live}/media', [LiveController::class, 'toggleMedia'])->name('live.media');
+    Route::post('/lives/{live}/buy', [LiveController::class, 'buyAccess'])->name('live.buy');
     Route::delete('/lives/{live}', [LiveController::class, 'destroy'])->name('live.destroy');
     
     // Placeholder for other features

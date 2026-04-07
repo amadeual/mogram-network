@@ -92,7 +92,20 @@ class LiveController extends Controller
             ->take(3)
             ->get();
 
-        return view('live-stream', compact('live', 'messages', 'gifts', 'topSupporters', 'suggestedChannels'));
+        // Check Access for Paid Lives
+        $hasAccess = true;
+        if (!$live->is_free && Auth::id() != $live->user_id) {
+            try {
+                $hasAccess = DB::table('live_access')
+                    ->where('user_id', Auth::id())
+                    ->where('live_id', $live->id)
+                    ->exists();
+            } catch (\Exception $e) {
+                $hasAccess = false; // Table doesn't exist yet, assume no access
+            }
+        }
+
+        return view('live-stream', compact('live', 'messages', 'gifts', 'topSupporters', 'suggestedChannels', 'hasAccess'));
     }
 
     public function destroy(Live $live)
@@ -106,6 +119,50 @@ class LiveController extends Controller
         
         // Optional: delete after some time or just leave it for history
         return response()->json(['success' => true]);
+    }
+
+    public function buyAccess(Live $live)
+    {
+        if ($live->is_free) return back();
+        
+        $user = Auth::user();
+        if ($user->balance < $live->price) {
+            return back()->with('error', 'Saldo insuficiente');
+        }
+
+        try {
+            DB::transaction(function () use ($user, $live) {
+                // Deduct from viewer
+                $user->decrement('balance', $live->price);
+                
+                // Add to creator (20% platform commission)
+                $commission = $live->price * 0.20;
+                $creatorShare = $live->price - $commission;
+                $live->user->increment('balance', $creatorShare);
+
+                // Record access
+                try {
+                    DB::table('live_access')->insert([
+                        'user_id' => $user->id,
+                        'live_id' => $live->id,
+                        'amount' => $live->price,
+                        'created_at' => now()
+                    ]);
+                } catch (\Exception $e) {
+                    // Try to create table if missing
+                    DB::statement("CREATE TABLE IF NOT EXISTS live_access (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, live_id INT, amount DECIMAL(10,2), created_at TIMESTAMP NULL)");
+                    DB::table('live_access')->insert([
+                        'user_id' => $user->id,
+                        'live_id' => $live->id,
+                        'amount' => $live->price,
+                        'created_at' => now()
+                    ]);
+                }
+            });
+            return back()->with('success', 'Acesso liberado!');
+        } catch (\Exception $e) {
+            return back()->with('error', 'Erro ao processar pagamento.');
+        }
     }
 
     public function start(Live $live)
