@@ -5,7 +5,9 @@
 @section('content')
 <div class="dash-layout" style="background: #0b0a15; display: flex; flex-direction: column; overflow: hidden;">
     <!-- Main Stream Layout -->
-    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+    <!-- Amazon IVS SDKs -->
+    <script src="https://web-broadcast.live-video.net/1.8.0/amazon-ivs-web-broadcast.js"></script>
+    <script src="https://player.live-video.net/1.24.0/amazon-ivs-player.min.js"></script>
     <div style="display: flex; flex: 1; height: calc(100vh - 60px);">
         <!-- Sidebar Navigation -->
         <aside style="width: 280px; background: #0b0a15; border-right: 1.5px solid rgba(255,255,255,0.05); padding: 1.5rem; display: flex; flex-direction: column; gap: 2rem;">
@@ -296,10 +298,12 @@
 
 <script>
     const IS_CREATOR = {{ Auth::id() == $live->user_id ? 'true' : 'false' }};
-    const LIVE_ID = 'mogram_live_{{ $live->id }}';
-    let peer = null;
-    let localStream = null;
-    let activeCalls = new Set();
+    const IVS_INGEST_ENDPOINT = '{{ env('AWS_IVS_INGEST_ENDPOINT') }}';
+    const IVS_STREAM_KEY = '{{ env('AWS_IVS_STREAM_KEY') }}';
+    const IVS_PLAYBACK_URL = '{{ env('AWS_IVS_PLAYBACK_URL') }}';
+    
+    let ivsBroadcaster = null;
+    let ivsPlayer = null;
     let selectedGiftId = null;
 
     function updateStatus(text, color = '#3390ec') {
@@ -311,111 +315,146 @@
         }
     }
 
-    function initPeer() {
-        // Unique ID for each session to avoid collision
-        const sessionSuffix = Math.random().toString(36).substr(2, 4);
-        const myPeerId = IS_CREATOR ? LIVE_ID : 'mgv_' + sessionSuffix + Date.now().toString().substr(-3);
+    // --- AMAZON IVS LOGIC ---
+
+    function initIVS() {
+        console.log('Initializing Amazon IVS...');
         
-        peer = new Peer(myPeerId, {
-            debug: 1,
-            config: {
-                'iceServers': [
-                    { urls: 'stun:stun.l.google.com:19302' },
-                    { urls: 'stun:stun1.l.google.com:19302' },
-                    { urls: 'stun:stun2.l.google.com:19302' },
-                    { urls: 'stun:global.stun.twilio.com:3478' }
-                ],
-                'iceCandidatePoolSize': 10
-            }
-        });
-
-        peer.on('open', (id) => {
-            console.log('WebRTC Connection Open:', id);
-            updateStatus(IS_CREATOR ? 'Pronto' : 'Conectado', '#22c55e');
-            if (!IS_CREATOR) startViewerLogic();
-        });
-
-        peer.on('error', (err) => {
-            console.error('PeerJS Error:', err.type);
-            if (err.type === 'id-taken' && IS_CREATOR) {
-                updateStatus('Conectividade...', '#ff9800');
-                setTimeout(() => window.location.reload(), 1000);
-            } else {
-                updateStatus('Erro de Rede', '#ef4444');
-            }
-        });
-
         if (IS_CREATOR) {
-            peer.on('connection', (conn) => {
-                console.log('Viewer joined:', conn.peer);
-                conn.on('open', () => {
-                    if (window.localStream) {
-                        const call = peer.call(conn.peer, window.localStream);
-                        activeCalls.add(call);
-                        updateStatus('Online (' + activeCalls.size + ')', '#22c55e');
-                    }
-                });
-            });
-
-            peer.on('call', (call) => {
-                if (window.localStream) {
-                    call.answer(window.localStream);
-                    activeCalls.add(call);
-                    updateStatus('Online (' + activeCalls.size + ')', '#22c55e');
-                }
-            });
+            initBroadcaster();
+        } else {
+            initPlayer();
         }
     }
 
-    function startViewerLogic() {
-        console.log('Starting viewer handshake...');
-        updateStatus('Buscando sinal...');
+    async function initBroadcaster() {
+        if (!IVS_INGEST_ENDPOINT || !IVS_STREAM_KEY) {
+            updateStatus('Erro: IVS Config faltando', '#ef4444');
+            console.error('Amazon IVS credentials missing in .env');
+            return;
+        }
+
+        const { IVSBroadcastClient } = window.IVSBroadcastClient;
         
-        const conn = peer.connect(LIVE_ID, { reliable: true });
-        
-        conn.on('open', () => {
-            updateStatus('Sinal Encontrado...');
-            conn.send({ type: 'request_stream' });
-        });
-
-        // Backup: Direct call
-        const call = peer.call(LIVE_ID, createDummyStream());
-        handleIncomingStream(call);
-
-        setTimeout(() => {
-            const video = document.getElementById('creator_video');
-            if (!video.srcObject && !IS_CREATOR) {
-                console.log('Stream missing, retrying...');
-                startViewerLogic();
-            }
-        }, 12000);
-    }
-
-    function createDummyStream() {
         try {
-            const canvas = document.createElement('canvas');
-            canvas.width = canvas.height = 2;
-            return canvas.captureStream();
-        } catch(e) { return new MediaStream(); }
+            ivsBroadcaster = IVSBroadcastClient.create({
+                streamConfig: IVSBroadcastClient.BASIC_LANDSCAPE,
+                ingestEndpoint: IVS_INGEST_ENDPOINT,
+            });
+
+            const preview = document.getElementById('creator_video');
+            ivsBroadcaster.attachPreview(preview);
+            
+            updateStatus('IVS Pronto', '#22c55e');
+
+            ivsBroadcaster.on(IVSBroadcastClient.Events.ERROR, (err) => {
+                console.error('Broadcaster Error:', err);
+                updateStatus('Erro na Transmissão', '#ef4444');
+            });
+
+            // Start stream automatically when camera is ready
+            ivsBroadcaster.on(IVSBroadcastClient.Events.CONNECTION_STATE_CHANGE, (state) => {
+                console.log('IVS State:', state);
+                if (state === 'CONNECTED') updateStatus('Ao Vivo (Amazon)', '#22c55e');
+                if (state === 'DISCONNECTED') updateStatus('Offline', '#ff9800');
+            });
+
+        } catch (err) {
+            console.error('Broadcaster Init Failed:', err);
+        }
     }
 
-    function handleIncomingStream(call) {
-        call.on('stream', (stream) => {
-            console.log('Stream received!');
-            updateStatus('Online', '#00ff00');
-            const video = document.getElementById('creator_video');
-            if (video && video.srcObject !== stream) {
-                video.srcObject = stream;
-                video.play().catch(() => {
-                    video.muted = true;
-                    video.play();
-                    document.getElementById('unmute_prompt').style.display = 'flex';
-                });
+    function initPlayer() {
+        if (!IVSPlayer.isPlayerSupported) {
+            updateStatus('Navegador sem suporte', '#ef4444');
+            return;
+        }
+
+        ivsPlayer = IVSPlayer.create();
+        const videoElement = document.getElementById('creator_video');
+        ivsPlayer.attachHTMLVideoElement(videoElement);
+        
+        updateStatus('Conectando...', '#3390ec');
+
+        ivsPlayer.addEventListener(IVSPlayer.PlayerEventType.STATE_CHANGED, (state) => {
+            console.log('Player State:', state);
+            if (state === 'BUFFERING') updateStatus('Carregando...', '#3390ec');
+            if (state === 'PLAYING') {
+                updateStatus('Ao Vivo', '#22c55e');
                 document.getElementById('offline_view').style.display = 'none';
                 document.getElementById('video_wrapper').style.display = 'flex';
             }
+            if (state === 'IDLE') updateStatus('Aguardando Criador...', '#3390ec');
         });
+
+        ivsPlayer.addEventListener(IVSPlayer.PlayerEventType.ERROR, (err) => {
+            console.error('Player error:', err);
+            updateStatus('Erro de conexão', '#ef4444');
+            // Auto-retry after 5s
+            setTimeout(() => {
+                if(IVS_PLAYBACK_URL) ivsPlayer.load(IVS_PLAYBACK_URL);
+            }, 5000);
+        });
+
+        if (IVS_PLAYBACK_URL) {
+            ivsPlayer.load(IVS_PLAYBACK_URL);
+            ivsPlayer.play();
+        } else {
+            updateStatus('Aguardando Transmissão...', '#3390ec');
+        }
     }
+
+    // Replace startCamera logic for IVS
+    async function startBroadcasting() {
+        if (!ivsBroadcaster) return;
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { width: 1280, height: 720 },
+                audio: true
+            });
+
+            window.localStream = stream;
+            
+            // Add devices to IVS
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const videoDevice = devices.find((d) => d.kind === 'videoinput');
+            const audioDevice = devices.find((d) => d.kind === 'audioinput');
+
+            await ivsBroadcaster.addVideoInputDevice(stream, 'camera', { index: 0 });
+            await ivsBroadcaster.addAudioInputDevice(stream, 'mic');
+
+            console.log('Broadcasting to Amazon IVS...');
+            await ivsBroadcaster.startBroadcast(IVS_STREAM_KEY);
+            
+            // Sync with DB
+            fetch('{{ route('live.start', $live->id) }}', {
+                method: 'POST',
+                headers: {'X-CSRF-TOKEN': '{{ csrf_token() }}'}
+            });
+
+            document.getElementById('offline_view').style.display = 'none';
+            document.getElementById('video_wrapper').style.display = 'flex';
+            const tools = document.getElementById('broadcaster_tools');
+            if (tools) tools.style.display = 'flex';
+
+            if (!window.chatPollingStarted) {
+                startChatPolling();
+                window.chatPollingStarted = true;
+            }
+
+        } catch (err) {
+            console.error('Start Broadcast Error:', err);
+            updateStatus('Erro de Câmera', '#ef4444');
+        }
+    }
+
+    // Call initIVS instead of initPeer
+    window.addEventListener('load', () => {
+        initIVS();
+    });
+
+    function initPeer() { /* Disabled for Amazon IVS */ }
                     c.on('close', () => { window.activeCalls = window.activeCalls.filter(cl => cl !== c); });
                 }
             };
@@ -495,8 +534,11 @@
 
         if (!window.chatPollingStarted) {
             startChatPolling();
-            window.chatPollingStarted = true;
         }
+    }
+
+    function startBroadcasterPreview() {
+        startBroadcasting();
     }
 
     function startCamera() {
