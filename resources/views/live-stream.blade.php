@@ -295,169 +295,127 @@
 </div>
 
 <script>
-    let selectedGiftId = null;
     const IS_CREATOR = {{ Auth::id() == $live->user_id ? 'true' : 'false' }};
     const LIVE_ID = 'mogram_live_{{ $live->id }}';
     let peer = null;
-    window.localStream = null;
+    let localStream = null;
+    let activeCalls = new Set();
+    let selectedGiftId = null;
+
+    function updateStatus(text, color = '#3390ec') {
+        const tag = document.getElementById('connection_status_tag');
+        if (tag) {
+            tag.innerText = 'STATUS: ' + text.toUpperCase();
+            tag.style.color = color;
+            tag.style.borderColor = color;
+        }
+    }
 
     function initPeer() {
-        // Viewer ID with timestamp to avoid ghost sessions
-        const viewerId = 'mogr_v_' + Math.random().toString(36).substr(2, 4) + Date.now().toString().substr(-4);
-        const peerId = IS_CREATOR ? LIVE_ID : viewerId;
-        const peerConfig = {
+        // Unique ID for each session to avoid collision
+        const sessionSuffix = Math.random().toString(36).substr(2, 4);
+        const myPeerId = IS_CREATOR ? LIVE_ID : 'mgv_' + sessionSuffix + Date.now().toString().substr(-3);
+        
+        peer = new Peer(myPeerId, {
             debug: 1,
             config: {
                 'iceServers': [
                     { urls: 'stun:stun.l.google.com:19302' },
                     { urls: 'stun:stun1.l.google.com:19302' },
                     { urls: 'stun:stun2.l.google.com:19302' },
-                    { urls: 'stun:stun3.l.google.com:19302' },
-                    { urls: 'stun:stun4.l.google.com:19302' },
                     { urls: 'stun:global.stun.twilio.com:3478' }
                 ],
                 'iceCandidatePoolSize': 10
             }
-        };
-
-        try {
-            peer = new Peer(peerId, peerConfig);
-        } catch (e) {
-            console.error('Peer creation failed:', e);
-            return;
-        }
-
-        let pendingCalls = [];
-
-        peer.on('open', (id) => {
-            console.log('Peer connected with ID:', id);
-            if (!IS_CREATOR) {
-                // Viewer starts calling
-                setTimeout(tryCallCreator, 1000);
-            }
         });
 
-        // Global interval for viewers who are waiting for stream
-        if (!IS_CREATOR) {
-            setInterval(() => {
-                const video = document.getElementById('creator_video');
-                if (!video.srcObject && peer && peer.open) {
-                    console.log('No stream detected, retrying call...');
-                    tryCallCreator();
-                }
-            }, 10000); // Check every 10s if we still don't have a stream
-        }
+        peer.on('open', (id) => {
+            console.log('WebRTC Connection Open:', id);
+            updateStatus(IS_CREATOR ? 'Pronto' : 'Conectado', '#22c55e');
+            if (!IS_CREATOR) startViewerLogic();
+        });
 
-        function updateStatus(text, color = '#3390ec') {
-            const tag = document.getElementById('connection_status_tag');
-            if (tag) {
-                tag.innerText = 'STATUS: ' + text.toUpperCase();
-                tag.style.color = color;
-                tag.style.borderColor = color;
+        peer.on('error', (err) => {
+            console.error('PeerJS Error:', err.type);
+            if (err.type === 'id-taken' && IS_CREATOR) {
+                updateStatus('Conectividade...', '#ff9800');
+                setTimeout(() => window.location.reload(), 1000);
+            } else {
+                updateStatus('Erro de Rede', '#ef4444');
             }
-        }
-
-        function tryCallCreator() {
-            if (!peer || peer.destroyed || peer.disconnected) {
-                if (peer && peer.disconnected) peer.reconnect();
-                setTimeout(tryCallCreator, 2000);
-                return;
-            }
-
-            updateStatus('Conectando ao Criador...');
-            
-            // Try both Data connection AND direct call for max reliability
-            console.log('VIEWER: Initiating hybrid connection...');
-            
-            const conn = peer.connect(LIVE_ID, { reliable: true });
-            
-            conn.on('open', () => {
-                console.log('VIEWER: Signaling channel open');
-                updateStatus('Aguardando Fluxo...');
-                conn.send({ type: 'join', id: peer.id });
-            });
-
-            // Parallel attempt: direct call
-            const call = peer.call(LIVE_ID, createDummyStream());
-            if (call) manageViewerCall(call);
-
-            conn.on('error', () => {
-                console.log('VIEWER: Data connection blocked, relying on direct call');
-            });
-        }
-
-        function createDummyStream() {
-            try {
-                const canvas = document.createElement('canvas');
-                canvas.width = canvas.height = 2;
-                return canvas.captureStream(5);
-            } catch(e) { return new MediaStream(); }
-        }
-
-        function manageViewerCall(call) {
-            call.on('stream', (remoteStream) => {
-                console.log('VIEWER: Stream received!', remoteStream.id);
-                updateStatus('Online', '#22c55e');
-                const video = document.getElementById('creator_video');
-                
-                if (video.srcObject !== remoteStream) {
-                    video.srcObject = remoteStream;
-                    video.load();
-                    video.play().then(() => {
-                        document.getElementById('offline_view').style.display = 'none';
-                        document.getElementById('video_wrapper').style.display = 'flex';
-                        if (video.muted) document.getElementById('unmute_prompt').style.display = 'flex';
-                    }).catch(() => {
-                        video.muted = true;
-                        video.play();
-                        document.getElementById('offline_view').style.display = 'none';
-                        document.getElementById('video_wrapper').style.display = 'flex';
-                        document.getElementById('unmute_prompt').style.display = 'flex';
-                    });
-                }
-            });
-        }
-
-        peer.on('call', (call) => {
-            if (IS_CREATOR) {
-                console.log('CREATOR: Incoming call...');
-                if (window.localStream) {
-                    call.answer(window.localStream);
-                    if (!window.activeCalls) window.activeCalls = [];
-                    window.activeCalls.push(call);
-                } else {
-                    pendingCalls.push(call);
-                }
-                return;
-            }
-            manageViewerCall(call);
         });
 
         if (IS_CREATOR) {
             peer.on('connection', (conn) => {
-                console.log('CREATOR: Viewer joined:', conn.peer);
-                conn.on('data', (data) => {
-                    if (data.type === 'join' && window.localStream) {
-                        console.log('CREATOR: Responding with stream to:', conn.peer);
-                        peer.call(conn.peer, window.localStream);
+                console.log('Viewer joined:', conn.peer);
+                conn.on('open', () => {
+                    if (window.localStream) {
+                        const call = peer.call(conn.peer, window.localStream);
+                        activeCalls.add(call);
+                        updateStatus('Online (' + activeCalls.size + ')', '#22c55e');
                     }
                 });
-                
-                // Immediate push attempt
-                if (window.localStream) {
-                    const call = peer.call(conn.peer, window.localStream);
-                    if (!window.activeCalls) window.activeCalls = [];
-                    window.activeCalls.push(call);
-                }
             });
 
-            window.answerPendingCalls = () => {
-                while (pendingCalls.length > 0) {
-                    const c = pendingCalls.shift();
-                    console.log('CREATOR: Answering pending call...');
-                    c.answer(window.localStream);
-                    if (!window.activeCalls) window.activeCalls = [];
-                    window.activeCalls.push(c);
+            peer.on('call', (call) => {
+                if (window.localStream) {
+                    call.answer(window.localStream);
+                    activeCalls.add(call);
+                    updateStatus('Online (' + activeCalls.size + ')', '#22c55e');
+                }
+            });
+        }
+    }
+
+    function startViewerLogic() {
+        console.log('Starting viewer handshake...');
+        updateStatus('Buscando sinal...');
+        
+        const conn = peer.connect(LIVE_ID, { reliable: true });
+        
+        conn.on('open', () => {
+            updateStatus('Sinal Encontrado...');
+            conn.send({ type: 'request_stream' });
+        });
+
+        // Backup: Direct call
+        const call = peer.call(LIVE_ID, createDummyStream());
+        handleIncomingStream(call);
+
+        setTimeout(() => {
+            const video = document.getElementById('creator_video');
+            if (!video.srcObject && !IS_CREATOR) {
+                console.log('Stream missing, retrying...');
+                startViewerLogic();
+            }
+        }, 12000);
+    }
+
+    function createDummyStream() {
+        try {
+            const canvas = document.createElement('canvas');
+            canvas.width = canvas.height = 2;
+            return canvas.captureStream();
+        } catch(e) { return new MediaStream(); }
+    }
+
+    function handleIncomingStream(call) {
+        call.on('stream', (stream) => {
+            console.log('Stream received!');
+            updateStatus('Online', '#00ff00');
+            const video = document.getElementById('creator_video');
+            if (video && video.srcObject !== stream) {
+                video.srcObject = stream;
+                video.play().catch(() => {
+                    video.muted = true;
+                    video.play();
+                    document.getElementById('unmute_prompt').style.display = 'flex';
+                });
+                document.getElementById('offline_view').style.display = 'none';
+                document.getElementById('video_wrapper').style.display = 'flex';
+            }
+        });
+    }
                     c.on('close', () => { window.activeCalls = window.activeCalls.filter(cl => cl !== c); });
                 }
             };
