@@ -4,56 +4,8 @@
 
 @section('content')
 <div class="app-layout">
-    <!-- Studio Sidebar (Integrated Gabriel Style) -->
-    <aside class="sidebar" style="background: #0f111a; border-right: 1px solid rgba(255,255,255,0.05);">
-        <div style="padding: 2rem 1.5rem; display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
-            <div>
-                <h4 style="font-size: 15px; font-weight: 700; color: white; margin: 0;">{{ Auth::user()->name }}</h4>
-                <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
-            </div>
-        </div>
-        
-        <nav style="display: flex; flex-direction: column; gap: 0.25rem; padding: 0 0.75rem;">
-            <a href="{{ route('dashboard') }}" class="menu-item" style="padding: 0.875rem 1rem; color: #a855f7; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 0.5rem; border-radius: 0;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                Voltar ao Feed
-            </a>
-            <a href="{{ route('studio.dashboard') }}" class="menu-item" style="padding: 0.875rem 1rem;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/></svg>
-                Dashboard
-            </a>
-            <a href="{{ route('studio.content') }}" class="menu-item active" style="padding: 0.875rem 1rem; border-radius: 12px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                Conteúdo
-            </a>
-            <a href="{{ route('studio.analytics') }}" class="menu-item" style="padding: 0.875rem 1rem;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                Analytics
-            </a>
-            <a href="#" class="menu-item" style="display: flex; justify-content: space-between; padding: 0.875rem 1rem;">
-                </span>
-                <span style="background: var(--primary-blue); color: white; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700;">0</span>
-            </a>
-            <a href="{{ route('studio.finance') }}" class="menu-item" style="padding: 0.875rem 1rem;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Financeiro
-            </a>
-            <a href="{{ route('studio.settings') }}" class="menu-item" style="padding: 0.875rem 1rem;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                Configurações
-            </a>
-        </nav>
-
-        <div style="margin-top: auto; padding: 2rem 0.75rem;">
-            <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 1.5rem;">
-                <div style="width: 8px; height: 8px; background: #3390ec; border-radius: 50%; box-shadow: 0 0 10px #3390ec;"></div>
-                <div>
-                    <p style="font-size: 10px; color: var(--text-muted); text-transform: uppercase; font-weight: 800; margin: 0;">Status da conta</p>
-                    <p style="font-size: 11px; color: white; font-weight: 700; margin: 0;">Verificado</p>
-                </div>
-            </div>
-    </aside>
+    <!-- Studio Sidebar -->
+    @include('partials.studio-sidebar')
 
     <main class="main-content" style="background: #0b0a15;">
         <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
