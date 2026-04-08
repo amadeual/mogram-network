@@ -19,11 +19,10 @@ class StudioController extends Controller
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         
         $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
-        $liveRevenue = DB::table('live_gifts')
-            ->where('receiver_id', Auth::id())
-            ->sum(DB::raw('amount - commission'));
+        $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
+        $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
         
-        $totalRevenue = $postRevenue + $liveRevenue;
+        $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue;
         
         return view('studio.dashboard', compact('posts', 'totalRevenue'));
     }
@@ -35,11 +34,10 @@ class StudioController extends Controller
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         
         $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
-        $liveRevenue = DB::table('live_gifts')
-            ->where('receiver_id', Auth::id())
-            ->sum(DB::raw('amount - commission'));
+        $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
+        $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
             
-        $totalRevenue = $postRevenue + $liveRevenue;
+        $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue;
         
         return view('studio.content', compact('posts', 'totalPosts', 'totalRevenue'));
     }
@@ -50,11 +48,10 @@ class StudioController extends Controller
         $totalPosts = count($postIds);
         
         $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
-        $liveRevenue = DB::table('live_gifts')
-            ->where('receiver_id', Auth::id())
-            ->sum(DB::raw('amount - commission'));
+        $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
+        $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
             
-        $totalRevenue = $postRevenue + $liveRevenue;
+        $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue;
         $totalViews = Post::where('user_id', Auth::id())->sum('views');
         
         // Weekly Earnings Evolution (Monday to Sunday)
@@ -100,6 +97,13 @@ class StudioController extends Controller
             ->select('live_gifts.amount', 'live_gifts.commission', 'live_gifts.live_id', 'live_gifts.created_at', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
             ->get();
 
+        $liveTickets = DB::table('live_access')
+            ->join('lives', 'live_access.live_id', '=', 'lives.id')
+            ->join('users', 'live_access.user_id', '=', 'users.id')
+            ->where('lives.user_id', Auth::id())
+            ->select('live_access.amount', 'live_access.commission', 'lives.title as live_title', 'users.name as buyer_name', 'users.username as buyer_username', 'live_access.created_at')
+            ->get();
+
         $withdrawals = Withdrawal::where('user_id', Auth::id())->latest()->get();
 
         $history = collect();
@@ -130,6 +134,19 @@ class StudioController extends Controller
             ]);
         }
 
+        foreach ($liveTickets as $ticket) {
+            $history->push([
+                'type' => 'Ticket de Live',
+                'description' => $ticket->live_title,
+                'user' => $ticket->buyer_name,
+                'username' => $ticket->buyer_username,
+                'amount' => $ticket->amount - (float)($ticket->commission ?? 0),
+                'direction' => 'in',
+                'date' => $ticket->created_at,
+                'status' => 'Aprovado',
+            ]);
+        }
+
         foreach ($withdrawals as $w) {
             $history->push([
                 'type' => 'Saque via ' . strtoupper($w->method),
@@ -146,8 +163,9 @@ class StudioController extends Controller
         $history = $history->sortByDesc('date');
 
         $postRevenue = $postSales->sum('amount');
-        $liveRevenue = $liveGifts->sum(function($g) { return $g->amount - $g->commission; });
-        $totalRevenue = $postRevenue + $liveRevenue;
+        $giftRevenue = $liveGifts->sum(function($g) { return $g->amount - $g->commission; });
+        $ticketRevenue = $liveTickets->sum(function($t) { return $t->amount - (float)($t->commission ?? 0); });
+        $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue;
         
         $totalCompletedWithdrawals = $withdrawals->whereIn('status', ['completed', 'pending'])->sum('amount');
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
@@ -164,7 +182,7 @@ class StudioController extends Controller
     public function withdrawPage()
     {
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
-        $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $totalRevenue = $this->calculateTotalRevenue();
         $totalCompletedWithdrawals = Withdrawal::where('user_id', Auth::id())->whereIn('status', ['completed', 'pending'])->sum('amount');
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
 
@@ -180,7 +198,7 @@ class StudioController extends Controller
         ]);
 
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
-        $totalRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $totalRevenue = $this->calculateTotalRevenue();
         
         $totalCompletedWithdrawals = Withdrawal::where('user_id', Auth::id())
             ->whereIn('status', ['pending', 'completed'])
@@ -349,5 +367,15 @@ class StudioController extends Controller
     {
         $post->increment('shares');
         return response()->json(['success' => true, 'shares' => $post->shares]);
+    }
+
+    private function calculateTotalRevenue()
+    {
+        $postIds = Post::where('user_id', Auth::id())->pluck('id');
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
+        $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
+        
+        return (float)$postRevenue + (float)$giftRevenue + (float)$ticketRevenue;
     }
 }

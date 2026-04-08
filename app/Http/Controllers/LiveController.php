@@ -42,7 +42,7 @@ class LiveController extends Controller
             } catch (\Exception $e) {
                 // Table doesn't exist, create it auto-fallback
                 try {
-                    DB::statement("CREATE TABLE IF NOT EXISTS live_access (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, live_id INT, amount DECIMAL(10,2), created_at TIMESTAMP NULL)");
+                    DB::statement("CREATE TABLE IF NOT EXISTS live_access (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, live_id INT, amount DECIMAL(10,2), commission DECIMAL(10,2) DEFAULT 0, created_at TIMESTAMP NULL)");
                 } catch (\Exception $ex) {}
                 $userAccessIds = [];
             }
@@ -180,15 +180,17 @@ class LiveController extends Controller
                         'user_id' => $user->id,
                         'live_id' => $live->id,
                         'amount' => $live->price,
+                        'commission' => $commission,
                         'created_at' => now()
                     ]);
                 } catch (\Exception $e) {
                     // Try to create table if missing
-                    DB::statement("CREATE TABLE IF NOT EXISTS live_access (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, live_id INT, amount DECIMAL(10,2), created_at TIMESTAMP NULL)");
+                    DB::statement("CREATE TABLE IF NOT EXISTS live_access (id INT AUTO_INCREMENT PRIMARY KEY, user_id INT, live_id INT, amount DECIMAL(10,2), commission DECIMAL(10,2), created_at TIMESTAMP NULL)");
                     DB::table('live_access')->insert([
                         'user_id' => $user->id,
                         'live_id' => $live->id,
                         'amount' => $live->price,
+                        'commission' => $commission,
                         'created_at' => now()
                     ]);
                 }
