@@ -165,7 +165,8 @@ class StudioController extends Controller
         $postRevenue = $postSales->sum('amount');
         $giftRevenue = $liveGifts->sum(function($g) { return $g->amount - $g->commission; });
         $ticketRevenue = $liveTickets->sum(function($t) { return $t->amount - (float)($t->commission ?? 0); });
-        $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue;
+        $liveRevenue = $giftRevenue + $ticketRevenue;
+        $totalRevenue = $postRevenue + $liveRevenue;
         
         $totalCompletedWithdrawals = $withdrawals->whereIn('status', ['completed', 'pending'])->sum('amount');
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
