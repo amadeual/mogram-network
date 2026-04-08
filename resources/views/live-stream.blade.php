@@ -165,36 +165,7 @@
                     </div>
 
 
-                <!-- 8. Gift Modal (Premium Redesign) -->
-                <div id="gift_modal" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); z-index: 400; align-items: center; justify-content: center; padding: 1.5rem;">
-                    <div style="background: #11131f; width: 100%; max-width: 440px; border-radius: 32px; padding: 2rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                            <div>
-                                <h3 style="color: white; font-weight: 900; font-size: 1.25rem; margin: 0; letter-spacing: -0.5px;">Enviar Presente</h3>
-                                <p style="color: #64748b; font-size: 0.75rem; font-weight: 700; margin: 5px 0 0;">Apoie o criador agora!</p>
-                            </div>
-                            <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">&times;</button>
-                        </div>
-                        
-                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 350px; overflow-y: auto; padding-right: 5px;" class="custom-scroll">
-                            @foreach($gifts as $gift)
-                            <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-item-v2" style="cursor: pointer; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px 10px; text-align: center; transition: 0.3s;">
-                                <div style="font-size: 2.25rem; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
-                                <div style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 4px;">{{ $gift->name }}</div>
-                                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 8px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
-                            </div>
-                            @endforeach
-                        </div>
-                        
-                        <div id="selected_gift_summary" style="margin-bottom: 1.5rem; text-align: center; display: none;">
-                            <p style="color: #64748b; font-size: 0.75rem; font-weight: 700;">Seu saldo atual: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
-                        </div>
 
-                        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2);">
-                            ENVIAR PRESENTE
-                        </button>
-                    </div>
-                </div>
 
 
                     <!-- 7. Paid Entry Overlay (Professionalized) -->
@@ -295,9 +266,26 @@
                     @endforeach
                 </div>
 
-                <div style="display: flex; gap: 10px;">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <div style="display: flex; gap: 8px; align-items: center;">
+                        <button type="button" onclick="toggleGiftModal()" style="background: none; border: none; padding: 0; color: #ffd600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                            <span style="font-size: 20px;">🎁</span>
+                        </button>
+                        <div style="position: relative;">
+                            <button type="button" onclick="toggleEmojiPicker()" style="background: none; border: none; padding: 0; color: #8fb1bf; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='#8fb1bf'">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                            </button>
+                            <div id="emoji_picker" style="display: none; position: absolute; bottom: 50px; left: 0; background: #151621; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; width: 280px; padding: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 100;">
+                                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-size: 20px;">
+                                    @foreach(['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','😉','😍','🥰','😘','😋','😛','😜','🤪','🤨','🧐','🤓','😎','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬'] as $emoji)
+                                        <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; padding: 4px; border-radius: 8px; text-align: center; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">{{ $emoji }}</span>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <input type="text" id="chat_input" placeholder="Diga algo..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 15px; color: white; outline: none;">
-                    <button onclick="sendChatMessage()" id="btn_send_chat" style="background: #3390ec; border: none; width: 48px; border-radius: 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <button onclick="sendChatMessage()" id="btn_send_chat" style="background: #3390ec; border: none; width: 48px; border-radius: 16px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; height: 48px;">
                         <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
                     </button>
                 </div>
@@ -307,19 +295,31 @@
 </div>
 
 <!-- Scripts -->
-<div id="gift_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; padding: 2rem;">
-    <div style="background: #1a1c2e; width: 400px; border-radius: 24px; padding: 2rem;">
-        <h3 style="color: white; margin-bottom: 1.5rem;">Enviar Presente</h3>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+
+
+<div id="gift_modal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center; padding: 2rem;">
+    <div style="background: #11131f; width: 100%; max-width: 440px; border-radius: 32px; padding: 2.5rem; border: 1.5px solid rgba(255,255,255,0.08); box-shadow: 0 50px 100px rgba(0,0,0,0.9); position: relative; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+            <div>
+                <h3 style="color: white; font-weight: 900; font-size: 1.25rem; margin: 0; letter-spacing: -0.5px;">Enviar Presente</h3>
+                <p style="color: #64748b; font-size: 0.75rem; font-weight: 700; margin: 5px 0 0;">Seu saldo: <span style="color: #22c55e;">R$ {{ number_format(Auth::user()->balance, 2, ',', '.') }}</span></p>
+            </div>
+            <button onclick="toggleGiftModal()" style="background: rgba(255,255,255,0.05); border: none; color: white; cursor: pointer; width: 32px; height: 32px; border-radius: 50%; font-size: 1.2rem; display: flex; align-items: center; justify-content: center;">&times;</button>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 2rem; max-height: 350px; overflow-y: auto; padding-right: 5px;" class="custom-scroll">
             @foreach($gifts as $gift)
-                <div onclick="selectGift({{ $gift->id }}, {{ $gift->price }}, '{{ $gift->name }}')" style="background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; text-align: center; cursor: pointer; border: 2px solid transparent;" class="gift-card" id="gift_{{ $gift->id }}">
-                    <div style="font-size: 24px;">{{ $gift->icon }}</div>
-                    <div style="font-size: 10px; color: white; margin-top: 5px;">R$ {{ number_format($gift->price, 0) }}</div>
-                </div>
+            <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-item-v2" style="cursor: pointer; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px 10px; text-align: center; transition: 0.3s;">
+                <div style="font-size: 2.25rem; margin-bottom: 10px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));">{{ $gift->icon }}</div>
+                <div style="font-size: 0.75rem; font-weight: 800; color: white; margin-bottom: 4px;">{{ $gift->name }}</div>
+                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600; background: rgba(255,214,0,0.1); padding: 4px 8px; border-radius: 8px; display: inline-block;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
+            </div>
             @endforeach
         </div>
-        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; margin-top: 2rem; background: #3390ec; border: none; padding: 12px; border-radius: 12px; color: white; font-weight: 800; opacity: 0.5;">ENVIAR</button>
-        <button onclick="toggleGiftModal()" style="width: 100%; margin-top: 0.5rem; background: transparent; border: none; color: #888; font-weight: 700; cursor: pointer;">Cancelar</button>
+        
+        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2); text-transform: uppercase;">
+            ENVIAR AGORA
+        </button>
     </div>
 </div>
 
@@ -848,7 +848,16 @@
     }
 
     function insertEmoji(emoji) {
-        document.getElementById('chat_input').value += emoji;
+        const input = document.getElementById('chat_input');
+        input.value += emoji;
+        input.focus();
+    }
+
+    function toggleEmojiPicker() {
+        const picker = document.getElementById('emoji_picker');
+        if (picker) {
+            picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+        }
     }
 
     function sendChatMessage() {
@@ -888,7 +897,9 @@
 
     function toggleGiftModal() {
         const m = document.getElementById('gift_modal');
-        m.style.display = m.style.display === 'none' ? 'flex' : 'none';
+        if (m) {
+            m.style.display = m.style.display === 'none' ? 'flex' : 'none';
+        }
     }
 
     function selectGift(id, element) {
@@ -902,20 +913,65 @@
         
         // Add active class
         element.style.borderColor = '#ffd600';
-        element.style.background = 'rgba(255,214,0,0.05)';
+        element.style.background = 'rgba(255,214,0,0.1)';
         
-        document.getElementById('send_gift_btn').disabled = false;
-        document.getElementById('send_gift_btn').style.opacity = '1';
-        document.getElementById('selected_gift_summary').style.display = 'block';
+        const sendBtn = document.getElementById('send_gift_btn');
+        if (sendBtn) {
+            sendBtn.disabled = false;
+            sendBtn.style.opacity = '1';
+        }
     }
 
     function confirmSendGift() {
+        if (!selectedGiftId) return;
+
+        const sendBtn = document.getElementById('send_gift_btn');
+        const originalText = sendBtn.innerText;
+        sendBtn.disabled = true;
+        sendBtn.innerText = 'ENVIANDO...';
+
         fetch('{{ route('live.gift', $live->id) }}', {
             method: 'POST',
             headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': '{{ csrf_token() }}'},
             body: JSON.stringify({gift_id: selectedGiftId})
-        }).then(() => { toggleGiftModal(); showToast('Enviado!'); });
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                toggleGiftModal();
+                showToast('Presente enviado com sucesso!');
+                // Polling will pick up the message
+            } else {
+                showToast(data.message || 'Erro ao enviar presente', 'error');
+                sendBtn.disabled = false;
+                sendBtn.innerText = originalText;
+            }
+        })
+        .catch(err => {
+            console.error('Error sending gift:', err);
+            showToast('Erro de conexão', 'error');
+            sendBtn.disabled = false;
+            sendBtn.innerText = originalText;
+        });
     }
+
+    // Close pickers on click outside
+    document.addEventListener('click', function(e) {
+        // Emoji Picker
+        const emojiPicker = document.getElementById('emoji_picker');
+        const emojiBtn = e.target.closest('button[onclick="toggleEmojiPicker()"]');
+        if (emojiPicker && emojiPicker.style.display === 'block' && !emojiPicker.contains(e.target) && !emojiBtn) {
+            emojiPicker.style.display = 'none';
+        }
+
+        // Gift Modal
+        const giftModal = document.getElementById('gift_modal');
+        const giftModalContent = giftModal ? giftModal.querySelector('div') : null;
+        const giftTriggers = e.target.closest('button[onclick="toggleGiftModal()"]');
+        if (giftModal && giftModal.style.display === 'flex' && e.target === giftModal && !giftTriggers) {
+            toggleGiftModal();
+        }
+    });
 
     function deleteLive(btn) {
         if (typeof showMogramConfirm === 'function') {
@@ -1070,6 +1126,18 @@
     @keyframes modalPop {
         from { transform: scale(0.8) translateY(20px); opacity: 0; }
         to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+
+    .gift-item-v2 {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .gift-item-v2:hover {
+        background: rgba(255,255,255,0.06) !important;
+        border-color: rgba(255,255,255,0.1) !important;
+        transform: translateY(-3px);
+    }
+    .gift-item-v2:active {
+        transform: scale(0.95);
     }
     
     @media (max-width: 1024px) {
