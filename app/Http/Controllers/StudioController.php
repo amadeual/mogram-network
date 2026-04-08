@@ -79,85 +79,111 @@ class StudioController extends Controller
 
     public function finance()
     {
+        $period = request('period', 'all');
+        $filterType = request('type', 'all');
+        
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         
         // Post Purchases (Conteúdo)
-        $postSales = DB::table('purchases')
+        $postSalesQuery = DB::table('purchases')
             ->join('posts', 'purchases.post_id', '=', 'posts.id')
             ->join('users', 'purchases.user_id', '=', 'users.id')
             ->whereIn('purchases.post_id', $postIds)
-            ->select('purchases.amount', 'purchases.created_at', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username')
-            ->get();
+            ->select('purchases.amount', 'purchases.created_at', 'posts.title as post_title', 'users.name as buyer_name', 'users.username as buyer_username');
 
         // Live Gifts (Lives & Chat)
-        $liveGifts = DB::table('live_gifts')
+        $liveGiftsQuery = DB::table('live_gifts')
             ->join('users', 'live_gifts.user_id', '=', 'users.id')
             ->join('gifts', 'live_gifts.gift_id', '=', 'gifts.id')
             ->where('live_gifts.receiver_id', Auth::id())
-            ->select('live_gifts.amount', 'live_gifts.commission', 'live_gifts.live_id', 'live_gifts.created_at', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username')
-            ->get();
+            ->select('live_gifts.amount', 'live_gifts.commission', 'live_gifts.live_id', 'live_gifts.created_at', 'gifts.name as gift_name', 'users.name as sender_name', 'users.username as sender_username');
 
-        $liveTickets = DB::table('live_access')
+        // Live Tickets
+        $liveTicketsQuery = DB::table('live_access')
             ->join('lives', 'live_access.live_id', '=', 'lives.id')
             ->join('users', 'live_access.user_id', '=', 'users.id')
             ->where('lives.user_id', Auth::id())
-            ->select('live_access.amount', 'live_access.commission', 'lives.title as live_title', 'users.name as buyer_name', 'users.username as buyer_username', 'live_access.created_at')
-            ->get();
+            ->select('live_access.amount', 'live_access.commission', 'lives.title as live_title', 'users.name as buyer_name', 'users.username as buyer_username', 'live_access.created_at');
 
-        $withdrawals = Withdrawal::where('user_id', Auth::id())->latest()->get();
+        $withdrawalsQuery = Withdrawal::where('user_id', Auth::id());
+
+        // Apply Global Totals (always showing global balance/overview unless specifically asked otherwise, 
+        // but for now let's make the Stats reflect the filters too for better UX)
+        
+        if ($period != 'all') {
+            $days = (int)$period;
+            $date = now()->subDays($days);
+            $postSalesQuery->where('purchases.created_at', '>=', $date);
+            $liveGiftsQuery->where('live_gifts.created_at', '>=', $date);
+            $liveTicketsQuery->where('live_access.created_at', '>=', $date);
+            $withdrawalsQuery->where('created_at', '>=', $date);
+        }
+
+        $postSales = $postSalesQuery->get();
+        $liveGifts = $liveGiftsQuery->get();
+        $liveTickets = $liveTicketsQuery->get();
+        $withdrawals = $withdrawalsQuery->latest()->get();
 
         $history = collect();
 
-        foreach ($postSales as $sale) {
-            $history->push([
-                'type' => 'Conteúdo',
-                'description' => $sale->post_title,
-                'user' => $sale->buyer_name,
-                'username' => $sale->buyer_username,
-                'amount' => $sale->amount,
-                'direction' => 'in',
-                'date' => $sale->created_at,
-                'status' => 'Aprovado',
-            ]);
+        if ($filterType == 'all' || $filterType == 'content') {
+            foreach ($postSales as $sale) {
+                $history->push([
+                    'type' => 'Conteúdo',
+                    'description' => $sale->post_title,
+                    'user' => $sale->buyer_name,
+                    'username' => $sale->buyer_username,
+                    'amount' => $sale->amount,
+                    'direction' => 'in',
+                    'date' => $sale->created_at,
+                    'status' => 'Aprovado',
+                ]);
+            }
         }
 
-        foreach ($liveGifts as $gift) {
-            $history->push([
-                'type' => $gift->live_id ? 'Lives' : 'Mimos',
-                'description' => $gift->gift_name,
-                'user' => $gift->sender_name,
-                'username' => $gift->sender_username,
-                'amount' => $gift->amount - $gift->commission,
-                'direction' => 'in',
-                'date' => $gift->created_at,
-                'status' => 'Aprovado',
-            ]);
+        if ($filterType == 'all' || $filterType == 'gifts') {
+            foreach ($liveGifts as $gift) {
+                $history->push([
+                    'type' => $gift->live_id ? 'Lives' : 'Mimos',
+                    'description' => $gift->gift_name,
+                    'user' => $gift->sender_name,
+                    'username' => $gift->sender_username,
+                    'amount' => $gift->amount - $gift->commission,
+                    'direction' => 'in',
+                    'date' => $gift->created_at,
+                    'status' => 'Aprovado',
+                ]);
+            }
         }
 
-        foreach ($liveTickets as $ticket) {
-            $history->push([
-                'type' => 'Ticket de Live',
-                'description' => $ticket->live_title,
-                'user' => $ticket->buyer_name,
-                'username' => $ticket->buyer_username,
-                'amount' => $ticket->amount - (float)($ticket->commission ?? 0),
-                'direction' => 'in',
-                'date' => $ticket->created_at,
-                'status' => 'Aprovado',
-            ]);
+        if ($filterType == 'all' || $filterType == 'tickets') {
+            foreach ($liveTickets as $ticket) {
+                $history->push([
+                    'type' => 'Ticket de Live',
+                    'description' => $ticket->live_title,
+                    'user' => $ticket->buyer_name,
+                    'username' => $ticket->buyer_username,
+                    'amount' => $ticket->amount - (float)($ticket->commission ?? 0),
+                    'direction' => 'in',
+                    'date' => $ticket->created_at,
+                    'status' => 'Aprovado',
+                ]);
+            }
         }
 
-        foreach ($withdrawals as $w) {
-            $history->push([
-                'type' => 'Saque via ' . strtoupper($w->method),
-                'description' => $w->account_info,
-                'user' => 'Para você',
-                'username' => Auth::user()->username,
-                'amount' => $w->amount,
-                'direction' => 'out',
-                'date' => $w->created_at->toDateTimeString(),
-                'status' => ucfirst($w->status),
-            ]);
+        if ($filterType == 'all' || $filterType == 'withdrawals') {
+            foreach ($withdrawals as $w) {
+                $history->push([
+                    'type' => 'Saque via ' . strtoupper($w->method),
+                    'description' => $w->account_info,
+                    'user' => 'Para você',
+                    'username' => Auth::user()->username,
+                    'amount' => $w->amount,
+                    'direction' => 'out',
+                    'date' => $w->created_at->toDateTimeString(),
+                    'status' => ucfirst($w->status),
+                ]);
+            }
         }
 
         $history = $history->sortByDesc('date');

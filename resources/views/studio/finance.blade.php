@@ -89,6 +89,37 @@
                 </div>
             </div>
 
+            <!-- Filter Bar -->
+            <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem 1.75rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
+                <form action="{{ route('studio.finance') }}" method="GET" style="display: flex; align-items: center; gap: 2rem; flex: 1; flex-wrap: wrap;" id="filterForm">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Período</span>
+                        <select name="period" onchange="document.getElementById('filterForm').submit()" 
+                                style="background: #151621; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 36px 8px 15px; color: white; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;">
+                            <option value="all" {{ request('period') == 'all' ? 'selected' : '' }}>Todo o tempo</option>
+                            <option value="1" {{ request('period') == '1' ? 'selected' : '' }}>Hoje</option>
+                            <option value="7" {{ request('period') == '7' ? 'selected' : '' }}>Últimos 7 dias</option>
+                            <option value="30" {{ request('period') == '30' ? 'selected' : '' }}>Últimos 30 dias</option>
+                            <option value="90" {{ request('period') == '90' ? 'selected' : '' }}>Últimos 90 dias</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <span style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Tipo</span>
+                        <select name="type" onchange="document.getElementById('filterForm').submit()" 
+                                style="background: #151621; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 36px 8px 15px; color: white; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;">
+                            <option value="all" {{ request('type') == 'all' ? 'selected' : '' }}>Todas Categorias</option>
+                            <option value="content" {{ request('type') == 'content' ? 'selected' : '' }}>Venda de Conteúdo</option>
+                            <option value="gifts" {{ request('type') == 'gifts' ? 'selected' : '' }}>Presentes / Gifts</option>
+                            <option value="tickets" {{ request('type') == 'tickets' ? 'selected' : '' }}>Live Tickets</option>
+                            <option value="withdrawals" {{ request('type') == 'withdrawals' ? 'selected' : '' }}>Saques Realizados</option>
+                        </select>
+                    </div>
+                </form>
+                <div style="font-size: 12px; font-weight: 800; color: var(--primary-blue); background: rgba(51,144,236,0.1); padding: 6px 14px; border-radius: 10px;">
+                    {{ $history->count() }} Transações
+                </div>
+            </div>
+
             <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 1.5rem;">Histórico de Transações</h3>
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 @forelse($history as $item)
