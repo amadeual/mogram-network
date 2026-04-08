@@ -33,7 +33,7 @@
             font-weight: 950;
             color: white;
             letter-spacing: -1px;
-            text-transform: uppercase;
+            text-transform: none;
             margin-top: 12px;
         }
         .content-card {
@@ -65,7 +65,7 @@
             border-radius: 18px;
             font-weight: 950;
             text-decoration: none;
-            text-transform: uppercase;
+            text-transform: none;
             font-size: 14px;
             letter-spacing: 1px;
         }
@@ -97,7 +97,7 @@
             font-size: 13px;
             font-weight: 800;
             color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
+            text-transform: none;
             text-align: left;
         }
         .stats-table tr:last-child td {
@@ -119,7 +119,7 @@
         <div class="header">
             <!-- Using a high-quality placeholder logo if the real file is unavailable -->
             <img src="https://mogramnetwork.com/logo-mogram.png" alt="Mogram" class="logo-img" onerror="this.src='https://ui-avatars.com/api/?name=M&background=3390ec&color=fff&size=128&bold=true'">
-            <div class="brand-name">MOGRAM Network</div>
+            <div class="brand-name">Mogram Network</div>
         </div>
 
         <div class="content-card">

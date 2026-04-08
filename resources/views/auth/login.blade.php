@@ -12,7 +12,7 @@
             </a>
         </div>
         
-        <div style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(51, 144, 236, 0.1); border-radius: 99px; color: var(--primary-blue); font-size: 10px; font-weight: 800; text-transform: uppercase; margin-bottom: 1.5rem;">
+        <div style="display: inline-block; padding: 0.25rem 0.75rem; background: rgba(51, 144, 236, 0.1); border-radius: 99px; color: var(--primary-blue); font-size: 10px; font-weight: 800; text-transform: none; margin-bottom: 1.5rem;">
             Mogram Premium
         </div>
         
@@ -93,7 +93,7 @@
 
             <div style="margin: 2rem 0; position: relative; text-align: center;">
                 <div style="position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--border-gray); z-index: 0;"></div>
-                <span style="position: relative; background: var(--dark-bg); padding: 0 1rem; color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: uppercase;">Ou continue com</span>
+                <span style="position: relative; background: var(--dark-bg); padding: 0 1rem; color: var(--text-muted); font-size: 10px; font-weight: 800; text-transform: none;">Ou continue com</span>
             </div>
 
             <div class="flex flex-direction-column gap-4" style="flex-direction: column;">

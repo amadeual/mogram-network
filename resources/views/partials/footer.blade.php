@@ -96,7 +96,7 @@
     .footer-heading {
         font-weight: 900;
         font-size: 0.8rem;
-        text-transform: uppercase;
+        text-transform: none;
         letter-spacing: 2px;
         color: white;
         margin-bottom: 1.5rem;

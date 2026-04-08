@@ -40,12 +40,12 @@
                     <div style="font-size: 28px;">💰</div>
                     <div style="display: flex; align-items: center; gap: 8px;">
                         <svg width="24" height="24" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="white" opacity="0.2"/><path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" /></svg>
-                        <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px; opacity: 0.9;">MOGRAM</span>
+                        <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px; opacity: 0.9;">Mogram</span>
                     </div>
                 </div>
 
                 <div>
-                    <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.25rem;">SALDO ATUAL</p>
+                    <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: none; letter-spacing: 1.5px; margin-bottom: 0.25rem;">SALDO ATUAL</p>
                     <h2 style="font-size: 2.1rem; font-weight: 950; color: white; letter-spacing: -1.5px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
                 </div>
 
@@ -72,7 +72,7 @@
                 <p style="color: var(--text-muted); font-size: 14px; font-weight: 700; opacity: 0.8;">Adicionar saldo via PIX / Cartão</p>
                 
                 <!-- Small action indicator -->
-                <div style="background: #22c55e; color: white; font-size: 10px; font-weight: 950; padding: 4px 10px; border-radius: 6px; margin-top: 1rem; text-transform: uppercase; letter-spacing: 0.5px;">
+                <div style="background: #22c55e; color: white; font-size: 10px; font-weight: 950; padding: 4px 10px; border-radius: 6px; margin-top: 1rem; text-transform: none; letter-spacing: 0.5px;">
                     AGORA
                 </div>
             </div>
@@ -101,7 +101,7 @@
                         {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
                     </p>
                     <div style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 6px; margin-top: 6px;">
-                        <span style="font-size: 9px; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'var(--text-muted)' }}; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</span>
+                        <span style="font-size: 9px; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'var(--text-muted)' }}; font-weight: 900; text-transform: none; letter-spacing: 0.5px;">{{ $item['status'] }}</span>
                     </div>
                 </div>
             </div>

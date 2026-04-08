@@ -288,7 +288,7 @@
     <aside class="right-sidebar">
         <div style="margin-bottom: 3rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Lives em alta</h3>
+                <h3 style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; letter-spacing: 1px;">Lives em alta</h3>
                 <a href="#" style="font-size: 11px; color: var(--primary-blue); font-weight: 700; text-decoration: none;">Ver tudo</a>
             </div>
             <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.02); padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-gray);">
@@ -305,7 +305,7 @@
 
         <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h3 style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Sugestões para você</h3>
+                <h3 style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; letter-spacing: 1px;">Sugestões para você</h3>
                 <a href="#" style="font-size: 11px; color: var(--primary-blue); font-weight: 700; text-decoration: none;">Ver tudo</a>
             </div>
             <div style="display: flex; flex-direction: column; gap: 1.5rem;">
@@ -692,7 +692,7 @@
                                     </h4>
                                     <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@${user.username}</p>
                                 </div>
-                                <div style="font-size: 10px; font-weight: 800; text-transform: uppercase; color: ${user.is_following ? 'var(--text-muted)' : 'var(--primary-blue)'}">
+                                <div style="font-size: 10px; font-weight: 800; text-transform: none; color: ${user.is_following ? 'var(--text-muted)' : 'var(--primary-blue)'}">
                                     ${user.is_following ? 'Seguindo' : 'Ver Perfil'}
                                 </div>
                             `;

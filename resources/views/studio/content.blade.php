@@ -22,17 +22,17 @@
         <div class="studio-body" style="padding: 0 3rem 3rem;">
             <div class="metrics-grid studio-grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #3390ec;">
-                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Publicações Totais</p>
+                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Publicações Totais</p>
                     <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ $totalPosts }}</h3>
                     <p style="font-size: 11px; color: var(--text-muted);">Acervo completo do criador</p>
                 </div>
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #22c55e;">
-                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Receita Acumulada</p>
+                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Receita Acumulada</p>
                     <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">R$ {{ number_format($totalRevenue, 2, ',', '.') }}</h3>
                     <p style="font-size: 11px; color: #22c55e; font-weight: 700;">+ R$ 0,00 <span style="font-weight: 400; color: var(--text-muted);">esta semana</span></p>
                 </div>
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #a855f7;">
-                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Engagement Global</p>
+                    <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Engagement Global</p>
                     @php
                         $totalEngagement = $posts->sum(function($p) { return $p->getEngagement(); });
                         $avgEngagement = $totalPosts > 0 ? $totalEngagement / $totalPosts : 0;
@@ -89,11 +89,11 @@
                                 <div style="display: flex; gap: 1.5rem; align-items: center;">
                                     <div style="text-align: center;">
                                         <p style="font-size: 12px; font-weight: 900; color: white; margin: 0;">{{ number_format($post->views, 0, ',', '.') }}</p>
-                                        <p style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Views</p>
+                                        <p style="font-size: 9px; color: var(--text-muted); text-transform: none;">Views</p>
                                     </div>
                                     <div style="text-align: center;">
                                         <p style="font-size: 12px; font-weight: 900; color: var(--primary-blue); margin: 0;">{{ number_format($post->getEngagement(), 0, ',', '.') }}</p>
-                                        <p style="font-size: 9px; color: var(--text-muted); text-transform: uppercase;">Engage</p>
+                                        <p style="font-size: 9px; color: var(--text-muted); text-transform: none;">Engage</p>
                                     </div>
                                 </div>
                             </td>

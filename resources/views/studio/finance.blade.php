@@ -21,13 +21,13 @@
                     <div style="width: 40px; height: 30px; background: rgba(255,255,255,0.15); border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);"></div>
                     <div style="display: flex; align-items: center; gap: 6px;">
                         <svg width="20" height="20" viewBox="0 0 512 512"><rect width="512" height="512" rx="100" fill="white" opacity="0.2"/><path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" /></svg>
-                        <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px;">MOGRAM</span>
+                        <span style="font-weight: 950; color: white; font-size: 0.9rem; letter-spacing: -0.5px;">Mogram</span>
                     </div>
                 </div>
                 
                 <!-- Balance Content -->
                 <div>
-                    <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.25rem;">Saldo Disponível</p>
+                    <p style="font-size: 11px; font-weight: 850; color: rgba(255,255,255,0.7); text-transform: none; letter-spacing: 1px; margin-bottom: 0.25rem;">Saldo Disponível</p>
                     <h2 style="font-size: 2rem; font-weight: 950; color: white; letter-spacing: -1px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
                 </div>
                 
@@ -51,7 +51,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         </div>
                     </div>
-                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Conteúdo</p>
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; margin-bottom: 4px; letter-spacing: 0.5px;">Conteúdo</p>
                     <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($postRevenue, 2, ',', '.') }}</h4>
                 </div>
 
@@ -62,7 +62,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
                         </div>
                     </div>
-                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Lives</p>
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; margin-bottom: 4px; letter-spacing: 0.5px;">Lives</p>
                     <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($liveRevenue, 2, ',', '.') }}</h4>
                 </div>
 
@@ -73,7 +73,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         </div>
                     </div>
-                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Assinaturas</p>
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; margin-bottom: 4px; letter-spacing: 0.5px;">Assinaturas</p>
                     <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ 0,00</h4>
                 </div>
 
@@ -84,7 +84,7 @@
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
                         </div>
                     </div>
-                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.5px;">Mimos</p>
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; margin-bottom: 4px; letter-spacing: 0.5px;">Mimos</p>
                     <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ 0,00</h4>
                 </div>
             </div>
@@ -93,7 +93,7 @@
             <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem 1.75rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;">
                 <form action="{{ route('studio.finance') }}" method="GET" style="display: flex; align-items: center; gap: 2rem; flex: 1; flex-wrap: wrap;" id="filterForm">
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Período</span>
+                        <span style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; letter-spacing: 0.5px;">Período</span>
                         <select name="period" onchange="document.getElementById('filterForm').submit()" 
                                 style="background: #151621; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 36px 8px 15px; color: white; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;">
                             <option value="all" {{ request('period') == 'all' ? 'selected' : '' }}>Todo o tempo</option>
@@ -104,7 +104,7 @@
                         </select>
                     </div>
                     <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Tipo</span>
+                        <span style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; letter-spacing: 0.5px;">Tipo</span>
                         <select name="type" onchange="document.getElementById('filterForm').submit()" 
                                 style="background: #151621; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 36px 8px 15px; color: white; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;">
                             <option value="all" {{ request('type') == 'all' ? 'selected' : '' }}>Todas Categorias</option>
@@ -141,7 +141,7 @@
                         <p style="font-size: 16px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
                             {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
                         </p>
-                        <p style="font-size: 10px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">{{ $item['status'] }}</p>
+                        <p style="font-size: 10px; color: var(--text-muted); font-weight: 800; text-transform: none; letter-spacing: 0.5px;">{{ $item['status'] }}</p>
                     </div>
                 </div>
                 @empty
@@ -170,7 +170,7 @@
             </header>
 
             <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; box-shadow: 0 30px 60px rgba(18, 97, 209, 0.25);">
-                <p style="font-size: 13px; font-weight: 900; color: white; opacity: 0.8; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 2rem;">Saldo Disponível</p>
+                <p style="font-size: 13px; font-weight: 900; color: white; opacity: 0.8; text-transform: none; letter-spacing: 1px; margin-bottom: 2rem;">Saldo Disponível</p>
                 <h2 style="font-size: 4rem; font-weight: 950; color: white; letter-spacing: -3px;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
                 <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.1); width: fit-content; padding: 8px 16px; border-radius: 100px; margin-top: 1.5rem;">
                     <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80;"></div>
@@ -183,7 +183,7 @@
                 <input type="hidden" name="method" id="method_input" value="pix">
 
                 <div style="margin-bottom: 3rem;">
-                    <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: uppercase; letter-spacing: 0.5px;">Valor do Saque</label>
+                    <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: none; letter-spacing: 0.5px;">Valor do saque</label>
                     <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
                         <span style="font-size: 2.5rem; font-weight: 950; color: var(--text-muted); margin-right: 1.5rem;">R$</span>
                         <input type="number" id="withdraw_amount" name="amount" placeholder="0,00" step="0.01" min="50" value="{{ old('amount') }}" required
@@ -192,7 +192,7 @@
                 </div>
 
                 <div style="margin-bottom: 3rem;">
-                    <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: uppercase;">Método de Pagamento</label>
+                    <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: none;">Método de Pagamento</label>
                     <div class="studio-grid-2" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
                         <div id="pix_card" onclick="selectMethod('pix')" style="flex: 1; background: #151621; border: 2.5px solid #3390ec; border-radius: 28px; padding: 2.5rem; cursor: pointer; transition: 0.3s; position: relative;">
                              <div style="position: absolute; right: 2rem; top: 2rem; width: 24px; height: 24px; background: #3390ec; border-radius: 50%; display: flex; align-items: center; justify-content: center;" id="pix_check">

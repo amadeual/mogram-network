@@ -24,23 +24,23 @@
             
             <h1 style="font-size: 2rem; font-weight: 950; color: white; letter-spacing: -1px; margin-bottom: 0.5rem;">{{ $user->name }}</h1>
             <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 1.5rem;">
-                <span style="font-size: 12px; color: var(--primary-blue); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; background: rgba(51, 144, 236, 0.1); padding: 4px 12px; border-radius: 20px;">@<span>{{ $user->username }}</span></span>
-                <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">•</span>
-                <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">{{ $user->category ?: 'Membro Mogram' }}</span>
+                <span style="font-size: 12px; color: var(--primary-blue); font-weight: 800; text-transform: none; letter-spacing: 1px; background: rgba(51, 144, 236, 0.1); padding: 4px 12px; border-radius: 20px;">@<span>{{ $user->username }}</span></span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: none;">•</span>
+                <span style="font-size: 12px; color: var(--text-muted); font-weight: 800; text-transform: none; letter-spacing: 1px;">{{ $user->category ?: 'Membro Mogram' }}</span>
             </div>
             
             <div style="display: flex; justify-content: center; gap: 3rem; margin-bottom: 2rem;">
                 <div style="text-align: center;">
                     <p style="font-size: 18px; font-weight: 950; color: white; margin: 0;" id="followers_count">{{ number_format($followersCount, 0, ',', '.') }}</p>
-                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Seguidores</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: none; letter-spacing: 0.5px;">Seguidores</p>
                 </div>
                 <div style="text-align: center;">
                     <p style="font-size: 18px; font-weight: 950; color: white; margin: 0;">{{ $posts->count() }}</p>
-                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Posts</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: none; letter-spacing: 0.5px;">Posts</p>
                 </div>
                 <div style="text-align: center;">
                     <p style="font-size: 18px; font-weight: 950; color: white; margin: 0;">{{ $lives->count() }}</p>
-                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Lives</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: none; letter-spacing: 0.5px;">Lives</p>
                 </div>
             </div>
 
@@ -74,11 +74,11 @@
 
         <div style="display: flex; justify-content: center; border-bottom: 1px solid var(--border-gray); background: rgba(0,0,0,0.2); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
             <div style="display: flex; gap: 4rem;">
-                <button onclick="switchTab('posts')" class="tab-btn active" id="tab_posts_btn" style="padding: 1.25rem 1rem; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; position: relative; transition: 0.3s;">
+                <button onclick="switchTab('posts')" class="tab-btn active" id="tab_posts_btn" style="padding: 1.25rem 1rem; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: none; letter-spacing: 1px; cursor: pointer; position: relative; transition: 0.3s;">
                     Posts
                     <div class="tab-indicator" style="position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--primary-blue); border-radius: 3px 3px 0 0; opacity: 1;"></div>
                 </button>
-                <button onclick="switchTab('lives')" class="tab-btn" id="tab_lives_btn" style="padding: 1.25rem 1rem; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; position: relative; transition: 0.3s;">
+                <button onclick="switchTab('lives')" class="tab-btn" id="tab_lives_btn" style="padding: 1.25rem 1rem; background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 800; text-transform: none; letter-spacing: 1px; cursor: pointer; position: relative; transition: 0.3s;">
                     Lives
                     <div class="tab-indicator" style="position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: var(--primary-blue); border-radius: 3px 3px 0 0; opacity: 0;"></div>
                 </button>

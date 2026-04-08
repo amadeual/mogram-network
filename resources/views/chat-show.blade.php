@@ -80,7 +80,7 @@
                                     </div>
                                     <div>
                                         <p style="margin: 0; color: #ffd600; font-weight: 950; font-size: 1rem;">{{ $msg->message }}</p>
-                                        <p style="margin: 0; color: rgba(255,214,0,0.7); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Presente de Apoio</p>
+                                        <p style="margin: 0; color: rgba(255,214,0,0.7); font-size: 0.7rem; font-weight: 800; text-transform: none;">Presente de Apoio</p>
                                     </div>
                                 </div>
                             @else
@@ -163,7 +163,7 @@
 
         <!-- Footer / Action -->
         <div style="padding: 1.25rem; background: rgba(255,255,255,0.02);">
-            <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1rem; border-radius: 16px; font-weight: 950; cursor: pointer; transition: 0.3s; font-size: 0.85rem; box-shadow: 0 10px 30px rgba(255,214,0,0.15); opacity: 0.3; text-transform: uppercase; letter-spacing: 0.5px;">
+            <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1rem; border-radius: 16px; font-weight: 950; cursor: pointer; transition: 0.3s; font-size: 0.85rem; box-shadow: 0 10px 30px rgba(255,214,0,0.15); opacity: 0.3; text-transform: none; letter-spacing: 0.5px;">
                 Enviar Agora
             </button>
         </div>

@@ -15,7 +15,7 @@
     </div>
 
     <div style="padding: 1rem; text-align: center; border-top: 1.5px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);">
-        <a href="#" style="color: #555; font-size: 0.75rem; font-weight: 800; text-decoration: none; text-transform: uppercase; letter-spacing: 0.5px;">Ver histórico completo</a>
+        <a href="#" style="color: #555; font-size: 0.75rem; font-weight: 800; text-decoration: none; text-transform: none; letter-spacing: 0.5px;">Ver histórico completo</a>
     </div>
 </div>
 

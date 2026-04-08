@@ -21,7 +21,7 @@
             </div>
 
             <nav style="display: flex; flex-direction: column; gap: 0.5rem;">
-                <p style="font-size: 0.65rem; font-weight: 800; color: #555; text-transform: uppercase;">Menu Principal</p>
+                <p style="font-size: 0.65rem; font-weight: 800; color: #555; text-transform: none;">Menu Principal</p>
                 <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; gap: 12px; color: #888; text-decoration: none; padding: 0.8rem; border-radius: 12px; font-weight: 700; transition: 0.3s;" onmouseover="this.style.background='rgba(51,144,236,0.1)'; this.style.color='white'">
                     <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> <span>Home</span>
                 </a>
@@ -31,7 +31,7 @@
             </nav>
 
             <div style="margin-top: auto; padding-top: 2rem;">
-                <p style="font-size: 0.65rem; font-weight: 800; color: #555; text-transform: uppercase; margin-bottom: 1rem;">Canais Sugeridos</p>
+                <p style="font-size: 0.65rem; font-weight: 800; color: #555; text-transform: none; margin-bottom: 1rem;">Canais Sugeridos</p>
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
                     @forelse($suggestedChannels as $suggested)
                     <div class="live-card-modern" onclick="showMogramLoader(); window.location.href='{{ route('live.watch', $suggested->id) }}'" style="display: flex; align-items: center; gap: 10px; text-decoration: none; cursor: pointer;">
@@ -100,7 +100,7 @@
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
                                     <div style="font-size: 3rem; margin-bottom: 1rem;">⏸️</div>
-                                    <h3 style="color: white; font-weight: 800; text-transform: uppercase;">Transmissão Pausada</h3>
+                                    <h3 style="color: white; font-weight: 800; text-transform: none;">Transmissão Pausada</h3>
                                 </div>
                             </div>
                             
@@ -159,7 +159,7 @@
                             <div id="alert_icon" style="font-size: 2.5rem; filter: drop-shadow(0 0 10px #ffd600);">🌹</div>
                             <div style="text-align: left;">
                                 <p id="alert_user" style="color: white; font-weight: 900; font-size: 0.9rem; margin: 0; line-height: 1;">Nome</p>
-                                <p id="alert_gift" style="color: #ffd600; font-weight: 800; font-size: 0.75rem; margin: 5px 0 0; text-transform: uppercase;">ENVIOU UMA ROSA!</p>
+                                <p id="alert_gift" style="color: #ffd600; font-weight: 800; font-size: 0.75rem; margin: 5px 0 0; text-transform: none;">ENVIOU UMA ROSA!</p>
                             </div>
                         </div>
                     </div>
@@ -179,7 +179,7 @@
                             <p style="color: #64748b; font-weight: 600; font-size: 0.9rem; margin-bottom: 2rem; line-height: 1.5;">Esta transmissão está disponível apenas para apoiadores que adquirirem o acesso VIP.</p>
                             
                             <div style="background: rgba(255,214,0,0.05); border: 1px dashed rgba(255,214,0,0.2); padding: 1.25rem; border-radius: 20px; margin-bottom: 2rem;">
-                                <p style="color: #64748b; font-size: 0.65rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Acesso Individual</p>
+                                <p style="color: #64748b; font-size: 0.65rem; font-weight: 900; text-transform: none; letter-spacing: 2px; margin-bottom: 5px;">Acesso Individual</p>
                                 <p style="color: #ffd600; font-size: 1.75rem; font-weight: 940;">R$ {{ number_format($live->price, 2, ',', '.') }}</p>
                             </div>
 
@@ -317,7 +317,7 @@
             @endforeach
         </div>
         
-        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2); text-transform: uppercase;">
+        <button id="send_gift_btn" disabled onclick="confirmSendGift()" style="width: 100%; background: linear-gradient(135deg, #ffd600, #ff9100); color: black; border: none; padding: 1.2rem; border-radius: 18px; font-weight: 900; cursor: pointer; opacity: 0.3; transition: 0.3s; font-size: 1rem; box-shadow: 0 10px 30px rgba(255,214,0,0.2); text-transform: none;">
             ENVIAR AGORA
         </button>
     </div>

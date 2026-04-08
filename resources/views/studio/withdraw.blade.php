@@ -26,7 +26,7 @@
                         <div style="width: 38px; height: 38px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
                         </div>
-                        <span style="font-size: 13px; font-weight: 900; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 1px;">Saldo Disponível</span>
+                        <span style="font-size: 13px; font-weight: 900; color: rgba(255,255,255,0.9); text-transform: none; letter-spacing: 1px;">Saldo Disponível</span>
                     </div>
                     <div style="color: rgba(255,255,255,0.6);">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>

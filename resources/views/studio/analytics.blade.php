@@ -18,7 +18,7 @@
         <!-- Key Metrics -->
         <div class="studio-grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
             <div class="premium-metric-card" style="--accent-color: #3390ec;">
-                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Visualizações Totais</p>
+                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Visualizações Totais</p>
                 <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ number_format($totalViews, 0, ',', '.') }}</h3>
                 <div style="color: #22c55e; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
@@ -26,7 +26,7 @@
                 </div>
             </div>
             <div class="premium-metric-card" style="--accent-color: #22c55e;">
-                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase;">Ganhos (R$)</p>
+                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Ganhos (R$)</p>
                 <h3 style="font-size: 2.25rem; font-weight: 950; color: #22c55e; margin: 0.75rem 0;">R$ {{ number_format($totalRevenue, 2, ',', '.') }}</h3>
                 <div style="color: #22c55e; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>

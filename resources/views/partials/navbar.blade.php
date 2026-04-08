@@ -7,7 +7,7 @@
                     <rect width="512" height="512" rx="100" fill="url(#navLogoGrad)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
-                <span class="text-xl font-black grad-text" style="letter-spacing: -1px;">MOGRAM</span>
+                <span class="text-xl font-black grad-text" style="letter-spacing: -1px;">Mogram</span>
             </a>
         </div>
         

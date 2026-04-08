@@ -112,7 +112,8 @@ class StudioController extends Controller
         
         if ($period != 'all') {
             $days = (int)$period;
-            $date = now()->subDays($days);
+            $date = ($days == 1) ? now()->startOfDay() : now()->subDays($days)->startOfDay();
+            
             $postSalesQuery->where('purchases.created_at', '>=', $date);
             $liveGiftsQuery->where('live_gifts.created_at', '>=', $date);
             $liveTicketsQuery->where('live_access.created_at', '>=', $date);

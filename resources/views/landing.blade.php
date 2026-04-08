@@ -57,7 +57,7 @@
     <div class="container">
         <div class="section-header-row">
             <div>
-                <span style="color: #ef4444; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; font-size: 0.75rem;">Spotlight</span>
+                <span style="color: #ef4444; font-weight: 900; text-transform: none; letter-spacing: 2px; font-size: 0.75rem;">Spotlight</span>
                 <h2 class="section-title-responsive">Top 3 Lives</h2>
             </div>
             <a href="{{ route('lives') }}" class="text-blue font-bold" style="text-decoration: none;">Ver todas as lives &rarr;</a>
@@ -116,7 +116,7 @@
                 <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.05);">
                     <div>
                         <p style="font-weight: 900; font-size: 1.1rem;">{{ $creator['fans'] }}</p>
-                        <p style="font-size: 0.6rem; color: #555; text-transform: uppercase; font-weight: 800;">Fãs</p>
+                        <p style="font-size: 0.6rem; color: #555; text-transform: none; font-weight: 800;">Fãs</p>
                     </div>
                 </div>
             </div>

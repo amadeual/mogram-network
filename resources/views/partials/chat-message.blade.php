@@ -5,7 +5,7 @@
         <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
             <p style="font-size: 0.85rem; font-weight: 800; color: {{ str_contains($message->message, 'enviou') ? '#ffd600' : '#3390ec' }};">{{ $message->user->name }}</p>
             @if($message->user->id == $live->user_id)
-                <span style="font-size: 8px; font-weight: 900; background: #3390ec; color: white; padding: 2px 4.5px; border-radius: 4px; text-transform: uppercase;">CRIADOR</span>
+                <span style="font-size: 8px; font-weight: 900; background: #3390ec; color: white; padding: 2px 4.5px; border-radius: 4px; text-transform: none;">CRIADOR</span>
             @endif
             <span style="font-size: 0.65rem; color: #444;">{{ $message->created_at->format('H:i') }}</span>
         </div>
@@ -15,7 +15,7 @@
                 <span style="font-size: 2rem; filter: drop-shadow(0 0 5px rgba(255,214,0,0.5));">{{ Str::after(Str::before($message->message, '!'), 'enviou ') }}</span>
                 <div>
                     <p style="margin: 0; color: #ffd600; font-weight: 900; font-size: 0.9rem; letter-spacing: -0.5px;">{{ $message->message }}</p>
-                    <p style="margin: 0; color: rgba(255,214,0,0.6); font-size: 0.65rem; font-weight: 800; text-transform: uppercase;">Presente de Apoio</p>
+                    <p style="margin: 0; color: rgba(255,214,0,0.6); font-size: 0.65rem; font-weight: 800; text-transform: none;">Presente de Apoio</p>
                 </div>
             </div>
         @else

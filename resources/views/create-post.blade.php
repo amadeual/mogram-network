@@ -119,7 +119,7 @@
                         <div id="tab-pago" class="tab-btn" onclick="switchMode('pago')">Pago</div>
                     </div>
                     <div id="price-section" style="opacity: 0.3; pointer-events: none; transition: 0.3s;">
-                        <p style="font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: uppercase;">Preço do Post (BRL)</p>
+                        <p style="font-size: 0.7rem; font-weight: 800; color: var(--text-gray); text-transform: none;">Preço do Post (BRL)</p>
                         <div class="price-input-wrapper">
                             <span class="price-prefix">R$</span>
                             <input type="text" id="price-input" class="price-input" value="0.00">

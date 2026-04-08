@@ -15,7 +15,7 @@
             <!-- Fixed Header -->
             <header class="studio-header" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(11, 10, 21, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between;">
                 <div>
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: none; letter-spacing: 0.5px; margin-bottom: 4px;">
                         <span>Início</span>
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
                         <span style="color: white; opacity: 0.5;">Criar Novo Post</span>
@@ -101,7 +101,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <span style="font-size: 9px; font-weight: 900; color: #a855f7; text-transform: uppercase; letter-spacing: 1px;">Editor Premium</span>
+                            <span style="font-size: 9px; font-weight: 900; color: #a855f7; text-transform: none; letter-spacing: 1px;">Editor Premium</span>
                         </div>
                         <div style="padding: 2rem;">
                             <input type="text" name="title" placeholder="Título do Post" required
@@ -189,7 +189,7 @@
                         <input type="hidden" name="is_paid" id="is_paid_input" value="0">
 
                         <div id="price_section" style="display: none;">
-                            <label style="font-size: 10px; font-weight: 950; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px; display: block;">Preço do Post (BRL)</label>
+                            <label style="font-size: 10px; font-weight: 950; color: var(--text-muted); text-transform: none; margin-bottom: 8px; display: block;">Preço do Post (BRL)</label>
                             <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1.25rem; display: flex; align-items: center;">
                                 <span style="font-weight: 900; color: var(--text-muted); margin-right: 1rem;">R$</span>
                                 <input type="number" name="price" id="price_input" value="5.00" step="0.01" min="5" style="background: transparent; border: none; font-size: 1.5rem; font-weight: 950; color: white; width: 100%; outline: none;" placeholder="5,00">
@@ -208,7 +208,7 @@
                         </div>
 
                         <div style="margin-bottom: 1.5rem;">
-                            <label style="font-size: 11px; font-weight: 950; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; display: block;">Categorias</label>
+                            <label style="font-size: 11px; font-weight: 950; color: var(--text-muted); text-transform: none; margin-bottom: 12px; display: block;">Categorias</label>
                             <input type="hidden" name="category" id="category_input" value="Fotografia, Lifestyle">
                             <div style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <div class="tag-badge">Fotografia <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
@@ -218,7 +218,7 @@
                         </div>
 
                         <div style="margin-bottom: 2rem;">
-                            <label style="font-size: 11px; font-weight: 950; color: var(--text-muted); text-transform: uppercase; margin-bottom: 12px; display: block;">Publicação</label>
+                            <label style="font-size: 11px; font-weight: 950; color: var(--text-muted); text-transform: none; margin-bottom: 12px; display: block;">Publicação</label>
                             <div style="background: rgba(0,0,0,0.1); border-radius: 12px; padding: 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 1rem;">
                                 <button type="button" class="tab-btn-schedule active" id="btn_immediate" onclick="setScheduleMode(false)">Imediata</button>
                                 <button type="button" class="tab-btn-schedule" id="btn_schedule" onclick="setScheduleMode(true)">Agendar</button>
@@ -246,7 +246,7 @@
                     <div style="background: rgba(51, 144, 236, 0.08); border-radius: 20px; padding: 1.5rem; display: flex; gap: 1rem;">
                         <div style="width: 32px; height: 32px; background: #3390ec; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-weight: 950; font-size: 14px; flex-shrink: 0;">i</div>
                         <div>
-                             <h4 style="font-size: 11px; font-weight: 950; color: #3390ec; text-transform: uppercase; margin-bottom: 4px;">Dica do Mogram</h4>
+                             <h4 style="font-size: 11px; font-weight: 950; color: #3390ec; text-transform: none; margin-bottom: 4px;">Dica do Mogram</h4>
                              <p style="font-size: 12px; color: rgba(255,255,255,0.8); font-weight: 600; line-height: 1.4;">Posts com vídeos convertem 40% mais assinantes pagos.</p>
                         </div>
                     </div>

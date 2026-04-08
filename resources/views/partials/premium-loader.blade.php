@@ -17,7 +17,7 @@
     </div>
     
     <div style="text-align: center;">
-        <h2 style="color: white; font-size: 1.25rem; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 0.5rem; background: linear-gradient(90deg, #ff8c2d, #ff4b1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CARREGANDO</h2>
+        <h2 style="color: white; font-size: 1.25rem; font-weight: 900; letter-spacing: 2px; text-transform: none; margin-bottom: 0.5rem; background: linear-gradient(90deg, #ff8c2d, #ff4b1f); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">CARREGANDO</h2>
         <div style="width: 200px; height: 4px; background: rgba(255,255,255,0.05); border-radius: 99px; margin: 0 auto; overflow: hidden;">
             <div id="mogram-loader-bar" style="width: 30%; height: 100%; background: linear-gradient(90deg, #ff8c2d, #ff4b1f); border-radius: 99px; animation: mogramProgress 2s infinite ease-in-out;"></div>
         </div>

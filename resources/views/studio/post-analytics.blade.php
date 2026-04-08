@@ -37,7 +37,7 @@
             </div>
             <div style="flex: 1;">
                 <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.5rem;">
-                    <span style="background: rgba(51, 144, 236, 0.1); color: #3390ec; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 6px; text-transform: uppercase;">EXCLUSIVO</span>
+                    <span style="background: rgba(51, 144, 236, 0.1); color: #3390ec; font-size: 10px; font-weight: 800; padding: 4px 10px; border-radius: 6px; text-transform: none;">EXCLUSIVO</span>
                     <span style="color: var(--text-muted); font-size: 12px;">Publicado em {{ $post->created_at->format('d M Y') }}</span>
                 </div>
                 <h2 style="font-size: 1.75rem; font-weight: 900; color: white; margin-bottom: 0.75rem;">{{ $post->title }}</h2>
@@ -128,7 +128,7 @@
             <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 2rem;">Público Alvo</h3>
                 
-                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">LOCALIZAÇÃO</p>
+                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; letter-spacing: 1px; margin-bottom: 1.25rem;">LOCALIZAÇÃO</p>
                 <div style="display: flex; flex-direction: column; gap: 1.25rem; margin-bottom: 3rem;">
                     <div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 12px;">
@@ -150,7 +150,7 @@
                     </div>
                 </div>
 
-                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 1.25rem;">FAIXA ETÁRIA</p>
+                <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; letter-spacing: 1px; margin-bottom: 1.25rem;">FAIXA ETÁRIA</p>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 16px; text-align: center;">
                         <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">18-24</p>

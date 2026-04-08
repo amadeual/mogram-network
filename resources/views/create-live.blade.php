@@ -13,7 +13,7 @@
         <!-- Header Section -->
         <header style="margin-bottom: 1.5rem; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 1rem;">
             <div>
-                <p style="color: var(--primary-blue); font-weight: 800; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px;">Estúdio de Transmissão</p>
+                <p style="color: var(--primary-blue); font-weight: 800; font-size: 0.65rem; text-transform: none; letter-spacing: 2px; margin-bottom: 5px;">Estúdio de Transmissão</p>
                 <h1 style="font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 900; color: white; letter-spacing: -1.5px; line-height: 1;">Configurar <span style="background: linear-gradient(90deg, #3390ec, #00d2ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Live</span></h1>
                 <p style="color: #64748b; font-size: 0.9rem; margin-top: 6px; font-weight: 500;">Defina os detalhes da sua transmissão e comece a monetizar seu talento.</p>
             </div>
@@ -238,7 +238,7 @@
         font-size: 0.7rem;
         font-weight: 800;
         color: #64748b;
-        text-transform: uppercase;
+        text-transform: none;
         margin-bottom: 8px;
         letter-spacing: 1px;
     }
@@ -260,7 +260,7 @@
     .mogram-input-v2.error { border-color: #ef4444; background: rgba(239, 68, 68, 0.05); }
 
     .field-error {
-        color: #ef4444; font-size: 0.65rem; font-weight: 700; margin-top: 6px; text-transform: uppercase;
+        color: #ef4444; font-size: 0.65rem; font-weight: 700; margin-top: 6px; text-transform: none;
         letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px; border-left: 2px solid #ef4444; padding-left: 8px;
     }
 

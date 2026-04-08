@@ -29,7 +29,7 @@
                    <h2 id="preview_title" style="color: white; font-size: 1.5rem; font-weight: 800; margin: 0 0 5px;"></h2>
                    <div style="display: flex; align-items: center; gap: 10px;">
                        <p id="preview_creator" style="color: #3390ec; font-size: 0.85rem; font-weight: 700; margin: 0;"></p>
-                       <span id="preview_price" style="background: #ffd600; color: black; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; text-transform: uppercase;">Ticket VIP</span>
+                       <span id="preview_price" style="background: #ffd600; color: black; font-size: 9px; font-weight: 900; padding: 2px 8px; border-radius: 6px; text-transform: none;">Ticket VIP</span>
                    </div>
                 </div>
             </div>

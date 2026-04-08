@@ -46,13 +46,13 @@
                     <!-- Name and Stats -->
                     <div style="flex: 1; padding-top: 1rem;">
                         <div style="margin-bottom: 1.5rem;">
-                            <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Nome Público</label>
+                            <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Nome Público</label>
                             <input type="text" name="name" value="{{ $user->name }}" 
                                    style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.875rem 1.25rem; color: white; font-weight: 700; outline: none; transition: 0.3s;"
                                    onfocus="this.style.borderColor='#3390ec'">
                         </div>
                         <div>
-                            <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Nome de Usuário</label>
+                            <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Nome de Usuário</label>
                             <input type="text" value="@{{ $user->username }}" disabled
                                    style="width: 100%; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.03); border-radius: 12px; padding: 0.875rem 1.25rem; color: var(--text-muted); font-weight: 700; cursor: not-allowed;">
                         </div>
@@ -61,12 +61,12 @@
 
                 <div class="settings-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem;">
                     <div>
-                        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Sua Cidade</label>
+                        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Sua Cidade</label>
                         <input type="text" name="city" value="{{ $user->city }}" placeholder="Ex: São Paulo, SP"
                                style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.875rem 1.25rem; color: white; font-weight: 700; outline: none;">
                     </div>
                     <div>
-                        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Área de Conteúdo</label>
+                        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Área de Conteúdo</label>
                         <select name="category" 
                                 style="width: 100%; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.875rem 1.25rem; color: #ffffff; font-weight: 700; outline: none; appearance: none; cursor: pointer;">
                             <option value="" style="background: #1a1c2e;">Selecione uma área</option>
@@ -87,7 +87,7 @@
                 </div>
 
                 <div style="margin-bottom: 3rem;">
-                    <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Bio / Descrição do Perfil</label>
+                    <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Bio / Descrição do Perfil</label>
                     <textarea name="bio" rows="4" placeholder="Conte um pouco sobre você para seus fãs..."
                               style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 1rem 1.25rem; color: white; font-weight: 600; outline: none; resize: none; line-height: 1.5;">{{ $user->bio }}</textarea>
                 </div>

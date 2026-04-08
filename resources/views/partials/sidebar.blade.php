@@ -17,7 +17,7 @@
                 <rect width="512" height="512" rx="100" fill="url(#mobileLogoGrad)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
-            <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.15rem;">MOGRAM</span>
+            <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.15rem;">Mogram</span>
         </div>
 
         {{-- Notification shortcut --}}
@@ -37,7 +37,7 @@
                     <rect width="512" height="512" rx="100" fill="url(#sidebarMobGrad)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
-                <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">MOGRAM</span>
+                <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">Mogram</span>
             </div>
             <button class="sidebar-close-btn" onclick="closeMogramSidebar()" aria-label="Close menu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -51,7 +51,7 @@
                 <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
-            <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">MOGRAM</span>
+            <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
         </div>
 
         <nav style="display: flex; flex-direction: column; gap: 0.35rem;">
