@@ -26,9 +26,8 @@ class StoryController extends Controller
             ->latest()
             ->get();
 
-        if ($stories->isEmpty()) {
-            return redirect()->route('dashboard')->with('error', 'Nenhum story disponível no momento.');
-        }
+        // removed the redirect to allow the menu to actually 'open' even if empty
+        // return view('stories', compact('stories'));
 
         return view('stories', compact('stories'));
     }

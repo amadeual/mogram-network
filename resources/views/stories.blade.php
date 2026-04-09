@@ -197,6 +197,29 @@
     const DEFAULT_DURATION = 5000;
 
     function initStory() {
+        if (stories.length === 0) {
+            const mediaViewport = document.getElementById('media-viewport');
+            mediaViewport.innerHTML = `
+                <div style="text-align: center; color: #64748b; padding: 40px;">
+                    <div style="font-size: 50px; margin-bottom: 20px; opacity: 0.3;">📭</div>
+                    <h3 style="color: white; font-weight: 800; font-size: 20px; margin-bottom: 10px;">Nenhum story por aqui</h3>
+                    <p style="font-size: 14px; margin-bottom: 30px;">Que tal postar um story e mostrar o que está rolando agora?</p>
+                    <button onclick="window.location.href='{{ route('dashboard') }}'" style="background: #3390ec; border: none; padding: 14px 28px; border-radius: 50px; color: white; font-weight: 800; cursor: pointer;">Começar agora</button>
+                </div>
+            `;
+            // Hide overlays gracefully if empty
+            document.getElementById('progress-container').style.display = 'none';
+            // Hide header, footer and other overlays by their known positions or traits
+            const overlays = document.querySelectorAll('.active-story-card > div');
+            overlays.forEach((div, idx) => {
+                // Keep the media-viewport (index 1) which holds the message
+                if (idx !== 1) div.style.display = 'none';
+            });
+            document.querySelectorAll('.nav-arrow').forEach(a => a.style.display = 'none');
+            document.querySelectorAll('.story-preview-side').forEach(s => s.style.display = 'none');
+            return;
+        }
+
         if (currentIndex >= stories.length) {
             window.location.href = "{{ route('dashboard') }}";
             return;
