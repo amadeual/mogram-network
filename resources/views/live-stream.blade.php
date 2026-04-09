@@ -93,9 +93,9 @@
                     <div id="video_wrapper" style="width: 100%; height: 100%; display: none; gap: 4px;">
                         <div id="main_video_slot" style="flex: 1; height: 100%; position: relative; background: #000;">
                             @if(Auth::id() == $live->user_id)
-                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: contain; background: #000;"></canvas>
+                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: contain; background: transparent;"></canvas>
                             @else
-                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: contain; background: #000;"></video>
+                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: contain; background: transparent;"></video>
                             @endif
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
@@ -117,6 +117,7 @@
                             </div>
 
                             @if(Auth::id() == $live->user_id)
+                                <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
                                     <button onclick="toggleAudio()" id="btn_audio" title="Mudar Áudio" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
                                     <button onclick="toggleVideo()" id="btn_video" title="Mudar Vídeo" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
                                     <button onclick="toggleFilters()" id="btn_filters" title="Filtros" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">✨</button>
