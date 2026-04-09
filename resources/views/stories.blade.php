@@ -41,7 +41,7 @@
         </div>
 
         <!-- Active Story Viewer -->
-        <div class="active-story-card" style="width: 100%; max-width: 440px; height: 750px; background: #151621; border-radius: 32px; position: relative; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8); border: 1.5px solid rgba(255,255,255,0.05);">
+        <div class="active-story-card" style="width: 100%; max-width: 480px; height: 80vh; background: #151621; border-radius: 32px; position: relative; overflow: hidden; box-shadow: 0 40px 100px rgba(0,0,0,0.8); border: 1.5px solid rgba(255,255,255,0.05); z-index: 10; transition: transform 0.3s ease;">
             
             <!-- Top Progress Bars -->
             <div id="progress-container" style="display: flex; gap: 6px; padding: 16px 20px; position: absolute; top: 0; left: 0; right: 0; z-index: 200;">
@@ -102,7 +102,7 @@
                     <button style="width: 45px; height: 45px; background: rgba(255,255,255,0.08); border: none; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px);">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                     </button>
-                    <button style="width: 45px; height: 45px; background: #3390ec; border: none; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px rgba(51, 144, 236, 0.3);">
+                    <button onclick="handleReply()" style="width: 45px; height: 45px; background: #3390ec; border: none; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px rgba(51, 144, 236, 0.3);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </button>
                 </div>
@@ -123,7 +123,7 @@
                             <span style="color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 900;">12</span>
                         </div>
                     </div>
-                    <div style="text-align: center; cursor: pointer;">
+                    <div style="text-align: center; cursor: pointer;" onclick="sendMimo()">
                         <div style="width: 38px; height: 38px; background: rgba(239, 68, 68, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(239, 68, 68, 0.3); margin: 0 auto 5px;">
                             <span style="font-size: 18px;">🎁</span>
                         </div>
@@ -180,13 +180,20 @@
         object-fit: cover;
     }
 
-    .nav-arrow:hover {
-        background: rgba(255,255,255,0.1) !important;
-        transform: scale(1.1);
+    @media (min-width: 1440px) {
+        .active-story-card { max-width: 520px !important; height: 85vh !important; }
+        .story-preview-side { width: 220px !important; height: 380px !important; }
+        .nav-arrow.prev { left: calc(50% - 380px) !important; }
+        .nav-arrow.next { right: calc(50% - 380px) !important; }
+        .story-preview-side.left { left: calc(50% - 580px) !important; }
+        .story-preview-side.right { right: calc(50% - 580px) !important; }
     }
 
-    .filter-pill { transition: 0.3s; }
-    .filter-pill:hover { background: rgba(255,255,255,0.1); }
+    @media (max-width: 768px) {
+        header { padding: 0 20px !important; }
+        .nav-arrow, .story-preview-side { display: none !important; }
+        .active-story-card { max-width: 100vw !important; height: 100vh !important; border-radius: 0 !important; }
+    }
 </style>
 
 <script>
@@ -317,11 +324,13 @@
         }
     }
 
-    function prevStory() {
-        if (currentIndex > 0) {
-            currentIndex--;
-            initStory();
-        }
+    function handleReply() {
+        showToast('Mensagem enviada!', 'success');
+        document.querySelector('input[type="text"]').value = '';
+    }
+
+    function sendMimo() {
+        showToast('Mimo enviado com sucesso! 🎁', 'success');
     }
 
     document.addEventListener('DOMContentLoaded', initStory);
