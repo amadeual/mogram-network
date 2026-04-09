@@ -11,14 +11,14 @@
     </button>
 
     {{-- Logo centered --}}
-    <div class="mobile-logo">
+    <a href="{{ route('dashboard') }}" class="mobile-logo" style="text-decoration: none;">
         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
             <defs><linearGradient id="studioMobileLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
             <rect width="512" height="512" rx="100" fill="url(#studioMobileLogoGrad)" />
             <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
         </svg>
         <span>Mogram Studio</span>
-    </div>
+    </a>
 
     <div style="width: 44px;"></div>
 </div>
@@ -27,14 +27,14 @@
 
     {{-- Mobile sidebar header (shown only inside sidebar on mobile) --}}
     <div class="sidebar-mobile-header mobile-only">
-        <div style="display:flex; align-items:center; gap: 10px;">
+        <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap: 10px; text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
                 <defs><linearGradient id="studioSidebarMobGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
                 <rect width="512" height="512" rx="100" fill="url(#studioSidebarMobGrad)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
             <span style="font-weight:900;font-size:1.25rem;color:white;letter-spacing:-0.5px;">Studio</span>
-        </div>
+        </a>
         <button class="sidebar-close-btn" onclick="closeStudioSidebar()" aria-label="Close menu">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>

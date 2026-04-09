@@ -37,11 +37,13 @@
     <div class="auth-right">
         <div class="auth-form-card">
             <div class="text-center" style="margin-bottom: 3rem;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 512 512" style="margin-bottom: 1.5rem;">
-                    <defs><linearGradient id="authLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#authLogoGrad)" />
-                    <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
-                </svg>
+                <a href="{{ route('home') }}" style="display: inline-block;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 512 512" style="margin-bottom: 1.5rem;">
+                        <defs><linearGradient id="authLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                        <rect width="512" height="512" rx="100" fill="url(#authLogoGrad)" />
+                        <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
+                    </svg>
+                </a>
                 <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem;">Bem-vindo ao Mogram</h2>
                 <p class="text-muted text-sm">Acesse sua conta para gerenciar seu conteúdo.</p>
             </div>
