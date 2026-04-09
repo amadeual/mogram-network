@@ -32,8 +32,8 @@
         
         <div class="hero-visual" style="position: relative;">
             <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; transform: perspective(1200px) rotateY(-12deg) rotateX(8deg); filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));">
-                {{-- Top Left: Macbook Creator Setup --}}
-                <div style="background: url('https://images.unsplash.com/photo-1527443154391-507e99c51f46?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 320px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
+                {{-- Top Left: Professional Microphone --}}
+                <div style="background: url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 320px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
                 
                 {{-- Top Right: Professional Camera --}}
                 <div style="background: url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
