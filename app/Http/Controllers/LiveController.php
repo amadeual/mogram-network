@@ -82,6 +82,13 @@ class LiveController extends Controller
 
             $thumbnailPath = $request->file('thumbnail')->store('live_thumbnails', 'public');
 
+            // Ensure scheduled_at column exists
+            try {
+                DB::statement("ALTER TABLE lives ADD COLUMN IF NOT EXISTS scheduled_at TIMESTAMP NULL AFTER status");
+            } catch (\Exception $e) {}
+
+            $isScheduled = $request->schedule_type === 'later' && $request->scheduled_at;
+            
             $live = Live::create([
                 'user_id' => Auth::id(),
                 'title' => $request->title,
@@ -90,7 +97,8 @@ class LiveController extends Controller
                 'thumbnail' => $thumbnailPath,
                 'is_free' => 0,
                 'price' => $request->price,
-                'status' => 'offline',
+                'status' => $isScheduled ? 'scheduled' : 'offline',
+                'scheduled_at' => $isScheduled ? $request->scheduled_at : null,
                 'started_at' => now()
             ]);
         } catch (\Exception $e) {
@@ -102,6 +110,10 @@ class LiveController extends Controller
             Mail::to(Auth::user()->email)->send(new LiveStartedMail($live));
         } catch (\Exception $e) {
             \Log::error('Erro ao enviar email de inicio de live: ' . $e->getMessage());
+        }
+
+        if ($isScheduled) {
+            return redirect()->route('live.index')->with('success', 'Live agendada com sucesso!');
         }
 
         return redirect()->route('live.watch', $live->id);

@@ -93,7 +93,7 @@
                 <div class="live-card-modern creator-mode">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
-                        <div class="time-tag">{{ $live->started_at->format('d M, H:i') }}</div>
+                        <div class="time-tag">{{ $live->scheduled_at ? $live->scheduled_at->format('d M, H:i') : $live->started_at->format('d M, H:i') }}</div>
                     </div>
                     <div class="info">
                         <h4 class="title">{{ $live->title }}</h4>
@@ -153,7 +153,7 @@
                 <div class="live-card-modern scheduled">
                     <div class="thumb-wrapper">
                         <img src="{{ Storage::url($live->thumbnail) }}" class="thumb">
-                        <div class="schedule-tag">{{ $live->started_at->format('d M, H:i') }}</div>
+                        <div class="schedule-tag">{{ $live->scheduled_at ? $live->scheduled_at->format('d M, H:i') : $live->started_at->format('d M, H:i') }}</div>
                     </div>
                     <div class="info">
                         <h4 class="title">{{ $live->title }}</h4>
