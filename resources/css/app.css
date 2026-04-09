@@ -807,79 +807,24 @@ section { padding: 4rem 0; }
     object-fit: cover;
 }
 
-/* Post Card Premium Refinement */
+/* Post Card */
 .post-card {
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    border-radius: 24px;
+    border: 1px solid var(--border-gray);
+    border-radius: 20px;
     overflow: hidden;
-    margin-bottom: 2.5rem;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transition: var(--transition);
-}
-
-.post-card:hover {
-    border-color: rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
+    margin-bottom: 2rem;
 }
 
 .post-header {
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem 1.5rem 1rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
 .post-content {
-    padding: 0.5rem 1.5rem 1.25rem;
-}
-
-.post-title {
-    font-size: 1.1rem;
-    font-weight: 850;
-    color: white;
-    margin-bottom: 0.75rem;
-    letter-spacing: -0.2px;
-}
-
-.post-description {
-    font-size: 0.925rem;
-    color: rgba(255,255,255,0.85);
-    line-height: 1.6;
-}
-
-.post-footer {
-    padding: 1.25rem 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-top: 1px solid rgba(255,255,255,0.03);
-}
-
-.interaction-btn {
-    background: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    font-size: 14px;
-    font-weight: 800;
-    color: var(--text-muted);
-    cursor: pointer;
-    transition: 0.2s;
-    padding: 8px 12px;
-    border-radius: 12px;
-}
-
-.interaction-btn:hover {
-    background: rgba(255,255,255,0.05);
-    color: white;
-}
-
-.interaction-btn svg {
-    width: 22px;
-    height: 22px;
-    stroke-width: 2.5;
+    padding: 0 1.5rem 1rem;
 }
 
 /* Studio Sidebar Extras */
@@ -1235,7 +1180,13 @@ section { padding: 4rem 0; }
     background: rgba(0,0,0,0.4);
 }
 
-/* Removed post-footer from here to keep it with post-card classes above */
+.post-footer {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border-gray);
+}
 
 /* Sidebar User Info */
 .sidebar-user {

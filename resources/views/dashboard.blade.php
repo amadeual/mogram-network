@@ -83,7 +83,7 @@
                 @foreach($activeStories as $userId => $userStories)
                     @php $user = $userStories->first()->user; @endphp
                     <a href="{{ route('stories') }}" class="story-circle" style="text-align: center; cursor: pointer; flex-shrink: 0; text-decoration: none;">
-                        <div class="story-avatar-wrapper" style="width: 62px; height: 62px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); margin-bottom: 5px; border: 1.5px solid #0b0a15;">
+                        <div class="story-avatar-wrapper" style="width: 62px; height: 62px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%); margin-bottom: 5px;">
                             <img src="{{ $user->avatar ? Storage::url($user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $user->name }}" class="story-avatar" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #0b0a15;">
                         </div>
                         <span style="font-size: 11px; color: white; font-weight: 700;">{{ Str::limit($user->name, 8) }}</span>
@@ -95,29 +95,28 @@
             @forelse($posts as $post)
             <div class="post-card" data-post-id="{{ $post->id }}">
                 <div class="post-header">
-                    <a href="{{ route('creator.profile', $post->user->username) }}" style="text-decoration: none; display: flex; align-items: center; gap: 12px; flex: 1;">
+                    <a href="{{ route('creator.profile', $post->user->username) }}" style="text-decoration: none;">
                         @if($post->user->avatar)
-                            <img src="{{ Storage::url($post->user->avatar) }}" class="post-author-img" style="width: 42px; height: 42px; object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
+                            <img src="{{ Storage::url($post->user->avatar) }}" class="post-author-img" style="object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
                         @else
-                            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $post->user->name }}" class="post-author-img" style="width: 42px; height: 42px;">
+                            <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $post->user->name }}" class="post-author-img">
                         @endif
-                        <div style="flex: 1;">
-                            <h4 style="font-size: 0.95rem; font-weight: 850; display: flex; align-items: center; gap: 6px; color: white; margin: 0;">
+                    </a>
+                    <div style="flex: 1;">
+                        <a href="{{ route('creator.profile', $post->user->username) }}" style="text-decoration: none;">
+                            <h4 style="font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 4px; color: white;">
                                 {{ $post->user->name }} 
                                 @if($post->user->is_verified)
-                                <svg width="15" height="15" viewBox="0 0 24 24" fill="#3390ec"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="#3390ec"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
                                 @endif
                             </h4>
-                            <p style="font-size: 0.7rem; color: var(--text-muted); font-weight: 700; margin-top: 2px; text-transform: none;">{{ $post->created_at->diffForHumans() }}</p>
-                        </div>
-                    </a>
-                    <button style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 5px;">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                    </button>
+                        </a>
+                        <p style="font-size: 11px; color: var(--text-muted);">{{ $post->created_at->diffForHumans() }}</p>
+                    </div>
                 </div>
                 <div class="post-content">
-                    <h3 class="post-title">{{ $post->title }}</h3>
-                        <div class="post-description">
+                    <h3 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ $post->title }}</h3>
+                        <div style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.5;">
                             @php
                                 $plainText = strip_tags($post->description);
                                 $isLong = mb_strlen($plainText) > 500;
@@ -204,22 +203,23 @@
                 </div>
                 @endif
 
-                <div class="post-footer">
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button class="interaction-btn" onclick="toggleLike(this, '{{ $post->id }}')" 
-                                style="color: {{ $post->isLikedBy(auth()->user()) ? '#ef4444' : 'inherit' }};">
-                            <svg viewBox="0 0 24 24" fill="{{ $post->isLikedBy(auth()->user()) ? 'currentColor' : 'none' }}" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <div class="post-footer" style="padding: 1.5rem 1.5rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 1rem;">
+                    <div style="display: flex; gap: 1.5rem; margin-bottom: 1.5rem;">
+                        <button onclick="toggleLike(this, '{{ $post->id }}')" 
+                                style="background: transparent; border: none; display: flex; align-items: center; gap: 0.6rem; font-size: 14px; font-weight: 800; color: {{ $post->isLikedBy(auth()->user()) ? '#ef4444' : 'var(--text-muted)' }}; cursor: pointer; transition: 0.2s; padding: 0;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="{{ $post->isLikedBy(auth()->user()) ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
                             <span class="likes-count">{{ $post->likes->count() }}</span>
                         </button>
-                        <button class="interaction-btn" onclick="toggleComments('{{ $post->id }}')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        <button onclick="toggleComments('{{ $post->id }}')" 
+                                style="background: transparent; border: none; display: flex; align-items: center; gap: 0.6rem; font-size: 14px; font-weight: 800; color: var(--text-muted); cursor: pointer; transition: 0.2s; padding: 0;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                             <span class="comments-count">{{ $post->comments->count() }}</span>
                         </button>
-                        <button class="interaction-btn" onclick="openShareModal('{{ route('dashboard') }}?post={{ $post->id }}', '{{ str_replace("'", "\\'", $post->title) }}')">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        <button onclick="openShareModal('{{ route('dashboard') }}?post={{ $post->id }}', '{{ str_replace("'", "\\'", $post->title) }}')" 
+                                style="background: transparent; border: none; display: flex; align-items: center; gap: 0.6rem; font-size: 14px; font-weight: 800; color: var(--text-muted); cursor: pointer; transition: 0.2s; padding: 0;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </button>
                     </div>
-                </div>
 
                     <!-- Comment Section -->
                     <div id="comments_section_{{ $post->id }}" style="display: none; border-top: 1px solid rgba(255,255,255,0.03); padding-top:1.5rem;">
@@ -236,34 +236,34 @@
                         </div>
 
                         <!-- Comment form -->
-                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem; padding: 0 1.5rem 1.5rem;">
+                        <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                             <img src="{{ auth()->user()->avatar ? Storage::url(auth()->user()->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . auth()->user()->name }}" 
-                                 style="width: 38px; height: 38px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1);">
+                                 style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #3390ec;">
                             <div style="flex: 1; position: relative;">
                                 <input type="text" id="comment_input_{{ $post->id }}" 
-                                       placeholder="Adicione um comentário..."
+                                       placeholder="Escreva um comentário..."
                                        maxlength="255"
-                                       style="width: 100%; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 0.85rem 3.5rem 0.85rem 1.25rem; color: white; font-size: 14px; outline: none; transition: 0.2s;"
-                                       onfocus="this.style.borderColor='rgba(51, 144, 236, 0.5)'; this.style.background='rgba(51, 144, 236, 0.05)'"
+                                       style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.75rem 3.5rem 0.75rem 1rem; color: white; font-size: 13px; outline: none; transition: 0.2s;"
+                                       onfocus="this.style.borderColor='#3390ec'"
                                        onkeydown="if(event.key === 'Enter') { event.preventDefault(); submitComment('{{ $post->id }}'); }">
                                 <button onclick="showEmojiPicker('{{ $post->id }}')" 
-                                        style="position: absolute; right: 2.75rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 18px; cursor: pointer; opacity: 0.5; padding: 0; transition: 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.5'">😊</button>
+                                        style="position: absolute; right: 2.5rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; font-size: 18px; cursor: pointer; opacity: 0.6; padding: 0;">😊</button>
                                 <button onclick="submitComment('{{ $post->id }}')" 
-                                        style="position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: var(--primary-blue); padding: 0; opacity: 0.8; transition: 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'">
+                                        style="position: absolute; right: 0.75rem; top: 50%; transform: translateY(-50%); background: transparent; border: none; cursor: pointer; color: var(--primary-blue); padding: 0;">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                                 </button>
-                                
-                                <!-- Emoji Picker Popover -->
-                                <div id="emoji_picker_{{ $post->id }}" style="display: none; position: absolute; bottom: 100%; right: 0; background: #1a1c2e; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; width: 220px; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 10px;">
-                                    @foreach(['❤️', '🔥', '👏', '😍', '🙌', '✨', '😂', '💯', '🚀', '🌟'] as $emoji)
+
+                                <!-- Simple Emoji Picker -->
+                                <div id="emoji_picker_{{ $post->id }}" style="display: none; position: absolute; bottom: 100%; right: 0; background: #1a1c2e; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 10; width: 200px; grid-template-columns: repeat(5, 1fr); gap: 8px;">
+                                    @php $emojis = ['❤️', '🔥', '👏', '😍', '🙌', '✨', '😂', '💯', '🚀', '🌟']; @endphp
+                                    @foreach($emojis as $emoji)
                                         <button onclick="insertEmoji('{{ $post->id }}', '{{ $emoji }}')" 
-                                                style="background: transparent; border: none; font-size: 20px; cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(51, 144, 236, 0.2)'" onmouseout="this.style.background='transparent'">
+                                                style="background: transparent; border: none; font-size: 20px; cursor: pointer; padding: 4px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(51, 144, 236, 0.2)'" onmouseout="this.style.background='transparent'">
                                             {{ $emoji }}
                                         </button>
                                     @endforeach
                                 </div>
                             </div>
-                        </div>
                         </div>
                     </div>
                 </div>
