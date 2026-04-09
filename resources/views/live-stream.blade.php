@@ -266,37 +266,40 @@
                     @endforeach
                 </div>
 
-                <div style="display: flex; gap: 10px; align-items: center;">
-                    <div style="display: flex; gap: 8px; align-items: center;">
-                        <button type="button" onclick="toggleGiftModal()" style="background: none; border: none; padding: 0; color: #ffd600; cursor: pointer; transition: 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
-                            <span style="font-size: 20px;">🎁</span>
+                <div style="display: flex; align-items: center; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 4px 5px 4px 10px; transition: 0.3s; gap: 8px;" id="live_chat_input_container">
+                    {{-- Left Actions: Gift & Emoji --}}
+                    <div style="display: flex; gap: 6px; align-items: center; border-right: 1px solid rgba(255,255,255,0.08); padding-right: 8px; margin-right: 4px;">
+                        <button type="button" onclick="toggleGiftModal()" style="background: none; border: none; padding: 0; color: #ffd600; cursor: pointer; transition: 0.2s; display: flex;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+                            <span style="font-size: 18px;">🎁</span>
                         </button>
-                        <div style="position: relative;">
+                        <div style="position: relative; display: flex;">
                             <button type="button" onclick="toggleEmojiPicker()" style="background: none; border: none; padding: 0; color: #8fb1bf; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'" onmouseout="this.style.color='#8fb1bf'">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
                             </button>
-                            <div id="emoji_picker" style="display: none; position: absolute; bottom: 50px; left: 0; background: #151621; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; width: 280px; padding: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 100;">
-                                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-size: 20px;">
-                                    @foreach(['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','😉','😍','🥰','😘','😋','😛','😜','🤪','🤨','🧐','🤓','😎','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬'] as $emoji)
+                            <div id="emoji_picker" style="display: none; position: absolute; bottom: 50px; left: -10px; background: #151621; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; width: 260px; padding: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 100;">
+                                <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-size: 18px;">
+                                    @foreach(['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😍','🥰','😘','😋','😎','🤩','🥳','😏','😒','😔','🥺','😢','😭','😤','😠','😡','🤬'] as $emoji)
                                         <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; padding: 4px; border-radius: 8px; text-align: center; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">{{ $emoji }}</span>
                                     @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div style="flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 5px 5px 5px 12px; transition: 0.3s; gap: 10px;" id="live_chat_input_container">
-                        <input type="text" id="chat_input" placeholder="Escreva algo..." 
-                               style="flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 14px; font-family: inherit; padding: 8px 0; font-weight: 500;">
-                        
-                        <button onclick="sendChatMessage()" id="btn_send_chat" 
-                                style="background: #3390ec; border: none; width: 34px; height: 34px; border-radius: 10px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);" 
-                                onmouseover="this.style.transform='scale(1.05)'; this.style.background='#2b83d8'" 
-                                onmouseout="this.style.transform='scale(1)'; this.style.background='#3390ec'">
-                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
-                                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
-                            </svg>
-                        </button>
-                    </div>
+
+                    {{-- Main Input --}}
+                    <input type="text" id="chat_input" placeholder="Escreva algo..." 
+                           style="flex: 1; min-width: 0; background: transparent; border: none; color: white; outline: none; font-size: 14px; font-family: inherit; padding: 8px 0; font-weight: 500;">
+                    
+                    {{-- Right Action: Send --}}
+                    <button onclick="sendChatMessage()" id="btn_send_chat" 
+                            style="background: #3390ec; border: none; width: 34px; height: 34px; border-radius: 10px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);" 
+                            onmouseover="this.style.transform='scale(1.05)'; this.style.background='#2b83d8'" 
+                            onmouseout="this.style.transform='scale(1)'; this.style.background='#3390ec'">
+                        <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                            <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
+                        </svg>
+                    </button>
+                </div>
 
                     <script>
                         document.getElementById('chat_input').addEventListener('focus', function() {
