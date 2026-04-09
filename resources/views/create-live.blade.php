@@ -117,7 +117,7 @@
                                     <option value="Fé & Religião" {{ old('category') == 'Fé & Religião' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Fé & Religião 🙏</option>
                                     <option value="Tecnologia" {{ old('category') == 'Tecnologia' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Tecnologia 💻</option>
                                     <option value="Educação" {{ old('category') == 'Educação' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Educação 📚</option>
-                                    <option value="Geral" {{ old('category') == 'Geral' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Geral 🌍</option>
+                                    <option value="Outros" {{ old('category') == 'Outros' ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Outros 🌍</option>
                                 </select>
                                 <div style="position: absolute; right: 1.25rem; top: 50%; transform: translateY(-50%); pointer-events: none; color: #64748b;">
                                     <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"></path></svg>

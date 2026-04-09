@@ -111,7 +111,7 @@
                             <label class="premium-label">Categoria</label>
                             <div style="position: relative;">
                                 <select name="category" required class="mogram-select-v2 @error('category') error @enderror">
-                                    @foreach(['Explorar', 'Música', 'Fé & Religião', 'Tecnologia', 'Educação', 'Geral'] as $cat)
+                                    @foreach(['Explorar', 'Música', 'Fé & Religião', 'Tecnologia', 'Educação', 'Outros'] as $cat)
                                         <option value="{{ $cat }}" {{ old('category', $live->category) == $cat ? 'selected' : '' }} style="background: #1a1c2e; color: white;">{{ $cat }}</option>
                                     @endforeach
                                 </select>

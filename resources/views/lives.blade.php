@@ -75,7 +75,7 @@
             <a href="?category=Fé & Religião" class="filter-pill {{ request('category') == 'Fé & Religião' ? 'active' : '' }}" style="text-decoration: none;">Fé & Religião</a>
             <a href="?category=Tecnologia" class="filter-pill {{ request('category') == 'Tecnologia' ? 'active' : '' }}" style="text-decoration: none;">Tecnologia</a>
             <a href="?category=Educação" class="filter-pill {{ request('category') == 'Educação' ? 'active' : '' }}" style="text-decoration: none;">Educação</a>
-            <a href="?category=Geral" class="filter-pill {{ request('category') == 'Geral' ? 'active' : '' }}" style="text-decoration: none;">Geral</a>
+            <a href="?category=Outros" class="filter-pill {{ request('category') == 'Outros' ? 'active' : '' }}" style="text-decoration: none;">Outros</a>
         </div>
 
         <!-- Section: My Scheduled Lives (Only for Creator) -->
