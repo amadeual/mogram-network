@@ -117,7 +117,7 @@
                             </div>
 
                             @if(Auth::id() == $live->user_id)
-                                <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
+                                <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; flex-direction: column; gap: 10px; z-index: 100;">
                                     <button onclick="toggleAudio()" id="btn_audio" title="Mudar Áudio" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
                                     <button onclick="toggleVideo()" id="btn_video" title="Mudar Vídeo" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
                                     <button onclick="toggleFilters()" id="btn_filters" title="Filtros" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">✨</button>
@@ -822,14 +822,17 @@
     }
 
     function applyBackground(bgName) {
-        const container = document.getElementById('main_video_slot');
-        if (bgName === 'none') {
-            container.style.backgroundImage = 'none';
-        } else {
-            container.style.backgroundImage = `url(/images/backgrounds/${bgName}.png)`;
-            container.style.backgroundSize = 'cover';
-            container.style.backgroundPosition = 'center';
-        }
+        const slots = [document.getElementById('main_video_slot'), document.getElementById('video_player_container')];
+        slots.forEach(container => {
+            if (!container) return;
+            if (bgName === 'none') {
+                container.style.backgroundImage = 'none';
+            } else {
+                container.style.backgroundImage = `url(/images/backgrounds/${bgName}.png)`;
+                container.style.backgroundSize = 'cover';
+                container.style.backgroundPosition = 'center';
+            }
+        });
         showToast('Cenário atualizado!', 'success');
     }
 
@@ -1275,7 +1278,8 @@
     }
 
     @media (max-width: 980px) {
-        .chat-sidebar { display: none !important; }
+        /* Remove the display:none to ensure chat is always accessible */
+        .chat-sidebar { width: 250px !important; }
     }
 
     /* Main Area flexibility */
