@@ -35,11 +35,11 @@
                 {{-- Top Left: Creator Studio --}}
                 <div style="background: url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 320px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
                 
-                {{-- Top Right: Creative/Abstract --}}
-                <div style="background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
+                {{-- Top Right: Macbook Creator Environment --}}
+                <div style="background: url('https://images.unsplash.com/photo-1493612276216-ee3925520721?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
                 
-                {{-- Bottom Left: Fashion/Portrait --}}
-                <div style="background: url('https://images.unsplash.com/photo-1529139513075-3aef4d2f3f9c?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: -3rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
+                {{-- Bottom Left: Creator in Action --}}
+                <div style="background: url('https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: -3rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
                 
                 {{-- Bottom Right: Live Card --}}
                 <div style="grid-column: 2; margin-top: -1.5rem; background: rgba(25, 25, 35, 0.7); backdrop-filter: blur(25px); padding: 1.75rem; border-radius: 32px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
