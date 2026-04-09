@@ -122,8 +122,13 @@
                         <input type="text" id="message_input" name="message" placeholder="Escreva uma mensagem..." autocomplete="off" required
                                style="flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 15px; font-weight: 500; font-family: inherit;">
                         
-                        <button type="submit" style="background: #3390ec; color: white; border: none; padding: 0.85rem 1.75rem; border-radius: 14px; font-weight: 850; font-size: 14px; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(51, 144, 236, 0.2);" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='none'">
-                            Enviar
+                        <button type="submit" 
+                                style="background: #3390ec; border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 4px 10px rgba(51, 144, 236, 0.2);" 
+                                onmouseover="this.style.transform='scale(1.1)'; this.style.background='#2b83d8'" 
+                                onmouseout="this.style.transform='scale(1)'; this.style.background='#3390ec'">
+                            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" style="margin-left: 2px;">
+                                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
+                            </svg>
                         </button>
                     </form>
                 </div>

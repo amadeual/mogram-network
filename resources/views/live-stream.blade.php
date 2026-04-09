@@ -284,9 +284,18 @@
                             </div>
                         </div>
                     </div>
-                    <input type="text" id="chat_input" placeholder="Diga algo..." style="flex: 1; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 12px 15px; color: white; outline: none;">
-                    <button onclick="sendChatMessage()" id="btn_send_chat" style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border: none; width: 44px; height: 44px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.3s; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.3);" onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 6px 15px rgba(51,144,236,0.4)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)'">
-                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" style="margin-left: 2px;"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                    <input type="text" id="chat_input" placeholder="Diga algo..." 
+                           style="flex: 1; background: rgba(255,255,255,0.03); border: 1.2px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 15px; color: white; outline: none; font-size: 14px; transition: 0.3s;"
+                           onfocus="this.style.borderColor='rgba(51,144,236,0.3)'; this.style.background='rgba(255,255,255,0.05)'"
+                           onblur="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.background='rgba(255,255,255,0.03)'">
+                    
+                    <button onclick="sendChatMessage()" id="btn_send_chat" 
+                            style="background: #3390ec; border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 4px 10px rgba(51, 144, 236, 0.2);" 
+                            onmouseover="this.style.transform='scale(1.1)'; this.style.background='#2b83d8'" 
+                            onmouseout="this.style.transform='scale(1)'; this.style.background='#3390ec'">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" style="margin-left: 2px;">
+                            <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
+                        </svg>
                     </button>
                 </div>
             </div>
