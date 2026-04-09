@@ -110,17 +110,17 @@
         <div class="creators-grid">
             @php
                 $demoCreators = [
-                    ['name' => 'Isabella Costa', 'handle' => '@isabella_fit', 'fans' => '12.4K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Isabella'],
-                    ['name' => 'Rafael Souza', 'handle' => '@rafael.tech', 'fans' => '8.2K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael'],
-                    ['name' => 'Julia Medeiros', 'handle' => '@julia_art', 'fans' => '25.7K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Julia'],
-                    ['name' => 'Rodrigo Gois', 'handle' => '@rodrigo.fit', 'fans' => '42.1K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rodrigo'],
+                    ['name' => 'Isabella Costa', 'handle' => '@isabella_fit', 'fans' => '12.4K', 'img' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80'],
+                    ['name' => 'Rafael Souza', 'handle' => '@rafael.tech', 'fans' => '8.2K', 'img' => 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80'],
+                    ['name' => 'Julia Medeiros', 'handle' => '@julia_art', 'fans' => '25.7K', 'img' => 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=200&q=80'],
+                    ['name' => 'Rodrigo Gois', 'handle' => '@rodrigo.fit', 'fans' => '42.1K', 'img' => 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?auto=format&fit=crop&w=200&q=80'],
                 ];
             @endphp
 
             @foreach($demoCreators as $creator)
             <div class="creator-card-social" style="background: rgba(255,255,255,0.03); padding: 2rem; border-radius: 30px; border: 1px solid rgba(255,255,255,0.05); text-align: center; transition: 0.3s; cursor: pointer;">
                 <div style="position: relative; width: 100px; height: 100px; margin: 0 auto 1.5rem;">
-                    <img src="{{ $creator['img'] }}" style="width: 100%; height: 100%; border-radius: 50%; border: 3px solid #ff4b1f; padding: 4px;">
+                    <img src="{{ $creator['img'] }}" style="width: 100%; height: 100%; border-radius: 50%; border: 3px solid #ff4b1f; padding: 4px; object-fit: cover;">
                     <div style="position: absolute; bottom: 0; right: 0; background: #22c55e; border: 3px solid #0b0a15; width: 24px; height: 24px; border-radius: 50%;"></div>
                 </div>
                 <h4 style="font-weight: 800; font-size: 1.1rem; margin-bottom: 0.25rem;">{{ $creator['name'] }}</h4>
