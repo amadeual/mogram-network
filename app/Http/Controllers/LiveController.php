@@ -28,8 +28,15 @@ class LiveController extends Controller
             $scheduledQuery->where('category', $request->category);
         }
 
-        $onlineLives = $onlineQuery->with(['user', 'chats'])->latest()->get();
-        $scheduledLives = $scheduledQuery->with('user')->latest()->get();
+        $onlineLives = $onlineQuery->with(['user', 'chats'])
+            ->select('lives.*')
+            ->selectSub('SELECT COUNT(*) FROM live_access WHERE live_access.live_id = lives.id', 'subscribers_count')
+            ->latest()->get();
+            
+        $scheduledLives = $scheduledQuery->with('user')
+            ->select('lives.*')
+            ->selectSub('SELECT COUNT(*) FROM live_access WHERE live_access.live_id = lives.id', 'subscribers_count')
+            ->latest()->get();
         
         // Load access for current user
         $userAccessIds = [];
@@ -117,6 +124,51 @@ class LiveController extends Controller
         }
 
         return redirect()->route('live.watch', $live->id);
+    }
+
+    public function edit(Live $live)
+    {
+        if (Auth::id() != $live->user_id) {
+            abort(403);
+        }
+
+        return view('live-edit', compact('live'));
+    }
+
+    public function update(Request $request, Live $live)
+    {
+        if (Auth::id() != $live->user_id) {
+            abort(403);
+        }
+
+        $request->validate([
+            'title' => 'required|string|max:100',
+            'description' => 'required|string|max:1000',
+            'category' => 'required',
+            'price' => 'required|numeric|min:5',
+        ]);
+
+        $data = [
+            'title' => $request->title,
+            'description' => $request->description,
+            'category' => $request->category,
+            'price' => $request->price,
+        ];
+
+        if ($request->hasFile('thumbnail')) {
+            $data['thumbnail'] = $request->file('thumbnail')->store('live_thumbnails', 'public');
+        }
+
+        if ($request->schedule_type === 'later' && $request->scheduled_at) {
+            $data['scheduled_at'] = $request->scheduled_at;
+            $data['status'] = 'scheduled';
+        } elseif ($request->schedule_type === 'now') {
+            $data['status'] = 'offline';
+        }
+
+        $live->update($data);
+
+        return redirect()->route('lives')->with('success', 'Live atualizada com sucesso!');
     }
 
     public function watch(Live $live)

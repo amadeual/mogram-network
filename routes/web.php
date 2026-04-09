@@ -89,6 +89,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/lives', [LiveController::class, 'index'])->name('lives');
     Route::get('/lives/create', [LiveController::class, 'create'])->name('live.create');
     Route::post('/lives/store', [LiveController::class, 'store'])->name('live.store');
+    Route::get('/lives/{live}/edit', [LiveController::class, 'edit'])->name('live.edit');
+    Route::put('/lives/{live}/update', [LiveController::class, 'update'])->name('live.update');
     Route::get('/lives/{live}', [LiveController::class, 'watch'])->name('live.watch');
     Route::post('/lives/{live}/start', [LiveController::class, 'start'])->name('live.start');
     Route::get('/lives/{live}/status', [LiveController::class, 'status'])->name('live.status');
