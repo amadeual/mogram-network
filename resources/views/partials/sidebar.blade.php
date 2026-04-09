@@ -106,6 +106,27 @@
                 Configurações
             </a>
         </nav>
+        
+        <div style="padding: 1.5rem 0.75rem 0.5rem; display: flex; flex-direction: column; gap: 0.85rem;">
+            {{-- Monetization CTA 1: Freedom --}}
+            <div style="background: linear-gradient(135deg, rgba(51, 144, 236, 0.15) 0%, rgba(51, 144, 236, 0.05) 100%); border: 1px solid rgba(51, 144, 236, 0.2); padding: 1.25rem; border-radius: 20px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -10px; right: -10px; opacity: 0.1;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                </div>
+                <h5 style="margin: 0 0 0.5rem; font-size: 0.85rem; font-weight: 800; color: #3390ec;">Liberdade Real</h5>
+                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; font-weight: 500;">Monetize sua comunidade sem interferência de algoritmos. Seu conteúdo chega a todos.</p>
+            </div>
+
+            {{-- Monetization CTA 2: Payments --}}
+            <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15) 0%, rgba(34, 197, 94, 0.05) 100%); border: 1px solid rgba(34, 197, 94, 0.2); padding: 1.25rem; border-radius: 20px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -10px; right: -10px; opacity: 0.1;">
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </div>
+                <h5 style="margin: 0 0 0.5rem; font-size: 0.85rem; font-weight: 800; color: #22c55e;">Pagamentos Flash</h5>
+                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; font-weight: 500;">Receba seus ganhos de forma simples e ultra rápida. Sem burocracia, direto na conta.</p>
+            </div>
+        </div>
+
 
         <div class="sidebar-user">
             @if(Auth::user()->avatar)
