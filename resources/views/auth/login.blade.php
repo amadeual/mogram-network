@@ -26,9 +26,9 @@
         
         <div class="flex items-center gap-4">
             <div class="flex" style="margin-left: 0.5rem;">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #1a1a1a;">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #1a1a1a; margin-left: -12px;">
-                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=James" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #1a1a1a; margin-left: -12px;">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #1a1a1a; object-fit: cover;">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #1a1a1a; margin-left: -12px; object-fit: cover;">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" style="width: 36px; height: 36px; border-radius: 50%; border: 2px solid #1a1a1a; margin-left: -12px; object-fit: cover;">
             </div>
             <span class="text-sm font-semibold text-light">Mais de 10.000 criadores ativos</span>
         </div>
