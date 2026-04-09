@@ -27,6 +27,7 @@ class User extends Authenticatable
         'category',
         'bio',
         'is_verified',
+        'role',
     ];
 
     /**
