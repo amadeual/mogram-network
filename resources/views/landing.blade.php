@@ -97,6 +97,45 @@
             @endforelse
         </div>
     </div>
+<!-- Value Prop: Control over Algorithm -->
+<section style="padding: 6rem 0; background: #0b0a15; border-top: 1px solid rgba(255,255,255,0.03);">
+    <div class="container">
+        <div style="background: linear-gradient(135deg, rgba(255, 75, 31, 0.1) 0%, rgba(255, 140, 45, 0.05) 100%); border: 1px solid rgba(255, 75, 31, 0.2); border-radius: 40px; padding: 4rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+            <div class="mobile-stack-landing">
+                <span style="color: #ff4b1f; font-weight: 900; letter-spacing: 1px; font-size: 0.85rem; text-transform: uppercase;">Liberdade Total</span>
+                <h2 style="font-size: 3rem; font-weight: 950; margin: 1.5rem 0; line-height: 1.1; letter-spacing: -2px;">O Algoritmo é Você.</h2>
+                <p style="font-size: 1.15rem; color: #aaa; line-height: 1.6; margin-bottom: 2.5rem;">Cansado de ser punido por robôs? No Mogram, não avaliamos seu conteúdo com algoritmos obscuros. Você fica no controle total da sua entrega e da sua monetização.</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div style="width: 24px; height: 24px; background: rgba(34, 197, 94, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p style="font-weight: 700; font-size: 1rem;">100% de Entrega para seus fãs reais.</p>
+                    </div>
+                    <div style="display: flex; align-items: flex-start; gap: 15px;">
+                        <div style="width: 24px; height: 24px; background: rgba(34, 197, 94, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 4px;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <p style="font-weight: 700; font-size: 1rem;">Zero Shadowban ou punições por engajamento.</p>
+                    </div>
+                </div>
+            </div>
+            <div style="position: relative;">
+                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 30px; padding: 2.5rem; transform: rotate(2deg); backdrop-filter: blur(10px);">
+                    <div style="width: 100%; height: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 1rem;"></div>
+                    <div style="width: 80%; height: 12px; background: rgba(255,255,255,0.05); border-radius: 6px; margin-bottom: 2rem;"></div>
+                    <div style="background: #ff4b1f; color: white; padding: 1.5rem; border-radius: 20px; text-align: center; font-weight: 950; font-size: 1.25rem; box-shadow: 0 15px 30px rgba(255, 75, 31, 0.3);">
+                        CONTEÚDO LIBERADO
+                    </div>
+                    <div style="margin-top: 2rem; display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem; font-weight: 800; color: #555;">
+                        <span>Alcance: 100%</span>
+                        <span>Controle: TOTAL</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 
 <!-- Featured Creators Grid -->
@@ -258,6 +297,27 @@
         .cta-card a {
             padding: 1rem 2.5rem !important;
             font-size: 1rem !important;
+        }
+
+        .mobile-stack-landing {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+            padding: 2rem !important;
+        }
+        
+        .mobile-stack-landing > div:first-child {
+            order: 1;
+        }
+        
+        .mobile-stack-landing > div:last-child {
+            order: 2;
+        }
+
+        /* Target the new section container specifically on mobile */
+        section > .container > div[style*="grid-template-columns: 1fr 1fr"] {
+            grid-template-columns: 1fr !important;
+            gap: 2rem !important;
+            padding: 2rem !important;
         }
     }
 </style>

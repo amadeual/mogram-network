@@ -113,8 +113,8 @@
                 <div style="position: absolute; top: -10px; right: -10px; opacity: 0.1;">
                     <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
                 </div>
-                <h5 style="margin: 0 0 0.5rem; font-size: 0.85rem; font-weight: 800; color: #3390ec;">Liberdade Real</h5>
-                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; font-weight: 500;">Monetize sua comunidade sem interferência de algoritmos. Seu conteúdo chega a todos.</p>
+                <h5 style="margin: 0 0 0.5rem; font-size: 0.85rem; font-weight: 800; color: #3390ec;">Zero Algoritmo</h5>
+                <p style="margin: 0; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; font-weight: 500;">Aqui você não é avaliado por robôs. Você tem 100% de controle e entrega total para sua comunidade.</p>
             </div>
 
             {{-- Monetization CTA 2: Payments --}}
