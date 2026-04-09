@@ -113,7 +113,7 @@ class LiveController extends Controller
         }
 
         if ($isScheduled) {
-            return redirect()->route('live.index')->with('success', 'Live agendada com sucesso!');
+            return redirect()->route('lives')->with('success', 'Live agendada com sucesso!');
         }
 
         return redirect()->route('live.watch', $live->id);
