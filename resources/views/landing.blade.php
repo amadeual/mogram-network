@@ -31,20 +31,33 @@
         </div>
         
         <div class="hero-visual" style="position: relative;">
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; transform: perspective(1000px) rotateY(-10deg) rotateX(5deg);">
-                <div style="background: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=2070&auto=format&fit=crop') center; background-size: cover; height: 300px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); margin-top: 2rem;"></div>
-                <div style="background: url('https://images.unsplash.com/photo-1549490349-8643362247b5?q=80&w=1974&auto=format&fit=crop') center; background-size: cover; height: 350px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1);"></div>
-                <div style="background: url('https://images.unsplash.com/photo-1588111000780-e37af4b1f4ed?q=80&w=1964&auto=format&fit=crop') center; background-size: cover; height: 350px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); margin-top: -3rem;"></div>
-                <div style="grid-column: 2; margin-top: -1rem; background: rgba(14, 14, 14, 0.85); backdrop-filter: blur(20px); padding: 1.5rem; border-radius: 24px; border: 1px solid var(--border-gray);">
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #ff4b1f; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white;">I</div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; transform: perspective(1200px) rotateY(-12deg) rotateX(8deg); filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));">
+                {{-- Top Left: Creator Studio --}}
+                <div style="background: url('https://images.unsplash.com/photo-1590602847861-f357a9332bbc?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 320px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
+                
+                {{-- Top Right: Creative/Abstract --}}
+                <div style="background: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
+                
+                {{-- Bottom Left: Fashion/Portrait --}}
+                <div style="background: url('https://images.unsplash.com/photo-1529139513075-3aef4d2f3f9c?auto=format&fit=crop&w=800&q=80') center; background-size: cover; height: 380px; border-radius: 32px; border: 1px solid rgba(255,255,255,0.1); margin-top: -3rem; box-shadow: inset 0 0 40px rgba(0,0,0,0.3);"></div>
+                
+                {{-- Bottom Right: Live Card --}}
+                <div style="grid-column: 2; margin-top: -1.5rem; background: rgba(25, 25, 35, 0.7); backdrop-filter: blur(25px); padding: 1.75rem; border-radius: 32px; border: 1px solid rgba(255,255,255,0.08); box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem;">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" style="width: 48px; height: 48px; border-radius: 50%; border: 2px solid #ff4b1f; object-fit: cover;">
                         <div>
-                            <p style="font-weight: 800; font-size: 0.9rem;">Isabella Costa</p>
-                            <p style="font-size: 0.7rem; color: #ef4444; font-weight: 800;">● AO VIVO</p>
+                            <p style="font-weight: 800; font-size: 1rem; color: white; margin: 0;">Isabella Costa</p>
+                            <p style="font-size: 0.75rem; color: #ef4444; font-weight: 900; display: flex; align-items: center; gap: 4px; margin-top: 2px;">
+                                <span style="width: 6px; height: 6px; background: #ef4444; border-radius: 50%; display: inline-block;"></span>
+                                AO VIVO
+                            </p>
                         </div>
                     </div>
-                    <div style="height: 100px; background: #222; border-radius: 12px; display: flex; align-items: center; justify-content: center;">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                    <div style="height: 140px; background: rgba(0,0,0,0.4); border-radius: 20px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=400&q=80') center; background-size: cover; opacity: 0.4; filter: blur(2px);"></div>
+                        <div style="width: 48px; height: 48px; background: #ff4b1f; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 1; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(255,75,31,0.3);" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                        </div>
                     </div>
                 </div>
             </div>
