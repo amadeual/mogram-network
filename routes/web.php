@@ -108,6 +108,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/stories', [App\Http\Controllers\StoryController::class, 'index'])->name('stories');
     Route::post('/stories/store', [App\Http\Controllers\StoryController::class, 'store'])->name('stories.store');
     Route::post('/stories/{story}/view', [App\Http\Controllers\StoryController::class, 'markAsViewed'])->name('stories.view');
+    Route::post('/stories/{story}/gift', [App\Http\Controllers\StoryController::class, 'sendGift'])->name('stories.gift');
+    Route::post('/stories/{story}/message', [App\Http\Controllers\StoryController::class, 'sendMessage'])->name('stories.message');
 
     // Notifications Routes
     Route::get('/notifications', [App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');

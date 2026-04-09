@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Story;
 use App\Models\StoryView;
+use App\Models\Gift;
+use App\Models\LiveGift;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -29,7 +32,8 @@ class StoryController extends Controller
         // removed the redirect to allow the menu to actually 'open' even if empty
         // return view('stories', compact('stories'));
 
-        return view('stories', compact('stories'));
+        $gifts = Gift::all();
+        return view('stories', compact('stories', 'gifts'));
     }
 
     public function store(Request $request)
@@ -74,6 +78,56 @@ class StoryController extends Controller
                 'ip_address' => request()->ip(),
             ]);
         }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function sendGift(Request $request, Story $story)
+    {
+        $request->validate(['gift_id' => 'required|exists:gifts,id']);
+        
+        $user = auth()->user();
+        $gift = Gift::find($request->gift_id);
+
+        if ($user->balance < $gift->price) {
+            return response()->json(['success' => false, 'message' => 'Saldo insuficiente']);
+        }
+
+        \Illuminate\Support\Facades\DB::transaction(function () use ($user, $gift, $story) {
+            $user->decrement('balance', $gift->price);
+            
+            $platformComm = $gift->price * 0.20;
+            $creatorShare = $gift->price - $platformComm;
+
+            LiveGift::create([
+                'user_id' => $user->id,
+                'receiver_id' => $story->user_id,
+                'gift_id' => $gift->id,
+                'amount' => $gift->price,
+                'commission' => $platformComm,
+                'live_id' => null
+            ]);
+
+            // Notify via DM
+            Message::create([
+                'sender_id' => $user->id,
+                'receiver_id' => $story->user_id,
+                'message' => "🌹 [Storie Mimo] Enviou um " . $gift->icon . " " . $gift->name . " no seu story!"
+            ]);
+        });
+
+        return response()->json(['success' => true, 'balance' => number_format($user->balance, 2, ',', '.')]);
+    }
+
+    public function sendMessage(Request $request, Story $story)
+    {
+        $request->validate(['message' => 'required|string|max:1000']);
+        
+        Message::create([
+            'sender_id' => auth()->id(),
+            'receiver_id' => $story->user_id,
+            'message' => "[Storie Reply] " . $request->message
+        ]);
 
         return response()->json(['success' => true]);
     }

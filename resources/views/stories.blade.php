@@ -92,45 +92,51 @@
             </div>
 
             <!-- Interactivity Footer -->
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 25px 20px; z-index: 150; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);">
+            <div id="story-footer" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 30px 20px 25px; z-index: 150; background: linear-gradient(to top, rgba(11, 10, 21, 0.95) 40%, rgba(11, 10, 21, 0.6) 80%, transparent);">
                 
+                <!-- Quick Emojis -->
+                <div style="display: flex; gap: 12px; justify-content: center; margin-bottom: 20px; animation: fadeInUp 0.4s ease-out;">
+                    @foreach(['🔥', '😍', '👏', '🙌', '❤️', '🤩'] as $emoji)
+                        <button onclick="sendEmoji('{{ $emoji }}')" style="background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.1); width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 18px; transition: 0.2s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+                            {{ $emoji }}
+                        </button>
+                    @endforeach
+                </div>
+
                 <!-- Bottom Reply Bar -->
-                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 20px;">
-                    <div style="flex: 1; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 12px 20px; backdrop-filter: blur(10px);">
-                        <input type="text" placeholder="Enviar mensagem..." style="background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; font-weight: 600;">
+                <div style="display: flex; gap: 12px; align-items: center; margin-bottom: 5px;">
+                    <div style="flex: 1; background: rgba(255,255,255,0.08); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 40px; padding: 12px 20px; backdrop-filter: blur(15px); box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                        <input type="text" id="story-reply-input" placeholder="Enviar mensagem..." style="background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 14px; font-weight: 600;">
                     </div>
-                    <button style="width: 45px; height: 45px; background: rgba(255,255,255,0.08); border: none; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px);">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                    
+                    <button onclick="toggleGifts()" style="width: 45px; height: 45px; background: rgba(239, 68, 68, 0.15); border: 1.5px solid rgba(239, 68, 68, 0.2); border-radius: 50%; color: #ef4444; display: flex; align-items: center; justify-content: center; cursor: pointer; backdrop-filter: blur(10px);">
+                         <span style="font-size: 18px;">🎁</span>
                     </button>
+
                     <button onclick="handleReply()" style="width: 45px; height: 45px; background: #3390ec; border: none; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 20px rgba(51, 144, 236, 0.3);">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                     </button>
                 </div>
-
-                <!-- Reaction Counters -->
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div style="display: flex; gap: 20px;">
-                        <div style="text-align: center;">
-                            <span style="font-size: 20px; display: block;">🔥</span>
-                            <span style="color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 900;">45</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <span style="font-size: 20px; display: block;">😍</span>
-                            <span style="color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 900;">128</span>
-                        </div>
-                        <div style="text-align: center;">
-                            <span style="font-size: 20px; display: block;">👏</span>
-                            <span style="color: rgba(255,255,255,0.5); font-size: 10px; font-weight: 900;">12</span>
-                        </div>
-                    </div>
-                    <div style="text-align: center; cursor: pointer;" onclick="sendMimo()">
-                        <div style="width: 38px; height: 38px; background: rgba(239, 68, 68, 0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; border: 1.5px solid rgba(239, 68, 68, 0.3); margin: 0 auto 5px;">
-                            <span style="font-size: 18px;">🎁</span>
-                        </div>
-                        <span style="color: #ef4444; font-size: 10px; font-weight: 900; letter-spacing: 0.5px;">Mimo</span>
-                    </div>
-                </div>
             </div>
+        </div>
+
+        <!-- Gift Selector Modal (Internal to main for sizing) -->
+        <div id="gift-modal" style="display: none; position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); width: 100%; max-width: 440px; background: #1a1c2e; border-radius: 32px 32px 0 0; z-index: 500; padding: 30px; border: 1.5px solid rgba(255,255,255,0.1); box-shadow: 0 -20px 60px rgba(0,0,0,0.8); animation: slideUp 0.3s ease-out;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h3 style="color: white; margin: 0; font-size: 18px; font-weight: 800;">Enviar um Mimo</h3>
+                <button onclick="toggleGifts()" style="background: rgba(255,255,255,0.05); border: none; color: white; width: 32px; height: 32px; border-radius: 50%; cursor: pointer;">✕</button>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; max-height: 400px; overflow-y: auto; padding-bottom: 20px;">
+                @foreach($gifts ?? [] as $gift)
+                <div onclick="sendMimo({{ $gift->id }}, '{{ $gift->name }}', '{{ $gift->icon }}', {{ $gift->price }})" style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(51, 144, 236, 0.1)'; this.style.borderColor='rgba(51, 144, 236, 0.3)';" onmouseout="this.style.background='rgba(255,255,255,0.03)'; this.style.borderColor='rgba(255,255,255,0.05)';">
+                    <span style="font-size: 28px; display: block; margin-bottom: 8px;">{{ $gift->icon }}</span>
+                    <span style="color: white; font-size: 11px; font-weight: 800; display: block;">{{ $gift->name }}</span>
+                    <span style="color: #22c55e; font-size: 10px; font-weight: 700;">R$ {{ number_format($gift->price, 2, ',', '.') }}</span>
+                </div>
+                @endforeach
+            </div>
+        </div>
         </div>
 
         <!-- Preview Stories (Right) -->
@@ -189,12 +195,11 @@
         .story-preview-side.right { right: calc(50% - 580px) !important; }
     }
 
-    @media (max-width: 768px) {
-        header { padding: 0 20px !important; }
-        .nav-arrow, .story-preview-side { display: none !important; }
-        .active-story-card { max-width: 100vw !important; height: 100vh !important; border-radius: 0 !important; }
-    }
-</style>
+        @keyframes slideUp { from { transform: translate(-50%, 100%); } to { transform: translate(-50%, 0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .active-story-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+    </style>
 
 <script>
     const stories = @json($stories);
@@ -325,12 +330,66 @@
     }
 
     function handleReply() {
-        showToast('Mensagem enviada!', 'success');
-        document.querySelector('input[type="text"]').value = '';
+        const input = document.getElementById('story-reply-input');
+        const message = input.value.trim();
+        if (!message) return;
+
+        const story = stories[currentIndex];
+        fetch(`/stories/${story.id}/message`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: message })
+        }).then(r => r.json()).then(data => {
+            if (data.success) {
+                showToast('Resposta enviada!', 'success');
+                input.value = '';
+            }
+        });
     }
 
-    function sendMimo() {
-        showToast('Mimo enviado com sucesso! 🎁', 'success');
+    function sendEmoji(emoji) {
+        const story = stories[currentIndex];
+        fetch(`/stories/${story.id}/message`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: emoji })
+        }).then(r => r.json()).then(data => {
+            if (data.success) {
+                showToast(`Emoji ${emoji} enviado!`, 'success');
+                
+                // Float animation
+                const float = document.createElement('div');
+                float.innerText = emoji;
+                float.style.cssText = `position: absolute; bottom: 100px; left: 50%; font-size: 40px; z-index: 1000; pointer-events: none; animation: floatUp 1s ease-out forwards;`;
+                document.querySelector('.active-story-card').appendChild(float);
+                setTimeout(() => float.remove(), 1000);
+            }
+        });
+    }
+
+    function toggleGifts() {
+        const modal = document.getElementById('gift-modal');
+        modal.style.display = modal.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function sendMimo(giftId, name, icon, price) {
+        const story = stories[currentIndex];
+        if (!confirm(`Deseja enviar ${icon} ${name} por R$ ${price.toFixed(2)}?`)) return;
+
+        fetch(`/stories/${story.id}/gift`, {
+            method: 'POST',
+            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' },
+            body: JSON.stringify({ gift_id: giftId })
+        }).then(r => r.json()).then(data => {
+            if (data.success) {
+                showToast(`Mimo ${icon} enviado com sucesso! 🎁`, 'success');
+                // Update balance in header
+                document.querySelector('header span').innerText = `R$ ${data.balance}`;
+                toggleGifts();
+            } else {
+                showToast(data.message || 'Erro ao enviar mimo', 'error');
+            }
+        });
     }
 
     document.addEventListener('DOMContentLoaded', initStory);
