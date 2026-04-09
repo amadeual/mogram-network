@@ -112,7 +112,7 @@
                                 {{-- Emoji Picker Popover --}}
                                 <div id="emoji_picker" style="display: none; position: absolute; bottom: 50px; left: 0; background: #151621; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; width: 280px; padding: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); z-index: 100;">
                                     <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; font-size: 20px;">
-                                        @foreach(['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','😉','😍','🥰','😘','😋','😛','😜','🤪','🤨','🧐','🤓','😎','🤩','🥳','😏','😒','😞','😔','😟','😕','🙁','☹️','😣','😖','😫','😩','🥺','😢','😭','😤','😠','😡','🤬'] as $emoji)
+                                        @foreach(['😂','😊','😍','🥰','😉','😎','🤔','🤨','🙄','😒','😔','😭','😱','😡','👍','👎','❤️','🔥','✨','💯','🙌','👏','🙏','🎉'] as $emoji)
                                             <span onclick="insertEmoji('{{ $emoji }}')" style="cursor: pointer; padding: 4px; border-radius: 8px; text-align: center; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">{{ $emoji }}</span>
                                         @endforeach
                                     </div>
