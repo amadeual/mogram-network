@@ -214,7 +214,7 @@
                     <div style="margin-top: 0.5rem;">
                         <button type="submit" form="live-form" class="mogram-btn-stream" id="submit-btn" onclick="this.innerHTML='PROCESSANDO...'; this.style.opacity='0.5'; this.style.pointerEvents='none';">
                             <span class="live-blink" id="live-indicator"></span>
-                            <span id="btn-text">INICIAR LIVE</span>
+                            <span id="btn-text">Iniciar Live</span>
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
                         </button>
                     </div>
@@ -233,11 +233,11 @@
         
         if (show) {
             container.style.display = 'block';
-            btnText.innerText = 'AGENDAR LIVE';
+            btnText.innerText = 'Agendar Live';
             indicator.style.display = 'none';
         } else {
             container.style.display = 'none';
-            btnText.innerText = 'INICIAR LIVE';
+            btnText.innerText = 'Iniciar Live';
             indicator.style.display = 'block';
         }
     }
