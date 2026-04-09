@@ -140,8 +140,8 @@
                                 <div class="option-content">
                                     <span class="dot"></span>
                                     <div class="txt">
-                                        <p class="main">Imediatamente</p>
-                                        <p class="sub">Começar agora</p>
+                                        <p class="main">Agora</p>
+                                        <p class="sub">Transmitir ja</p>
                                     </div>
                                 </div>
                             </label>
@@ -159,7 +159,7 @@
 
                         <div id="schedule_datetime_container" style="display: none; animation: premiumZoomIn 0.3s forwards;">
                             <label class="premium-label">Data e Hora da Transmissão</label>
-                            <input type="datetime-local" name="scheduled_at" class="mogram-input-v2" min="{{ date('Y-m-d\TH:i') }}">
+                            <input type="datetime-local" name="scheduled_at" class="mogram-input-v2 calendar-picker" min="{{ date('Y-m-d\TH:i') }}">
                             <p style="color: #64748b; font-size: 0.65rem; margin-top: 8px; font-weight: 600;">Seus seguidores serão notificados quando a live estiver prestes a começar.</p>
                         </div>
                     </div>
@@ -399,6 +399,22 @@
     }
     .scheduling-option .txt .main { color: white; font-weight: 800; font-size: 0.85rem; margin: 0; }
     .scheduling-option .txt .sub { color: #64748b; font-size: 0.65rem; margin: 0; }
+
+    .calendar-picker {
+        background: rgba(255,255,255,0.05) !important;
+        border-color: rgba(255,255,255,0.15) !important;
+        color-scheme: dark;
+    }
+    .calendar-picker::-webkit-calendar-picker-indicator {
+        filter: invert(1);
+        cursor: pointer;
+        opacity: 0.6;
+        transition: 0.3s;
+    }
+    .calendar-picker::-webkit-calendar-picker-indicator:hover {
+        opacity: 1;
+        transform: scale(1.1);
+    }
 
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
     @keyframes premiumZoomIn { from { opacity: 0; transform: scaleY(0.8); } to { opacity: 1; transform: scaleY(1); } }
