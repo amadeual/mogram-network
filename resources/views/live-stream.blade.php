@@ -284,19 +284,34 @@
                             </div>
                         </div>
                     </div>
-                    <input type="text" id="chat_input" placeholder="Diga algo..." 
-                           style="flex: 1; background: rgba(255,255,255,0.03); border: 1.2px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 10px 15px; color: white; outline: none; font-size: 14px; transition: 0.3s;"
-                           onfocus="this.style.borderColor='rgba(51,144,236,0.3)'; this.style.background='rgba(255,255,255,0.05)'"
-                           onblur="this.style.borderColor='rgba(255,255,255,0.08)'; this.style.background='rgba(255,255,255,0.03)'">
-                    
-                    <button onclick="sendChatMessage()" id="btn_send_chat" 
-                            style="background: #3390ec; border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 4px 10px rgba(51, 144, 236, 0.2);" 
-                            onmouseover="this.style.transform='scale(1.1)'; this.style.background='#2b83d8'" 
-                            onmouseout="this.style.transform='scale(1)'; this.style.background='#3390ec'">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" style="margin-left: 2px;">
-                            <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
-                        </svg>
-                    </button>
+                    <div style="flex: 1; display: flex; align-items: center; background: rgba(255,255,255,0.04); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 5px 5px 5px 12px; transition: 0.3s; gap: 10px;" id="live_chat_input_container">
+                        <input type="text" id="chat_input" placeholder="Escreva algo..." 
+                               style="flex: 1; background: transparent; border: none; color: white; outline: none; font-size: 14px; font-family: inherit; padding: 8px 0; font-weight: 500;">
+                        
+                        <button onclick="sendChatMessage()" id="btn_send_chat" 
+                                style="background: #3390ec; border: none; width: 34px; height: 34px; border-radius: 10px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; flex-shrink: 0; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);" 
+                                onmouseover="this.style.transform='scale(1.05)'; this.style.background='#2b83d8'" 
+                                onmouseout="this.style.transform='scale(1)'; this.style.background='#3390ec'">
+                            <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                                <path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <script>
+                        document.getElementById('chat_input').addEventListener('focus', function() {
+                            const container = document.getElementById('live_chat_input_container');
+                            container.style.borderColor = '#3390ec';
+                            container.style.background = 'rgba(51, 144, 236, 0.05)';
+                            container.style.boxShadow = '0 0 15px rgba(51, 144, 236, 0.1)';
+                        });
+                        document.getElementById('chat_input').addEventListener('blur', function() {
+                            const container = document.getElementById('live_chat_input_container');
+                            container.style.borderColor = 'rgba(255,255,255,0.1)';
+                            container.style.background = 'rgba(255,255,255,0.04)';
+                            container.style.boxShadow = 'none';
+                        });
+                    </script>
                 </div>
             </div>
         </aside>
