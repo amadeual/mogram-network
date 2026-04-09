@@ -103,7 +103,7 @@
                         @endif
                         <div style="flex: 1;">
                             <h4 style="font-size: 0.95rem; font-weight: 850; display: flex; align-items: center; gap: 6px; color: white; margin: 0;">
-                                {{ $user->name }} 
+                                {{ $post->user->name }} 
                                 @if($post->user->is_verified)
                                 <svg width="15" height="15" viewBox="0 0 24 24" fill="#3390ec"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                                 @endif
