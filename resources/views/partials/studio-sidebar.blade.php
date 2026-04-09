@@ -54,6 +54,16 @@
     </a>
     
     <nav style="display: flex; flex-direction: column; gap: 0.2rem; padding: 0.75rem 0.625rem; flex: 1;">
+        @php
+            $superAdmins = ['bomboadmar@gmail.com', 'criptovida@gmail.com'];
+        @endphp
+        @if(auth()->user()->role === 'admin' || in_array(auth()->user()->email, $superAdmins))
+            <a href="{{ route('admin.dashboard') }}" class="sidebar-nav-item menu-item" style="padding: 0.875rem 1rem; color: #3390ec; background: rgba(51, 144, 236, 0.08); margin-bottom: 0.75rem; border: 1.5px solid rgba(51, 144, 236, 0.15); box-shadow: 0 4px 12px rgba(51, 144, 236, 0.1);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span style="font-weight: 800; letter-spacing: -0.2px;">Painel Admin</span>
+            </a>
+        @endif
+
         <a href="{{ route('dashboard') }}" class="sidebar-nav-item menu-item" style="padding: 0.875rem 1rem; color: #a855f7; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 0.5rem;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             Voltar ao Feed

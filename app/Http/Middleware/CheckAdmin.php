@@ -15,7 +15,9 @@ class CheckAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (auth()->check() && auth()->user()->role === 'admin') {
+        $superAdmins = ['bomboadmar@gmail.com', 'criptovida@gmail.com'];
+
+        if (auth()->check() && (auth()->user()->role === 'admin' || in_array(auth()->user()->email, $superAdmins))) {
             return $next($request);
         }
 

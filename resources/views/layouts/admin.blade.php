@@ -273,6 +273,10 @@
             </div>
 
             <nav class="sidebar-nav">
+                <a href="{{ route('studio.dashboard') }}" class="nav-item" style="color: #a855f7; background: rgba(168, 85, 247, 0.08); margin-bottom: 1.5rem; border: 1.5px solid rgba(168, 85, 247, 0.15); box-shadow: 0 4px 12px rgba(168, 85, 247, 0.05);">
+                    <svg  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                    Mogram Studio
+                </a>
                 <a href="{{ route('admin.dashboard') }}" class="nav-item {{ Route::is('admin.dashboard') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
                     Dashboard
