@@ -44,7 +44,46 @@
                 <!-- Left: Form Details -->
                 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                     
-                    <!-- Core Info Card -->
+                    <!-- Scheduling Card (Moved to Top for better calendar visibility) -->
+                    <div class="glass-editor-card">
+                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
+                            <div style="width: 36px; height: 36px; background: rgba(51, 144, 236, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                            </div>
+                            <h3 style="font-size: 1.1rem; font-weight: 800; color: white;">Agendamento</h3>
+                        </div>
+
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                            <label class="scheduling-option">
+                                <input type="radio" name="schedule_type" value="now" checked onchange="toggleScheduleInput(false)">
+                                <div class="option-content">
+                                    <span class="dot"></span>
+                                    <div class="txt">
+                                        <p class="main">Agora</p>
+                                        <p class="sub">Transmitir ja</p>
+                                    </div>
+                                </div>
+                            </label>
+                            <label class="scheduling-option">
+                                <input type="radio" name="schedule_type" value="later" onchange="toggleScheduleInput(true)">
+                                <div class="option-content">
+                                    <span class="dot"></span>
+                                    <div class="txt">
+                                        <p class="main">Agendar</p>
+                                        <p class="sub">Para mais tarde</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="schedule_datetime_container" style="display: none; animation: premiumZoomIn 0.3s forwards;">
+                            <label class="premium-label">Data e Hora da Transmissão</label>
+                            <input type="datetime-local" name="scheduled_at" id="scheduled_at" class="mogram-input-v2 calendar-picker" min="{{ date('Y-m-d\TH:i') }}">
+                            <p style="color: #64748b; font-size: 0.65rem; margin-top: 8px; font-weight: 600;">Seus seguidores serão notificados quando a live estiver prestes a começar.</p>
+                        </div>
+                    </div>
+
+                    <!-- General Info Card -->
                     <div class="glass-editor-card">
                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 0.5rem;">
                             <div style="width: 32px; height: 32px; background: rgba(51, 144, 236, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
@@ -125,44 +164,6 @@
                         </div>
                     </div>
 
-                    <!-- Scheduling Card -->
-                    <div class="glass-editor-card">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem;">
-                            <div style="width: 36px; height: 36px; background: rgba(51, 144, 236, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            </div>
-                            <h3 style="font-size: 1.1rem; font-weight: 800; color: white;">Agendamento</h3>
-                        </div>
-
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
-                            <label class="scheduling-option">
-                                <input type="radio" name="schedule_type" value="now" checked onchange="toggleScheduleInput(false)">
-                                <div class="option-content">
-                                    <span class="dot"></span>
-                                    <div class="txt">
-                                        <p class="main">Agora</p>
-                                        <p class="sub">Transmitir ja</p>
-                                    </div>
-                                </div>
-                            </label>
-                            <label class="scheduling-option">
-                                <input type="radio" name="schedule_type" value="later" onchange="toggleScheduleInput(true)">
-                                <div class="option-content">
-                                    <span class="dot"></span>
-                                    <div class="txt">
-                                        <p class="main">Agendar</p>
-                                        <p class="sub">Para mais tarde</p>
-                                    </div>
-                                </div>
-                            </label>
-                        </div>
-
-                        <div id="schedule_datetime_container" style="display: none; animation: premiumZoomIn 0.3s forwards;">
-                            <label class="premium-label">Data e Hora da Transmissão</label>
-                            <input type="datetime-local" name="scheduled_at" class="mogram-input-v2 calendar-picker" min="{{ date('Y-m-d\TH:i') }}">
-                            <p style="color: #64748b; font-size: 0.65rem; margin-top: 8px; font-weight: 600;">Seus seguidores serão notificados quando a live estiver prestes a começar.</p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Right Side: Visuals & Stats -->
@@ -212,7 +213,7 @@
 
                     <!-- Action Button Container -->
                     <div style="margin-top: 0.5rem;">
-                        <button type="submit" form="live-form" class="mogram-btn-stream" id="submit-btn" onclick="this.innerHTML='PROCESSANDO...'; this.style.opacity='0.5'; this.style.pointerEvents='none';">
+                        <button type="submit" form="live-form" class="mogram-btn-stream" id="submit-btn">
                             <span class="live-blink" id="live-indicator"></span>
                             <span id="btn-text">Iniciar Live</span>
                             <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
@@ -235,12 +236,24 @@
             container.style.display = 'block';
             btnText.innerText = 'Agendar Live';
             indicator.style.display = 'none';
+            document.getElementById('scheduled_at').setAttribute('required', 'required');
         } else {
             container.style.display = 'none';
             btnText.innerText = 'Iniciar Live';
             indicator.style.display = 'block';
+            document.getElementById('scheduled_at').removeAttribute('required');
         }
     }
+
+    // Handle Form Submission State
+    document.getElementById('live-form').addEventListener('submit', function(e) {
+        if (!this.checkValidity()) return;
+        
+        const btn = document.getElementById('submit-btn');
+        btn.innerHTML = '<span style="display:flex; align-items:center; gap:10px;"><div class="mogram-spinner" style="width:16px; height:16px;"></div> PROCESSANDO...</span>';
+        btn.style.opacity = '0.7';
+        btn.style.pointerEvents = 'none';
+    });
 
     function previewThumb(input) {
         if (input.files && input.files[0]) {
@@ -417,6 +430,14 @@
     }
 
     @keyframes pulse { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.2); } 100% { opacity: 1; transform: scale(1); } }
+    
+    .mogram-spinner {
+        border: 3px solid rgba(255,255,255,0.2);
+        border-top: 3px solid white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     @keyframes premiumZoomIn { from { opacity: 0; transform: scaleY(0.8); } to { opacity: 1; transform: scaleY(1); } }
 </style>
 @endsection
