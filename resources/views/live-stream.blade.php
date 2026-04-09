@@ -90,12 +90,12 @@
                 <div id="video_layers" style="position: absolute; inset: 0;">
                     
                     <!-- 1. Video System (Active Stream) -->
-                    <div id="video_wrapper" style="width: 100%; height: 100%; display: none; background: transparent;">
-                        <div id="main_video_slot" style="width: 100%; height: 100%; position: relative; background: transparent;">
+                    <div id="video_wrapper" style="width: 100%; height: 100%; display: none; background: transparent !important;">
+                        <div id="main_video_slot" style="width: 100%; height: 100%; position: relative; background: transparent !important;">
                             @if(Auth::id() == $live->user_id)
-                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: contain; background: transparent;"></canvas>
+                                <canvas id="creator_video" style="width: 100%; height: 100%; object-fit: contain; background: transparent !important;"></canvas>
                             @else
-                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: contain; background: transparent;"></video>
+                                <video id="creator_video" autoplay playsinline muted style="width: 100%; height: 100%; object-fit: contain; background: transparent !important;"></video>
                             @endif
                             <div id="paused_overlay" style="display: none; position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(20px); align-items: center; justify-content: center; z-index: 50;">
                                 <div style="text-align: center;">
@@ -827,12 +827,12 @@
         
         if (bgName === 'none') {
             container.style.backgroundImage = 'none';
-            container.style.backgroundColor = '#000';
+            container.style.setProperty('background-color', '#000', 'important');
         } else {
             container.style.backgroundImage = `url(/images/backgrounds/${bgName}.png)`;
             container.style.backgroundSize = 'cover';
             container.style.backgroundPosition = 'center';
-            container.style.backgroundColor = 'transparent';
+            container.style.setProperty('background-color', 'transparent', 'important');
         }
         showToast('Cenário atualizado!', 'success');
     }
