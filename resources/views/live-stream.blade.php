@@ -117,12 +117,38 @@
                             </div>
 
                             @if(Auth::id() == $live->user_id)
-                                <div id="broadcaster_tools" style="display: none; position: absolute; top: 1.5rem; right: 1.5rem; display: flex; flex-direction: column; gap: 10px; z-index: 100;">
                                     <button onclick="toggleAudio()" id="btn_audio" title="Mudar Áudio" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🎤</button>
                                     <button onclick="toggleVideo()" id="btn_video" title="Mudar Vídeo" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">📹</button>
+                                    <button onclick="toggleFilters()" id="btn_filters" title="Filtros" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">✨</button>
+                                    <button onclick="toggleBackgrounds()" id="btn_background" title="Background Virtual" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🖼️</button>
                                     <button onclick="togglePause()" id="btn_pause" title="Pausar" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">⏸</button>
                                     <button onclick="toggleScreenShare()" id="btn_screen" title="Compartilhar Tela" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🖥️</button>
                                     <button onclick="switchCamera()" id="btn_flip" title="Trocar Câmera" style="background: rgba(0,0,0,0.6); width: 40px; height: 40px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); color: white; cursor: pointer;">🔄</button>
+                                </div>
+
+                                <!-- Filters Panel -->
+                                <div id="filters_panel" style="display: none; position: absolute; top: 1.5rem; right: 65px; background: rgba(11, 10, 21, 0.9); backdrop-filter: blur(20px); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1rem; width: 220px; z-index: 110; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                    <p style="color: white; font-weight: 800; font-size: 0.75rem; margin-bottom: 10px;">Filtros de Vídeo</p>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                        <button onclick="applyFilter('none')" class="filter-btn">Normal</button>
+                                        <button onclick="applyFilter('grayscale(100%)')" class="filter-btn">Mono</button>
+                                        <button onclick="applyFilter('sepia(100%)')" class="filter-btn">Sépia</button>
+                                        <button onclick="applyFilter('contrast(150%)')" class="filter-btn">Vibrante</button>
+                                        <button onclick="applyFilter('hue-rotate(90deg)')" class="filter-btn">Psicodélico</button>
+                                        <button onclick="applyFilter('blur(2px)')" class="filter-btn">Suave</button>
+                                    </div>
+                                </div>
+
+                                <!-- Backgrounds Panel -->
+                                <div id="backgrounds_panel" style="display: none; position: absolute; top: 1.5rem; right: 65px; background: rgba(11, 10, 21, 0.9); backdrop-filter: blur(20px); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 1rem; width: 220px; z-index: 110; animation: modalPop 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);">
+                                    <p style="color: white; font-weight: 800; font-size: 0.75rem; margin-bottom: 10px;">Ambientação Studio</p>
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                        <button onclick="applyBackground('none')" class="bg-thumb" style="background: #000;">Nenhum</button>
+                                        <button onclick="applyBackground('studio_premium')" class="bg-thumb" style="background-image: url(/images/backgrounds/studio_premium.png); background-size: cover;"></button>
+                                        <button onclick="applyBackground('studio_neon')" class="bg-thumb" style="background-image: url(/images/backgrounds/studio_neon.png); background-size: cover;"></button>
+                                        <button onclick="applyBackground('studio_cozy')" class="bg-thumb" style="background-image: url(/images/backgrounds/studio_cozy.png); background-size: cover;"></button>
+                                    </div>
+                                    <p style="color: #555; font-size: 0.6rem; margin-top: 10px; font-weight: 700;">Dica: Use um fundo neutro ou chroma key para melhores resultados.</p>
                                 </div>
                             @endif
 
@@ -771,6 +797,39 @@
         if (isScreenSharing) return;
         currentFacingMode = currentFacingMode === 'user' ? 'environment' : 'user';
         await startCamera();
+    }
+
+    function toggleFilters() {
+        const p = document.getElementById('filters_panel');
+        document.getElementById('backgrounds_panel').style.display = 'none';
+        p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function toggleBackgrounds() {
+        const p = document.getElementById('backgrounds_panel');
+        document.getElementById('filters_panel').style.display = 'none';
+        p.style.display = p.style.display === 'none' ? 'block' : 'none';
+    }
+
+    function applyFilter(filter) {
+        const video = document.getElementById('creator_video');
+        video.style.filter = filter;
+        showToast('Filtro aplicado!', 'success');
+        
+        // Broadcast filter choice to viewers (optional)
+        // fetch('/lives/{{ $live->id }}/settings', { ... });
+    }
+
+    function applyBackground(bgName) {
+        const container = document.getElementById('main_video_slot');
+        if (bgName === 'none') {
+            container.style.backgroundImage = 'none';
+        } else {
+            container.style.backgroundImage = `url(/images/backgrounds/${bgName}.png)`;
+            container.style.backgroundSize = 'cover';
+            container.style.backgroundPosition = 'center';
+        }
+        showToast('Cenário atualizado!', 'success');
     }
 
     async function replaceVideoTrack(newTrack) {
