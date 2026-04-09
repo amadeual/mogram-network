@@ -33,10 +33,10 @@
         </nav>
 
         <div style="background: rgba(255,255,255,0.03); border-radius: 16px; padding: 1rem; border: 1px solid var(--border-color); display: flex; align-items: center; gap: 1rem; margin-top: 2rem;">
-            <div style="width: 40px; height: 40px; border-radius: 50%; background: #444; border: 2px solid var(--primary-blue);"></div>
+            <div style="width: 40px; height: 40px; border-radius: 50%; background: #444; border: 2px solid var(--primary-blue); background-image: url('{{ auth()->user()->avatar ? Storage::url(auth()->user()->avatar) : 'https://api.dicebear.com/7.x/avataaars/svg?seed=' . auth()->user()->name }}'); background-size: cover;"></div>
             <div style="flex: 1;">
-                <p style="font-size: 0.85rem; font-weight: 700;">Marcos Silva</p>
-                <p style="font-size: 0.75rem; color: var(--text-gray);">@marcos.creator</p>
+                <p style="font-size: 0.85rem; font-weight: 700;">{{ auth()->user()->name }}</p>
+                <p style="font-size: 0.75rem; color: var(--text-gray);">@<span>{{ auth()->user()->username }}</span></p>
             </div>
         </div>
     </aside>
@@ -204,7 +204,7 @@
         const newPost = {
             id: Date.now(),
             content: postContent.innerHTML,
-            user: 'Marcos Silva',
+            user: '{{ auth()->user()->name }}',
             image: selectedFiles.length > 0 ? URL.createObjectURL(selectedFiles[0]) : '/images/thumb_plant.png',
             time: 'Agora mesmo',
             type: document.getElementById('tab-pago').classList.contains('active') ? 'locked' : 'standard',

@@ -13,10 +13,10 @@ class DemoDataSeeder extends Seeder
     {
         // Create 2 Creators
         $ana = User::firstOrCreate(
-            ['email' => 'ana@mogram.com'],
+            ['email' => 'leticia@mogram.com'],
             [
-                'name' => 'Ana Silva',
-                'username' => 'anasilva',
+                'name' => 'Leticia Silva',
+                'username' => 'leticiasilva',
                 'password' => Hash::make('password'),
                 'is_verified' => true,
                 'category' => 'Lifestyle & Moda',
@@ -26,10 +26,10 @@ class DemoDataSeeder extends Seeder
         );
 
         $marcos = User::firstOrCreate(
-            ['email' => 'marcos@mogram.com'],
+            ['email' => 'gabriel@mogram.com'],
             [
-                'name' => 'Marcos Gamer',
-                'username' => 'marcosgamer',
+                'name' => 'Gabriel Games',
+                'username' => 'gabrielgames',
                 'password' => Hash::make('password'),
                 'is_verified' => true,
                 'avatar' => 'images/avatars/marcos.png',

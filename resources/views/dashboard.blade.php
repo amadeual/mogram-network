@@ -293,12 +293,12 @@
             </div>
             <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.02); padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-gray);">
                 <div style="position: relative;">
-                    <img src="{{ asset('images/creators/marcos.png') }}" style="width: 44px; height: 44px; border-radius: 50%;">
+                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" style="width: 44px; height: 44px; border-radius: 50%;">
                     <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; font-size: 8px; font-weight: 900; padding: 2px 4px; border-radius: 4px; border: 2px solid #0b0a15;">AO VIVO</div>
                 </div>
                 <div>
                     <h4 style="font-size: 13px; font-weight: 700;">Gameplay Sábado</h4>
-                    <p style="font-size: 11px; color: var(--text-muted);">Marcos Gamer • 1.2k assistindo</p>
+                    <p style="font-size: 11px; color: var(--text-muted);">Lucas Vlogs • 1.2k assistindo</p>
                 </div>
             </div>
         </div>
@@ -314,7 +314,7 @@
                         <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Julia" style="width: 36px; height: 36px; border-radius: 50%;">
                         <div>
                             <h4 style="font-size: 13px; font-weight: 700;">Julia Design</h4>
-                            <p style="font-size: 11px; color: var(--text-muted);">Seguido por ana.c</p>
+                            <p style="font-size: 11px; color: var(--text-muted);">Seguido por isabella.c</p>
                         </div>
                     </div>
                     <a href="#" style="font-size: 12px; color: var(--primary-blue); font-weight: 700; text-decoration: none;">Seguir</a>

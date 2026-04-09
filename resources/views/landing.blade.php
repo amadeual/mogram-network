@@ -37,9 +37,9 @@
                 <div style="background: url('https://images.unsplash.com/photo-1588111000780-e37af4b1f4ed?q=80&w=1964&auto=format&fit=crop') center; background-size: cover; height: 350px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); margin-top: -3rem;"></div>
                 <div style="grid-column: 2; margin-top: -1rem; background: rgba(14, 14, 14, 0.85); backdrop-filter: blur(20px); padding: 1.5rem; border-radius: 24px; border: 1px solid var(--border-gray);">
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #ff4b1f; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white;">A</div>
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: #ff4b1f; display: flex; align-items: center; justify-content: center; font-weight: 900; color: white;">I</div>
                         <div>
-                            <p style="font-weight: 800; font-size: 0.9rem;">Ana Clara</p>
+                            <p style="font-weight: 800; font-size: 0.9rem;">Isabella Costa</p>
                             <p style="font-size: 0.7rem; color: #ef4444; font-weight: 800;">● AO VIVO</p>
                         </div>
                     </div>
@@ -97,8 +97,8 @@
         <div class="creators-grid">
             @php
                 $demoCreators = [
-                    ['name' => 'Ana Clara', 'handle' => '@anaclara_fit', 'fans' => '12.4K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Ana'],
-                    ['name' => 'Marcos Lima', 'handle' => '@marcos.tech', 'fans' => '8.2K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Marcos'],
+                    ['name' => 'Isabella Costa', 'handle' => '@isabella_fit', 'fans' => '12.4K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Isabella'],
+                    ['name' => 'Rafael Souza', 'handle' => '@rafael.tech', 'fans' => '8.2K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rafael'],
                     ['name' => 'Julia Medeiros', 'handle' => '@julia_art', 'fans' => '25.7K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Julia'],
                     ['name' => 'Rodrigo Gois', 'handle' => '@rodrigo.fit', 'fans' => '42.1K', 'img' => 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rodrigo'],
                 ];
