@@ -822,18 +822,24 @@
     }
 
     function applyBackground(bgName) {
-        const container = document.getElementById('video_player_container');
-        if (!container) return;
+        const containers = [
+            document.getElementById('video_player_container'),
+            document.getElementById('main_video_slot'),
+            document.getElementById('video_wrapper')
+        ];
         
-        if (bgName === 'none') {
-            container.style.backgroundImage = 'none';
-            container.style.setProperty('background-color', '#000', 'important');
-        } else {
-            container.style.backgroundImage = `url(/images/backgrounds/${bgName}.png)`;
-            container.style.backgroundSize = 'cover';
-            container.style.backgroundPosition = 'center';
-            container.style.setProperty('background-color', 'transparent', 'important');
-        }
+        containers.forEach(container => {
+            if (!container) return;
+            if (bgName === 'none') {
+                container.style.backgroundImage = 'none';
+                container.style.setProperty('background-color', '#000', 'important');
+            } else {
+                container.style.backgroundImage = `url(/images/backgrounds/${bgName}.png)`;
+                container.style.backgroundSize = 'cover';
+                container.style.backgroundPosition = 'center';
+                container.style.setProperty('background-color', 'transparent', 'important');
+            }
+        });
         showToast('Cenário atualizado!', 'success');
     }
 
