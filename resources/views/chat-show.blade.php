@@ -32,7 +32,6 @@
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <h4 style="font-size: 15px; font-weight: 900; color: white; margin: 0;">{{ $user->name }}</h4>
-                            <p style="font-size: 12px; color: #3390ec; font-weight: 800; margin: 2px 0 0;">Digitando...</p>
                         </div>
                     </div>
                 </div>
