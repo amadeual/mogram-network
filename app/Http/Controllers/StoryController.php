@@ -84,6 +84,10 @@ class StoryController extends Controller
 
     public function sendGift(Request $request, Story $story)
     {
+        if ($story->user_id === auth()->id()) {
+            return response()->json(['success' => false, 'message' => 'Não é possível enviar mimos para seu próprio story.']);
+        }
+
         $request->validate(['gift_id' => 'required|exists:gifts,id']);
         
         $user = auth()->user();
@@ -121,6 +125,10 @@ class StoryController extends Controller
 
     public function sendMessage(Request $request, Story $story)
     {
+        if ($story->user_id === auth()->id()) {
+            return response()->json(['success' => false, 'message' => 'Não é possível responder seu próprio story.']);
+        }
+
         $request->validate(['message' => 'required|string|max:1000']);
         
         Message::create([

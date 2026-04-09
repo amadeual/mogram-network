@@ -263,6 +263,15 @@
         storyTime.innerText = 'há 2h'; // Mock time
 
         // Preview Thumbs
+        // Hide footer/interactions if it's my own story
+        const authId = {{ auth()->id() }};
+        const storyFooter = document.getElementById('story-footer');
+        if (story.user_id === authId) {
+            storyFooter.style.display = 'none';
+        } else {
+            storyFooter.style.display = 'block';
+        }
+
         const prevThumb = document.getElementById('prev-story-thumb');
         const nextThumb = document.getElementById('next-story-thumb');
         if (currentIndex > 0) prevThumb.src = `/storage/${stories[currentIndex-1].file_path}`;
