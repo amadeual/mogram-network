@@ -111,6 +111,26 @@ class AdminController extends Controller
         return back()->with('success', "Senha resetada! Nova senha temporária: {$tempPassword}");
     }
 
+    public function gifts()
+    {
+        $gifts = \App\Models\Gift::all();
+        return view('admin.gifts', compact('gifts'));
+    }
+
+    public function updateGift(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'icon' => 'required|string',
+        ]);
+
+        $gift = \App\Models\Gift::findOrFail($id);
+        $gift->update($request->only(['name', 'price', 'icon']));
+
+        return back()->with('success', 'Presente atualizado com sucesso!');
+    }
+
     public function categories()
     {
         // For categories, we might use a separate model but currently they are strings in posts/lives
