@@ -45,6 +45,18 @@ class AdminController extends Controller
         return view('admin.categories', compact('categories'));
     }
 
+    public function withdrawals()
+    {
+        $withdrawals = \App\Models\Withdrawal::with('user')->orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.withdrawals', compact('withdrawals'));
+    }
+
+    public function deposits()
+    {
+        $deposits = \App\Models\Deposit::with('user')->orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.deposits', compact('deposits'));
+    }
+
     public function reports()
     {
         return view('admin.reports');

@@ -129,6 +129,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
         Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
         Route::get('/categories', [App\Http\Controllers\AdminController::class, 'categories'])->name('admin.categories');
+        Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals');
+        Route::get('/deposits', [App\Http\Controllers\AdminController::class, 'deposits'])->name('admin.deposits');
         Route::get('/reports', [App\Http\Controllers\AdminController::class, 'reports'])->name('admin.reports');
         Route::get('/settings', [App\Http\Controllers\AdminController::class, 'settings'])->name('admin.settings');
         Route::post('/settings', [App\Http\Controllers\AdminController::class, 'updateSettings'])->name('admin.settings.update');
