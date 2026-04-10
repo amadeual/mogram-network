@@ -165,12 +165,21 @@ class AdminController extends Controller
 
     public function settings()
     {
-        return view('admin.settings');
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        return view('admin.settings', compact('settings'));
     }
 
     public function updateSettings(Request $request)
     {
-        // Logic to update system settings (possibly in a 'configs' table)
+        $data = $request->except('_token');
+        
+        foreach ($data as $key => $value) {
+            \App\Models\Setting::updateOrCreate(
+                ['key' => $key],
+                ['value' => $value]
+            );
+        }
+
         return back()->with('success', 'Configurações atualizadas com sucesso!');
     }
 }
