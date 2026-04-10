@@ -16,60 +16,63 @@
 </div>
 
 <!-- Filters Bar -->
-<div class="admin-card" style="padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
+<form action="{{ route('admin.users') }}" method="GET" class="admin-card" style="padding: 1rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; gap: 1rem;">
     <div style="flex: 1; position: relative;">
         <svg style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Buscar por nome ou e-mail..." style="width: 100%; background: transparent; border: none; padding: 10px 45px; color: white; outline: none; font-weight: 600;">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Buscar por nome ou e-mail..." style="width: 100%; background: transparent; border: none; padding: 10px 45px; color: white; outline: none; font-weight: 600;">
     </div>
     
     <div style="display: flex; gap: 0.75rem;">
-        <select style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
-            <option>Todos os Status</option>
-            <option>Ativos</option>
-            <option>Suspensos</option>
-            <option>Pendentes</option>
+        <select name="status" onchange="this.form.submit()" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
+            <option value="">Todos os Status</option>
+            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Ativos</option>
+            <option value="suspended" {{ request('status') == 'suspended' ? 'selected' : '' }}>Suspensos</option>
         </select>
-        <select style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
-            <option>Todas as Funções</option>
-            <option>Administrador</option>
-            <option>Criador</option>
-            <option>Usuário</option>
+        <select name="role" onchange="this.form.submit()" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
+            <option value="">Todas as Funções</option>
+            <option value="admin" {{ request('role') == 'admin' ? 'selected' : '' }}>Administrador</option>
+            <option value="creator" {{ request('role') == 'creator' ? 'selected' : '' }}>Criador</option>
+            <option value="user" {{ request('role') == 'user' ? 'selected' : '' }}>Usuário</option>
         </select>
-        <button style="background: rgba(255,255,255,0.05); border: none; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+        <button type="submit" style="background: var(--primary-blue); border: none; width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; cursor: pointer; box-shadow: 0 4px 12px rgba(51, 144, 236, 0.2);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2z"/></svg>
         </button>
     </div>
-</div>
+</form>
 
 <!-- Users Table -->
-<div class="admin-card" style="padding: 0;">
+<div class="admin-card" style="padding: 0; overflow: visible;">
     <table style="width: 100%; border-collapse: collapse;">
         <thead>
             <tr style="border-bottom: 1.5px solid var(--border-gray);">
-                <th style="padding: 1.5rem 2rem; text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Usuário</th>
-                <th style="padding: 1.5rem 2rem; text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Status</th>
-                <th style="padding: 1.5rem 2rem; text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Função</th>
-                <th style="padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Receita Gerada</th>
-                <th style="padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Data de Cadastro</th>
-                <th style="padding: 1.5rem 2rem; text-align: right; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 0.5px;">Ações</th>
+                <th style="padding: 1.5rem 2rem; text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800;">Usuário</th>
+                <th style="padding: 1.5rem 2rem; text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800;">Status</th>
+                <th style="padding: 1.5rem 2rem; text-align: left; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800;">Função</th>
+                <th style="padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800;">Carteira</th>
+                <th style="padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800;">Cadastro</th>
+                <th style="padding: 1.5rem 2rem; text-align: right; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; font-weight: 800;">Ações</th>
             </tr>
         </thead>
         <tbody>
             @foreach($users as $user)
-            <tr style="border-bottom: 1px solid var(--border-gray); transition: 0.2s;" onmouseover="this.style.background='rgba(51, 144, 236, 0.02)'" onmouseout="this.style.background='transparent'">
+            <tr style="border-bottom: 1px solid var(--border-gray); transition: 0.2s;">
                 <td style="padding: 1.5rem 2rem;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <img src="{{ $user->avatar ? Storage::url($user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$user->name }}" style="width: 40px; height: 40px; border-radius: 12px;">
                         <div>
                             <h4 style="font-size: 0.9rem; font-weight: 800;">{{ $user->name }}</h4>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">{{ $user->username }}</p>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">@<span>{{ $user->username }}</span></p>
                         </div>
                     </div>
                 </td>
                 <td style="padding: 1.5rem 2rem;">
+                    @php
+                        $statusColor = $user->status == 'suspended' ? 'var(--danger)' : 'var(--success)';
+                        $statusLabel = $user->status == 'suspended' ? 'Suspenso' : 'Ativo';
+                    @endphp
                     <div style="display: flex; align-items: center; gap: 8px;">
-                        <div style="width: 8px; height: 8px; background: {{ $user->is_verified ? 'var(--success)' : 'var(--danger)' }}; border-radius: 50%;"></div>
-                        <span style="font-size: 0.8rem; font-weight: 800;">{{ $user->is_verified ? 'Ativo' : 'Pendente' }}</span>
+                        <div style="width: 8px; height: 8px; background: {{ $statusColor }}; border-radius: 50%;"></div>
+                        <span style="font-size: 0.8rem; font-weight: 800; color: {{ $statusColor }}">{{ $statusLabel }}</span>
                     </div>
                 </td>
                 <td style="padding: 1.5rem 2rem;">
@@ -77,16 +80,115 @@
                         {{ ucfirst($user->role ?? 'usuário') }}
                     </div>
                 </td>
-                <td style="padding: 1.5rem 2rem; text-align: center; font-weight: 800; font-size: 0.9rem;">
-                    R$ {{ number_format($user->balance * 2.5, 2, ',', '.') }}
+                <td style="padding: 1.5rem 2rem; text-align: center; font-weight: 900; font-size: 0.9rem;">
+                    R$ {{ number_format($user->balance, 2, ',', '.') }}
                 </td>
                 <td style="padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 700;">
                     {{ $user->created_at->format('d/m/Y') }}
                 </td>
-                <td style="padding: 1.5rem 2rem; text-align: right;">
-                    <button style="background: transparent; border: none; color: white; cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 1.5rem 2rem; text-align: right; position: relative;">
+                    <style>
+                        .actions-dropdown {
+                            display: none;
+                            position: absolute;
+                            right: 2rem;
+                            top: 3.5rem;
+                            background: var(--bg-sidebar);
+                            border: 1px solid var(--border-gray);
+                            border-radius: 16px;
+                            width: 240px;
+                            z-index: 1000;
+                            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+                            padding: 0.75rem;
+                            text-align: left;
+                        }
+                        .dropdown-item {
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            gap: 12px;
+                            padding: 0.85rem 1rem;
+                            border-radius: 10px;
+                            color: var(--text-muted);
+                            text-decoration: none;
+                            font-size: 0.85rem;
+                            font-weight: 700;
+                            border: none;
+                            background: transparent;
+                            cursor: pointer;
+                            transition: 0.2s;
+                        }
+                        .dropdown-item:hover {
+                            background: rgba(255,255,255,0.05);
+                            color: white;
+                        }
+                        .dropdown-item.danger:hover {
+                            background: rgba(239, 68, 68, 0.1);
+                            color: var(--danger);
+                        }
+                        .actions-btn:focus + .actions-dropdown, .actions-dropdown:hover {
+                            display: block;
+                        }
+                    </style>
+                    <button class="actions-btn" style="background: transparent; border: none; color: white; cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
                     </button>
+                    <div class="actions-dropdown">
+                        <div style="padding: 0.5rem 1rem; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Gerenciar</div>
+                        <a href="{{ route('admin.users.show', $user->id) }}" class="dropdown-item">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                            Ver Detalhes
+                        </a>
+                        
+                        <div style="padding: 0.5rem 1rem; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-top: 1px solid var(--border-gray); margin-top: 0.5rem;">Ações</div>
+                        
+                        <form action="{{ route('admin.users.reset_password', $user->id) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z"/></svg>
+                                Resetar Senha
+                            </button>
+                        </form>
+
+                        @if(!$user->two_factor_secret)
+                            <button class="dropdown-item" disabled title="2FA não está ativo">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                Resetar 2FA
+                            </button>
+                        @else
+                            <form action="{{ route('admin.users.toggle', [$user->id, 'reset_2fa']) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                    Resetar 2FA
+                                </button>
+                            </form>
+                        @endif
+
+                        <form action="{{ route('admin.users.toggle', [$user->id, $user->withdrawals_frozen ? 'unfreeze_withdrawals' : 'freeze_withdrawals']) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                                {{ $user->withdrawals_frozen ? 'Descongelar Saques' : 'Congelar Saques' }}
+                            </button>
+                        </form>
+
+                        <form action="{{ route('admin.users.toggle', [$user->id, $user->deposits_frozen ? 'unfreeze_deposits' : 'freeze_deposits']) }}" method="POST">
+                            @csrf
+                            <button type="submit" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                {{ $user->deposits_frozen ? 'Descongelar Depósitos' : 'Congelar Depósitos' }}
+                            </button>
+                        </form>
+
+                        <form action="{{ route('admin.users.toggle', [$user->id, $user->status == 'suspended' ? 'activate' : 'suspend']) }}" method="POST" style="border-top: 1px solid var(--border-gray); margin-top: 0.5rem;">
+                            @csrf
+                            <button type="submit" class="dropdown-item danger">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                                {{ $user->status == 'suspended' ? 'Reativar Usuário' : 'Suspender Usuário' }}
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @endforeach
@@ -95,7 +197,7 @@
     
     <!-- Pagination -->
     <div style="padding: 1.5rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.1);">
-        <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700;">Mostrando <strong>1</strong> a <strong>{{ $users->count() }}</strong> de <strong>{{ $users->total() }}</strong> usuários</p>
+        <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700;">Mostrando <strong>{{ $users->firstItem() }}</strong> a <strong>{{ $users->lastItem() }}</strong> de <strong>{{ $users->total() }}</strong> usuários</p>
         <div>
             {{ $users->links() }}
         </div>

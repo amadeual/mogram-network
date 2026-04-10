@@ -50,10 +50,65 @@ class AdminController extends Controller
         return view('admin.dashboard', compact('stats', 'recentActivity', 'recentTransactions', 'revenueData'));
     }
 
-    public function users()
+    public function users(Request $request)
     {
-        $users = User::paginate(10);
+        $query = User::query();
+
+        if ($request->search) {
+            $query->where(function($q) use ($request) {
+                $q->where('name', 'LIKE', "%{$request->search}%")
+                  ->orWhere('email', 'LIKE', "%{$request->search}%")
+                  ->orWhere('username', 'LIKE', "%{$request->search}%");
+            });
+        }
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->role) {
+            $query->where('role', $request->role);
+        }
+
+        $users = $query->paginate(15);
         return view('admin.users', compact('users'));
+    }
+
+    public function showUser($id)
+    {
+        $user = User::findOrFail($id);
+        // Logic for city, country, IP etc. IP usually stored in a logs table or session.
+        // For now using the column added in migration.
+        return view('admin.user-details', compact('user'));
+    }
+
+    public function toggleUserStatus($id, $action)
+    {
+        $user = User::findOrFail($id);
+        
+        switch($action) {
+            case 'suspend': $user->status = 'suspended'; break;
+            case 'activate': $user->status = 'active'; break;
+            case 'freeze_withdrawals': $user->withdrawals_frozen = true; break;
+            case 'unfreeze_withdrawals': $user->withdrawals_frozen = false; break;
+            case 'freeze_deposits': $user->deposits_frozen = true; break;
+            case 'unfreeze_deposits': $user->deposits_frozen = false; break;
+            case 'reset_2fa': $user->two_factor_secret = null; break;
+        }
+
+        $user->save();
+        return back()->with('success', 'Ação executada com sucesso!');
+    }
+
+    public function resetUserPassword($id)
+    {
+        $user = User::findOrFail($id);
+        $tempPassword = \Illuminate\Support\Str::random(10);
+        $user->password = \Illuminate\Support\Facades\Hash::make($tempPassword);
+        $user->save();
+        
+        // In a real app, send email. For now return with success message
+        return back()->with('success', "Senha resetada! Nova senha temporária: {$tempPassword}");
     }
 
     public function categories()

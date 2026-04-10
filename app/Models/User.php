@@ -24,10 +24,16 @@ class User extends Authenticatable
         'password',
         'avatar',
         'city',
+        'country',
         'category',
         'bio',
         'is_verified',
         'role',
+        'status',
+        'withdrawals_frozen',
+        'deposits_frozen',
+        'last_ip',
+        'two_factor_secret',
     ];
 
     /**

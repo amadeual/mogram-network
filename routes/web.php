@@ -128,6 +128,9 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
         Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
+        Route::get('/users/{id}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('admin.users.show');
+        Route::post('/users/{id}/toggle/{action}', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle');
+        Route::post('/users/{id}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('admin.users.reset_password');
         Route::get('/categories', [App\Http\Controllers\AdminController::class, 'categories'])->name('admin.categories');
         Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals');
         Route::get('/deposits', [App\Http\Controllers\AdminController::class, 'deposits'])->name('admin.deposits');

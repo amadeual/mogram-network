@@ -334,6 +334,20 @@
                 </div>
             </header>
 
+            @if(session('success'))
+            <div style="background: var(--success); color: white; padding: 1rem 1.5rem; border-radius: 14px; margin-bottom: 2rem; display: flex; align-items: center; gap: 12px; font-weight: 700; box-shadow: 0 10px 30px rgba(34, 197, 94, 0.2); animation: fadeInAnim 0.3s ease-out;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                {{ session('success') }}
+            </div>
+            @endif
+
+            @if(session('error'))
+            <div style="background: var(--danger); color: white; padding: 1rem 1.5rem; border-radius: 14px; margin-bottom: 2rem; display: flex; align-items: center; gap: 12px; font-weight: 700; box-shadow: 0 10px 30px rgba(239, 68, 68, 0.2); animation: fadeInAnim 0.3s ease-out;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                {{ session('error') }}
+            </div>
+            @endif
+
             <div class="fade-in">
                 @yield('admin_content')
             </div>
