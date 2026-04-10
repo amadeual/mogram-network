@@ -178,8 +178,35 @@ class AdminController extends Controller
                 ['key' => $key],
                 ['value' => $value]
             );
+
+            // Sync specifically with .env if requested
+            if ($key === 'ABACATE_PAY_KEY') {
+                $this->updateEnvFile('ABACATE_PAY_KEY', $value);
+            }
         }
 
         return back()->with('success', 'Configurações atualizadas com sucesso!');
+    }
+
+    private function updateEnvFile($key, $value)
+    {
+        $path = base_path('.env');
+
+        if (file_exists($path)) {
+            $content = file_get_contents($path);
+            $oldValue = env($key);
+
+            if (str_contains($content, "{$key}=")) {
+                $content = preg_replace(
+                    "/^{$key}=.*/m",
+                    "{$key}={$value}",
+                    $content
+                );
+            } else {
+                $content .= "\n{$key}={$value}";
+            }
+
+            file_put_contents($path, $content);
+        }
     }
 }

@@ -99,7 +99,7 @@
             </div>
         </div>
 
-        <!-- Gateways (Visual only for now) -->
+        <!-- Gateways -->
         <div class="admin-card">
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;">
                 <div style="width: 42px; height: 42px; background: rgba(51, 144, 236, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
@@ -111,23 +111,39 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 16px; padding: 1.25rem;">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 38px; height: 38px; background: #009ee3; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.2rem;">M</div>
+            <div style="display: flex; flex-direction: column; gap: 2rem;">
+                <div style="display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 20px; padding: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: #22c55e; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.5rem;">A</div>
+                            <div>
+                                <h4 style="font-size: 1rem; font-weight: 850;">AbacatePay</h4>
+                                <p style="font-size: 0.75rem; color: var(--success); font-weight: 800;">ATIVADO (PIX / CARTÃO)</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 6px 14px; border-radius: 10px; font-size: 0.7rem; font-weight: 840;">
+                            SINCROZINADO COM .ENV
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
                         <div>
-                            <h4 style="font-size: 0.95rem; font-weight: 850;">Mercado Pago</h4>
-                            <p style="font-size: 0.7rem; color: var(--success); font-weight: 800;">ATIVADO (PIX)</p>
+                            <label style="display: block; color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">Abacate Pay API Key</label>
+                            <div style="display: flex; align-items: center; background: rgba(0,0,0,0.3); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
+                                <svg style="color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z"/></svg>
+                                <input type="password" name="ABACATE_PAY_KEY" value="{{ env('ABACATE_PAY_KEY') }}" placeholder="abc_..." style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 600; font-family: monospace;">
+                            </div>
+                            <p style="margin-top: 8px; font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Esta chave será salva tanto no banco quanto no seu arquivo .env automaticamente.</p>
                         </div>
                     </div>
                 </div>
                 
-                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1.5px solid var(--border-gray); border-radius: 16px; padding: 1.25rem; opacity: 0.5;">
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1.5px solid var(--border-gray); border-radius: 20px; padding: 1.5rem; opacity: 0.4; filter: grayscale(1);">
                     <div style="display: flex; align-items: center; gap: 1rem;">
-                        <div style="width: 38px; height: 38px; background: #635bff; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.2rem;">S</div>
+                        <div style="width: 48px; height: 48px; background: #635bff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.5rem;">S</div>
                         <div>
-                            <h4 style="font-size: 0.95rem; font-weight: 850;">Stripe</h4>
-                            <p style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">DESATIVADO</p>
+                            <h4 style="font-size: 1rem; font-weight: 850;">Stripe</h4>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">INDISPONÍVEL</p>
                         </div>
                     </div>
                 </div>
