@@ -40,9 +40,9 @@
             <div style="width: 48px; height: 48px; background: rgba(34, 197, 94, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--success); margin-bottom: 1.5rem;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Receita Total</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Ganhos dos Criadores</p>
             <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_revenue'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Fluxo bruto histórico</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Total líquido recebido (Mimos, Lives, etc)</p>
         </div>
     </div>
 
@@ -52,9 +52,9 @@
             <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--danger); margin-bottom: 1.5rem;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Lucro Líquido</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Lucro da Plataforma</p>
             <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['net_profit'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Comissão de 15%</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Comissão de {{ $stats['commission'] }}% sobre as transações</p>
         </div>
     </div>
 </div>

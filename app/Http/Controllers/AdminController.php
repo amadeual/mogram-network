@@ -13,13 +13,24 @@ class AdminController extends Controller
 {
     public function index()
     {
+        $settings = \App\Models\Setting::all()->pluck('value', 'key');
+        $commission = (float)($settings['commission_percentage'] ?? 15);
+        $creatorShare = (100 - $commission) / 100;
+        $platformShare = $commission / 100;
+
+        // Sum of all money spent on the platform
+        $totalSpent = \App\Models\LiveGift::sum('amount') + 
+                      \App\Models\Purchase::sum('amount') + 
+                      DB::table('live_access')->sum('amount');
+
         $stats = [
             'total_users' => User::count(),
             'total_deposits' => \App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount'),
-            'total_revenue' => \App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount'),
+            'total_revenue' => $totalSpent * $creatorShare, // What creators actually earned
             'total_posts' => Post::count(),
             'total_lives' => Live::count(),
-            'net_profit' => (\App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount')) * 0.15,
+            'net_profit' => $totalSpent * $platformShare, // Platform revenue (commission)
+            'commission' => $commission
         ];
 
         // Daily Revenue for Chart (Last 30 days)
