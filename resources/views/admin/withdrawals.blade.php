@@ -12,7 +12,7 @@
     <div style="display: flex; gap: 1rem;">
         <div class="admin-card" style="padding: 10px 20px; display: flex; align-items: center; gap: 10px; background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.2);">
             <div style="width: 8px; height: 8px; background: var(--success); border-radius: 50%;"></div>
-            <span style="font-size: 0.8rem; font-weight: 800; color: var(--success);">Pendentes: R$ 45.300,00</span>
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--success);">Pendentes: R$ {{ number_format($pendingAmount, 2, ',', '.') }}</span>
         </div>
     </div>
 </div>

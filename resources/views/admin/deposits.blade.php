@@ -12,7 +12,7 @@
     <div style="display: flex; gap: 1rem;">
         <div class="admin-card" style="padding: 10px 20px; display: flex; align-items: center; gap: 10px; background: rgba(51, 144, 236, 0.1); border-color: rgba(51, 144, 236, 0.2);">
             <div style="width: 8px; height: 8px; background: var(--primary-blue); border-radius: 50%;"></div>
-            <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-blue);">Total Hoje: R$ 12.840,00</span>
+            <span style="font-size: 0.8rem; font-weight: 800; color: var(--primary-blue);">Total Hoje: R$ {{ number_format($todayAmount, 2, ',', '.') }}</span>
         </div>
     </div>
 </div>

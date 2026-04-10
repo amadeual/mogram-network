@@ -15,14 +15,39 @@ class AdminController extends Controller
     {
         $stats = [
             'total_users' => User::count(),
-            'total_revenue' => LiveGift::sum('amount'),
+            'total_revenue' => \App\Models\Deposit::where('status', 'approved')->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount'),
             'total_posts' => Post::count(),
             'total_lives' => Live::count(),
+            'net_profit' => (\App\Models\Deposit::where('status', 'approved')->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount')) * 0.15,
         ];
 
-        $recentActivity = User::latest()->take(5)->get();
+        // Daily Revenue for Chart (Last 30 days)
+        $revenueData = DB::table(function ($query) {
+            $query->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+                ->from('deposits')
+                ->where('status', 'approved')
+                ->groupBy('date')
+                ->unionAll(
+                    DB::table('live_gifts')
+                        ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+                        ->groupBy('date')
+                )
+                ->unionAll(
+                    DB::table('purchases')
+                        ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+                        ->groupBy('date')
+                );
+        }, 'combined')
+        ->select('date', DB::raw('SUM(total) as daily_total'))
+        ->where('date', '>=', now()->subDays(30))
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
 
-        return view('admin.dashboard', compact('stats', 'recentActivity'));
+        $recentActivity = User::latest()->take(5)->get();
+        $recentTransactions = \App\Models\Deposit::with('user')->latest()->take(5)->get();
+
+        return view('admin.dashboard', compact('stats', 'recentActivity', 'recentTransactions', 'revenueData'));
     }
 
     public function users()
@@ -36,10 +61,9 @@ class AdminController extends Controller
         // For categories, we might use a separate model but currently they are strings in posts/lives
         // I will use a mock list for now based on the image provided
         $categories = [
-            ['id' => 1, 'name' => 'Premium', 'slug' => 'premium', 'posts' => 1204, 'status' => 'active', 'icon' => '⭐'],
-            ['id' => 2, 'name' => 'Bastidores', 'slug' => 'bastidores', 'posts' => 450, 'status' => 'active', 'icon' => '🎥'],
-            ['id' => 3, 'name' => 'Promoções', 'slug' => 'promocoes', 'posts' => 120, 'status' => 'inactive', 'icon' => '📢'],
-            ['id' => 4, 'name' => 'Tutoriais', 'slug' => 'tutoriais', 'posts' => 85, 'status' => 'active', 'icon' => '🎓'],
+            ['id' => 1, 'name' => 'Premium', 'slug' => 'premium', 'posts' => Post::count(), 'status' => 'active', 'icon' => '⭐'],
+            ['id' => 2, 'name' => 'Bastidores', 'slug' => 'bastidores', 'posts' => Post::count() / 2, 'status' => 'active', 'icon' => '🎥'],
+            ['id' => 3, 'name' => 'Geral', 'slug' => 'geral', 'posts' => Post::count(), 'status' => 'active', 'icon' => '🌍'],
         ];
 
         return view('admin.categories', compact('categories'));
@@ -48,13 +72,15 @@ class AdminController extends Controller
     public function withdrawals()
     {
         $withdrawals = \App\Models\Withdrawal::with('user')->orderBy('created_at', 'desc')->paginate(15);
-        return view('admin.withdrawals', compact('withdrawals'));
+        $pendingAmount = \App\Models\Withdrawal::where('status', 'pending')->sum('amount');
+        return view('admin.withdrawals', compact('withdrawals', 'pendingAmount'));
     }
 
     public function deposits()
     {
         $deposits = \App\Models\Deposit::with('user')->orderBy('created_at', 'desc')->paginate(15);
-        return view('admin.deposits', compact('deposits'));
+        $todayAmount = \App\Models\Deposit::whereDate('created_at', \Carbon\Carbon::today())->sum('amount');
+        return view('admin.deposits', compact('deposits', 'todayAmount'));
     }
 
     public function reports()

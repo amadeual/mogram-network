@@ -18,10 +18,10 @@
             </div>
             <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Usuários Totais</p>
             <h2 style="font-size: 1.75rem; font-weight: 900;">{{ number_format($stats['total_users'], 0, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">vs. {{ number_format($stats['total_users'] * 0.9, 0, ',', '.') }} mês passado</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Base de usuários ativa</p>
         </div>
-        <div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
-            +12%
+        <div style="background: rgba(51, 144, 236, 0.1); color: var(--primary-blue); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
+            Real
         </div>
     </div>
 
@@ -33,10 +33,10 @@
             </div>
             <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Receita Total</p>
             <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_revenue'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">vs. R$ {{ number_format($stats['total_revenue'] * 0.8, 2, ',', '.') }} mês passado</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Fluxo bruto histórico</p>
         </div>
         <div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
-            +25%
+            Real
         </div>
     </div>
 
@@ -47,11 +47,11 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
             <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Lucro Líquido (15%)</p>
-            <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_revenue'] * 0.15, 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Margem de lucro atual: 15%</p>
+            <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['net_profit'], 2, ',', '.') }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Comissão de 15% sobre o bruto</p>
         </div>
-        <div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
-            +8%
+        <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
+            Líquido
         </div>
     </div>
 </div>
@@ -134,10 +134,10 @@
     new Chart(ctx, {
         type: 'line',
         data: {
-            labels: ['01 AGO', '05 AGO', '10 AGO', '15 AGO', '20 AGO', '25 AGO', '30 AGO'],
+            labels: {!! json_encode($revenueData->pluck('date')->map(function($d) { return date('d/m', strtotime($d)); })) !!},
             datasets: [{
                 label: 'Receita (R$)',
-                data: [150000, 185000, 240000, 280000, 320000, 380000, 450230],
+                data: {!! json_encode($revenueData->pluck('daily_total')) !!},
                 fill: true,
                 backgroundColor: gradient,
                 borderColor: '#3390ec',
