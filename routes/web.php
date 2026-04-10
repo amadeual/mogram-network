@@ -80,6 +80,7 @@ Route::middleware(['auth'])->group(function () {
     // Settings Routes
     Route::get('/studio/settings', [SettingsController::class, 'index'])->name('studio.settings');
     Route::post('/studio/settings', [SettingsController::class, 'update'])->name('studio.settings.update');
+    Route::post('/studio/settings/password', [SettingsController::class, 'updatePassword'])->name('studio.settings.password');
 
     Route::get('/create', function () {
         return view('create-post');

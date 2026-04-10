@@ -97,6 +97,52 @@
                     <button type="submit" class="mogram-btn-primary" style="padding: 1rem 3rem; border-radius: 14px; font-weight: 950; box-shadow: 0 8px 30px rgba(51, 144, 236, 0.3);">Salvar Alterações</button>
                 </div>
             </form>
+
+            <!-- Security Settings -->
+            <form action="{{ route('studio.settings.password') }}" method="POST" 
+                  class="settings-form" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 3rem; max-width: 800px; margin-top: 3rem;">
+                @csrf
+                
+                <header style="margin-bottom: 2.5rem;">
+                    <h3 style="font-size: 1.25rem; font-weight: 900; color: white; margin-bottom: 0.5rem;">Segurança da Conta</h3>
+                    <p style="color: var(--text-muted); font-size: 13px; font-weight: 600;">Atualize sua senha periodicamente para manter sua conta protegida.</p>
+                </header>
+
+                @if($errors->any())
+                    <div style="background: rgba(239,68,68,0.1); border: 1.5px solid rgba(239,68,68,0.2); border-radius: 16px; padding: 1rem 1.5rem; color: #ef4444; font-weight: 700; font-size: 14px; margin-bottom: 2rem;">
+                        <ul style="list-style: none;">
+                            @foreach($errors->all() as $error)
+                                <li>• {{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <div style="display: flex; flex-direction: column; gap: 1.5rem; margin-bottom: 2.5rem;">
+                    <div>
+                        <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Senha Atual</label>
+                        <input type="password" name="current_password" required
+                               style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.875rem 1.25rem; color: white; font-weight: 700; outline: none;">
+                    </div>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Nova Senha</label>
+                            <input type="password" name="password" required
+                                   style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.875rem 1.25rem; color: white; font-weight: 700; outline: none;">
+                        </div>
+                        <div>
+                            <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; margin-bottom: 8px;">Confirmar Nova Senha</label>
+                            <input type="password" name="password_confirmation" required
+                                   style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.875rem 1.25rem; color: white; font-weight: 700; outline: none;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="submit" class="mogram-btn-primary" style="padding: 1rem 3rem; border-radius: 14px; font-weight: 950; box-shadow: 0 8px 30px rgba(51, 144, 236, 0.3);">Atualizar Senha</button>
+                </div>
+            </form>
         </div>
     </main>
 </div>

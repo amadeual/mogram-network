@@ -42,4 +42,18 @@ class SettingsController extends Controller
 
         return redirect()->back()->with('success', 'Configurações atualizadas com sucesso!');
     }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|current_password',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = Auth::user();
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->password);
+        $user->save();
+
+        return redirect()->back()->with('success', 'Senha alterada com sucesso!');
+    }
 }
