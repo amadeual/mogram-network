@@ -15,10 +15,11 @@ class AdminController extends Controller
     {
         $stats = [
             'total_users' => User::count(),
-            'total_revenue' => \App\Models\Deposit::where('status', 'approved')->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount'),
+            'total_deposits' => \App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount'),
+            'total_revenue' => \App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount'),
             'total_posts' => Post::count(),
             'total_lives' => Live::count(),
-            'net_profit' => (\App\Models\Deposit::where('status', 'approved')->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount')) * 0.15,
+            'net_profit' => (\App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount') + \App\Models\LiveGift::sum('amount') + \App\Models\Purchase::sum('amount')) * 0.15,
         ];
 
         // Daily Revenue for Chart (Last 30 days)

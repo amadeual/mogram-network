@@ -9,7 +9,7 @@
 </div>
 
 <!-- Stats Grid -->
-<div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
     <!-- Users Card -->
     <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start;">
         <div>
@@ -20,8 +20,17 @@
             <h2 style="font-size: 1.75rem; font-weight: 900;">{{ number_format($stats['total_users'], 0, ',', '.') }}</h2>
             <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Base de usuários ativa</p>
         </div>
-        <div style="background: rgba(51, 144, 236, 0.1); color: var(--primary-blue); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
-            Real
+    </div>
+
+    <!-- Deposits Card -->
+    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div>
+            <div style="width: 48px; height: 48px; background: rgba(51, 144, 236, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); margin-bottom: 1.5rem;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Depósitos Totais</p>
+            <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_deposits'], 2, ',', '.') }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Entrada de capital confirmada</p>
         </div>
     </div>
 
@@ -35,9 +44,6 @@
             <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_revenue'], 2, ',', '.') }}</h2>
             <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Fluxo bruto histórico</p>
         </div>
-        <div style="background: rgba(34, 197, 94, 0.1); color: var(--success); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
-            Real
-        </div>
     </div>
 
     <!-- Profit Card -->
@@ -46,12 +52,9 @@
             <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--danger); margin-bottom: 1.5rem;">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Lucro Líquido (15%)</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Lucro Líquido</p>
             <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['net_profit'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Comissão de 15% sobre o bruto</p>
-        </div>
-        <div style="background: rgba(239, 68, 68, 0.1); color: var(--danger); padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 800;">
-            Líquido
+            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Comissão de 15%</p>
         </div>
     </div>
 </div>
