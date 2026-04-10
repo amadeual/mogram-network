@@ -51,7 +51,7 @@
                 <td style="padding: 1.5rem 2rem;">
                     @php
                         $statusColors = [
-                            'pending' => ['bg' => 'rgba(255, 255, 255, 0.05)', 'text' => var(--text-muted), 'label' => 'Aguardando'],
+                            'pending' => ['bg' => 'rgba(255, 255, 255, 0.05)', 'text' => 'var(--text-muted)', 'label' => 'Aguardando'],
                             'approved' => ['bg' => 'rgba(34, 197, 94, 0.1)', 'text' => 'var(--success)', 'label' => 'Confirmado'],
                             'cancelled' => ['bg' => 'rgba(239, 68, 68, 0.1)', 'text' => 'var(--danger)', 'label' => 'Cancelado'],
                         ];
