@@ -77,8 +77,8 @@ class CommunityController extends Controller
         $community->description = $request->description;
         $community->category = $request->category;
         $community->price = $request->price;
-        $community->has_free_trial = $request->has('has_free_trial');
-        $community->free_trial_days = $request->free_trial_days ?? 0;
+        $community->has_free_trial = false;
+        $community->free_trial_days = 0;
 
         if ($request->hasFile('avatar')) {
             $community->avatar = $request->file('avatar')->store('communities/avatars', 'public');
@@ -229,8 +229,9 @@ class CommunityController extends Controller
             'banner' => 'nullable|image|max:5120',
         ]);
 
-        $data = $request->only(['name', 'description', 'category', 'price', 'free_trial_days']);
-        $data['has_free_trial'] = ($request->free_trial_days > 0);
+        $data = $request->only(['name', 'description', 'category', 'price']);
+        $data['has_free_trial'] = false;
+        $data['free_trial_days'] = 0;
 
         if ($request->hasFile('avatar')) {
             if ($community->avatar) Storage::disk('public')->delete($community->avatar);

@@ -49,10 +49,6 @@
                         <button type="submit" class="mogram-btn-primary" style="width: 100%; padding: 1.25rem; border-radius: 16px; font-weight: 900; font-size: 15px; border: none; background: #3390ec; color: white; cursor: pointer; box-shadow: 0 15px 30px rgba(51, 144, 236, 0.4); transition: 0.3s;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 20px 40px rgba(51, 144, 236, 0.5)'" onmouseout="this.style.transform='translateY(0)'">Assinar Agora</button>
                     </form>
                     
-                    @if($community->has_free_trial)
-                        <p style="margin-top: 1.5rem; font-size: 13px; color: #22c55e; font-weight: 700;">Inclui {{ $community->free_trial_days }} dias de teste grátis</p>
-                    @endif
-                    
                     <p style="margin-top: 1.5rem; font-size: 11px; color: var(--text-muted); font-weight: 600;">O valor será descontado do seu saldo Mogram.</p>
                 </div>
             </div>
