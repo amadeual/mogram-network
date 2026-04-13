@@ -42,10 +42,25 @@ class LiveController extends Controller
         $userAccessIds = [];
         if (Auth::check()) {
             try {
-                $userAccessIds = DB::table('live_access')
+                // Access via purchase
+                $purchasedAccessIds = DB::table('live_access')
                     ->where('user_id', Auth::id())
                     ->pluck('live_id')
                     ->toArray();
+                
+                // Access via community membership
+                $myCommunityIds = DB::table('community_subscriptions')
+                    ->where('user_id', Auth::id())
+                    ->where('status', 'active')
+                    ->pluck('community_id')
+                    ->toArray();
+                
+                $communityAccessIds = Live::whereIn('community_id', $myCommunityIds)
+                    ->pluck('id')
+                    ->toArray();
+
+                $userAccessIds = array_unique(array_merge($purchasedAccessIds, $communityAccessIds));
+
             } catch (\Exception $e) {
                 // Table doesn't exist, create it auto-fallback
                 try {
@@ -60,7 +75,8 @@ class LiveController extends Controller
 
     public function create()
     {
-        return view('create-live');
+        $communities = \App\Models\Community::where('user_id', Auth::id())->get();
+        return view('create-live', compact('communities'));
     }
 
     public function store(Request $request)
@@ -71,7 +87,8 @@ class LiveController extends Controller
                 'description' => 'required|string|max:1000',
                 'thumbnail' => 'required|image|max:5120',
                 'category' => 'nullable|string|max:100',
-                'price' => 'required|numeric|min:5.00'
+                'price' => 'required|numeric|min:5.00',
+                'community_id' => 'nullable|exists:communities,id'
             ], [
                 'title.required' => 'O título da live é obrigatório.',
                 'description.required' => 'A descrição da live é obrigatória.',
@@ -98,6 +115,7 @@ class LiveController extends Controller
             
             $live = Live::create([
                 'user_id' => Auth::id(),
+                'community_id' => $request->community_id,
                 'title' => $request->title,
                 'description' => $request->description,
                 'category' => $request->category ?? 'Geral',
@@ -132,7 +150,8 @@ class LiveController extends Controller
             abort(403);
         }
 
-        return view('live-edit', compact('live'));
+        $communities = \App\Models\Community::where('user_id', Auth::id())->get();
+        return view('live-edit', compact('live', 'communities'));
     }
 
     public function update(Request $request, Live $live)
@@ -146,6 +165,7 @@ class LiveController extends Controller
             'description' => 'required|string|max:1000',
             'category' => 'required',
             'price' => 'required|numeric|min:5',
+            'community_id' => 'nullable|exists:communities,id'
         ]);
 
         $data = [
@@ -153,6 +173,7 @@ class LiveController extends Controller
             'description' => $request->description,
             'category' => $request->category,
             'price' => $request->price,
+            'community_id' => $request->community_id,
         ];
 
         if ($request->hasFile('thumbnail')) {
@@ -194,10 +215,20 @@ class LiveController extends Controller
         $hasAccess = true;
         if (!$live->is_free && Auth::id() != $live->user_id) {
             try {
+                // Check if user has purchased access
                 $hasAccess = DB::table('live_access')
                     ->where('user_id', Auth::id())
                     ->where('live_id', $live->id)
                     ->exists();
+                
+                // If no purchase, check if user is a member of the allowed community
+                if (!$hasAccess && $live->community_id) {
+                    $hasAccess = DB::table('community_subscriptions')
+                        ->where('user_id', Auth::id())
+                        ->where('community_id', $live->community_id)
+                        ->where('status', 'active')
+                        ->exists();
+                }
             } catch (\Exception $e) {
                 $hasAccess = false; // Table doesn't exist yet, assume no access
             }
@@ -224,6 +255,20 @@ class LiveController extends Controller
         if ($live->is_free) return back();
         
         $user = Auth::user();
+
+        // Check if user already has access via community
+        if ($live->community_id) {
+            $isMember = DB::table('community_subscriptions')
+                ->where('user_id', $user->id)
+                ->where('community_id', $live->community_id)
+                ->where('status', 'active')
+                ->exists();
+            
+            if ($isMember) {
+                return back()->with('success', 'Você já tem acesso como membro da comunidade!');
+            }
+        }
+
         if ($user->balance < $live->price) {
             return back()->with('error', 'Saldo insuficiente');
         }

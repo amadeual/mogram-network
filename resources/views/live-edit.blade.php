@@ -107,7 +107,7 @@
                         </div>
 
                         <!-- Category Select -->
-                        <div>
+                        <div style="margin-bottom: 1rem;">
                             <label class="premium-label">Categoria</label>
                             <div style="position: relative;">
                                 <select name="category" required class="mogram-select-v2 @error('category') error @enderror">
@@ -116,6 +116,20 @@
                                     @endforeach
                                 </select>
                             </div>
+                        </div>
+
+                        <!-- Community Select (Free Access) -->
+                        <div>
+                            <label class="premium-label">Comunidade com Acesso Grátis (Opcional)</label>
+                            <div style="position: relative;">
+                                <select name="community_id" class="mogram-select-v2 @error('community_id') error @enderror">
+                                    <option value="" {{ !$live->community_id ? 'selected' : '' }} style="background: #1a1c2e; color: white;">Nenhuma (Apenas pagantes)</option>
+                                    @foreach($communities as $community)
+                                        <option value="{{ $community->id }}" {{ old('community_id', $live->community_id) == $community->id ? 'selected' : '' }} style="background: #1a1c2e; color: white;">{{ $community->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <p style="color: #64748b; font-size: 0.65rem; margin-top: 8px; font-weight: 600;">Membros desta comunidade poderão entrar na live sem pagar o ingresso.</p>
                         </div>
                     </div>
 

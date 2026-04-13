@@ -9,7 +9,12 @@ class Live extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'title', 'description', 'thumbnail', 'is_free', 'price', 'status', 'scheduled_at', 'started_at', 'ended_at', 'is_paused', 'is_muted', 'is_camera_off'];
+    protected $fillable = ['user_id', 'community_id', 'title', 'description', 'thumbnail', 'is_free', 'price', 'status', 'scheduled_at', 'started_at', 'ended_at', 'is_paused', 'is_muted', 'is_camera_off'];
+    
+    public function community()
+    {
+        return $this->belongsTo(Community::class);
+    }
 
     protected $casts = [
         'scheduled_at' => 'datetime',
