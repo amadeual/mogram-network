@@ -224,7 +224,7 @@ class StudioController extends Controller
         $liveRevenue = $giftRevenue + $ticketRevenue;
         $totalRevenue = $postRevenue + $liveRevenue + $communityRevenue;
         
-        $totalCompletedWithdrawals = $withdrawals->whereIn('status', ['completed', 'pending'])->sum('amount');
+        $totalCompletedWithdrawals = $withdrawals->whereIn('status', ['approved', 'pending'])->sum('amount');
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
         
         return view('studio.finance', compact(
@@ -241,7 +241,7 @@ class StudioController extends Controller
     {
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         $totalRevenue = $this->calculateTotalRevenue();
-        $totalCompletedWithdrawals = Withdrawal::where('user_id', Auth::id())->whereIn('status', ['completed', 'pending'])->sum('amount');
+        $totalCompletedWithdrawals = Withdrawal::where('user_id', Auth::id())->whereIn('status', ['approved', 'pending'])->sum('amount');
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
 
         return view('studio.withdraw', compact('availableBalance'));
@@ -259,7 +259,7 @@ class StudioController extends Controller
         $totalRevenue = $this->calculateTotalRevenue();
         
         $totalCompletedWithdrawals = Withdrawal::where('user_id', Auth::id())
-            ->whereIn('status', ['pending', 'completed'])
+            ->whereIn('status', ['pending', 'approved'])
             ->sum('amount');
             
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;

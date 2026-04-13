@@ -139,6 +139,8 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/users/{id}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('admin.users.reset_password');
         Route::get('/categories', [App\Http\Controllers\AdminController::class, 'categories'])->name('admin.categories');
         Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals');
+        Route::post('/withdrawals/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
+        Route::post('/withdrawals/{id}/reject', [App\Http\Controllers\AdminController::class, 'rejectWithdrawal'])->name('admin.withdrawals.reject');
         Route::get('/deposits', [App\Http\Controllers\AdminController::class, 'deposits'])->name('admin.deposits');
         Route::get('/gifts', [App\Http\Controllers\AdminController::class, 'gifts'])->name('admin.gifts');
         Route::post('/gifts/{id}', [App\Http\Controllers\AdminController::class, 'updateGift'])->name('admin.gifts.update');

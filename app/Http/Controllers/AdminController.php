@@ -200,6 +200,39 @@ class AdminController extends Controller
         return back()->with('success', 'Configurações atualizadas com sucesso!');
     }
 
+    public function approveWithdrawal($id)
+    {
+        $withdrawal = \App\Models\Withdrawal::findOrFail($id);
+        
+        if ($withdrawal->status !== 'pending') {
+            return back()->with('error', 'Este saque já foi processado.');
+        }
+
+        $withdrawal->status = 'approved';
+        $withdrawal->save();
+
+        // Optional: Send notification to user
+        
+        return back()->with('success', 'Saque aprovado e marcado como pago!');
+    }
+
+    public function rejectWithdrawal(Request $request, $id)
+    {
+        $withdrawal = \App\Models\Withdrawal::findOrFail($id);
+        
+        if ($withdrawal->status !== 'pending') {
+            return back()->with('error', 'Este saque já foi processado.');
+        }
+
+        $withdrawal->status = 'rejected';
+        $withdrawal->rejection_reason = $request->reason ?? 'Solicitação recusada pela administração.';
+        $withdrawal->save();
+
+        // Optional: Send notification to user
+
+        return back()->with('success', 'Saque recusado com sucesso.');
+    }
+
     private function updateEnvFile($key, $value)
     {
         $path = base_path('.env');

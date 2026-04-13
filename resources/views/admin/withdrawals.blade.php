@@ -46,15 +46,23 @@
                     R$ {{ number_format($withdrawal->amount, 2, ',', '.') }}
                 </td>
                 <td style="padding: 1.5rem 2rem;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        @if($withdrawal->method == 'pix')
-                            <div style="width: 24px; height: 24px; background: #32bcad; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.6rem; font-weight: 900;">PIX</div>
-                        @else
-                            <div style="width: 24px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white;">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                            </div>
-                        @endif
-                        <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-muted);">{{ strtoupper($withdrawal->method) }}</span>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            @if($withdrawal->method == 'pix')
+                                <div style="width: 24px; height: 24px; background: #32bcad; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.6rem; font-weight: 900;">PIX</div>
+                            @elseif($withdrawal->method == 'redotpay')
+                                <div style="width: 24px; height: 24px; background: #e11d48; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.5rem; font-weight: 900;">RDOT</div>
+                            @else
+                                <div style="width: 24px; height: 24px; background: #26a17b; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 0.6rem; font-weight: 900;">USDT</div>
+                            @endif
+                            <span style="font-size: 0.8rem; font-weight: 700; color: white;">{{ strtoupper($withdrawal->method) }}</span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.05); padding: 6px 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 8px; max-width: 220px;">
+                            <span style="font-size: 0.75rem; font-weight: 700; color: #3390ec; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $withdrawal->account_info }}</span>
+                            <button onclick="navigator.clipboard.writeText('{{ $withdrawal->account_info }}'); alert('Copiado!')" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center;">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            </button>
+                        </div>
                     </div>
                 </td>
                 <td style="padding: 1.5rem 2rem;">
@@ -76,8 +84,14 @@
                 <td style="padding: 1.5rem 2rem; text-align: right;">
                     @if($withdrawal->status == 'pending')
                         <div style="display: flex; justify-content: flex-end; gap: 8px;">
-                            <button style="background: var(--success); border: none; color: white; padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer;">Aprovar</button>
-                            <button style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--danger); padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer;">Recusar</button>
+                            <form action="{{ route('admin.withdrawals.approve', $withdrawal->id) }}" method="POST" style="display: inline;">
+                                @csrf
+                                <button type="submit" style="background: var(--success); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; cursor: pointer; transition: 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Aprovar Pago</button>
+                            </form>
+                            <form action="{{ route('admin.withdrawals.reject', $withdrawal->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja recusar este saque?')">
+                                @csrf
+                                <button type="submit" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--danger); padding: 8px 16px; border-radius: 8px; font-size: 0.75rem; font-weight: 800; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">Recusar</button>
+                            </form>
                         </div>
                     @else
                         <button style="background: transparent; border: none; color: var(--text-muted); cursor: pointer;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg></button>
