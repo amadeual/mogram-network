@@ -34,7 +34,7 @@
                 <h1 style="font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">Explorar Comunidades</h1>
                 <p style="font-size: 18px; color: rgba(255,255,255,0.6); font-weight: 500; margin-bottom: 40px;">Encontre e conecte-se com os melhores criadores do Mogram. Acesse<br>conteúdos exclusivos e cresça com a sua tribo.</p>
                 
-                <form action="{{ route('communities.index') }}" method="GET" style="max-width: 700px; margin: 0 auto; position: relative; margin-bottom: 30px;">
+                <form action="{{ route('communities.explore') }}" method="GET" style="max-width: 700px; margin: 0 auto; position: relative; margin-bottom: 30px;">
                     <div style="position: relative; display: flex; align-items: center;">
                         <span style="position: absolute; left: 24px; color: rgba(255,255,255,0.3);">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -48,7 +48,7 @@
                 <!-- Category Pills -->
                 <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                     @foreach(['Todos', 'Games', 'Negócios', 'Arte', 'Música', 'Estilo de Vida', 'Tecnologia'] as $cat)
-                        <a href="{{ route('communities.index', ['category' => $cat]) }}" 
+                        <a href="{{ route('communities.explore', ['category' => $cat]) }}" 
                            style="padding: 10px 24px; border-radius: 50px; background: {{ request('category', 'Todos') == $cat ? '#3390ec' : 'rgba(255,255,255,0.04)' }}; border: 1px solid rgba(255,255,255,0.05); color: {{ request('category', 'Todos') == $cat ? 'white' : 'rgba(255,255,255,0.6)' }}; text-decoration: none; font-size: 14px; font-weight: 700; transition: 0.2s;"
                            onmouseover="this.style.background='rgba(51, 144, 236, 0.1)'; this.style.color='white'"
                            onmouseout="this.style.background='{{ request('category', 'Todos') == $cat ? '#3390ec' : 'rgba(255,255,255,0.04)' }}'; this.style.color='{{ request('category', 'Todos') == $cat ? 'white' : 'rgba(255,255,255,0.6)' }}'">
