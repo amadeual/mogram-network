@@ -231,6 +231,7 @@ class StudioController extends Controller
             'totalRevenue', 
             'postRevenue', 
             'liveRevenue', 
+            'communityRevenue',
             'availableBalance', 
             'history'
         ));

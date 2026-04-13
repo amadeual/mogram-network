@@ -66,15 +66,15 @@
                     <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($liveRevenue, 2, ',', '.') }}</h4>
                 </div>
 
-                <!-- Assinaturas (Future/Placeholder) -->
-                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer; opacity: 0.6;">
+                <!-- Assinaturas (Real) -->
+                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
                         <div style="width: 40px; height: 40px; background: rgba(168, 85, 247, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                         </div>
                     </div>
                     <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; margin-bottom: 4px; letter-spacing: 0.5px;">Assinaturas</p>
-                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ 0,00</h4>
+                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($communityRevenue, 2, ',', '.') }}</h4>
                 </div>
 
                 <!-- Mimos (Future/Placeholder) -->
