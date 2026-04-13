@@ -47,12 +47,24 @@
                             <img src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . Auth::user()->name }}" style="width: 44px; height: 44px; border-radius: 14px; object-fit: cover;">
                             <textarea name="content" placeholder="O que você quer compartilhar com a comunidade?" style="flex: 1; background: transparent; border: none; color: white; font-size: 15px; font-weight: 600; outline: none; resize: none; min-height: 60px;" required></textarea>
                         </div>
+                        
+                        <!-- Media Preview Container -->
+                        <div id="media-preview-container" style="display: none; margin-bottom: 1.5rem; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
+                            <img id="post-image-preview" style="display: none; width: 100%; max-height: 400px; object-fit: contain; background: #000;">
+                            <video id="post-video-preview" style="display: none; width: 100%; max-height: 400px; background: #000;" controls></video>
+                            <div id="post-file-preview" style="display: none; padding: 1rem; background: rgba(255,255,255,0.05); display: flex; align-items: center; gap: 1rem;">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+                                <span id="file-name" style="font-size: 13px; color: white;"></span>
+                            </div>
+                            <button type="button" onclick="clearMedia()" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(10px);">×</button>
+                        </div>
+
                         <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.03);">
                             <div style="display: flex; gap: 1rem;">
                                 <button type="button" onclick="document.getElementById('post-media').click()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                                 </button>
-                                <input type="file" id="post-media" name="media" style="display: none;">
+                                <input type="file" id="post-media" name="media" style="display: none;" onchange="handlePostMedia(this)">
                             </div>
                             <button type="submit" class="mogram-btn-primary" style="padding: 0.75rem 2rem; border-radius: 12px; font-weight: 800; font-size: 13px;">Publicar</button>
                         </div>
@@ -171,6 +183,47 @@
         </div>
     </main>
 </div>
+
+<script>
+    function handlePostMedia(input) {
+        const container = document.getElementById('media-preview-container');
+        const img = document.getElementById('post-image-preview');
+        const vid = document.getElementById('post-video-preview');
+        const file = document.getElementById('post-file-preview');
+        const fileName = document.getElementById('file-name');
+
+        if (input.files && input.files[0]) {
+            const f = input.files[0];
+            const reader = new FileReader();
+            
+            container.style.display = 'block';
+            img.style.display = 'none';
+            vid.style.display = 'none';
+            file.style.display = 'none';
+
+            if (f.type.startsWith('image/')) {
+                reader.onload = (e) => {
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(f);
+            } else if (f.type.startsWith('video/')) {
+                const url = URL.createObjectURL(f);
+                vid.src = url;
+                vid.style.display = 'block';
+            } else {
+                fileName.textContent = f.name;
+                file.style.display = 'flex';
+            }
+        }
+    }
+
+    function clearMedia() {
+        const input = document.getElementById('post-media');
+        input.value = '';
+        document.getElementById('media-preview-container').style.display = 'none';
+    }
+</script>
 
 <style>
     @keyframes fadeInUp {
