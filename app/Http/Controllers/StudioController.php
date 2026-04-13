@@ -188,7 +188,7 @@ class StudioController extends Controller
         if ($filterType == 'all' || $filterType == 'communities') {
             foreach ($communitySubs as $sub) {
                 $history->push([
-                    'type' => 'Comunidade',
+                    'type' => 'Assinaturas',
                     'description' => $sub->community_name,
                     'user' => $sub->buyer_name,
                     'username' => $sub->buyer_username,

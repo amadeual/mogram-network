@@ -146,22 +146,43 @@ class CommunityController extends Controller
 
     public function subscribe(Community $community)
     {
-        if (Auth::user()->balance < $community->price) {
-            return back()->with('error', 'Saldo insuficiente na carteira.');
+        if (Auth::id() === $community->user_id) {
+            return back()->with('error', 'Você é o proprietário desta comunidade.');
         }
 
-        Auth::user()->decrement('balance', $community->price);
+        $existing = CommunitySubscription::where('user_id', Auth::id())
+            ->where('community_id', $community->id)
+            ->where('status', 'active')
+            ->first();
 
-        CommunitySubscription::updateOrCreate(
-            ['community_id' => $community->id, 'user_id' => Auth::id()],
-            [
-                'amount' => $community->price,
-                'status' => 'active',
-                'expires_at' => now()->addMonth(), // Assuming monthly
-            ]
-        );
+        if ($existing) {
+            return redirect()->route('communities.show', $community->slug);
+        }
 
-        return redirect()->route('communities.show', $community->slug)->with('success', 'Assinatura realizada com sucesso!');
+        if (Auth::user()->balance < $community->price) {
+            return back()->with('error', 'Saldo insuficiente na carteira. Por favor, faça um depósito.');
+        }
+
+        DB::transaction(function () use ($community) {
+            // Deduct from buyer
+            Auth::user()->decrement('balance', $community->price);
+
+            // Create or update subscription
+            CommunitySubscription::updateOrCreate(
+                ['community_id' => $community->id, 'user_id' => Auth::id()],
+                [
+                    'amount' => $community->price,
+                    'status' => 'active',
+                    'expires_at' => now()->addMonth(),
+                    'created_at' => now(), // Force update timestamp to show in finance
+                ]
+            );
+
+            // Note: We don't increment the owner's 'balance' column because the Studio 
+            // calculates earnings based on the community_subscriptions table.
+        });
+
+        return redirect()->route('communities.show', $community->slug)->with('success', 'Assinatura realizada com sucesso! Bem-vindo à comunidade.');
     }
 
     public function storePost(Request $request, Community $community)
