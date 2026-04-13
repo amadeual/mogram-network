@@ -35,7 +35,24 @@ class FeedController extends Controller
                 ->groupBy('user_id');
         }
 
-        return view('dashboard', compact('posts', 'activeStories'));
+        // Get suggestions: Trending (most followed) and Common Interests (same category)
+        $user = auth()->user();
+        $excludeIds = array_merge($followingIds, [$user->id]);
+
+        $trendingUsers = \App\Models\User::whereNotIn('id', $excludeIds)
+            ->withCount('followers')
+            ->orderBy('followers_count', 'desc')
+            ->limit(2)
+            ->get();
+
+        $interestUsers = \App\Models\User::whereNotIn('id', $excludeIds)
+            ->where('category', $user->category)
+            ->whereNotNull('category')
+            ->inRandomOrder()
+            ->limit(2)
+            ->get();
+
+        return view('dashboard', compact('posts', 'activeStories', 'trendingUsers', 'interestUsers'));
     }
 
     public function toggleLike(Post $post)
