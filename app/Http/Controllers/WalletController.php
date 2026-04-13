@@ -146,9 +146,31 @@ class WalletController extends Controller
                 ];
             });
 
+        // History of Community Subscriptions (out)
+        $communitySubs = DB::table('community_subscriptions')
+            ->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')
+            ->join('users', 'communities.user_id', '=', 'users.id')
+            ->where('community_subscriptions.user_id', $user->id)
+            ->where('community_subscriptions.status', 'active')
+            ->select('community_subscriptions.*', 'communities.name as community_name', 'users.name as creator_name', 'users.username as creator_username')
+            ->get()
+            ->map(function($cs) {
+                return [
+                    'type' => 'Assinatura de Comunidade',
+                    'description' => $cs->community_name,
+                    'user' => $cs->creator_name,
+                    'username' => $cs->creator_username,
+                    'amount' => $cs->amount,
+                    'direction' => 'out',
+                    'date' => $cs->created_at,
+                    'status' => 'Concluído'
+                ];
+            });
+
         $history = $purchases->concat($deposits)
             ->concat($liveAccess)
             ->concat($giftsSent)
+            ->concat($communitySubs)
             ->sortByDesc('date');
 
         $availableBalance = $user->balance;
