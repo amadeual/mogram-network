@@ -52,9 +52,9 @@ class FeedController extends Controller
             ->limit(2)
             ->get();
 
-        // Get Top Live (highest viewer count or only online)
+        // Get Top Lives (highest viewer count or only online) - Top 10
         try {
-            $topLive = \App\Models\Live::where('status', 'online')
+            $topLives = \App\Models\Live::where('status', 'online')
                 ->with('user')
                 ->select('*')
                 ->selectSub(function($query) {
@@ -65,12 +65,13 @@ class FeedController extends Controller
                 }, 'viewer_count')
                 ->orderBy('viewer_count', 'desc')
                 ->latest()
-                ->first();
+                ->limit(10)
+                ->get();
         } catch (\Exception $e) {
-            $topLive = \App\Models\Live::where('status', 'online')->with('user')->latest()->first();
+            $topLives = \App\Models\Live::where('status', 'online')->with('user')->latest()->limit(10)->get();
         }
 
-        return view('dashboard', compact('posts', 'activeStories', 'trendingUsers', 'interestUsers', 'topLive'));
+        return view('dashboard', compact('posts', 'activeStories', 'trendingUsers', 'interestUsers', 'topLives'));
     }
 
     public function toggleLike(Post $post)

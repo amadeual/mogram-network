@@ -24,19 +24,6 @@
             </div>
 
             <div style="display: flex; gap: 1rem; position: relative; align-items: center;">
-                @if($topLive)
-                <a href="{{ route('live.watch', $topLive->id) }}" class="trending-live-badge" style="display: flex; align-items: center; gap: 0.75rem; background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.15); padding: 6px 12px; border-radius: 14px; text-decoration: none; transition: 0.3s;">
-                    <div style="position: relative; display: flex;">
-                        <img src="{{ $topLive->user->avatar ? Storage::url($topLive->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $topLive->user->name }}" style="width: 32px; height: 32px; border-radius: 10px; object-fit: cover; border: 1.5px solid #ef4444;">
-                        <div style="position: absolute; -top: 4px; -right: 4px; background: #ef4444; color: white; font-size: 7px; font-weight: 900; padding: 1px 3px; border-radius: 4px; border: 1.5px solid #0b0a15; bottom: -4px; right: -4px;">AO VIVO</div>
-                    </div>
-                    <div class="desktop-only" style="display: flex; flex-direction: column; line-height: 1.2;">
-                        <span style="font-size: 9px; font-weight: 900; color: #ef4444; text-transform: uppercase; letter-spacing: 0.5px;">Live em Alta</span>
-                        <span style="font-size: 12px; font-weight: 800; color: white; white-space: nowrap;">{{ Str::limit($topLive->title, 18) }}</span>
-                    </div>
-                </a>
-                @endif
-
                 <div style="position: relative;">
                     <button class="notif-bell" onclick="toggleNotifs()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative; padding: 8px; border-radius: 12px; transition: 0.2s;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -419,19 +406,38 @@
         <div style="margin-bottom: 3rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                 <h3 style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none; letter-spacing: 1px;">Lives em alta</h3>
-                <a href="#" style="font-size: 11px; color: var(--primary-blue); font-weight: 700; text-decoration: none;">Ver tudo</a>
+                <a href="{{ route('lives') }}" style="font-size: 11px; color: var(--primary-blue); font-weight: 700; text-decoration: none;">Ver tudo</a>
             </div>
-            <div style="display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.02); padding: 0.75rem; border-radius: 12px; border: 1px solid var(--border-gray);">
-                <div style="position: relative;">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" style="width: 44px; height: 44px; border-radius: 50%;">
-                    <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; font-size: 8px; font-weight: 900; padding: 2px 4px; border-radius: 4px; border: 2px solid #0b0a15;">AO VIVO</div>
+            <div id="lives-slider" style="position: relative; min-height: 70px;">
+                @forelse($topLives as $idx => $live)
+                <a href="{{ route('live.watch', $live->id) }}" class="live-slide {{ $idx === 0 ? 'active' : '' }}" style="display: {{ $idx === 0 ? 'flex' : 'none' }}; align-items: center; gap: 1rem; background: rgba(255,255,255,0.02); padding: 0.75rem; border-radius: 16px; border: 1px solid var(--border-gray); text-decoration: none; transition: 0.3s; animation: slideLive 0.5s ease-out;">
+                    <div style="position: relative;">
+                        <img src="{{ $live->user->avatar ? Storage::url($live->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $live->user->name }}" style="width: 44px; height: 44px; border-radius: 14px; object-fit: cover; border: 1.5px solid #ef4444;">
+                        <div style="position: absolute; top: -5px; left: 50%; transform: translateX(-50%); background: #ef4444; color: white; font-size: 8px; font-weight: 900; padding: 2px 4px; border-radius: 4px; border: 2px solid #0b0a15; white-space: nowrap;">AO VIVO</div>
+                    </div>
+                    <div style="flex: 1; min-width: 0;">
+                        <h4 style="font-size: 13px; font-weight: 800; color: white; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $live->title }}</h4>
+                        <p style="font-size: 11px; color: var(--text-muted); margin: 2px 0 0;">{{ $live->user->name }} • {{ $live->viewer_count ?? 0 }} assistindo</p>
+                    </div>
+                </a>
+                @empty
+                <div style="text-align: center; padding: 1rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.1);">
+                    <p style="font-size: 11px; color: var(--text-muted);">Nenhuma live no momento</p>
                 </div>
-                <div>
-                    <h4 style="font-size: 13px; font-weight: 700;">Gameplay Sábado</h4>
-                    <p style="font-size: 11px; color: var(--text-muted);">Lucas Vlogs • 1.2k assistindo</p>
-                </div>
+                @endforelse
             </div>
         </div>
+
+        <style>
+            @keyframes slideLive {
+                from { opacity: 0; transform: translateX(10px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+            .live-slide:hover {
+                background: rgba(255,255,255,0.05) !important;
+                border-color: rgba(239, 68, 68, 0.3) !important;
+            }
+        </style>
 
         <div>
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
@@ -939,6 +945,17 @@
             btn.style.opacity = '1';
             showToast('Erro ao realizar ação', 'error');
         });
+    }
+
+    // Lives Sidebar Slider
+    let currentLiveIndex = 0;
+    const liveSlides = document.querySelectorAll('.live-slide');
+    if (liveSlides.length > 1) {
+        setInterval(() => {
+            liveSlides[currentLiveIndex].style.display = 'none';
+            currentLiveIndex = (currentLiveIndex + 1) % liveSlides.length;
+            liveSlides[currentLiveIndex].style.display = 'flex';
+        }, 5000);
     }
 </script>
 @endsection
