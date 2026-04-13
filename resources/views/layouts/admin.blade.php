@@ -55,6 +55,13 @@
             flex-direction: column;
             position: fixed;
             height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE and Edge */
+        }
+
+        .sidebar::-webkit-scrollbar {
+            display: none; /* Chrome, Safari and Opera */
         }
 
         .sidebar-logo {
