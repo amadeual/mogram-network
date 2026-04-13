@@ -40,6 +40,7 @@ class StoryController extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimes:jpeg,png,jpg,mp4,mov|max:20480', // 20MB max
+            'caption' => 'nullable|string|max:500',
             'is_exclusive' => 'boolean',
             'price' => 'nullable|numeric|min:0',
         ]);
@@ -50,6 +51,7 @@ class StoryController extends Controller
         $story = Story::create([
             'user_id' => auth()->id(),
             'file_path' => $path,
+            'caption' => $request->caption,
             'type' => $type,
             'is_exclusive' => $request->is_exclusive ?? false,
             'price' => $request->price ?? 0.00,

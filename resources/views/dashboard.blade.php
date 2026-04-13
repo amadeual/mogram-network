@@ -547,15 +547,63 @@
         });
     }
 
+    let selectedStoryFile = null;
+
     function uploadStory(input) {
         if (!input.files || !input.files[0]) return;
+        selectedStoryFile = input.files[0];
         
-        const file = input.files[0];
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('_token', '{{ csrf_token() }}');
+        const previewContainer = document.getElementById('story-preview-container');
+        previewContainer.innerHTML = '';
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (selectedStoryFile.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.src = e.target.result;
+                video.style.maxWidth = '100%';
+                video.style.maxHeight = '100%';
+                video.autoplay = true;
+                video.muted = true;
+                video.loop = true;
+                previewContainer.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.style.maxWidth = '100%';
+                img.style.maxHeight = '100%';
+                img.style.objectFit = 'contain';
+                previewContainer.appendChild(img);
+            }
+            
+            document.getElementById('storyUploadModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        reader.readAsDataURL(selectedStoryFile);
+    }
 
-        showToast('Enviando story...');
+    function closeStoryModal() {
+        document.getElementById('storyUploadModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('create-story-input').value = '';
+        document.getElementById('story-caption').value = '';
+        selectedStoryFile = null;
+    }
+
+    function confirmStoryUpload() {
+        if (!selectedStoryFile) return;
+        
+        const btn = document.getElementById('btn-story-post');
+        const caption = document.getElementById('story-caption').value;
+        const originalText = btn.innerHTML;
+        
+        btn.disabled = true;
+        btn.innerHTML = '<svg class="animate-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Enviando...';
+
+        const formData = new FormData();
+        formData.append('file', selectedStoryFile);
+        formData.append('caption', caption);
+        formData.append('_token', '{{ csrf_token() }}');
 
         fetch("{{ route('stories.store') }}", {
             method: 'POST',
@@ -571,11 +619,15 @@
                 setTimeout(() => window.location.reload(), 1500);
             } else {
                 showToast(data.message || 'Erro ao publicar story', 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
             }
         })
         .catch(err => {
             console.error(err);
             showToast('Erro técnico ao publicar', 'error');
+            btn.disabled = false;
+            btn.innerHTML = originalText;
         });
     }
 
@@ -672,6 +724,31 @@
                 Copiar Link
             </button>
         </div>
+    </div>
+</div>
+
+<!-- Story Upload Modal -->
+<div id="storyUploadModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 10000; align-items: center; justify-content: center;">
+    <div style="background: #1a1a1a; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2rem; width: 90%; max-width: 450px; position: relative;">
+        <button onclick="closeStoryModal()" style="position: absolute; top: 1rem; right: 1rem; background: transparent; border: none; color: var(--text-muted); cursor: pointer;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h3 style="font-size: 20px; font-weight: 800; color: white; margin-bottom: 1.5rem; text-align: center;">Novo Story</h3>
+        
+        <div id="story-preview-container" style="width: 100%; height: 300px; border-radius: 16px; overflow: hidden; margin-bottom: 1.5rem; background: #000; display: flex; align-items: center; justify-content: center;">
+            <!-- Preview will be inserted here -->
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+            <label style="display: block; font-size: 13px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem;">Legenda (Opcional)</label>
+            <textarea id="story-caption" placeholder="Escreva algo sobre este story..." 
+                      style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px; color: white; font-size: 14px; outline: none; border-color: transparent; resize: none; min-height: 80px;"
+                      onfocus="this.style.borderColor='var(--primary-blue)'" onblur="this.style.borderColor='transparent'"></textarea>
+        </div>
+
+        <button onclick="confirmStoryUpload()" id="btn-story-post" style="width: 100%; height: 50px; background: #3390ec; color: white; border: none; border-radius: 14px; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+            Postar Agora
+        </button>
     </div>
 </div>
 

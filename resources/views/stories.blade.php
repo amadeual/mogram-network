@@ -91,6 +91,11 @@
                 <a href="#" style="color: #ef4444; text-decoration: none; font-weight: 800; font-size: 13px;">Assinar Premium</a>
             </div>
 
+            <!-- Story Caption -->
+            <div id="story-caption-display" style="position: absolute; bottom: 120px; left: 0; right: 0; padding: 0 25px; z-index: 160; text-align: center;">
+                <p id="caption-text" style="color: white; font-size: 14px; font-weight: 600; text-shadow: 0 2px 10px rgba(0,0,0,0.5); line-height: 1.4; margin: 0;"></p>
+            </div>
+
             <!-- Interactivity Footer -->
             <div id="story-footer" style="position: absolute; bottom: 0; left: 0; right: 0; padding: 30px 20px 25px; z-index: 150; background: linear-gradient(to top, rgba(11, 10, 21, 0.95) 40%, rgba(11, 10, 21, 0.6) 80%, transparent);">
                 
@@ -261,6 +266,16 @@
         userName.innerText = story.user.name;
         userAvatar.src = story.user.avatar ? `/storage/${story.user.avatar}` : `https://api.dicebear.com/7.x/initials/svg?seed=${story.user.name}`;
         storyTime.innerText = 'há 2h'; // Mock time
+        
+        // Handle Caption
+        const captionDisplay = document.getElementById('story-caption-display');
+        const captionText = document.getElementById('caption-text');
+        if (story.caption) {
+            captionText.innerText = story.caption;
+            captionDisplay.style.display = 'block';
+        } else {
+            captionDisplay.style.display = 'none';
+        }
 
         // Preview Thumbs
         // Hide footer/interactions if it's my own story

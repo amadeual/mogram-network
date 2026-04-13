@@ -12,6 +12,7 @@ class Story extends Model
     protected $fillable = [
         'user_id',
         'file_path',
+        'caption',
         'type',
         'is_exclusive',
         'price',

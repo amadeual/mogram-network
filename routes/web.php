@@ -23,6 +23,7 @@ Route::get('/', function () {
     return view('landing', compact('topLives'));
 })->name('home');
 
+
 // Authentication Routes
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
