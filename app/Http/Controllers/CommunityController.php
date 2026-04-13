@@ -12,10 +12,32 @@ use Illuminate\Support\Str;
 
 class CommunityController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $communities = Community::where('status', 'active')->with(['user'])->latest()->get();
-        return view('communities.explore', compact('communities'));
+        $query = Community::where('status', 'active')->with(['user']);
+
+        if ($request->has('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'LIKE', "%{$search}%")
+                  ->orWhere('description', 'LIKE', "%{$search}%")
+                  ->orWhereHas('user', function($qu) use ($search) {
+                      $qu->where('name', 'LIKE', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->has('category') && $request->category != 'Todos') {
+            $query->where('category', $request->category);
+        }
+
+        $communities = $query->latest()->get();
+        
+        // Split for design: recommendations (e.g. top 3) and the rest
+        $recommended = $communities->take(3);
+        $allCommunities = $communities; // Keep all for the grid below
+        
+        return view('communities.explore', compact('communities', 'recommended', 'allCommunities'));
     }
 
     public function myCommunities()
@@ -36,6 +58,7 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'category' => 'nullable|string|max:100',
             'price' => 'required|numeric|min:5|max:250000',
             'avatar' => 'nullable|image|max:2048',
             'banner' => 'nullable|image|max:5120',
@@ -50,6 +73,7 @@ class CommunityController extends Controller
         $community->name = $request->name;
         $community->slug = $slug;
         $community->description = $request->description;
+        $community->category = $request->category;
         $community->price = $request->price;
         $community->has_free_trial = $request->has('has_free_trial');
         $community->free_trial_days = $request->free_trial_days ?? 0;
@@ -175,13 +199,14 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
+            'category' => 'nullable|string|max:100',
             'price' => 'required|numeric|min:5|max:250000',
             'free_trial_days' => 'nullable|integer|min:0',
             'avatar' => 'nullable|image|max:2048',
             'banner' => 'nullable|image|max:5120',
         ]);
 
-        $data = $request->only(['name', 'description', 'price', 'free_trial_days']);
+        $data = $request->only(['name', 'description', 'category', 'price', 'free_trial_days']);
         $data['has_free_trial'] = ($request->free_trial_days > 0);
 
         if ($request->hasFile('avatar')) {
