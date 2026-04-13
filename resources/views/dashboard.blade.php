@@ -118,67 +118,6 @@
         </style>
 
         <div class="feed-container">
-            <!-- Discovery Options -->
-            <div style="padding: 1rem 0; margin-bottom: 0.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                    <div style="display: flex; gap: 0.5rem; background: rgba(255,255,255,0.03); padding: 4px; border-radius: 14px;">
-                        <button onclick="switchDiscovery('trending')" id="tab-trending" class="discovery-tab active" style="background: rgba(255,255,255,0.05); border: none; color: white; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s;">Tendência</button>
-                        <button onclick="switchDiscovery('interests')" id="tab-interests" class="discovery-tab" style="background: transparent; border: none; color: var(--text-muted); padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 800; cursor: pointer; transition: 0.2s;">Interesses</button>
-                    </div>
-                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">2 sugestões para você</span>
-                </div>
-
-                <!-- Trending View -->
-                <div id="view-trending" class="discovery-view" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    @forelse($trendingUsers as $u)
-                    <div class="user-suggestion-card" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1rem; display: flex; align-items: center; gap: 1rem; transition: 0.2s;">
-                        <a href="{{ route('creator.profile', $u->username) }}" style="position: relative;">
-                            <img src="{{ $u->avatar ? Storage::url($u->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $u->name }}" style="width: 48px; height: 48px; border-radius: 16px; object-fit: cover;">
-                            @if($u->is_verified)
-                                <div style="position: absolute; bottom: -4px; right: -4px; background: #3390ec; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border: 2px solid #0b0a15;">
-                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-                                </div>
-                            @endif
-                        </a>
-                        <div style="flex: 1; min-width: 0;">
-                            <h4 style="font-size: 13px; font-weight: 800; color: white; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $u->name }}</h4>
-                            <p style="font-size: 11px; color: var(--text-muted); margin: 0;">{{ $u->followers_count ?? $u->followers()->count() }} seguidores</p>
-                        </div>
-                        <button onclick="toggleFollowDiscovery(this, '{{ $u->id }}')" style="background: #3390ec; border: none; color: white; padding: 8px 14px; border-radius: 10px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s;">Seguir</button>
-                    </div>
-                    @empty
-                    <p style="grid-column: span 2; text-align: center; color: var(--text-muted); font-size: 12px; padding: 1rem;">Nenhuma sugestão no momento</p>
-                    @endforelse
-                </div>
-
-                <!-- Interests View -->
-                <div id="view-interests" class="discovery-view" style="display: none; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    @forelse($interestUsers as $u)
-                    <div class="user-suggestion-card" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1rem; display: flex; align-items: center; gap: 1rem; transition: 0.2s;">
-                        <a href="{{ route('creator.profile', $u->username) }}" style="position: relative;">
-                            <img src="{{ $u->avatar ? Storage::url($u->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $u->name }}" style="width: 48px; height: 48px; border-radius: 16px; object-fit: cover;">
-                            @if($u->is_verified)
-                                <div style="position: absolute; bottom: -4px; right: -4px; background: #3390ec; border-radius: 50%; width: 16px; height: 16px; display: flex; align-items: center; justify-content: center; border: 2px solid #0b0a15;">
-                                    <svg width="8" height="8" viewBox="0 0 24 24" fill="white"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>
-                                </div>
-                            @endif
-                        </a>
-                        <div style="flex: 1; min-width: 0;">
-                            <h4 style="font-size: 13px; font-weight: 800; color: white; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $u->name }}</h4>
-                            <p style="font-size: 11px; color: var(--text-muted); margin: 0;">{{ $u->category ?? 'Interesse comum' }}</p>
-                        </div>
-                        <button onclick="toggleFollowDiscovery(this, '{{ $u->id }}')" style="background: #3390ec; border: none; color: white; padding: 8px 14px; border-radius: 10px; font-size: 11px; font-weight: 800; cursor: pointer; transition: 0.2s;">Seguir</button>
-                    </div>
-                    @empty
-                    <p style="grid-column: span 2; text-align: center; color: var(--text-muted); font-size: 12px; padding: 1rem;">Complete seu perfil com uma categoria para ver sugestões</p>
-                    @endforelse
-                </div>
-            </div>
-
-            <style>
-                .discovery-tab:hover { background: rgba(255,255,255,0.08) !important; color: white !important; }
-                .user-suggestion-card:hover { transform: translateY(-3px); background: rgba(255,255,255,0.04) !important; border-color: rgba(51, 144, 236, 0.2) !important; }
-            </style>
             <!-- Dynamic Stories Bar -->
             <div class="stories-bar" style="display: flex; gap: 1rem; padding: 1rem 0; overflow-x: auto; scrollbar-width: none;">
                 <!-- Add Own Story -->
@@ -881,36 +820,6 @@
         }
     });
 
-    function switchDiscovery(type) {
-        const tabTrending = document.getElementById('tab-trending');
-        const tabInterests = document.getElementById('tab-interests');
-        const viewTrending = document.getElementById('view-trending');
-        const viewInterests = document.getElementById('view-interests');
-
-        if (type === 'trending') {
-            tabTrending.classList.add('active');
-            tabTrending.style.background = 'rgba(255,255,255,0.05)';
-            tabTrending.style.color = 'white';
-            
-            tabInterests.classList.remove('active');
-            tabInterests.style.background = 'transparent';
-            tabInterests.style.color = 'var(--text-muted)';
-            
-            viewTrending.style.display = 'grid';
-            viewInterests.style.display = 'none';
-        } else {
-            tabInterests.classList.add('active');
-            tabInterests.style.background = 'rgba(255,255,255,0.05)';
-            tabInterests.style.color = 'white';
-            
-            tabTrending.classList.remove('active');
-            tabTrending.style.background = 'transparent';
-            tabTrending.style.color = 'var(--text-muted)';
-            
-            viewInterests.style.display = 'grid';
-            viewTrending.style.display = 'none';
-        }
-    }
 
     function toggleFollowDiscovery(btn, userId) {
         btn.disabled = true;
