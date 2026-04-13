@@ -96,6 +96,36 @@
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
                 Carteira
             </a>
+            <a href="{{ route('communities.my') }}" class="menu-item sidebar-nav-item {{ Route::is('communities.my') ? 'active' : '' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                Minhas Comunidades
+            </a>
+            
+            @php
+                $sidebarCommunities = \App\Models\Community::whereIn('id', function($query) {
+                    $query->select('community_id')
+                        ->from('community_subscriptions')
+                        ->where('user_id', Auth::id())
+                        ->where('status', 'active');
+                })->orWhere('user_id', Auth::id())->take(5)->get();
+            @endphp
+
+            @if($sidebarCommunities->count() > 0)
+                <div class="sidebar-divider"></div>
+                <div style="padding: 0 0.875rem 0.5rem; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Comunidades</div>
+                @foreach($sidebarCommunities as $sc)
+                    <a href="{{ route('communities.show', $sc->slug) }}" class="menu-item sidebar-nav-item" style="padding: 0.5rem 0.875rem;">
+                        <div style="width: 24px; height: 24px; border-radius: 6px; overflow: hidden; background: rgba(255,255,255,0.05); flex-shrink:0;">
+                            @if($sc->avatar)
+                                <img src="{{ Storage::url($sc->avatar) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                            @else
+                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--primary-blue); color: white; font-size: 10px; font-weight: 900;">{{ substr($sc->name, 0, 1) }}</div>
+                            @endif
+                        </div>
+                        <span style="font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $sc->name }}</span>
+                    </a>
+                @endforeach
+            @endif
             <div class="sidebar-divider mobile-only"></div>
             <a href="{{ route('studio.dashboard') }}" class="menu-item sidebar-nav-item" style="color: var(--primary-blue);">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>

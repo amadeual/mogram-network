@@ -15,10 +15,10 @@ class FeedController extends Controller
     public function index()
     {
         $posts = Post::with(['user', 'likes', 'comments.user', 'comments.replies.user'])
-            ->where(function($query) {
-                $query->whereNull('scheduled_at')
-                      ->orWhere('scheduled_at', '<=', now());
-            })
+            ->where(function ($query) {
+            $query->whereNull('scheduled_at')
+                ->orWhere('scheduled_at', '<=', now());
+        })
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
@@ -57,17 +57,18 @@ class FeedController extends Controller
             $topLives = \App\Models\Live::where('status', 'online')
                 ->with('user')
                 ->select('*')
-                ->selectSub(function($query) {
-                    $query->from('live_viewers')
-                        ->whereColumn('live_viewers.live_id', 'lives.id')
-                        ->where('last_seen_at', '>=', now()->subSeconds(30))
-                        ->selectRaw('count(*)');
-                }, 'viewer_count')
+                ->selectSub(function ($query) {
+                $query->from('live_viewers')
+                    ->whereColumn('live_viewers.live_id', 'lives.id')
+                    ->where('last_seen_at', '>=', now()->subSeconds(30))
+                    ->selectRaw('count(*)');
+            }, 'viewer_count')
                 ->orderBy('viewer_count', 'desc')
                 ->latest()
                 ->limit(10)
                 ->get();
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             $topLives = \App\Models\Live::where('status', 'online')->with('user')->latest()->limit(10)->get();
         }
 
@@ -77,13 +78,14 @@ class FeedController extends Controller
     public function toggleLike(Post $post)
     {
         $like = Like::where('user_id', Auth::id())
-                    ->where('post_id', $post->id)
-                    ->first();
+            ->where('post_id', $post->id)
+            ->first();
 
         if ($like) {
             $like->delete();
             $status = 'unliked';
-        } else {
+        }
+        else {
             Like::create([
                 'user_id' => Auth::id(),
                 'post_id' => $post->id
@@ -149,7 +151,7 @@ class FeedController extends Controller
         // Check balance
         if ($user->balance < $post->price) {
             return response()->json([
-                'success' => false, 
+                'success' => false,
                 'error' => 'Saldo insuficiente!',
                 'balance' => $user->balance,
                 'price' => $post->price,
@@ -159,10 +161,10 @@ class FeedController extends Controller
 
         // Process purchase
         try {
-            \Illuminate\Support\Facades\DB::transaction(function() use ($user, $post) {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($user, $post) {
                 // Debit buyer
                 $user->decrement('balance', $post->price);
-                
+
                 // Credit seller (creator)
                 $creator = $post->user;
                 // Removed: $creator->increment('balance', $post->price); // Goes only to Finance ledger
@@ -177,20 +179,23 @@ class FeedController extends Controller
                 // Send email to buyer
                 try {
                     Mail::to($user->email)->send(new ContentPurchasedMail($post->price));
-                } catch (\Exception $e) {
+                }
+                catch (\Exception $e) {
                     \Log::error('Erro ao enviar email de compra: ' . $e->getMessage());
                 }
 
                 // Send email to creator (seller)
                 try {
                     Mail::to($creator->email)->send(new \App\Mail\ContentSoldMail($post->price, $user->name, $post->title));
-                } catch (\Exception $e) {
+                }
+                catch (\Exception $e) {
                     \Log::error('Erro ao enviar email de venda: ' . $e->getMessage());
                 }
                 // Notify creator
                 try {
                     $creator->notify(new \App\Notifications\ContentSold($post->price, $user->name, $post->title));
-                } catch (\Exception $e) {
+                }
+                catch (\Exception $e) {
                     \Log::error('Erro ao notificar venda de conteúdo: ' . $e->getMessage());
                 }
             });
@@ -201,7 +206,8 @@ class FeedController extends Controller
                 'new_balance' => $user->fresh()->balance
             ]);
 
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             return response()->json(['success' => false, 'error' => 'Erro ao processar a compra. Tente novamente.'], 500);
         }
     }

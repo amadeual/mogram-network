@@ -92,4 +92,14 @@ class User extends Authenticatable
     {
         return $this->following()->where('following_id', $user->id)->exists();
     }
+
+    public function myCommunities()
+    {
+        return $this->hasMany(Community::class);
+    }
+
+    public function communitySubscriptions()
+    {
+        return $this->hasMany(CommunitySubscription::class);
+    }
 }

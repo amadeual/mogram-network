@@ -148,4 +148,15 @@ Route::middleware(['auth'])->group(function () {
 
     // Purchases Routes
     Route::get('/purchases', [App\Http\Controllers\PurchaseController::class, 'index'])->name('purchases.index');
+
+    // Communities Routes
+    Route::get('/communities/explore', [App\Http\Controllers\CommunityController::class, 'index'])->name('communities.explore');
+    Route::get('/communities/my', [App\Http\Controllers\CommunityController::class, 'myCommunities'])->name('communities.my');
+    Route::post('/communities/store', [App\Http\Controllers\CommunityController::class, 'store'])->name('communities.store');
+    Route::get('/communities/{community:slug}', [App\Http\Controllers\CommunityController::class, 'show'])->name('communities.show');
+    Route::get('/communities/{community:slug}/dashboard', [App\Http\Controllers\CommunityController::class, 'dashboard'])->name('communities.dashboard');
+    Route::get('/communities/{community:slug}/members', [App\Http\Controllers\CommunityController::class, 'members'])->name('communities.members');
+    Route::post('/communities/{community:slug}/subscribe', [App\Http\Controllers\CommunityController::class, 'subscribe'])->name('communities.subscribe');
+    Route::post('/communities/{community:slug}/posts', [App\Http\Controllers\CommunityController::class, 'storePost'])->name('communities.posts.store');
+    Route::put('/communities/{community:slug}/settings', [App\Http\Controllers\CommunityController::class, 'updateSettings'])->name('communities.settings.update');
 });
