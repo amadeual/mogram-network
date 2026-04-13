@@ -86,108 +86,67 @@
                 <td style="padding: 1.5rem 2rem; text-align: center; color: var(--text-muted); font-size: 0.8rem; font-weight: 700;">
                     {{ $user->created_at->format('d/m/Y') }}
                 </td>
-                <td style="padding: 1.5rem 2rem; text-align: right; position: relative;">
-                    <style>
-                        .actions-dropdown {
-                            display: none;
-                            position: absolute;
-                            right: 2rem;
-                            top: 3.5rem;
-                            background: var(--bg-sidebar);
-                            border: 1px solid var(--border-gray);
-                            border-radius: 16px;
-                            width: 240px;
-                            z-index: 1000;
-                            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-                            padding: 0.75rem;
-                            text-align: left;
-                        }
-                        .dropdown-item {
-                            width: 100%;
-                            display: flex;
-                            align-items: center;
-                            gap: 12px;
-                            padding: 0.85rem 1rem;
-                            border-radius: 10px;
-                            color: var(--text-muted);
-                            text-decoration: none;
-                            font-size: 0.85rem;
-                            font-weight: 700;
-                            border: none;
-                            background: transparent;
-                            cursor: pointer;
-                            transition: 0.2s;
-                        }
-                        .dropdown-item:hover {
-                            background: rgba(255,255,255,0.05);
-                            color: white;
-                        }
-                        .dropdown-item.danger:hover {
-                            background: rgba(239, 68, 68, 0.1);
-                            color: var(--danger);
-                        }
-                        .actions-btn:focus + .actions-dropdown, .actions-dropdown:hover {
-                            display: block;
-                        }
-                    </style>
-                    <button class="actions-btn" style="background: transparent; border: none; color: white; cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
-                    </button>
-                    <div class="actions-dropdown">
-                        <div style="padding: 0.5rem 1rem; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Gerenciar</div>
-                        <a href="{{ route('admin.users.show', $user->id) }}" class="dropdown-item">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                            Ver Detalhes
-                        </a>
-                        
-                        <div style="padding: 0.5rem 1rem; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-top: 1px solid var(--border-gray); margin-top: 0.5rem;">Ações</div>
-                        
-                        <form action="{{ route('admin.users.reset_password', $user->id) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z"/></svg>
-                                Resetar Senha
-                            </button>
-                        </form>
-
-                        @if(!$user->two_factor_secret)
-                            <button class="dropdown-item" disabled title="2FA não está ativo">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                                Resetar 2FA
-                            </button>
-                        @else
-                            <form action="{{ route('admin.users.toggle', [$user->id, 'reset_2fa']) }}" method="POST">
+                <td style="padding: 1.5rem 2rem; text-align: right;">
+                    <div style="position: relative; display: inline-block;">
+                        <button onclick="toggleDropdown(this)" class="actions-btn" style="background: transparent; border: none; color: white; cursor: pointer; padding: 8px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                        </button>
+                        <div class="actions-dropdown" style="right: 0; top: 100%;">
+                            <div style="padding: 0.5rem 1rem; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;">Gerenciar</div>
+                            <a href="{{ route('admin.users.show', $user->id) }}" class="dropdown-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                Ver Detalhes
+                            </a>
+                            
+                            <div style="padding: 0.5rem 1rem; font-size: 0.65rem; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; border-top: 1px solid var(--border-gray); margin-top: 0.5rem;">Ações</div>
+                            
+                            <form action="{{ route('admin.users.reset_password', $user->id) }}" method="POST">
                                 @csrf
                                 <button type="submit" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z"/></svg>
+                                    Resetar Senha
+                                </button>
+                            </form>
+
+                            @if(!$user->two_factor_secret)
+                                <button class="dropdown-item" disabled title="2FA não está ativo">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                     Resetar 2FA
                                 </button>
+                            @else
+                                <form action="{{ route('admin.users.toggle', [$user->id, 'reset_2fa']) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" class="dropdown-item">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                                        Resetar 2FA
+                                    </button>
+                                </form>
+                            @endif
+
+                            <form action="{{ route('admin.users.toggle', [$user->id, $user->withdrawals_frozen ? 'unfreeze_withdrawals' : 'freeze_withdrawals']) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
+                                    {{ $user->withdrawals_frozen ? 'Descongelar Saques' : 'Congelar Saques' }}
+                                </button>
                             </form>
-                        @endif
 
-                        <form action="{{ route('admin.users.toggle', [$user->id, $user->withdrawals_frozen ? 'unfreeze_withdrawals' : 'freeze_withdrawals']) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
-                                {{ $user->withdrawals_frozen ? 'Descongelar Saques' : 'Congelar Saques' }}
-                            </button>
-                        </form>
+                            <form action="{{ route('admin.users.toggle', [$user->id, $user->deposits_frozen ? 'unfreeze_deposits' : 'freeze_deposits']) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="dropdown-item">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                                    {{ $user->deposits_frozen ? 'Descongelar Depósitos' : 'Congelar Depósitos' }}
+                                </button>
+                            </form>
 
-                        <form action="{{ route('admin.users.toggle', [$user->id, $user->deposits_frozen ? 'unfreeze_deposits' : 'freeze_deposits']) }}" method="POST">
-                            @csrf
-                            <button type="submit" class="dropdown-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-                                {{ $user->deposits_frozen ? 'Descongelar Depósitos' : 'Congelar Depósitos' }}
-                            </button>
-                        </form>
-
-                        <form action="{{ route('admin.users.toggle', [$user->id, $user->status == 'suspended' ? 'activate' : 'suspend']) }}" method="POST" style="border-top: 1px solid var(--border-gray); margin-top: 0.5rem;">
-                            @csrf
-                            <button type="submit" class="dropdown-item danger">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
-                                {{ $user->status == 'suspended' ? 'Reativar Usuário' : 'Suspender Usuário' }}
-                            </button>
-                        </form>
+                            <form action="{{ route('admin.users.toggle', [$user->id, $user->status == 'suspended' ? 'activate' : 'suspend']) }}" method="POST" style="border-top: 1px solid var(--border-gray); margin-top: 0.5rem;">
+                                @csrf
+                                <button type="submit" class="dropdown-item danger">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg>
+                                    {{ $user->status == 'suspended' ? 'Reativar Usuário' : 'Suspender Usuário' }}
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </td>
             </tr>
@@ -203,4 +162,82 @@
         </div>
     </div>
 </div>
+
+<style>
+    .actions-dropdown {
+        display: none;
+        position: absolute;
+        right: 2rem;
+        top: 3.5rem;
+        background: #11141e;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        width: 240px;
+        z-index: 1000;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        padding: 0.75rem;
+        text-align: left;
+    }
+    .actions-dropdown.show {
+        display: block;
+        animation: dropdownFadeIn 0.2s ease-out;
+    }
+    @keyframes dropdownFadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .dropdown-item {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 0.85rem 1rem;
+        border-radius: 10px;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 700;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .dropdown-item:hover {
+        background: rgba(255,255,255,0.05);
+        color: white;
+    }
+    .dropdown-item.danger:hover {
+        background: rgba(239, 68, 68, 0.1);
+        color: #ef4444;
+    }
+</style>
+
+@section('scripts')
+<script>
+    function toggleDropdown(btn) {
+        const dropdown = btn.nextElementSibling;
+        const allDropdowns = document.querySelectorAll('.actions-dropdown');
+        
+        allDropdowns.forEach(d => {
+            if (d !== dropdown) d.classList.remove('show');
+        });
+        
+        dropdown.classList.toggle('show');
+        
+        // Close on click outside
+        const closeDropdown = (e) => {
+            if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+                document.removeEventListener('click', closeDropdown);
+            }
+        };
+        
+        if (dropdown.classList.contains('show')) {
+            setTimeout(() => {
+                document.addEventListener('click', closeDropdown);
+            }, 0);
+        }
+    }
+</script>
+@endsection
 @endsection
