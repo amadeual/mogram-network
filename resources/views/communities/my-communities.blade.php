@@ -123,17 +123,23 @@
             </div>
 
             <div style="margin-bottom: 2rem;">
-                <label style="display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Imagens</label>
+                <label style="display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Imagens (Opcional)</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div onclick="document.getElementById('avatar-input').click()" style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(51,144,236,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                        <p style="font-size: 10px; color: var(--text-muted); margin-top: 5px; font-weight: 800;">AVATAR</p>
-                        <input type="file" id="avatar-input" name="avatar" style="display: none;">
+                    <div onclick="document.getElementById('avatar-input').click()" id="avatar-preview-container" style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.3s; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                        <div id="avatar-placeholder">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                            <p style="font-size: 10px; color: var(--text-muted); margin-top: 5px; font-weight: 800;">AVATAR</p>
+                        </div>
+                        <img id="avatar-preview" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+                        <input type="file" id="avatar-input" name="avatar" style="display: none;" onchange="previewImage(this, 'avatar-preview', 'avatar-placeholder')">
                     </div>
-                    <div onclick="document.getElementById('banner-input').click()" style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='rgba(51,144,236,0.05)'" onmouseout="this.style.background='rgba(255,255,255,0.03)'">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                        <p style="font-size: 10px; color: var(--text-muted); margin-top: 5px; font-weight: 800;">BANNER</p>
-                        <input type="file" id="banner-input" name="banner" style="display: none;">
+                    <div onclick="document.getElementById('banner-input').click()" id="banner-preview-container" style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 14px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.3s; height: 120px; display: flex; flex-direction: column; align-items: center; justify-content: center; overflow: hidden; position: relative;">
+                        <div id="banner-placeholder">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <p style="font-size: 10px; color: var(--text-muted); margin-top: 5px; font-weight: 800;">CAPA (BANNER)</p>
+                        </div>
+                        <img id="banner-preview" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+                        <input type="file" id="banner-input" name="banner" style="display: none;" onchange="previewImage(this, 'banner-preview', 'banner-placeholder')">
                     </div>
                 </div>
             </div>
@@ -144,6 +150,17 @@
 </div>
 
 <script>
+    function previewImage(input, previewId, placeholderId) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById(previewId).src = e.target.result;
+                document.getElementById(previewId).style.display = 'block';
+                document.getElementById(placeholderId).style.display = 'none';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
     function openCreateModal() {
         document.getElementById('createCommunityModal').style.display = 'flex';
         document.body.style.overflow = 'hidden';

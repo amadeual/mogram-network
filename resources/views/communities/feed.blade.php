@@ -8,7 +8,7 @@
 
     <main class="main-content">
         <!-- Community Header -->
-        <div style="height: 200px; background: {{ $community->banner ? 'url('.Storage::url($community->banner).')' : 'linear-gradient(45deg, #1a1c2e, #3390ec)' }}; background-size: cover; background-position: center; position: relative;">
+        <div style="height: 200px; background: {{ $community->banner ? 'url(\''.Storage::url($community->banner).'\')' : 'linear-gradient(45deg, #1a1c2e, #3390ec)' }}; background-size: cover; background-position: center; position: relative;">
             <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(11, 10, 21, 0.9));"></div>
             
             <div style="position: absolute; bottom: -40px; left: 2rem; display: flex; align-items: flex-end; gap: 1.5rem;">

@@ -107,12 +107,76 @@
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
-        <p style="color: var(--text-muted); text-align: center; margin-bottom: 2rem;">As configurações detalhadas estarão disponíveis em breve.</p>
-        <button onclick="closeEditModal()" class="mogram-btn-primary" style="width: 100%; padding: 1rem; border-radius: 12px;">Entendido</button>
+        <form action="{{ route('communities.update', $community->slug) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Apresentação</label>
+                <input type="text" name="name" value="{{ $community->name }}" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px; margin-bottom: 1rem;">
+                <textarea name="description" rows="3" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px; resize: none;">{{ $community->description }}</textarea>
+            </div>
+
+            <div style="margin-bottom: 1.5rem;">
+                <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Financeiro</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <input type="number" name="price" step="0.01" value="{{ $community->price }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px;">
+                    <input type="number" name="free_trial_days" value="{{ $community->free_trial_days }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 2rem;">
+                <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Imagens (Opcional)</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div onclick="document.getElementById('edit-avatar-input').click()" style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 12px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer;">
+                        @if($community->avatar)
+                            <img src="{{ Storage::url($community->avatar) }}" id="edit-avatar-preview" style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <div id="edit-avatar-placeholder" style="text-align: center;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                <p style="font-size: 9px; color: var(--text-muted); margin-top: 4px;">AVATAR</p>
+                            </div>
+                            <img id="edit-avatar-preview" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+                        @endif
+                        <input type="file" id="edit-avatar-input" name="avatar" style="display: none;" onchange="previewUpdateImage(this, 'edit-avatar-preview', 'edit-avatar-placeholder')">
+                    </div>
+                    <div onclick="document.getElementById('edit-banner-input').click()" style="background: rgba(255,255,255,0.03); border: 1.5px dashed rgba(255,255,255,0.1); border-radius: 12px; height: 100px; display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; cursor: pointer;">
+                        @if($community->banner)
+                            <img src="{{ Storage::url($community->banner) }}" id="edit-banner-preview" style="width: 100%; height: 100%; object-fit: cover;">
+                        @else
+                            <div id="edit-banner-placeholder" style="text-align: center;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                <p style="font-size: 9px; color: var(--text-muted); margin-top: 4px;">CAPA</p>
+                            </div>
+                            <img id="edit-banner-preview" style="display: none; width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0;">
+                        @endif
+                        <input type="file" id="edit-banner-input" name="banner" style="display: none;" onchange="previewUpdateImage(this, 'edit-banner-preview', 'edit-banner-placeholder')">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="mogram-btn-primary" style="width: 100%; padding: 1rem; border-radius: 12px; font-weight: 900;">Salvar Alterações</button>
+        </form>
     </div>
 </div>
 
 <script>
+    function previewUpdateImage(input, previewId, placeholderId) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(previewId);
+                const placeholder = document.getElementById(placeholderId);
+                if(preview) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    preview.style.position = 'absolute';
+                    preview.style.inset = '0';
+                }
+                if(placeholder) placeholder.style.display = 'none';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
     function openEditModal() {
         document.getElementById('editCommunityModal').style.display = 'flex';
     }

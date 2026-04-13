@@ -7,7 +7,7 @@
     @include('partials.sidebar')
 
     <main class="main-content">
-        <div style="height: 300px; background: {{ $community->banner ? 'url('.Storage::url($community->banner).')' : 'linear-gradient(45deg, #1a1c2e, #3390ec)' }}; background-size: cover; background-position: center; position: relative;">
+        <div style="height: 300px; background: {{ $community->banner ? 'url(\''.Storage::url($community->banner).'\')' : 'linear-gradient(45deg, #1a1c2e, #3390ec)' }}; background-size: cover; background-position: center; position: relative;">
             <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(11, 10, 21, 0.9));"></div>
             <a href="{{ route('communities.explore') }}" style="position: absolute; top: 2rem; left: 2rem; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; border: 1px solid rgba(255,255,255,0.1); transition: 0.2s;" onmouseover="this.style.transform='translateX(-5px)'" onmouseout="this.style.transform='translateX(0)'">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>

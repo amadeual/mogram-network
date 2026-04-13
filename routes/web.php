@@ -158,5 +158,5 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communities/{community:slug}/members', [App\Http\Controllers\CommunityController::class, 'members'])->name('communities.members');
     Route::post('/communities/{community:slug}/subscribe', [App\Http\Controllers\CommunityController::class, 'subscribe'])->name('communities.subscribe');
     Route::post('/communities/{community:slug}/posts', [App\Http\Controllers\CommunityController::class, 'storePost'])->name('communities.posts.store');
-    Route::put('/communities/{community:slug}/settings', [App\Http\Controllers\CommunityController::class, 'updateSettings'])->name('communities.settings.update');
+    Route::put('/communities/{community:slug}', [App\Http\Controllers\CommunityController::class, 'update'])->name('communities.update');
 });

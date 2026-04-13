@@ -165,20 +165,34 @@ class CommunityController extends Controller
         return back()->with('success', 'Post publicado!');
     }
 
-    public function updateSettings(Request $request, Community $community)
+    public function update(Request $request, Community $community)
     {
         if (Auth::id() !== $community->user_id) abort(403);
 
         $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string|max:1000',
             'price' => 'required|numeric|min:0',
-            'has_free_trial' => 'nullable|boolean',
+            'free_trial_days' => 'nullable|integer|min:0',
+            'avatar' => 'nullable|image|max:2048',
+            'banner' => 'nullable|image|max:5120',
         ]);
 
-        $community->update([
-            'price' => $request->price,
-            'has_free_trial' => $request->has('has_free_trial'),
-        ]);
+        $data = $request->only(['name', 'description', 'price', 'free_trial_days']);
+        $data['has_free_trial'] = ($request->free_trial_days > 0);
 
-        return back()->with('success', 'Configurações atualizadas!');
+        if ($request->hasFile('avatar')) {
+            if ($community->avatar) Storage::disk('public')->delete($community->avatar);
+            $data['avatar'] = $request->file('avatar')->store('communities/avatars', 'public');
+        }
+
+        if ($request->hasFile('banner')) {
+            if ($community->banner) Storage::disk('public')->delete($community->banner);
+            $data['banner'] = $request->file('banner')->store('communities/banners', 'public');
+        }
+
+        $community->update($data);
+
+        return back()->with('success', 'Comunidade atualizada com sucesso!');
     }
 }
