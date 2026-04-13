@@ -66,7 +66,7 @@ class CommunityController extends Controller
         return redirect()->route('communities.dashboard', $community->slug)->with('success', 'Comunidade criada!');
     }
 
-    public function show(Community $community)
+    public function show(Request $request, Community $community)
     {
         $hasAccess = Auth::id() === $community->user_id || 
                      CommunitySubscription::where('user_id', Auth::id())
@@ -78,14 +78,17 @@ class CommunityController extends Controller
             return view('communities.landing', compact('community'));
         }
 
-        $posts = CommunityPost::where('community_id', $community->id)
-            ->with('user')
-            ->latest()
-            ->paginate(15);
+        $query = CommunityPost::where('community_id', $community->id)->with('user')->latest();
+
+        if ($request->has('type') && $request->type != 'all') {
+            $query->where('media_type', $request->type);
+        }
+
+        $posts = $query->paginate(15)->appends(['type' => $request->type]);
             
         $onlineMembersCount = CommunitySubscription::where('community_id', $community->id)
             ->where('status', 'active')
-            ->count(); // Mocking online for now or just using active
+            ->count();
 
         return view('communities.feed', compact('community', 'posts', 'onlineMembersCount'));
     }
