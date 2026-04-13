@@ -119,7 +119,7 @@
             <div style="margin-bottom: 1.5rem;">
                 <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Financeiro</label>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <input type="number" name="price" step="0.01" value="{{ $community->price }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px;">
+                    <input type="number" name="price" step="0.01" min="5" max="250000" value="{{ $community->price }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px;">
                     <input type="number" name="free_trial_days" value="{{ $community->free_trial_days }}" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-size: 13px;">
                 </div>
             </div>

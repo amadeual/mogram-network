@@ -114,7 +114,7 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                 <div>
                     <label style="display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Preço Mensal (R$)</label>
-                    <input type="number" name="price" step="0.01" required value="0.00" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 15px; color: white; font-size: 14px; font-weight: 600; outline: none; transition: 0.3s;">
+                    <input type="number" name="price" step="0.01" min="5" max="250000" required value="5.00" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 12px 15px; color: white; font-size: 14px; font-weight: 600; outline: none; transition: 0.3s;">
                 </div>
                 <div>
                     <label style="display: block; font-size: 12px; font-weight: 800; color: var(--text-muted); margin-bottom: 0.5rem; text-transform: uppercase;">Teste Grátis (Dias)</label>

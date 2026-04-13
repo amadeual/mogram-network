@@ -36,7 +36,7 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|min:5|max:250000',
             'avatar' => 'nullable|image|max:2048',
             'banner' => 'nullable|image|max:5120',
         ]);
@@ -172,7 +172,7 @@ class CommunityController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required|numeric|min:5|max:250000',
             'free_trial_days' => 'nullable|integer|min:0',
             'avatar' => 'nullable|image|max:2048',
             'banner' => 'nullable|image|max:5120',
