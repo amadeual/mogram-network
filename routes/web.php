@@ -38,7 +38,7 @@ Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-// Legal Routes
+// Legal & Support Routes
 Route::get('/termos-de-uso', function () {
     return view('legal.terms');
 })->name('terms');
@@ -46,6 +46,10 @@ Route::get('/termos-de-uso', function () {
 Route::get('/politica-de-privacidade', function () {
     return view('legal.privacy');
 })->name('privacy');
+
+Route::get('/ajuda', function () {
+    return view('help.index');
+})->name('help');
 
 // Protected Routes
 Route::middleware(['auth'])->group(function () {

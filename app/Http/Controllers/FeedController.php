@@ -52,7 +52,25 @@ class FeedController extends Controller
             ->limit(2)
             ->get();
 
-        return view('dashboard', compact('posts', 'activeStories', 'trendingUsers', 'interestUsers'));
+        // Get Top Live (highest viewer count or only online)
+        try {
+            $topLive = \App\Models\Live::where('status', 'online')
+                ->with('user')
+                ->select('*')
+                ->selectSub(function($query) {
+                    $query->from('live_viewers')
+                        ->whereColumn('live_viewers.live_id', 'lives.id')
+                        ->where('last_seen_at', '>=', now()->subSeconds(30))
+                        ->selectRaw('count(*)');
+                }, 'viewer_count')
+                ->orderBy('viewer_count', 'desc')
+                ->latest()
+                ->first();
+        } catch (\Exception $e) {
+            $topLive = \App\Models\Live::where('status', 'online')->with('user')->latest()->first();
+        }
+
+        return view('dashboard', compact('posts', 'activeStories', 'trendingUsers', 'interestUsers', 'topLive'));
     }
 
     public function toggleLike(Post $post)

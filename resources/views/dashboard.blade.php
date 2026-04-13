@@ -24,6 +24,19 @@
             </div>
 
             <div style="display: flex; gap: 1rem; position: relative; align-items: center;">
+                @if($topLive)
+                <a href="{{ route('live.watch', $topLive->id) }}" class="trending-live-badge" style="display: flex; align-items: center; gap: 0.75rem; background: rgba(239, 68, 68, 0.1); border: 1.5px solid rgba(239, 68, 68, 0.15); padding: 6px 12px; border-radius: 14px; text-decoration: none; transition: 0.3s;">
+                    <div style="position: relative; display: flex;">
+                        <img src="{{ $topLive->user->avatar ? Storage::url($topLive->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $topLive->user->name }}" style="width: 32px; height: 32px; border-radius: 10px; object-fit: cover; border: 1.5px solid #ef4444;">
+                        <div style="position: absolute; -top: 4px; -right: 4px; background: #ef4444; color: white; font-size: 7px; font-weight: 900; padding: 1px 3px; border-radius: 4px; border: 1.5px solid #0b0a15; bottom: -4px; right: -4px;">AO VIVO</div>
+                    </div>
+                    <div class="desktop-only" style="display: flex; flex-direction: column; line-height: 1.2;">
+                        <span style="font-size: 9px; font-weight: 900; color: #ef4444; text-transform: uppercase; letter-spacing: 0.5px;">Live em Alta</span>
+                        <span style="font-size: 12px; font-weight: 800; color: white; white-space: nowrap;">{{ Str::limit($topLive->title, 18) }}</span>
+                    </div>
+                </a>
+                @endif
+
                 <div style="position: relative;">
                     <button class="notif-bell" onclick="toggleNotifs()" style="background: transparent; border: none; color: white; cursor: pointer; position: relative; padding: 8px; border-radius: 12px; transition: 0.2s;">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -33,6 +46,34 @@
                 <a href="{{ route('chat.index') }}" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; padding: 8px; border-radius: 12px; transition: 0.2s;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </a>
+
+                <div style="position: relative;">
+                    <button onclick="toggleMoreMenu()" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; padding: 8px; border-radius: 12px; transition: 0.2s;">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                    <div id="mogram-more-menu" style="display: none; position: absolute; top: calc(100% + 10px); right: 0; background: #1a1926; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); z-index: 2001; min-width: 200px; overflow: hidden; animation: slideIn 0.2s ease-out;">
+                        <div style="padding: 8px;">
+                            <a href="{{ route('help') }}" class="more-menu-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                                Central de Ajuda
+                            </a>
+                            <a href="{{ route('privacy') }}" class="more-menu-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                                Privacidade
+                            </a>
+                            <a href="{{ route('terms') }}" class="more-menu-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                                Termos de Uso
+                            </a>
+                            <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 12px;"></div>
+                            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-header').submit();" class="more-menu-item" style="color: #ef4444;">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                                Sair
+                            </a>
+                        </div>
+                    </div>
+                    <form id="logout-form-header" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
+                </div>
             </div>
         </header>
 
@@ -58,6 +99,34 @@
             }
             .search-item:hover {
                 background: rgba(255,255,255,0.05);
+            }
+            .more-menu-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px 16px;
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                font-size: 13px;
+                font-weight: 700;
+                transition: 0.2s;
+            }
+            .more-menu-item:hover {
+                background: rgba(255,255,255,0.05);
+            }
+            .more-menu-item svg {
+                opacity: 0.6;
+            }
+            .trending-live-badge:hover {
+                background: rgba(239, 68, 68, 0.15) !important;
+                transform: translateY(-2px);
+                border-color: rgba(239, 68, 68, 0.3) !important;
+            }
+            @keyframes pulseLive {
+                0% { opacity: 1; transform: scale(1); }
+                50% { opacity: 0.6; transform: scale(1.1); }
+                100% { opacity: 1; transform: scale(1); }
             }
         </style>
 
@@ -388,9 +457,9 @@
         <footer style="margin-top: 4rem; opacity: 0.5;">
             <div style="display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem;">
                 <a href="#" style="font-size: 10px; color: white; text-decoration: none;">Sobre</a>
-                <a href="#" style="font-size: 10px; color: white; text-decoration: none;">Ajuda</a>
-                <a href="#" style="font-size: 10px; color: white; text-decoration: none;">Privacidade</a>
-                <a href="#" style="font-size: 10px; color: white; text-decoration: none;">Termos</a>
+                <a href="{{ route('help') }}" style="font-size: 10px; color: white; text-decoration: none;">Ajuda</a>
+                <a href="{{ route('privacy') }}" style="font-size: 10px; color: white; text-decoration: none;">Privacidade</a>
+                <a href="{{ route('terms') }}" style="font-size: 10px; color: white; text-decoration: none;">Termos</a>
             </div>
             <p style="font-size: 10px;">© 2026 Mogram do Brasil</p>
         </footer>
@@ -791,6 +860,19 @@
         document.querySelectorAll('.post-card').forEach(card => {
             viewObserver.observe(card);
         });
+    });
+
+    function toggleMoreMenu() {
+        const menu = document.getElementById('mogram-more-menu');
+        menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    }
+
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('mogram-more-menu');
+        const btn = menu.previousElementSibling;
+        if (!menu.contains(e.target) && !btn.contains(e.target)) {
+            menu.style.display = 'none';
+        }
     });
 
     function switchDiscovery(type) {
