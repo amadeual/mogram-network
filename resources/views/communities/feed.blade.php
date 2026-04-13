@@ -50,8 +50,8 @@
                         
                         <!-- Media Preview Container -->
                         <div id="media-preview-container" style="display: none; margin-bottom: 1.5rem; position: relative; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.1);">
-                            <img id="post-image-preview" style="display: none; width: 100%; max-height: 400px; object-fit: contain; background: #000;">
-                            <video id="post-video-preview" style="display: none; width: 100%; max-height: 400px; background: #000;" controls></video>
+                            <img id="post-image-preview" style="display: none; width: 100%; max-height: 250px; object-fit: contain; background: #000;">
+                            <video id="post-video-preview" style="display: none; width: 100%; max-height: 250px; background: #000;" controls></video>
                             <div id="post-file-preview" style="display: none; padding: 1rem; background: rgba(255,255,255,0.05); display: flex; align-items: center; gap: 1rem;">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
                                 <span id="file-name" style="font-size: 13px; color: white;"></span>
@@ -103,9 +103,9 @@
                             @if($post->media)
                                 <div style="margin-top: 1rem; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
                                     @if($post->media_type === 'image')
-                                        <img src="{{ Storage::url($post->media) }}" style="width: 100%; max-height: 500px; object-fit: contain; background: #000;">
+                                        <img src="{{ Storage::url($post->media) }}" style="width: 100%; max-height: 320px; object-fit: cover; background: rgba(0,0,0,0.2);">
                                     @elseif($post->media_type === 'video')
-                                        <video src="{{ Storage::url($post->media) }}" controls style="width: 100%; max-height: 500px; background: #000;"></video>
+                                        <video src="{{ Storage::url($post->media) }}" controls style="width: 100%; max-height: 320px; background: #000;"></video>
                                     @else
                                         <!-- File download card -->
                                         <div style="padding: 1.5rem; background: rgba(255,255,255,0.03); display: flex; align-items: center; gap: 1rem;">
