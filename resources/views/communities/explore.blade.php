@@ -91,7 +91,7 @@
                                 <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 25px;">
                                     <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 700;">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                                        {{ number_format($c->subscriptions_count ?? 1200, 0, ',', '.') }} membros
+                                        {{ number_format($c->members_count, 0, ',', '.') }} membros
                                     </div>
                                     <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #fbbf24; font-weight: 800;">
                                         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -134,7 +134,7 @@
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $c->name }}</h4>
-                            <p style="font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 8px;">{{ number_format(rand(100, 10000)) }} membros</p>
+                            <p style="font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 8px;">{{ number_format($c->members_count, 0, ',', '.') }} membros</p>
                             <a href="{{ route('communities.show', $c->slug) }}" style="color: #3390ec; font-size: 11px; font-weight: 900; text-decoration: none;">Ver Detalhes</a>
                         </div>
                     </div>

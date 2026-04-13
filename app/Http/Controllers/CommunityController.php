@@ -14,7 +14,9 @@ class CommunityController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Community::where('status', 'active')->with(['user']);
+        $query = Community::where('status', 'active')->with(['user'])->withCount(['subscriptions as members_count' => function($q) {
+            $q->where('status', 'active');
+        }]);
 
         if ($request->has('search')) {
             $search = $request->search;
