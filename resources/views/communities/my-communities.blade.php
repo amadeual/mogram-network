@@ -6,46 +6,64 @@
 <div class="app-layout">
     @include('partials.sidebar')
 
-    <main class="main-content">
-        <header style="height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray); background: rgba(11, 10, 21, 0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
-            <h2 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Minhas Comunidades</h2>
+    <main class="main-content" style="margin-left: 280px; width: calc(100% - 280px); min-height: 100vh; display: flex; flex-direction: column;">
+        <header style="height: 80px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
+            <div>
+                <h2 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Minhas Comunidades</h2>
+                <div style="display: flex; gap: 1rem; margin-top: 4px;">
+                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Gerencie suas comunidades e assinaturas</span>
+                </div>
+            </div>
             <div style="display: flex; gap: 1rem;">
-                <a href="{{ route('communities.explore') }}" class="mogram-btn-secondary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Explorar</a>
-                <button onclick="openCreateModal()" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px;">Criar nova</button>
+                <a href="{{ route('communities.explore') }}" class="mogram-btn-secondary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">Explorar</a>
+                <button onclick="openCreateModal()" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; background: #3390ec; border: none; color: white; cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Criar nova</button>
             </div>
         </header>
 
-        <div class="feed-container" style="padding: 2rem;">
+        <div style="flex: 1; padding: 40px 5%; max-width: 1400px; margin: 0 auto; width: 100%;">
             <!-- My Owned Communities -->
-            <div style="margin-bottom: 4rem;">
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                    <div style="width: 32px; height: 32px; background: rgba(51,144,236,0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #3390ec;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <div style="margin-bottom: 5rem;">
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 36px; height: 36px; background: rgba(51,144,236,0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #3390ec;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <h3 style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Minhas Criações</h3>
                     </div>
-                    <h3 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Minhas Criações</h3>
+                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 20px;">{{ count($myCommunities) }} comunidades</span>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;">
                     @forelse($myCommunities as $c)
-                    <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem; display: flex; align-items: center; gap: 1.25rem; transition: 0.2s; cursor: pointer;" onclick="window.location='{{ route('communities.dashboard', $c->slug) }}'" onmouseover="this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(51,144,236,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.05)'">
-                        <div style="width: 60px; height: 60px; border-radius: 14px; overflow: hidden; background: #1a1c2e; flex-shrink: 0;">
-                            @if($c->avatar)
-                                <img src="{{ Storage::url($c->avatar) }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: var(--primary-blue); color: white; font-size: 18px; font-weight: 900;">{{ substr($c->name, 0, 1) }}</div>
-                            @endif
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <h4 style="font-size: 15px; font-weight: 800; color: white; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $c->name }}</h4>
-                            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">{{ $c->subscriptions()->where('status', 'active')->count() }} membros ativos</p>
-                        </div>
-                        <div style="color: var(--text-muted);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="community-desktop-card" style="--delay: {{ $loop->index }}" onclick="window.location='{{ route('communities.dashboard', $c->slug) }}'">
+                        <div class="card-glow"></div>
+                        <div style="position: relative; z-index: 1; display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="width: 70px; height: 70px; border-radius: 18px; overflow: hidden; background: #1a1c2e; flex-shrink: 0; box-shadow: 0 8px 16px rgba(0,0,0,0.3);">
+                                @if($c->avatar)
+                                    <img src="{{ Storage::url($c->avatar) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                @else
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #3390ec, #00d2ff); color: white; font-size: 24px; font-weight: 900;">{{ substr($c->name, 0, 1) }}</div>
+                                @endif
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <h4 style="font-size: 17px; font-weight: 800; color: white; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $c->name }}</h4>
+                                <p style="font-size: 13px; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+                                    <span style="width: 6px; height: 6px; background: #22c55e; border-radius: 50%;"></span>
+                                    {{ $c->subscriptions()->where('status', 'active')->count() }} membros ativos
+                                </p>
+                            </div>
+                            <div class="arrow-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                            </div>
                         </div>
                     </div>
                     @empty
-                    <div style="grid-column: 1/-1; padding: 3rem; text-align: center; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1.25px dashed rgba(255,255,255,0.05);">
-                        <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Você ainda não criou nenhuma comunidade.</p>
+                    <div style="grid-column: 1/-1; padding: 4rem; text-align: center; background: rgba(255,255,255,0.01); border-radius: 24px; border: 2px dashed rgba(255,255,255,0.05);">
+                        <div style="margin-bottom: 1.5rem; color: rgba(255,255,255,0.1);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;">Você ainda não criou nenhuma comunidade.</p>
+                        <button onclick="openCreateModal()" style="margin-top: 1.5rem; background: transparent; border: 1px solid #3390ec; color: #3390ec; padding: 8px 24px; border-radius: 50px; font-weight: 800; cursor: pointer;">Começar agora</button>
                     </div>
                     @endforelse
                 </div>
@@ -53,34 +71,44 @@
 
             <!-- Subscribed Communities -->
             <div>
-                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;">
-                    <div style="width: 32px; height: 32px; background: rgba(34, 197, 94, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #22c55e;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 36px; height: 36px; background: rgba(34, 197, 94, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #22c55e;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        </div>
+                        <h3 style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Assinaturas Ativas</h3>
                     </div>
-                    <h3 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Assinaturas Ativas</h3>
+                    <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 20px;">{{ count($subscribedCommunities) }} assinaturas</span>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 2rem;">
                     @forelse($subscribedCommunities as $c)
-                    <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.25rem; display: flex; align-items: center; gap: 1.25rem; transition: 0.2s; cursor: pointer;" onclick="window.location='{{ route('communities.show', $c->slug) }}'" onmouseover="this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(34, 197, 94, 0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.05)'">
-                        <div style="width: 60px; height: 60px; border-radius: 14px; overflow: hidden; background: #1a1c2e; flex-shrink: 0;">
-                            @if($c->avatar)
-                                <img src="{{ Storage::url($c->avatar) }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #22c55e; color: white; font-size: 18px; font-weight: 900;">{{ substr($c->name, 0, 1) }}</div>
-                            @endif
-                        </div>
-                        <div style="flex: 1; min-width: 0;">
-                            <h4 style="font-size: 15px; font-weight: 800; color: white; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $c->name }}</h4>
-                            <p style="font-size: 12px; color: var(--text-muted); font-weight: 600;">Criado por {{ '@' . $c->user->username }}</p>
-                        </div>
-                        <div style="color: var(--text-muted);">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="community-desktop-card sub" style="--delay: {{ $loop->index + 5 }}" onclick="window.location='{{ route('communities.show', $c->slug) }}'">
+                        <div class="card-glow"></div>
+                        <div style="position: relative; z-index: 1; display: flex; align-items: center; gap: 1.5rem;">
+                            <div style="width: 70px; height: 70px; border-radius: 18px; overflow: hidden; background: #1a1c2e; flex-shrink: 0; box-shadow: 0 8px 16px rgba(0,0,0,0.3);">
+                                @if($c->avatar)
+                                    <img src="{{ Storage::url($c->avatar) }}" style="width: 100%; height: 100%; object-fit: cover;">
+                                @else
+                                    <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #22c55e, #4ade80); color: white; font-size: 24px; font-weight: 900;">{{ substr($c->name, 0, 1) }}</div>
+                                @endif
+                            </div>
+                            <div style="flex: 1; min-width: 0;">
+                                <h4 style="font-size: 17px; font-weight: 800; color: white; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ $c->name }}</h4>
+                                <p style="font-size: 13px; color: var(--text-muted); font-weight: 600;">Criado por <span style="color: #3390ec;">{{ '@' . $c->user->username }}</span></p>
+                            </div>
+                            <div class="arrow-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                            </div>
                         </div>
                     </div>
                     @empty
-                    <div style="grid-column: 1/-1; padding: 3rem; text-align: center; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1.25px dashed rgba(255,255,255,0.05);">
-                        <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Você ainda não assinou nenhuma comunidade.</p>
+                    <div style="grid-column: 1/-1; padding: 4rem; text-align: center; background: rgba(255,255,255,0.01); border-radius: 24px; border: 2px dashed rgba(255,255,255,0.05);">
+                        <div style="margin-bottom: 1.5rem; color: rgba(255,255,255,0.1);">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8l4 4-4 4M8 12h7"/></svg>
+                        </div>
+                        <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;">Você ainda não assinou nenhuma comunidade.</p>
+                        <a href="{{ route('communities.explore') }}" style="display: inline-block; margin-top: 1.5rem; background: #3390ec; color: white; padding: 10px 30px; border-radius: 50px; font-weight: 800; text-decoration: none;">Explorar agora</a>
                     </div>
                     @endforelse
                 </div>
@@ -148,6 +176,82 @@
         </form>
     </div>
 </div>
+
+<style>
+    .community-desktop-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1.5px solid rgba(255, 255, 255, 0.05);
+        border-radius: 24px;
+        padding: 1.5rem;
+        cursor: pointer;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .community-desktop-card:hover {
+        transform: translateY(-8px);
+        background: rgba(255, 255, 255, 0.04);
+        border-color: rgba(51, 144, 236, 0.3);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+
+    .community-desktop-card.sub:hover {
+        border-color: rgba(34, 197, 94, 0.3);
+    }
+
+    .card-glow {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle at 50% 0%, rgba(51, 144, 236, 0.1), transparent 70%);
+        opacity: 0;
+        transition: 0.4s;
+    }
+
+    .community-desktop-card.sub .card-glow {
+        background: radial-gradient(circle at 50% 0%, rgba(34, 197, 94, 0.1), transparent 70%);
+    }
+
+    .community-desktop-card:hover .card-glow {
+        opacity: 1;
+    }
+
+    .arrow-icon {
+        width: 44px;
+        height: 44px;
+        background: rgba(255,255,255,0.03);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.15);
+        transition: 0.3s;
+    }
+
+    .community-desktop-card:hover .arrow-icon {
+        background: rgba(51, 144, 236, 0.1);
+        color: #3390ec;
+        transform: translateX(4px);
+    }
+
+    .community-desktop-card.sub:hover .arrow-icon {
+        background: rgba(34, 197, 94, 0.1);
+        color: #22c55e;
+    }
+
+    @keyframes premiumFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .community-desktop-card {
+        animation: premiumFadeIn 0.5s forwards;
+        animation-delay: calc(var(--delay) * 0.1s);
+    }
+</style>
 
 <script>
     function previewImage(input, previewId, placeholderId) {
