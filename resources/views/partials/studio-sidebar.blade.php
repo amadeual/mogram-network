@@ -23,7 +23,7 @@
     </div>
 
     {{-- ===== SIDEBAR ===== --}}
-    <aside class="sidebar collapsed" id="studio_mogram_sidebar">
+    <aside class="sidebar" id="studio_mogram_sidebar">
 
         {{-- Mobile sidebar header --}}
         <div class="sidebar-mobile-header mobile-only">
@@ -178,10 +178,13 @@ function toggleSidebarCollapse() {
     if (!sidebar) return;
     
     if (isMobile) {
-        // Always expanded on mobile drawer
         sidebar.classList.remove('collapsed');
+        document.body.classList.remove('sidebar-is-collapsed');
     } else {
-        const shouldBeCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+        const stored = localStorage.getItem('sidebar_collapsed');
+        // Default to EXPANDED (false) if nothing stored
+        const shouldBeCollapsed = stored === 'true';
+        
         if (shouldBeCollapsed) {
             sidebar.classList.add('collapsed');
             document.body.classList.add('sidebar-is-collapsed');
