@@ -8,7 +8,7 @@
     @include('partials.studio-sidebar')
 
     <main class="main-content" style="background: #0b0a15;">
-        <header class="studio-header">
+        <header class="studio-header" style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Gerenciar Conteúdo</h1>
                 <p style="color: var(--text-muted); font-size: 15px;">Visualize, edite e monitore suas publicações.</p>
