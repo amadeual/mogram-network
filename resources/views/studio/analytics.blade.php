@@ -44,7 +44,7 @@
                     @php $fixed_max = 2500; @endphp
                     @foreach($weeklyEarnings as $day => $val)
                         <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                            <div style="font-size: 9px; color: #22c55e; font-weight: 800; min-height: 12px;">@if($val > 0) R$ {{ number_format($val, 0) }} @endif</div>
+                            <div style="font-size: 9px; color: #22c55e; font-weight: 800; min-height: 12px;">@if($val > 0) R$ {{ number_format($val, 2, ',', '.') }} @endif</div>
                             <div style="width: 100%; height: {{ min(100, max(2, ($val / $fixed_max) * 100)) }}%; background: linear-gradient(to top, var(--primary-blue), #8b5cf6); border-radius: 12px 12px 6px 6px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 20px rgba(51, 144, 236, 0.3); cursor: pointer;" title="R$ {{ number_format($val, 2) }}"></div>
                             <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; margin-top: 4px; text-transform: capitalize;">{{ $day }}</div>
                         </div>

@@ -40,7 +40,7 @@
                     <p style="font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Acesso Ilimitado</p>
                     <div style="display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 2rem;">
                         <span style="font-size: 1.5rem; font-weight: 700; color: var(--text-muted);">R$</span>
-                        <span style="font-size: 3rem; font-weight: 950; color: white; letter-spacing: -1px;">{{ number_format($community->price, 0) }}</span>
+                        <span style="font-size: 3rem; font-weight: 950; color: white; letter-spacing: -1px;">{{ number_format($community->price, 2, ',', '.') }}</span>
                         <span style="font-size: 1.25rem; font-weight: 700; color: var(--text-muted);">/mês</span>
                     </div>
 

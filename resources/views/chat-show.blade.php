@@ -160,7 +160,7 @@
             <div onclick="selectGift('{{ $gift->id }}', this)" class="gift-card-v3" style="cursor: pointer; padding: 12px 6px; text-align: center; border-radius: 18px; transition: 0.2s; border: 1px solid transparent;">
                 <div style="font-size: 1.75rem; margin-bottom: 6px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3)); transition: 0.2s;" class="gift-icon-v3">{{ $gift->icon }}</div>
                 <div style="font-size: 0.65rem; font-weight: 800; color: rgba(255,255,255,0.5); margin-bottom: 3px; display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $gift->name }}</div>
-                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600;">R$ {{ number_format($gift->price, 0, ',', '.') }}</div>
+                <div style="font-size: 0.7rem; font-weight: 900; color: #ffd600;">R$ {{ number_format($gift->price, 2, ',', '.') }}</div>
             </div>
             @endforeach
         </div>
