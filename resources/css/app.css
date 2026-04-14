@@ -1312,6 +1312,9 @@ body.sidebar-is-collapsed .main-content {
 /* ===== STUDIO MOBILE OPTIMIZATION ===== */
 /* ===== ADDITIONAL MOBILE OPTIMIZATIONS ===== */
 @media (max-width: 991px) {
+    .mobile-only { display: flex !important; }
+    .desktop-only { display: none !important; }
+
     /* Force app-layout to not overflow */
     .app-layout {
         overflow-x: hidden !important;
