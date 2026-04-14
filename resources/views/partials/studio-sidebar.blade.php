@@ -40,7 +40,7 @@
             </button>
         </div>
 
-        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem 0.5rem;">
+        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: center; padding: 1.25rem 0.75rem;">
             <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
                     <defs><linearGradient id="studioLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -49,9 +49,6 @@
                 </svg>
                 <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Studio</span>
             </a>
-            <button onclick="toggleSidebarCollapse()" class="burger-btn" style="width: 32px; height: 32px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
         </div>
             
         {{-- User Info --}}
