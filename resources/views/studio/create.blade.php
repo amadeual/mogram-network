@@ -211,10 +211,21 @@
                         <div style="margin-bottom: 1.5rem;">
                             <label style="font-size: 11px; font-weight: 950; color: var(--text-muted); text-transform: none; margin-bottom: 12px; display: block;">Categorias</label>
                             <input type="hidden" name="category" id="category_input" value="Fotografia, Lifestyle">
-                            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                                <div class="tag-badge">Fotografia <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-                                <div class="tag-badge">Lifestyle <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></div>
-                                <div class="tag-badge add">+ Adicionar</div>
+                            
+                            <div id="category_tags_container" style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem;">
+                                <!-- Dynamic tags here -->
+                            </div>
+                            
+                            <div style="display: flex; gap: 8px; align-items: center;">
+                                <input type="text" id="new_category_input" placeholder="Nova categoria..." 
+                                       style="background: rgba(0,0,0,0.2); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 10px; padding: 8px 12px; color: white; font-size: 12px; outline: none; width: 100%; font-weight: 600;"
+                                       onkeydown="if(event.key === 'Enter') { event.preventDefault(); addCategoryTag(); }">
+                                <button type="button" onclick="addCategoryTag()" 
+                                        style="background: rgba(51, 144, 236, 0.1); color: #3390ec; border: none; padding: 8px 16px; border-radius: 10px; font-size: 12px; font-weight: 900; cursor: pointer; transition: 0.2s;"
+                                        onmouseover="this.style.background='#3390ec';this.style.color='white'"
+                                        onmouseout="this.style.background='rgba(51, 144, 236, 0.1)';this.style.color='#3390ec'">
+                                    Adicionar
+                                </button>
                             </div>
                         </div>
 
@@ -590,6 +601,42 @@
         if(dropzone) {
             dropzone.addEventListener('click', () => fileInput && fileInput.click());
         }
+
+        let currentCategories = ['Fotografia', 'Lifestyle'];
+
+        window.renderCategories = function() {
+            const container = document.getElementById('category_tags_container');
+            const input = document.getElementById('category_input');
+            if(!container || !input) return;
+
+            container.innerHTML = '';
+            currentCategories.forEach((cat, index) => {
+                const badge = document.createElement('div');
+                badge.className = 'tag-badge';
+                badge.innerHTML = `${cat} <svg onclick="removeCategoryTag(${index})" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" style="cursor:pointer; opacity: 0.7;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+                container.appendChild(badge);
+            });
+            input.value = currentCategories.join(', ');
+        };
+
+        window.addCategoryTag = function() {
+            const input = document.getElementById('new_category_input');
+            if(!input) return;
+            const val = input.value.trim();
+            if (val && !currentCategories.includes(val)) {
+                currentCategories.push(val);
+                window.renderCategories();
+                input.value = '';
+            }
+        };
+
+        window.removeCategoryTag = function(index) {
+            currentCategories.splice(index, 1);
+            window.renderCategories();
+        };
+
+        // Initialize categories
+        window.renderCategories();
 
         document.addEventListener('click', (e) => {
             if (emojiPicker && !emojiPicker.contains(e.target) && !e.target.closest('.tool-btn')) {
