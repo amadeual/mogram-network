@@ -117,7 +117,7 @@
             <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
                 <div style="width: 8px; height: 8px; background: #3390ec; border-radius: 50%; box-shadow: 0 0 10px #3390ec;"></div>
                 <div>
-                    <p style="font-size: 10px; color: var(--text-muted); text-transform: none; font-weight: 800; margin: 0;">Status da conta</p>
+                    <p style="font-size: 10px; color: var(--text-muted); text-transform: none; font-weight: 800; margin: 0;">Status</p>
                     <p style="font-size: 11px; color: white; font-weight: 700; margin: 0;">Verificado</p>
                 </div>
             </div>
