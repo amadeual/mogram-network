@@ -187,11 +187,11 @@
                     <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: none; letter-spacing: 0.5px;">Valor do saque</label>
                     <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1rem;">
                         <span style="font-size: 2.5rem; font-weight: 950; color: var(--text-muted); margin-right: 1.5rem;">R$</span>
-                        <input type="number" id="withdraw_amount_finance" name="amount" placeholder="0,00" step="0.01" min="20" value="{{ old('amount') }}" required
+                        <input type="number" id="withdraw_amount_finance" name="amount" placeholder="0,00" step="0.01" min="50" max="5000" value="{{ old('amount') }}" required
                                oninput="updateFinanceNetAmount()"
                                style="background: transparent; border: none; font-size: 3.5rem; font-weight: 950; color: white; outline: none; width: 100%;">
                     </div>
-                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O valor mínimo para saque é R$ 20,00.</p>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O valor permitido é entre R$ 50,00 e R$ 5.000,00.</p>
                 </div>
 
                 <!-- Fee Summary -->
