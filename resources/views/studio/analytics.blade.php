@@ -38,24 +38,50 @@
 
         <div class="responsive-grid-feed" style="margin-top: 3rem;">
             <!-- Main Chart -->
-            <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
-                <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos Semanal (Seg-Dom)</h3>
-                <div style="height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding-bottom: 2rem; position: relative; border-left: 1px solid rgba(255,255,255,0.05); padding-left: 15px;">
-                    @php $fixed_max = 2500; @endphp
+            <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem; position: relative;">
+                <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 2.5rem;">Evolução de Ganhos Semanal <span style="font-size: 12px; color: var(--text-muted); font-weight: 600; margin-left: 8px;">(R$)</span></h3>
+                
+                <div style="height: 280px; display: flex; flex-direction: row; align-items: flex-end; gap: 16px; position: relative; padding-left: 45px; padding-bottom: 30px;">
+                    <!-- Grid Lines -->
+                    <div style="position: absolute; left: 45px; right: 0; top: 0; height: 1px; background: rgba(255,255,255,0.05); z-index: 1;"></div>
+                    <div style="position: absolute; left: 45px; right: 0; top: 50%; height: 1px; background: rgba(255,255,255,0.05); z-index: 1;"></div>
+                    <div style="position: absolute; left: 45px; right: 0; bottom: 30px; height: 1px; background: rgba(255,255,255,0.1); z-index: 1;"></div>
+
+                    @php 
+                        $rawValues = $weeklyEarnings instanceof \Illuminate\Support\Collection ? $weeklyEarnings->values()->toArray() : array_values((array)$weeklyEarnings);
+                        $max_observed = count($rawValues) > 0 ? max($rawValues) : 0;
+                        $fixed_max = 1000;
+                        if($max_observed > 0) {
+                            $fixed_max = ceil($max_observed / 500) * 500;
+                            if($fixed_max < 100) $fixed_max = 100;
+                        }
+                    @endphp
+
+                    <!-- Scale Labels -->
+                    <div style="position: absolute; left: 0; top: -6px; font-size: 10px; color: var(--text-muted); font-weight: 800; font-family: monospace;">{{ $fixed_max >= 1000 ? number_format($fixed_max/1000, 1) . 'k' : $fixed_max }}</div>
+                    <div style="position: absolute; left: 0; top: calc(50% - 6px); font-size: 10px; color: var(--text-muted); font-weight: 800; font-family: monospace;">{{ $fixed_max >= 1000 ? number_format(($fixed_max/2)/1000, 1) . 'k' : $fixed_max/2 }}</div>
+                    <div style="position: absolute; left: 0; bottom: 24px; font-size: 10px; color: var(--text-muted); font-weight: 800; font-family: monospace;">0</div>
+
+                    <!-- Bars -->
                     @foreach($weeklyEarnings as $day => $val)
-                        <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;">
-                            <div style="font-size: 9px; color: #22c55e; font-weight: 800; min-height: 12px;">@if($val > 0) R$ {{ number_format($val, 2, ',', '.') }} @endif</div>
-                            <div style="width: 100%; height: {{ min(100, max(2, ($val / $fixed_max) * 100)) }}%; background: linear-gradient(to top, var(--primary-blue), #8b5cf6); border-radius: 12px 12px 6px 6px; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 20px rgba(51, 144, 236, 0.3); cursor: pointer;" title="R$ {{ number_format($val, 2) }}"></div>
-                            <div style="font-size: 10px; color: var(--text-muted); font-weight: 700; margin-top: 4px; text-transform: capitalize;">{{ $day }}</div>
+                        @php 
+                            $percentage = min(100, max(2, ($val / $fixed_max) * 100));
+                        @endphp
+                        <div style="flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; position: relative; z-index: 2; group;">
+                            <!-- Tooltip -->
+                            <div style="opacity: {{ $val > 0 ? 1 : 0 }}; position: absolute; top: calc(100% - {{ $percentage }}% - 25px); font-size: 10px; color: {{ $val > 0 ? 'white' : 'transparent' }}; font-weight: 900; background: rgba(0,0,0,0.6); padding: 2px 6px; border-radius: 6px; white-space: nowrap; transition: 0.3s; pointer-events: none;">
+                                @if($val > 0) R$ {{ number_format($val, 2, ',', '.') }} @endif
+                            </div>
+                            
+                            <!-- Bar -->
+                            <div style="width: 100%; max-width: 45px; height: {{ $percentage }}%; background: linear-gradient(to top, #3390ec, #8b5cf6); border-radius: 8px 8px 0 0; transition: height 1s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 20px rgba(139, 92, 246, 0.2); cursor: pointer;" onmouseover="this.style.filter='brightness(1.2)'" onmouseout="this.style.filter='brightness(1)'"></div>
+                            
+                            <!-- Day Label -->
+                            <div style="position: absolute; bottom: 0; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: uppercase;">
+                                {{ substr($day, 0, 3) }}
+                            </div>
                         </div>
                     @endforeach
-
-                    <!-- Scale markers -->
-                    <div style="position: absolute; left: -10px; top: 0; bottom: 32px; display: flex; flex-direction: column; justify-content: space-between; font-size: 9px; color: var(--text-muted); font-weight: 700;">
-                        <span>2500</span>
-                        <span>1250</span>
-                        <span>0</span>
-                    </div>
                 </div>
             </div>
 
