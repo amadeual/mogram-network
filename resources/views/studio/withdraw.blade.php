@@ -31,22 +31,12 @@
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         <div style="width: 38px; height: 38px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
-                        </div>
-                        <span style="font-size: 13px; font-weight: 900; color: rgba(255,255,255,0.9); text-transform: none; letter-spacing: 1px;">Saldo Disponível</span>
-                    </div>
-                    <div style="color: rgba(255,255,255,0.6);">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                    </div>
-                </div>
-                
-                <h2 style="font-size: 4rem; font-weight: 950; color: white; margin-bottom: 2rem; letter-spacing: -3px; display: flex; align-items: baseline; gap: 10px;">
-                    <span style="font-size: 1.5rem; opacity: 0.8;">R$</span> {{ number_format($availableBalance, 2, ',', '.') }}
-                </h2>
-
-                <div style="display: flex; align-items: center; gap: 10px; background: rgba(0,0,0,0.15); width: fit-content; padding: 8px 16px; border-radius: 100px;">
-                    <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 10px #4ade80;"></div>
-                    <span style="font-size: 12px; color: white; font-weight: 700;">Atualizado em tempo real</span>
+            <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 24px; padding: 1.75rem; margin-bottom: 2.5rem; box-shadow: 0 15px 40px rgba(18, 97, 209, 0.2); border: 1.5px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; min-height: 160px;">
+                <p style="font-size: 11px; font-weight: 850; color: white; opacity: 0.8; text-transform: none; letter-spacing: 1px; margin-bottom: 0.75rem;">Saldo Disponível</p>
+                <h2 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -1.5px; margin: 0;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
+                <div style="display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.1); width: fit-content; padding: 6px 14px; border-radius: 100px; margin-top: 1rem;">
+                    <div style="width: 6px; height: 6px; background: #4ade80; border-radius: 50%; box-shadow: 0 0 8px #4ade80;"></div>
+                    <span style="font-size: 10px; color: white; font-weight: 700;">Atualizado em tempo real</span>
                 </div>
             </div>
 
