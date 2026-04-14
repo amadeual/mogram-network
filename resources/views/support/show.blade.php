@@ -17,9 +17,9 @@
                 <span style="color: white;">Ticket #{{ $ticket->id }}</span>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 320px; gap: 2.5rem; align-items: start;">
+            <div class="ticket-view-layout">
                 <!-- Conversation Area -->
-                <div>
+                <div class="conversation-main">
                     <header style="margin-bottom: 3rem;">
                         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 1rem;">
                             <span class="category-tag {{ Str::slug($ticket->category) }}">{{ $ticket->category }}</span>
@@ -42,7 +42,7 @@
                                         <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $message->user->name }}" style="width: 44px; height: 44px; border-radius: 12px;">
                                     @endif
                                 </div>
-                                <div style="flex: 1; max-width: 80%;">
+                                <div style="flex: 1; max-width: 80%;" class="message-bubble">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; {{ $message->user_id == Auth::id() ? '' : 'justify-content: flex-end;' }}">
                                         <span style="font-size: 13px; font-weight: 800; color: white;">{{ $message->user->name }}</span>
                                         <span style="font-size: 11px; color: var(--text-muted); font-weight: 600;">{{ $message->created_at->format('d M, H:i') }}</span>
@@ -93,7 +93,7 @@
                 </div>
 
                 <!-- Sidebar Info -->
-                <aside>
+                <aside class="ticket-details-sidebar">
                     <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 28px; padding: 2rem; position: sticky; top: 100px;">
                         <h3 style="font-size: 16px; font-weight: 950; color: white; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1.5px solid rgba(255,255,255,0.03);">Detalhes do Ticket</h3>
                         
@@ -127,6 +127,18 @@
 </div>
 
 <style>
+    @media (max-width: 992px) {
+        .ticket-view-layout { flex-direction: column !important; }
+        .ticket-details-sidebar { position: static !important; width: 100% !important; margin-top: 2rem; }
+        .main-content { padding: 1.5rem 1rem !important; }
+        .conversation-main h1 { font-size: 1.75rem !important; }
+        .message-bubble { max-width: 90% !important; }
+    }
+
+    .ticket-view-layout { display: flex; gap: 2.5rem; align-items: start; }
+    .conversation-main { flex: 1; min-width: 0; }
+    .ticket-details-sidebar { width: 320px; flex-shrink: 0; }
+
     .category-tag { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: none; }
     .category-tag.pagamentos { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
     .category-tag.tecnico { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }

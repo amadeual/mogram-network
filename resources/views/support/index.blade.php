@@ -34,67 +34,96 @@
                 <!-- Main Content Area -->
                 <div>
                     <!-- Filter Tabs -->
-                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
-                        <div style="display: flex; background: rgba(11, 10, 21, 0.4); border: 1.5px solid rgba(255,255,255,0.05); padding: 5px; border-radius: 14px; gap: 5px;">
-                            <button class="support-tab active">Todos os Tickets</button>
-                            <button class="support-tab">Abertos <span class="badge">{{ $tickets->where('status', 'Aberto')->count() }}</span></button>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; gap: 1.5rem; flex-wrap: wrap;">
+                        <div style="display: flex; background: rgba(11, 10, 21, 0.4); border: 1.5px solid rgba(255,255,255,0.05); padding: 5px; border-radius: 14px; gap: 5px; overflow-x: auto; max-width: 100%; scrollbar-width: none;">
+                            <button class="support-tab active" onclick="filterByStatus('Todos', this)">Todos</button>
+                            <button class="support-tab" onclick="filterByStatus('Aberto', this)">Abertos <span class="badge">{{ $tickets->where('status', 'Aberto')->count() }}</span></button>
+                            <button class="support-tab" onclick="filterByStatus('Resolvido', this)">Resolvidos <span class="badge">{{ $tickets->where('status', 'Resolvido')->count() }}</span></button>
                         </div>
                         
-                        <div style="position: relative; flex: 1; max-width: 400px; margin-left: 1.5rem;">
+                        <div style="position: relative; flex: 1; min-width: 250px;">
                             <svg style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.2);" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                            <input type="text" id="ticketSearchInput" onkeyup="filterTickets()" placeholder="Pesquisar por número do chamado, título, categoria ou status..." style="width: 100%; background: transparent; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 15px 10px 40px; color: white; font-size: 13px; font-weight: 600; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#3390ec'">
+                            <input type="text" id="ticketSearchInput" onkeyup="filterTickets()" placeholder="Pesquisar tickets..." style="width: 100%; background: transparent; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 15px 10px 40px; color: white; font-size: 13px; font-weight: 600; outline: none; transition: 0.2s;" onfocus="this.style.borderColor='#3390ec'">
                         </div>
                     </div>
 
                     <!-- Tickets Table -->
-                    <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden;">
-                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                            <thead>
-                                <tr style="border-bottom: 1.5px solid rgba(255,255,255,0.03);">
-                                    <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">ID</th>
-                                    <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Assunto</th>
-                                    <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Categoria</th>
-                                    <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($tickets as $ticket)
-                                <tr class="ticket-row" onclick="window.location.href='{{ route('support.show', $ticket->id) }}'" style="cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s;">
-                                    <td style="padding: 1.5rem; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 700;">#{{ $ticket->id }}</td>
-                                    <td style="padding: 1.5rem;">
-                                        <h4 style="color: white; font-size: 14px; font-weight: 800; margin-bottom: 2px;">{{ $ticket->subject }}</h4>
-                                        <p style="font-size: 11px; color: rgba(255,255,255,0.3); font-weight: 600;">{{ $ticket->lastMessage?->message ? \Illuminate\Support\Str::limit($ticket->lastMessage->message, 40) : 'Sem mensagens' }}</p>
-                                    </td>
-                                    <td style="padding: 1.5rem;">
-                                        <span class="category-tag {{ \Illuminate\Support\Str::slug($ticket->category) }}">{{ $ticket->category }}</span>
-                                    </td>
-                                    <td style="padding: 1.5rem;">
-                                        <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: {{ $ticket->status == 'Aberto' ? '#22c55e' : ($ticket->status == 'Resolvido' ? 'rgba(255,255,255,0.4)' : '#ffd600') }}">
-                                            <div style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></div>
-                                            {{ $ticket->status }}
-                                        </div>
-                                    </td>
-                                </tr>
-                                @empty
-                                <tr>
-                                    <td colspan="4" style="padding: 5rem; text-align: center;">
-                                        <p style="color: rgba(255,255,255,0.2); font-weight: 800; font-size: 14px;">Nenhum ticket encontrado.</p>
-                                    </td>
-                                </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                        
-                        @if($tickets->count() > 0)
-                        <div style="padding: 1.25rem 1.5rem; display: flex; align-items: center; justify-content: space-between; border-top: 1.5px solid rgba(255,255,255,0.03);">
-                             <p style="font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 700;">Mostrando 1-{{ $tickets->count() }} de {{ $tickets->count() }} tickets</p>
-                             <div style="display: flex; gap: 8px;">
-                                 <button class="page-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg></button>
-                                 <button class="page-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></button>
-                             </div>
+            <div class="tickets-container">
+                <!-- Tickets Table (Desktop) -->
+                <div class="desktop-tickets" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden;">
+                    <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 1.5px solid rgba(255,255,255,0.03);">
+                                <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">ID</th>
+                                <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Assunto</th>
+                                <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Categoria</th>
+                                <th style="padding: 1.5rem; color: rgba(255,255,255,0.4); font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($tickets as $ticket)
+                            <tr class="ticket-row" data-status="{{ $ticket->status }}" onclick="window.location.href='{{ route('support.show', $ticket->id) }}'" style="cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s;">
+                                <td style="padding: 1.5rem; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 700;">#{{ $ticket->id }}</td>
+                                <td style="padding: 1.5rem;">
+                                    <h4 style="color: white; font-size: 14px; font-weight: 800; margin-bottom: 2px;">{{ $ticket->subject }}</h4>
+                                    <p style="font-size: 11px; color: rgba(255,255,255,0.3); font-weight: 600;">{{ $ticket->lastMessage?->message ? \Illuminate\Support\Str::limit($ticket->lastMessage->message, 40) : 'Sem mensagens' }}</p>
+                                </td>
+                                <td style="padding: 1.5rem;">
+                                    <span class="category-tag {{ \Illuminate\Support\Str::slug($ticket->category) }}">{{ $ticket->category }}</span>
+                                </td>
+                                <td style="padding: 1.5rem;">
+                                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 800; color: {{ $ticket->status == 'Aberto' ? '#22c55e' : ($ticket->status == 'Resolvido' ? 'rgba(255,255,255,0.4)' : '#ffd600') }}">
+                                        <div style="width: 6px; height: 6px; border-radius: 50%; background: currentColor;"></div>
+                                        {{ $ticket->status }}
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" style="padding: 5rem; text-align: center;">
+                                    <p style="color: rgba(255,255,255,0.2); font-weight: 800; font-size: 14px;">Nenhum ticket encontrado.</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tickets Cards (Mobile) -->
+                <div class="mobile-tickets" style="display: none; flex-direction: column; gap: 1rem;">
+                    @forelse($tickets as $ticket)
+                    <div class="ticket-card ticket-row" data-status="{{ $ticket->status }}" onclick="window.location.href='{{ route('support.show', $ticket->id) }}'" style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.06); border-radius: 20px; padding: 1.5rem; transition: 0.2s;">
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem;">
+                            <span style="font-size: 11px; font-weight: 800; color: rgba(255,255,255,0.4);">#{{ $ticket->id }}</span>
+                            <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 900; color: {{ $ticket->status == 'Aberto' ? '#22c55e' : ($ticket->status == 'Resolvido' ? 'rgba(255,255,255,0.4)' : '#ffd600') }}">
+                                <div style="width: 5px; height: 5px; border-radius: 50%; background: currentColor;"></div>
+                                {{ $ticket->status }}
+                            </div>
                         </div>
-                        @endif
+                        <h4 style="color: white; font-size: 15px; font-weight: 800; margin-bottom: 5px;">{{ $ticket->subject }}</h4>
+                        <p style="font-size: 12px; color: rgba(255,255,255,0.4); font-weight: 600; margin-bottom: 1rem;">{{ $ticket->category }}</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem;">
+                            <span style="font-size: 11px; color: rgba(255,255,255,0.3); font-weight: 700;">{{ $ticket->updated_at->diffForHumans() }}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+                        </div>
                     </div>
+                    @empty
+                    <div style="text-align: center; padding: 3rem 1rem; background: rgba(255,255,255,0.02); border-radius: 20px; border: 1px dashed rgba(255,255,255,0.1);">
+                        <p style="color: rgba(255,255,255,0.3); font-size: 13px; font-weight: 700;">Nenhum ticket encontrado.</p>
+                    </div>
+                    @endforelse
+                </div>
+
+                @if($tickets->count() > 0)
+                <div style="margin-top: 2rem; padding: 1.25rem 0; display: flex; align-items: center; justify-content: space-between;">
+                     <p style="font-size: 12px; color: rgba(255,255,255,0.3); font-weight: 700;">Total: {{ $tickets->count() }} tickets</p>
+                     <div style="display: flex; gap: 8px;">
+                         <button class="page-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg></button>
+                         <button class="page-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg></button>
+                     </div>
+                </div>
+                @endif
+            </div>
                 </div>
             </div>
         </div>
@@ -140,6 +169,17 @@
 </div>
 
 <style>
+    @media (max-width: 768px) {
+        .main-content { padding: 1.5rem 1rem !important; }
+        header { flex-direction: column; gap: 1.5rem; align-items: flex-start !important; }
+        header h1 { font-size: 2rem !important; }
+        header button { width: 100%; justify-content: center; }
+        .desktop-tickets { display: none !important; }
+        .mobile-tickets { display: flex !important; }
+        #newTicketModal { padding: 1rem !important; }
+        #newTicketModal > div { padding: 2rem !important; border-radius: 24px !important; }
+    }
+
     .support-tab {
         background: transparent;
         border: none;
@@ -153,11 +193,13 @@
         align-items: center;
         gap: 8px;
         transition: 0.2s;
+        white-space: nowrap;
     }
     .support-tab.active { background: #3390ec; color: white; }
     .support-tab .badge { background: rgba(255,255,255,0.15); padding: 1px 6px; border-radius: 6px; font-size: 10px; }
     
     .ticket-row:hover { background: rgba(255,255,255,0.04) !important; }
+    .ticket-card:hover { border-color: rgba(51, 144, 236, 0.3) !important; background: rgba(51, 144, 236, 0.05) !important; }
     
     .category-tag { padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 900; text-transform: none; }
     .category-tag.pagamentos { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
@@ -176,6 +218,41 @@
 </style>
 
 <script>
+    let currentStatusFilter = 'Todos';
+
+    function filterByStatus(status, btn) {
+        currentStatusFilter = status;
+        
+        // Update tabs UI
+        document.querySelectorAll('.support-tab').forEach(tab => tab.classList.remove('active'));
+        btn.classList.add('active');
+        
+        applyAllFilters();
+    }
+
+    function filterTickets() {
+        applyAllFilters();
+    }
+
+    function applyAllFilters() {
+        const searchQuery = document.getElementById('ticketSearchInput').value.toUpperCase();
+        const tableRows = document.querySelectorAll('.ticket-row');
+        
+        tableRows.forEach(row => {
+            const status = row.getAttribute('data-status');
+            const textContent = row.textContent || row.innerText;
+            
+            const matchStatus = (currentStatusFilter === 'Todos' || status === currentStatusFilter);
+            const matchSearch = (textContent.toUpperCase().indexOf(searchQuery) > -1);
+            
+            if (matchStatus && matchSearch) {
+                row.style.setProperty('display', row.classList.contains('ticket-card') ? 'flex' : '', 'important');
+            } else {
+                row.style.setProperty('display', 'none', 'important');
+            }
+        });
+    }
+
     function openNewTicketModal() {
         document.getElementById('newTicketModal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -188,22 +265,6 @@
     window.onclick = function(e) {
         const modal = document.getElementById('newTicketModal');
         if (e.target == modal) closeNewTicketModal();
-    }
-    
-    // Live Search Filter functionality
-    function filterTickets() {
-        let input = document.getElementById('ticketSearchInput');
-        let filter = input.value.toUpperCase();
-        let tableRows = document.querySelectorAll('.ticket-row');
-        
-        tableRows.forEach(row => {
-            let textContent = row.textContent || row.innerText;
-            if (textContent.toUpperCase().indexOf(filter) > -1) {
-                row.style.display = "";
-            } else {
-                row.style.display = "none";
-            }
-        });
     }
 </script>
 @endsection
