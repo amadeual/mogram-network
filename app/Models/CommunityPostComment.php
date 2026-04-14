@@ -20,4 +20,10 @@ class CommunityPostComment extends Model
     {
         return $this->belongsTo(CommunityPost::class, 'community_post_id');
     }
+
+    public function getFormattedContentAttribute()
+    {
+        $content = e($this->content);
+        return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
+    }
 }

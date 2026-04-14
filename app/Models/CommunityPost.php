@@ -21,6 +21,17 @@ class CommunityPost extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function post()
+    {
+        return $this->belongsTo(CommunityPost::class, 'community_post_id');
+    }
+
+    public function getFormattedContentAttribute()
+    {
+        $content = e($this->content);
+        return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
+    }
+
     public function likes()
     {
         return $this->hasMany(CommunityPostLike::class, 'community_post_id');
@@ -47,5 +58,11 @@ class CommunityPost extends Model
         } catch (\Exception $e) {
             return 0;
         }
+    }
+
+    public function getFormattedContentAttribute()
+    {
+        $content = e($this->content);
+        return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
     }
 }

@@ -160,14 +160,14 @@
 
                             @if($isLong)
                                 <div id="short_desc_{{ $post->id }}">
-                                    {{ mb_substr($plainText, 0, 500) }}...
+                                    {!! $post->formatted_short_description !!}...
                                     <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
                                 </div>
                                 <div id="full_desc_{{ $post->id }}" style="display: none;">
-                                    {!! $post->description !!}
+                                    {!! $post->formatted_description !!}
                                 </div>
                             @else
-                                {!! $post->description !!}
+                                {!! $post->formatted_description !!}
                             @endif
                         </div>
                 </div>

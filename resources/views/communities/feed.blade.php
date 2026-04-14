@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <div style="padding: 1.5rem;">
-                            <p style="font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 1rem;">{{ $post->content }}</p>
+                            <p style="font-size: 14px; color: rgba(255,255,255,0.9); line-height: 1.6; margin-bottom: 1rem;">{!! $post->formatted_content !!}</p>
                             
                             @if($post->media)
                                 <div style="margin-top: 1rem; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05);">
@@ -141,7 +141,7 @@
                                     <img src="{{ $comment->user->avatar ? Storage::url($comment->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $comment->user->name }}" style="width: 28px; height: 28px; border-radius: 8px;">
                                     <div style="flex: 1; background: rgba(255,255,255,0.03); padding: 0.75rem 1rem; border-radius: 12px;">
                                         <p style="font-size: 12px; font-weight: 800; color: white; margin: 0 0 4px;">{{ $comment->user->name }}</p>
-                                        <p style="font-size: 13px; color: rgba(255,255,255,0.8); margin: 0; line-height: 1.4;">{{ $comment->content }}</p>
+                                        <p style="font-size: 13px; color: rgba(255,255,255,0.8); margin: 0; line-height: 1.4;">{!! $comment->formatted_content !!}</p>
                                     </div>
                                 </div>
                                 @endforeach
