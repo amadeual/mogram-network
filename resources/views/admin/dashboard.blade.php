@@ -9,52 +9,64 @@
 </div>
 
 <!-- Stats Grid -->
-<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
     <!-- Users Card -->
-    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem;">
         <div>
-            <div style="width: 48px; height: 48px; background: rgba(51, 144, 236, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); margin-bottom: 1.5rem;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <div style="width: 40px; height: 40px; background: rgba(51, 144, 236, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); margin-bottom: 1.25rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Usuários Totais</p>
-            <h2 style="font-size: 1.75rem; font-weight: 900;">{{ number_format($stats['total_users'], 0, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Base de usuários ativa</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 740; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Usuários Totais</p>
+            <h2 style="font-size: 1.45rem; font-weight: 950; letter-spacing: -0.5px;">{{ number_format($stats['total_users'], 0, ',', '.') }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.4rem; font-weight: 600;">Base ativa</p>
         </div>
     </div>
 
     <!-- Deposits Card -->
-    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem;">
         <div>
-            <div style="width: 48px; height: 48px; background: rgba(51, 144, 236, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); margin-bottom: 1.5rem;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+            <div style="width: 40px; height: 40px; background: rgba(51, 144, 236, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue); margin-bottom: 1.25rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Depósitos Totais</p>
-            <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_deposits'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Entrada de capital confirmada</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 740; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Depósitos</p>
+            <h2 style="font-size: 1.45rem; font-weight: 950; letter-spacing: -0.5px;">R$ {{ number_format($stats['total_deposits'], 2, ',', '.') }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.4rem; font-weight: 600;">Capital confirmado</p>
         </div>
     </div>
 
-    <!-- Revenue Card -->
-    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <!-- Open Tickets Card -->
+    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem;">
         <div>
-            <div style="width: 48px; height: 48px; background: rgba(34, 197, 94, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--success); margin-bottom: 1.5rem;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <div style="width: 40px; height: 40px; background: rgba(255, 214, 0, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #ffd600; margin-bottom: 1.25rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Ganhos dos Criadores</p>
-            <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['total_revenue'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Total líquido recebido (Mimos, Lives, etc)</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 740; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Tickets em Aberto</p>
+            <h2 style="font-size: 1.45rem; font-weight: 950; letter-spacing: -0.5px; color: #ffd600;">{{ $stats['open_tickets'] }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.4rem; font-weight: 600;">Aguardando suporte</p>
+        </div>
+    </div>
+
+    <!-- Pending Withdrawals Card -->
+    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem;">
+        <div>
+            <div style="width: 40px; height: 40px; background: rgba(168, 85, 247, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: #a855f7; margin-bottom: 1.25rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 740; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Saques Pendentes</p>
+            <h2 style="font-size: 1.45rem; font-weight: 950; letter-spacing: -0.5px; color: #a855f7;">{{ $stats['pending_withdrawals'] }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.4rem; font-weight: 600;">Solicitações a processar</p>
         </div>
     </div>
 
     <!-- Profit Card -->
-    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div class="admin-card" style="display: flex; justify-content: space-between; align-items: flex-start; padding: 1.5rem;">
         <div>
-            <div style="width: 48px; height: 48px; background: rgba(239, 68, 68, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--danger); margin-bottom: 1.5rem;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+            <div style="width: 40px; height: 40px; background: rgba(34, 197, 94, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--success); margin-bottom: 1.25rem;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
             </div>
-            <p style="color: var(--text-muted); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.5rem;">Lucro da Plataforma</p>
-            <h2 style="font-size: 1.75rem; font-weight: 900;">R$ {{ number_format($stats['net_profit'], 2, ',', '.') }}</h2>
-            <p style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem; font-weight: 600;">Comissão de {{ $stats['commission'] }}% sobre as transações</p>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 740; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.4rem;">Lucro Mogram</p>
+            <h2 style="font-size: 1.45rem; font-weight: 950; letter-spacing: -0.5px; color: var(--success);">R$ {{ number_format($stats['net_profit'], 2, ',', '.') }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.7rem; margin-top: 0.4rem; font-weight: 600;">Comissão da plataforma</p>
         </div>
     </div>
 </div>

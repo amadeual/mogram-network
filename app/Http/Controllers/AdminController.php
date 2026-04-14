@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Post;
 use App\Models\Live;
 use App\Models\LiveGift;
+use App\Models\Ticket;
+use App\Models\Withdrawal;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -30,7 +32,9 @@ class AdminController extends Controller
             'total_posts' => Post::count(),
             'total_lives' => Live::count(),
             'net_profit' => $totalSpent * $platformShare, // Platform revenue (commission)
-            'commission' => $commission
+            'commission' => $commission,
+            'open_tickets' => Ticket::where('status', 'Aberto')->count(),
+            'pending_withdrawals' => Withdrawal::where('status', 'pending')->count()
         ];
 
         // Daily Revenue for Chart (Last 30 days)
