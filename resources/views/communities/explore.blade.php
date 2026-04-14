@@ -23,12 +23,12 @@
             </div>
         </header>
 
-        <div style="flex: 1; padding: 40px 5%; max-width: 1400px; margin: 0 auto; width: 100%;">
+        <div class="explore-container" style="flex: 1; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%;">
             
             <!-- Hero Search Section -->
             <div style="text-align: center; margin-bottom: 60px;">
-                <h1 class="communities-hero-title" style="font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">Explorar Comunidades</h1>
-                <p class="communities-hero-subtitle" style="font-size: 18px; color: rgba(255,255,255,0.6); font-weight: 500; margin-bottom: 40px;">Encontre e conecte-se com os melhores criadores do Mogram.</p>
+                <h1 class="communities-hero-title" style="font-size: clamp(2rem, 8vw, 3rem); font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">Explorar Comunidades</h1>
+                <p class="communities-hero-subtitle" style="font-size: clamp(1rem, 3vw, 1.125rem); color: rgba(255,255,255,0.6); font-weight: 500; margin-bottom: 40px;">Encontre e conecte-se com os melhores criadores do Mogram.</p>
                 
                 <form action="{{ route('communities.explore') }}" method="GET" style="max-width: 700px; margin: 0 auto; position: relative; margin-bottom: 30px;">
                     <div style="position: relative; display: flex; align-items: center; flex-direction: inherit;" class="communities-search-container">
@@ -64,45 +64,45 @@
                     <a href="#" style="color: #3390ec; text-decoration: none; font-weight: 800; font-size: 13px;">Ver tudo</a>
                 </div>
 
-                <div class="premium-card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 30px;">
+                <div class="premium-card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
                     @forelse($recommended as $c)
-                    <div class="premium-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 28px; overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;">
-                        <div style="height: 200px; position: relative; overflow: hidden;">
+                    <div class="premium-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; max-width: 420px; margin: 0 auto; width: 100%;">
+                        <div style="height: 160px; position: relative; overflow: hidden;" class="card-banner-wrapper">
                             <img src="{{ $c->banner ? Storage::url($c->banner) : 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=800' }}" style="width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease;" class="card-banner">
-                            <div style="position: absolute; top: 15px; right: 15px; background: rgba(51, 144, 236, 0.9); backdrop-filter: blur(10px); color: white; padding: 6px 14px; border-radius: 50px; font-weight: 900; font-size: 11px; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);">
-                                {{ $c->price > 0 ? 'R$ '.number_format($c->price, 2, ',', '.').'/MÊS' : 'GRATUITO' }}
+                            <div style="position: absolute; top: 12px; right: 12px; background: rgba(51, 144, 236, 0.9); backdrop-filter: blur(10px); color: white; padding: 4px 12px; border-radius: 50px; font-weight: 900; font-size: 10px; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);">
+                                {{ $c->price > 0 ? 'R$ '.number_format($c->price, 2, ',', '.').'/M' : 'GRÁTIS' }}
                             </div>
                             <div class="card-overlay" style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.8)); opacity: 0.8;"></div>
                         </div>
                         
-                        <div style="padding: 25px; position: relative; z-index: 2;">
-                            <div style="position: absolute; top: -40px; left: 25px; width: 70px; height: 70px; border-radius: 20px; overflow: hidden; border: 4px solid #0b0a15; box-shadow: 0 10px 30px rgba(0,0,0,0.8); background: #1a1a1a;">
+                        <div style="padding: 20px; position: relative; z-index: 2;">
+                            <div style="position: absolute; top: -35px; left: 20px; width: 60px; height: 60px; border-radius: 16px; overflow: hidden; border: 3px solid #0b0a15; box-shadow: 0 10px 30px rgba(0,0,0,0.8); background: #1a1a1a;">
                                 <img src="{{ $c->avatar ? Storage::url($c->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$c->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                             </div>
                             
-                            <div style="margin-top: 35px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
-                                    <h3 style="font-size: 20px; font-weight: 850; letter-spacing: -0.5px; color: white;">{{ $c->name }}</h3>
-                                    <div style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; padding: 4px 8px; border-radius: 8px; font-size: 11px; font-weight: 900; display: flex; align-items: center; gap: 4px;">
-                                        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                            <div style="margin-top: 30px;">
+                                <div style="display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px;">
+                                    <h3 style="font-size: 18px; font-weight: 850; letter-spacing: -0.4px; color: white; margin: 0; line-height: 1.2;">{{ $c->name }}</h3>
+                                    <div style="background: rgba(251, 191, 36, 0.1); color: #fbbf24; padding: 2px 6px; border-radius: 6px; font-size: 10px; font-weight: 900; display: flex; align-items: center; gap: 3px; flex-shrink: 0;">
+                                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                                         4.9
                                     </div>
                                 </div>
-                                <p style="font-size: 14px; color: rgba(255,255,255,0.5); line-height: 1.6; margin-bottom: 25px; height: 3.2em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-weight: 500;">{{ $c->description }}</p>
+                                <p style="font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5; margin-bottom: 20px; height: 3em; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; font-weight: 500;">{{ $c->description }}</p>
                                 
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 25px; padding: 12px 16px; background: rgba(255,255,255,0.03); border-radius: 16px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; padding: 10px 14px; background: rgba(255,255,255,0.03); border-radius: 12px;">
                                     <div style="display: flex; flex-direction: column;">
-                                        <span style="font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 800; text-transform: uppercase;">Membros</span>
-                                        <span style="font-size: 14px; font-weight: 850; color: white;">{{ number_format($c->members_count, 0, ',', '.') }}</span>
+                                        <span style="font-size: 9px; color: rgba(255,255,255,0.3); font-weight: 800; text-transform: uppercase;">Membros</span>
+                                        <span style="font-size: 13px; font-weight: 850; color: white;">{{ number_format($c->members_count, 0, ',', '.') }}</span>
                                     </div>
-                                    <div style="width: 1px; height: 24px; background: rgba(255,255,255,0.06);"></div>
+                                    <div style="width: 1px; height: 20px; background: rgba(255,255,255,0.06);"></div>
                                     <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                                        <span style="font-size: 10px; color: rgba(255,255,255,0.3); font-weight: 800; text-transform: uppercase;">Categoria</span>
-                                        <span style="font-size: 12px; font-weight: 800; color: #3390ec;">{{ $c->category }}</span>
+                                        <span style="font-size: 9px; color: rgba(255,255,255,0.3); font-weight: 800; text-transform: uppercase;">Categoria</span>
+                                        <span style="font-size: 11px; font-weight: 800; color: #3390ec;">{{ $c->category }}</span>
                                     </div>
                                 </div>
 
-                                <a href="{{ route('communities.show', $c->slug) }}" class="community-card-btn" style="display: block; width: 100%; background: #3390ec; color: white; text-align: center; padding: 16px; border-radius: 16px; font-weight: 900; font-size: 14px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.2);">Entrar na Tribo</a>
+                                <a href="{{ route('communities.show', $c->slug) }}" class="community-card-btn" style="display: block; width: 100%; background: #3390ec; color: white; text-align: center; padding: 12px; border-radius: 14px; font-weight: 900; font-size: 13px; text-decoration: none; transition: 0.3s; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.2);">Acessar Tribo</a>
                             </div>
                         </div>
                     </div>
@@ -117,18 +117,18 @@
                     <h2 class="communities-section-title" style="font-size: 24px; font-weight: 900; letter-spacing: -0.5px;">Descobrir Mais</h2>
                 </div>
 
-                <div class="categories-grid-small" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                <div class="categories-grid-small" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
                     @foreach($allCommunities->skip(3)->take(8) as $c)
-                    <div class="small-community-item" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 12px; display: flex; gap: 15px; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden;" onclick="window.location.href='{{ route('communities.show', $c->slug) }}'">
-                        <div style="width: 70px; height: 70px; border-radius: 14px; overflow: hidden; flex-shrink: 0; position: relative; z-index: 2;">
+                    <div class="small-community-item" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 10px; display: flex; gap: 12px; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-width: 400px; margin: 0 auto; width: 100%;" onclick="window.location.href='{{ route('communities.show', $c->slug) }}'">
+                        <div style="width: 56px; height: 56px; border-radius: 12px; overflow: hidden; flex-shrink: 0; position: relative; z-index: 2;">
                             <img src="{{ $c->avatar ? Storage::url($c->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$c->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
                         <div style="flex: 1; min-width: 0; position: relative; z-index: 2;">
-                            <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: white;">{{ $c->name }}</h4>
-                            <p style="font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 6px;">{{ number_format($c->members_count, 0, ',', '.') }} membros</p>
-                            <span style="display: inline-flex; align-items: center; gap: 4px; color: #3390ec; font-size: 11px; font-weight: 900;">
-                                Ver Tribo
-                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            <h4 style="font-size: 14px; font-weight: 800; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: white;">{{ $c->name }}</h4>
+                            <p style="font-size: 10px; color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 4px;">{{ number_format($c->members_count, 0, ',', '.') }} membros</p>
+                            <span style="display: inline-flex; align-items: center; gap: 4px; color: #3390ec; font-size: 10px; font-weight: 900;">
+                                Ver
+                                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
                             </span>
                         </div>
                         <div class="item-hover-effect" style="position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(51,144,236,0.03)); opacity: 0; transition: 0.3s;"></div>

@@ -31,7 +31,7 @@
                         <h3 style="font-size: 1.5rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Minhas Criações</h3>
                     </div>
                     <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 20px;">{{ count($myCommunities) }} comunidades</span>
-                </div>                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                </div>                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;">
                     @forelse($myCommunities as $c)
                     <div class="community-premium-card" style="--delay: {{ $loop->index }}" onclick="window.location='{{ route('communities.dashboard', $c->slug) }}'">
                         <div class="card-glow"></div>
@@ -82,7 +82,7 @@
                     <span style="font-size: 12px; color: var(--text-muted); font-weight: 700; background: rgba(255,255,255,0.03); padding: 4px 12px; border-radius: 20px;">{{ count($subscribedCommunities) }} tribos</span>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.25rem;">
                     @forelse($subscribedCommunities as $c)
                     <div class="community-premium-card sub" style="--delay: {{ $loop->index + 4 }}" onclick="window.location='{{ route('communities.show', $c->slug) }}'">
                         <div class="card-glow"></div>
@@ -184,12 +184,15 @@
     .community-premium-card {
         background: rgba(255, 255, 255, 0.02);
         border: 1px solid rgba(255, 255, 255, 0.06);
-        border-radius: 28px;
-        padding: 1.5rem;
+        border-radius: 24px;
+        padding: 1.25rem;
         cursor: pointer;
         transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         position: relative;
         overflow: hidden;
+        max-width: 450px;
+        margin: 0 auto;
+        width: 100%;
     }
 
     .community-premium-card:hover {
