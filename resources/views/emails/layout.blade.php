@@ -118,11 +118,7 @@
     <div class="container">
         <div class="header">
             <div style="margin: 0 auto; width: 64px; height: 64px; border-radius: 18px; box-shadow: 0 15px 35px rgba(255, 75, 31, 0.2); overflow: hidden; display: inline-block;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 512 512" style="display: block;">
-                    <defs><linearGradient id="emailLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#emailLogoGrad)" />
-                    <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
-                </svg>
+                <img src="{{ url('/logo-email.svg') }}" alt="Mogram" style="width: 100%; height: 100%; display: block;" onerror="this.src='https://ui-avatars.com/api/?name=M&background=ff4b1f&color=fff&size=128&bold=true'">
             </div>
             <div class="brand-name">Mogram Network</div>
         </div>
