@@ -173,11 +173,22 @@ function toggleSidebarCollapse() {
 
 // Init
 (function() {
-    const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
-    if (isCollapsed && window.innerWidth > 991) {
-        const sidebar = document.getElementById('studio_mogram_sidebar') || document.getElementById('mogram_sidebar');
-        if (sidebar) sidebar.classList.add('collapsed');
-        document.body.classList.add('sidebar-is-collapsed');
+    const isMobile = window.innerWidth <= 991;
+    const sidebar = document.getElementById('studio_mogram_sidebar') || document.getElementById('mogram_sidebar');
+    if (!sidebar) return;
+    
+    if (isMobile) {
+        // Always expanded on mobile drawer
+        sidebar.classList.remove('collapsed');
+    } else {
+        const shouldBeCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+        if (shouldBeCollapsed) {
+            sidebar.classList.add('collapsed');
+            document.body.classList.add('sidebar-is-collapsed');
+        } else {
+            sidebar.classList.remove('collapsed');
+            document.body.classList.remove('sidebar-is-collapsed');
+        }
     }
 })();
 </script>

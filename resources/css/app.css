@@ -1604,6 +1604,21 @@ body.sidebar-is-collapsed .main-content {
     .studio-grid-2 {
         grid-template-columns: 1fr !important;
     }
+
+    /* Fix: Ensure sidebar text is visible on mobile drawer even if "collapsed" via desktop settings */
+    .sidebar.collapsed .sidebar-logo span,
+    .sidebar.collapsed .menu-item span,
+    .sidebar.collapsed .sidebar-user div,
+    .sidebar.collapsed .sidebar-mobile-header span,
+    .sidebar.collapsed #account-status-text,
+    .sidebar.collapsed .logout-text,
+    .sidebar.collapsed .studio-user-details {
+        display: inline-block !important;
+    }
+
+    .sidebar.collapsed .studio-user-details {
+        display: flex !important;
+    }
 }
 
 /* Utilities */
