@@ -3,6 +3,15 @@
 @section('title', 'Gestão de Conteúdo')
 
 @section('admin_content')
+<style>
+    .pagination svg { width: 1.5rem !important; height: 1.5rem !important; }
+    .pagination .flex.justify-between.flex-1 { display: none !important; }
+    .pagination span[aria-current="page"] span { background: var(--primary-blue) !important; border-color: var(--primary-blue) !important; color: white !important; }
+    .pagination a, .pagination span { border-color: var(--border-gray) !important; background: rgba(255,255,255,0.03) !important; color: white !important; padding: 8px 16px !important; }
+    nav[role="navigation"] { display: flex; flex-direction: column; align-items: center; gap: 1rem; margin-top: 1rem; }
+    .pagination .text-sm { color: var(--text-muted) !important; font-weight: 600; }
+</style>
+
 <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 3rem;">
     <div>
         <p style="color: var(--primary-blue); font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 0.5rem;">Home / Conteúdo / Posts</p>
