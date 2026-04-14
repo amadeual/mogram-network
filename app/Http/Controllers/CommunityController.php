@@ -62,10 +62,18 @@ class CommunityController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'category' => 'nullable|string|max:100',
-            'price' => 'required|numeric|min:5|max:250000',
+            'price' => 'required',
             'avatar' => 'nullable|image|max:2048',
             'banner' => 'nullable|image|max:5120',
         ]);
+
+        $rawPrice = str_replace(['R$', ' '], '', $request->price);
+        $rawPrice = str_replace(',', '.', $rawPrice);
+        $priceFloat = (float)$rawPrice;
+        
+        if ($priceFloat < 5) {
+            return back()->withInput()->withErrors(['price' => 'O mínimo é R$ 5,00']);
+        }
 
         $slug = Str::slug($request->name);
         $count = Community::where('slug', 'LIKE', "{$slug}%")->count();
@@ -77,7 +85,7 @@ class CommunityController extends Controller
         $community->slug = $slug;
         $community->description = $request->description;
         $community->category = $request->category;
-        $community->price = (float)str_replace(',', '.', $request->price);
+        $community->price = $priceFloat;
         $community->has_free_trial = false;
         $community->free_trial_days = 0;
 
@@ -224,14 +232,22 @@ class CommunityController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'category' => 'nullable|string|max:100',
-            'price' => 'required|numeric|min:5|max:250000',
+            'price' => 'required',
             'free_trial_days' => 'nullable|integer|min:0',
             'avatar' => 'nullable|image|max:2048',
             'banner' => 'nullable|image|max:5120',
         ]);
 
-        $data = $request->only(['name', 'description', 'category']);
-        $data['price'] = (float)str_replace(',', '.', $request->price);
+        $rawPrice = str_replace(['R$', ' '], '', $request->price);
+        $rawPrice = str_replace(',', '.', $rawPrice);
+        $priceFloat = (float)$rawPrice;
+        
+        if ($priceFloat < 5) {
+            return back()->withInput()->withErrors(['price' => 'O mínimo é R$ 5,00']);
+        }
+
+        $data = $request->only(['name', 'description', 'category', 'free_trial_days']);
+        $data['price'] = $priceFloat;
         $data['has_free_trial'] = false;
         $data['free_trial_days'] = 0;
 

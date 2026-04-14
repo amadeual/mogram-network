@@ -130,6 +130,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/{user}', [ChatController::class, 'sendMessage'])->name('chat.send');
     Route::post('/chat/{user}/gift', [ChatController::class, 'sendGift'])->name('chat.gift');
 
+    // Support Routes
+    Route::get('/suporte', [SupportController::class, 'index'])->name('support.index');
+    Route::post('/suporte', [SupportController::class, 'store'])->name('support.store');
+    Route::get('/suporte/{ticket}', [SupportController::class, 'show'])->name('support.show');
+    Route::post('/suporte/{ticket}/reply', [SupportController::class, 'reply'])->name('support.reply');
+
     // Admin Panel Routes
     Route::middleware(['admin'])->prefix('admin')->group(function () {
         Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
@@ -147,6 +153,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/reports', [App\Http\Controllers\AdminController::class, 'reports'])->name('admin.reports');
         Route::get('/settings', [App\Http\Controllers\AdminController::class, 'settings'])->name('admin.settings');
         Route::post('/settings', [App\Http\Controllers\AdminController::class, 'updateSettings'])->name('admin.settings.update');
+
+        // Admin Support Routes
+        Route::get('/suporte', [App\Http\Controllers\Admin\SupportController::class, 'index'])->name('admin.support.index');
+        Route::get('/suporte/{ticket}', [App\Http\Controllers\Admin\SupportController::class, 'show'])->name('admin.support.show');
+        Route::post('/suporte/{ticket}/reply', [App\Http\Controllers\Admin\SupportController::class, 'reply'])->name('admin.support.reply');
     });
 
     // Purchases Routes

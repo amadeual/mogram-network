@@ -133,13 +133,16 @@ class AdminController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
+            'price' => 'required',
             'icon' => 'required|string',
         ]);
 
         $gift = \App\Models\Gift::findOrFail($id);
         $data = $request->only(['name', 'icon']);
-        $data['price'] = (float)str_replace(',', '.', $request->price);
+        
+        // Fix for 2.50 rounding to 3 or validation failing on 2,50
+        $rawPrice = str_replace(',', '.', $request->price);
+        $data['price'] = (float)$rawPrice;
         $gift->update($data);
 
         return back()->with('success', 'Presente atualizado com sucesso!');

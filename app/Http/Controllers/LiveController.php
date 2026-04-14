@@ -164,15 +164,23 @@ class LiveController extends Controller
             'title' => 'required|string|max:100',
             'description' => 'required|string|max:1000',
             'category' => 'required',
-            'price' => 'required|numeric|min:5',
+            'price' => 'required',
             'community_id' => 'nullable|exists:communities,id'
         ]);
+
+        $rawPrice = str_replace(['R$', ' '], '', $request->price);
+        $rawPrice = str_replace(',', '.', $rawPrice);
+        $priceFloat = (float)$rawPrice;
+        
+        if ($priceFloat < 5.00) {
+            return back()->withInput()->withErrors(['price' => 'O valor mínimo para uma live é R$ 5,00.']);
+        }
 
         $data = [
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'price' => (float)str_replace(',', '.', $request->price),
+            'price' => $priceFloat,
             'community_id' => $request->community_id,
         ];
 

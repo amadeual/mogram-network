@@ -8,8 +8,12 @@
 
     <!-- Main Feed -->
     <main class="main-content">
-        <header style="height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray); background: rgba(11, 10, 21, 0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
-            <div style="flex: 1; max-width: 400px; position: relative;">
+        <header style="height: 70px; padding: 0 1.5rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray); background: rgba(11, 10, 21, 0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
+            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                <button onclick="toggleMogramSidebar()" style="background: transparent; border: none; color: white; cursor: pointer; padding: 8px; border-radius: 12px; display: flex; align-items: center; justify-content: center; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                </button>
+                <div style="flex: 1; max-width: 400px; position: relative;">
                 <div style="position: relative;">
                     <svg style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                     <input type="text" id="user-search" placeholder="Buscar criadores (ex: @username ou nome)..." 
@@ -34,33 +38,9 @@
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                 </a>
 
-                <div style="position: relative;">
-                    <button onclick="toggleMoreMenu()" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; padding: 8px; border-radius: 12px; transition: 0.2s;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
-                    </button>
-                    <div id="mogram-more-menu" style="display: none; position: absolute; top: calc(100% + 10px); right: 0; background: #1a1926; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 20px; box-shadow: 0 15px 50px rgba(0,0,0,0.5); z-index: 2001; min-width: 200px; overflow: hidden; animation: slideIn 0.2s ease-out;">
-                        <div style="padding: 8px;">
-                            <a href="{{ route('help') }}" class="more-menu-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                                Central de Ajuda
-                            </a>
-                            <a href="{{ route('privacy') }}" class="more-menu-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                                Privacidade
-                            </a>
-                            <a href="{{ route('terms') }}" class="more-menu-item">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                                Termos de Uso
-                            </a>
-                            <div style="height: 1px; background: rgba(255,255,255,0.05); margin: 8px 12px;"></div>
-                            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form-header').submit();" class="more-menu-item" style="color: #ef4444;">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                                Sair
-                            </a>
-                        </div>
-                    </div>
-                    <form id="logout-form-header" action="{{ route('logout') }}" method="POST" style="display: none;">@csrf</form>
-                </div>
+                <a href="{{ route('support.index') }}" style="background: transparent; border: none; color: white; cursor: pointer; display: flex; align-items: center; padding: 8px; border-radius: 12px; transition: 0.2s;" title="Central de Ajuda">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </a>
             </div>
         </header>
 

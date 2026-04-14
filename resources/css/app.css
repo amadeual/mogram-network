@@ -715,7 +715,7 @@ section { padding: 4rem 0; }
 }
 
 .sidebar.collapsed .sidebar-header .burger-btn {
-    display: none !important;
+    display: flex !important;
 }
 
 .sidebar.collapsed .sidebar-logo {

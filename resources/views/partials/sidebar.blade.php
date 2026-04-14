@@ -44,7 +44,7 @@
             </button>
         </div>
 
-        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem 1.0rem;">
+        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; padding: 0.5rem 0.75rem 1.0rem;">
             <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
                     <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -53,9 +53,6 @@
                 </svg>
                 <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
             </a>
-            <button onclick="toggleSidebarCollapse()" class="burger-btn" style="width: 32px; height: 32px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s;">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
         </div>
 
         <nav style="display: flex; flex-direction: column; gap: 0.35rem; flex: 1;">
@@ -82,7 +79,7 @@
                     ->count('sender_id');
             @endphp
             <a href="{{ route('chat.index') }}" class="menu-item sidebar-nav-item {{ Route::is('chat.*') ? 'active' : '' }}">
-                <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+                <div style="position: relative; display: flex; align-items: center;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     @if($unreadChatsCount > 0)
                         <span style="position: absolute; top: -6px; right: -8px; background: #ef4444; color: white; font-size: 8px; font-weight: 900; min-width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #0b0a15; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); z-index: 10;">
@@ -103,6 +100,10 @@
             <a href="{{ route('communities.explore') }}" class="menu-item sidebar-nav-item {{ Route::is('communities.explore') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <span>Comunidades</span>
+            </a>
+            <a href="{{ route('support.index') }}" class="menu-item sidebar-nav-item {{ Route::is('support.*') ? 'active' : '' }}">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><circle cx="12" cy="12" r="1"/></svg>
+                <span>Suporte</span>
             </a>
             
             <div class="sidebar-divider mobile-only"></div>
