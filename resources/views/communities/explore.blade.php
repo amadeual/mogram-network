@@ -66,7 +66,7 @@
 
                 <div class="premium-card-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px;">
                     @forelse($recommended as $c)
-                    <div class="premium-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; max-width: 420px; margin: 0 auto; width: 100%;">
+                    <div class="premium-card" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); border-radius: 24px; overflow: hidden; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; width: 100%;">
                         <div style="height: 160px; position: relative; overflow: hidden;" class="card-banner-wrapper">
                             <img src="{{ $c->banner ? Storage::url($c->banner) : 'https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=800' }}" style="width: 100%; height: 100%; object-fit: cover; transition: 0.6s ease;" class="card-banner">
                             <div style="position: absolute; top: 12px; right: 12px; background: rgba(51, 144, 236, 0.9); backdrop-filter: blur(10px); color: white; padding: 4px 12px; border-radius: 50px; font-weight: 900; font-size: 10px; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);">
@@ -119,7 +119,7 @@
 
                 <div class="categories-grid-small" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px;">
                     @foreach($allCommunities->skip(3)->take(8) as $c)
-                    <div class="small-community-item" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 10px; display: flex; gap: 12px; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; max-width: 400px; margin: 0 auto; width: 100%;" onclick="window.location.href='{{ route('communities.show', $c->slug) }}'">
+                    <div class="small-community-item" style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 10px; display: flex; gap: 12px; align-items: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); position: relative; overflow: hidden; width: 100%;" onclick="window.location.href='{{ route('communities.show', $c->slug) }}'">
                         <div style="width: 56px; height: 56px; border-radius: 12px; overflow: hidden; flex-shrink: 0; position: relative; z-index: 2;">
                             <img src="{{ $c->avatar ? Storage::url($c->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$c->name }}" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -147,8 +147,8 @@
         </div>
 
         <!-- Detailed Footer -->
-        <footer style="background: #000; border-top: 1px solid rgba(255,255,255,0.03); padding: 80px 5% 40px;">
-            <div class="communities-footer" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px;">
+        <footer style="background: #000; border-top: 1px solid rgba(255,255,255,0.03); padding: 40px 0.75rem 30px; overflow: hidden;">
+            <div class="communities-footer" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 30px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
