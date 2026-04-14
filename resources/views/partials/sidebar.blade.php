@@ -57,19 +57,19 @@
         <nav style="display: flex; flex-direction: column; gap: 0.35rem;">
             <a href="{{ route('dashboard') }}" class="menu-item sidebar-nav-item {{ Route::is('dashboard') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                Home
+                <span>Home</span>
             </a>
             <a href="{{ route('stories') }}" class="menu-item sidebar-nav-item {{ Route::is('stories') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                Stories
+                <span>Stories</span>
             </a>
             <a href="{{ route('studio.create') }}" class="menu-item sidebar-nav-item {{ Route::is('studio.create') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                Criar
+                <span>Criar</span>
             </a>
             <a href="{{ route('lives') }}" class="menu-item sidebar-nav-item {{ Route::is('lives') || Route::is('live.*') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                Lives
+                <span>Lives</span>
             </a>
             @php
                 $unreadChatsCount = \App\Models\Message::where('receiver_id', Auth::id())
@@ -81,7 +81,7 @@
                 <div style="position: relative; display: flex; align-items: center; justify-content: center;">
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
                     @if($unreadChatsCount > 0)
-                        <span style="position: absolute; top: -6px; right: -8px; background: #ef4444; color: white; font-size: 8px; font-weight: 900; min-width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #0b0a15; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);">
+                        <span style="position: absolute; top: -6px; right: -8px; background: #ef4444; color: white; font-size: 8px; font-weight: 900; min-width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #0b0a15; box-shadow: 0 0 10px rgba(239, 68, 68, 0.3); z-index: 10;">
                             {{ $unreadChatsCount }}
                         </span>
                     @endif
@@ -90,26 +90,33 @@
             </a>
             <a href="{{ route('purchases.index') }}" class="menu-item sidebar-nav-item {{ Route::is('purchases.*') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-                Minhas Compras
+                <span>Minhas Compras</span>
             </a>
             <a href="{{ route('wallet.index') }}" class="menu-item sidebar-nav-item {{ Route::is('wallet.*') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
-                Carteira
+                <span>Carteira</span>
             </a>
             <a href="{{ route('communities.explore') }}" class="menu-item sidebar-nav-item {{ Route::is('communities.explore') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                Comunidades
+                <span>Comunidades</span>
             </a>
             
             <div class="sidebar-divider mobile-only"></div>
             <a href="{{ route('studio.dashboard') }}" class="menu-item sidebar-nav-item" style="color: var(--primary-blue);">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-                Mogram Studio
+                <span>Mogram Studio</span>
             </a>
             <a href="{{ route('studio.settings') }}" class="menu-item sidebar-nav-item {{ Route::is('studio.settings') ? 'active' : '' }}">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                Configurações
+                <span>Configurações</span>
             </a>
+
+            {{-- Collapse Toggle (Desktop) --}}
+            <div class="sidebar-divider desktop-only"></div>
+            <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start;">
+                <svg id="collapse-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><polyline points="15 18 9 12 15 6"/></svg>
+                <span>Recolher</span>
+            </button>
         </nav>
 
         <div class="sidebar-user">
@@ -383,5 +390,38 @@ function closeMogramSidebar() {
         }
         startX = null;
     }, { passive: true });
+})();
+
+function toggleSidebarCollapse() {
+    const sidebar = document.getElementById('mogram_sidebar');
+    const icon = document.getElementById('collapse-icon');
+    const isCollapsed = sidebar.classList.toggle('collapsed');
+    
+    // Save state
+    localStorage.setItem('sidebar_collapsed', isCollapsed);
+    
+    // Rotate icon
+    if (icon) {
+        icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+
+    // Inform body for layout adjustments if needed
+    if (isCollapsed) {
+        document.body.classList.add('sidebar-is-collapsed');
+    } else {
+        document.body.classList.remove('sidebar-is-collapsed');
+    }
+}
+
+// Initialize collapse state on load
+(function() {
+    const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+    if (isCollapsed && window.innerWidth > 991) {
+        const sidebar = document.getElementById('mogram_sidebar');
+        const icon = document.getElementById('collapse-icon');
+        if (sidebar) sidebar.classList.add('collapsed');
+        if (icon) icon.style.transform = 'rotate(180deg)';
+        document.body.classList.add('sidebar-is-collapsed');
+    }
 })();
 </script>
