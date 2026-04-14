@@ -44,22 +44,15 @@
             </button>
         </div>
 
-        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; padding: 0.5rem 0.75rem 1.0rem; justify-content: space-between;">
+        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; padding: 0.5rem 0.75rem 1.0rem;">
             <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
                     <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
                     <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
-                <span class="grad-text sidebar-label" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
+                <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
             </a>
-            <button class="sidebar-collapse-toggle" onclick="toggleSidebarCollapse()" aria-label="Toggle sidebar" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.color='var(--primary-blue)'" onmouseout="this.style.color='var(--text-muted)'">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                    <line x1="3" y1="6" x2="21" y2="6"/>
-                    <line x1="3" y1="12" x2="21" y2="12"/>
-                    <line x1="3" y1="18" x2="21" y2="18"/>
-                </svg>
-            </button>
         </div>
 
         <nav style="display: flex; flex-direction: column; gap: 0.35rem; flex: 1;">
@@ -180,15 +173,13 @@ function toggleSidebarCollapse() {
     }
 }
 
-// Init — collapsed by default on desktop
+// Init — sidebar always expanded on desktop
 (function() {
-    const userPref = localStorage.getItem('sidebar_collapsed');
-    // Default to collapsed (true) unless user explicitly chose to expand (false)
-    const shouldCollapse = userPref === null ? true : userPref === 'true';
-    if (shouldCollapse && window.innerWidth > 991) {
+    // On desktop, never auto-collapse
+    if (window.innerWidth > 991) {
         const sidebar = document.getElementById('mogram_sidebar');
-        if (sidebar) sidebar.classList.add('collapsed');
-        document.body.classList.add('sidebar-is-collapsed');
+        if (sidebar) sidebar.classList.remove('collapsed');
+        document.body.classList.remove('sidebar-is-collapsed');
     }
 })();
 </script>
