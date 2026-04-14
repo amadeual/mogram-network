@@ -38,14 +38,14 @@
         <div style="margin-top: 4rem; display: grid; grid-template-columns: 1fr 300px; gap: 2rem; padding: 0 2rem 5rem;" class="responsive-grid-feed">
             <!-- Main Content -->
             <div class="community-feed">
-                <!-- Create Post (if owner or permission, assuming members can post for now as per Image 4) -->
+                <!-- Create Post -->
                 @if(Auth::id() === $community->user_id)
-                <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; margin-bottom: 2rem;">
+                <div class="community-post-box" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; margin-bottom: 2rem;">
                     <form action="{{ route('communities.posts.store', $community->slug) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                             <img src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . Auth::user()->name }}" style="width: 44px; height: 44px; border-radius: 14px; object-fit: cover;">
-                            <textarea name="content" placeholder="O que você quer compartilhar com a comunidade?" style="flex: 1; background: transparent; border: none; color: white; font-size: 15px; font-weight: 600; outline: none; resize: none; min-height: 60px;" required></textarea>
+                            <textarea name="content" placeholder="O que você quer compartilhar com a comunidade?" style="flex: 1; background: transparent; border: none; color: white; font-size: 15px; font-weight: 600; outline: none; resize: none; min-height: 60px; min-width: 0;" required></textarea>
                         </div>
                         
                         <!-- Media Preview Container -->
@@ -59,7 +59,7 @@
                             <button type="button" onclick="clearMedia()" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; backdrop-filter: blur(10px);">×</button>
                         </div>
 
-                        <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.03);">
+                        <div class="post-create-footer" style="display: flex; align-items: center; justify-content: space-between; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.03);">
                             <div style="display: flex; gap: 1rem;">
                                 <button type="button" onclick="document.getElementById('post-media').click()" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'">
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
@@ -292,9 +292,12 @@
         to { opacity: 1; transform: translateY(0); }
     }
     .filter-tab:hover { background: rgba(255,255,255,0.08) !important; color: white !important; }
+    
+    * { box-sizing: border-box; }
 
     @media (max-width: 991px) {
         .community-header-container { height: 260px !important; }
+        
         .community-info-wrapper {
             bottom: 70px !important;
             left: 1rem !important;
@@ -309,13 +312,21 @@
         }
         .responsive-grid-feed {
             grid-template-columns: 1fr !important;
-            padding: 0 1rem 5rem !important;
-            margin-top: 6rem !important;
+            padding: 0 0.75rem 5rem !important;
+            margin-top: 5rem !important;
         }
         .community-post-box {
-            padding: 1.25rem !important;
+            padding: 1rem !important;
             border-radius: 18px !important;
             margin-bottom: 1.5rem !important;
+        }
+        .post-create-footer {
+            gap: 0.25rem !important;
+        }
+        .mogram-btn-primary {
+            padding: 0.6rem 0.8rem !important;
+            font-size: 11px !important;
+            white-space: nowrap !important;
         }
         .post-card {
             border-radius: 18px !important;
