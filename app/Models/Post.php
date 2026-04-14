@@ -75,4 +75,17 @@ class Post extends Model
     {
         return $this->purchases()->where('user_id', $user->id)->exists();
     }
+
+    public function getFormattedDescriptionAttribute()
+    {
+        $content = e($this->description);
+        return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
+    }
+
+    public function getFormattedShortDescriptionAttribute()
+    {
+        $plainText = strip_tags($this->description);
+        $short = mb_substr($plainText, 0, 500);
+        return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', e($short));
+    }
 }

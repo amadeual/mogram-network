@@ -127,5 +127,130 @@
     </style>
 
     @yield('scripts')
+    
+    <script>
+        // Mention System Autocomplete
+        let mentionDropdown = null;
+        let activeMentionInput = null;
+
+        document.addEventListener('input', async function(e) {
+            if (e.target.tagName === 'TEXTAREA' || (e.target.tagName === 'INPUT' && (e.target.type === 'text' || !e.target.type))) {
+                const input = e.target;
+                const value = input.value;
+                const cursorPosition = input.selectionStart;
+                const textBeforeCursor = value.substring(0, cursorPosition);
+                const words = textBeforeCursor.split(/[\s\n]/);
+                const lastWord = words[words.length - 1];
+
+                if (lastWord.startsWith('@') && lastWord.length > 1) {
+                    const query = lastWord.substring(1).split(/[^a-zA-Z0-9]/)[0]; // Clean query
+                    if (!query) return hideMentionDropdown();
+                    
+                    activeMentionInput = input;
+                    const users = await fetchMentions(query);
+                    if (users && users.length > 0) {
+                        showMentionDropdown(users, input);
+                    } else {
+                        hideMentionDropdown();
+                    }
+                } else {
+                    hideMentionDropdown();
+                }
+            }
+        });
+
+        async function fetchMentions(q) {
+            try {
+                const resp = await fetch(`/search/users?q=${encodeURIComponent(q)}`);
+                const data = await resp.json();
+                return data.users || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function showMentionDropdown(users, input) {
+            if (!mentionDropdown) {
+                mentionDropdown = document.createElement('div');
+                mentionDropdown.style.cssText = `
+                    position: absolute;
+                    background: #1a1c2e;
+                    border: 1px solid rgba(255,255,255,0.1);
+                    border-radius: 12px;
+                    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+                    z-index: 100000;
+                    max-height: 200px;
+                    overflow-y: auto;
+                    width: 250px;
+                    display: flex;
+                    flex-direction: column;
+                `;
+                document.body.appendChild(mentionDropdown);
+            }
+
+            const rect = input.getBoundingClientRect();
+            mentionDropdown.style.left = \`\${rect.left}px\`;
+            mentionDropdown.style.top = \`\${rect.bottom + window.scrollY + 5}px\`;
+            mentionDropdown.innerHTML = '';
+            mentionDropdown.style.display = 'flex';
+
+            users.forEach(user => {
+                const item = document.createElement('div');
+                item.style.cssText = `
+                    padding: 10px 14px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    cursor: pointer;
+                    transition: 0.2s;
+                    border-bottom: 1px solid rgba(255,255,255,0.03);
+                `;
+                item.innerHTML = `
+                    <img src="${user.avatar}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">
+                    <div style="flex: 1; overflow: hidden;">
+                        <p style="font-size: 13px; font-weight: 800; color: white; margin: 0; overflow: hidden; text-overflow: ellipsis;">${user.name}</p>
+                        <p style="font-size: 11px; color: #3390ec; margin: 0; font-weight: 600;">@${user.username}</p>
+                    </div>
+                `;
+                item.onmouseover = () => item.style.background = 'rgba(51, 144, 236, 0.15)';
+                item.onmouseout = () => item.style.background = 'transparent';
+                item.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    insertMention(user.username);
+                };
+                mentionDropdown.appendChild(item);
+            });
+        }
+
+        function hideMentionDropdown() {
+            if (mentionDropdown) mentionDropdown.style.display = 'none';
+        }
+
+        function insertMention(username) {
+            if (!activeMentionInput) return;
+            const input = activeMentionInput;
+            const value = input.value;
+            const cursorPosition = input.selectionStart;
+            const textBeforeCursor = value.substring(0, cursorPosition);
+            const textAfterCursor = value.substring(cursorPosition);
+            
+            const words = textBeforeCursor.split(/[\s\n]/);
+            words[words.length - 1] = '@' + username + ' ';
+            
+            input.value = words.join(' ') + textAfterCursor;
+            
+            // Dispatch input event to trigger any listeners (like auto-expand)
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+            input.focus();
+            hideMentionDropdown();
+        }
+
+        document.addEventListener('mousedown', (e) => {
+            if (mentionDropdown && !mentionDropdown.contains(e.target) && e.target !== activeMentionInput) {
+                hideMentionDropdown();
+            }
+        });
+    </script>
 </body>
 </html>
