@@ -20,7 +20,7 @@
         </header>
 
         <div class="studio-body">
-            <div class="metrics-grid responsive-grid-3" style="margin-bottom: 2.5rem;">
+            <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem;">
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #3390ec;">
                     <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Publicações Totais</p>
                     <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ $totalPosts }}</h3>
