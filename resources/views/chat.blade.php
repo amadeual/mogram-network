@@ -10,7 +10,7 @@
         <div style="display: flex; height: 100vh;">
             
             <!-- Chat List Sidebar -->
-            <div style="width: 380px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; background: rgba(255,255,255,0.01);">
+            <div class="chat-sidebar">
                 <div style="padding: 2.5rem 2rem 1.5rem;">
                     <h1 style="font-size: 1.75rem; font-weight: 950; color: white; letter-spacing: -1px; margin-bottom: 1.5rem;">Mensagens</h1>
                     <div style="position: relative;">
@@ -69,7 +69,7 @@
             </div>
 
             <!-- Empty State / Welcome -->
-            <div style="flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0b0a15;">
+            <div class="chat-welcome-state">
                 <div style="text-align: center; max-width: 320px;">
                     <div style="width: 80px; height: 80px; background: rgba(255,255,255,0.03); border-radius: 28px; display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,0.2); margin: 0 auto 2rem;">
                         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -88,8 +88,13 @@
 
 <style>
 .main-content { margin-left: 280px; }
+.chat-sidebar { width: 380px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; background: rgba(255,255,255,0.01); }
+.chat-welcome-state { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0b0a15; }
+
 @media (max-width: 991px) {
     .main-content { margin-left: 0 !important; }
+    .chat-sidebar { width: 100% !important; border-right: none !important; }
+    .chat-welcome-state { display: none !important; }
 }
 </style>
 @endsection

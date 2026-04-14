@@ -41,8 +41,11 @@
             <div style="flex: 1; display: flex; flex-direction: column; background: #0b0a15; position: relative;">
                 
                 <!-- Chat Header -->
-                <header style="padding: 1.5rem 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; z-index: 10;">
+                <header class="chat-header">
                     <div style="display: flex; align-items: center; gap: 12px;">
+                        <a href="{{ route('chat.index') }}" class="mobile-only" style="color: white; margin-right: 8px;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+                        </a>
                         @if($user->avatar)
                             <img src="{{ Storage::url($user->avatar) }}" style="width: 44px; height: 44px; border-radius: 12px; object-fit: cover;">
                         @else
@@ -53,21 +56,18 @@
                                 {{ $user->name }}
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="#3390ec" style="color: white;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
                             </h3>
-                            <p style="font-size: 12px; color: var(--text-muted); margin: 2px 0 0; font-weight: 700;">Ativo agora</p>
+                            <p style="font-size: 11px; color: var(--text-muted); margin: 2px 0 0; font-weight: 700;">Ativo agora</p>
                         </div>
                     </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <button style="background: rgba(255,255,255,0.05); border: none; width: 44px; height: 44px; border-radius: 12px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </button>
-                        <button style="background: rgba(255,255,255,0.05); border: none; width: 44px; height: 44px; border-radius: 12px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button style="background: rgba(255,255,255,0.05); border: none; width: 40px; height: 40px; border-radius: 10px; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         </button>
                     </div>
                 </header>
 
                 <!-- Messages -->
-                <div id="chat_messages" style="flex: 1; overflow-y: auto; padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: 1.5rem;">
+                <div id="chat_messages" class="chat-messages-container">
                     @foreach($messages as $msg)
                         <div style="display: flex; flex-direction: column; align-items: {{ $msg->sender_id == Auth::id() ? 'flex-end' : 'flex-start' }}; max-width: 80%; margin-bottom: 10px;">
                             @php $isGift = str_contains($msg->message, '🎁 enviou'); @endphp
@@ -93,7 +93,7 @@
                 </div>
 
                 <!-- Chat Input Area -->
-                <div style="padding: 1.5rem 2.5rem 2.5rem; background: #0b0a15;">
+                <div class="chat-input-container">
                     <form action="{{ route('chat.send', $user->id) }}" method="POST" id="chat_form" 
                           style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 0.75rem 0.75rem 0.75rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
                         @csrf
@@ -256,6 +256,9 @@
 
 <style>
 .main-content { margin-left: 280px; }
+.chat-header { padding: 1.5rem 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between; z-index: 10; background: #0b0a15; }
+.chat-messages-container { flex: 1; overflow-y: auto; padding: 2rem 2.5rem; display: flex; flex-direction: column; gap: 1.5rem; }
+.chat-input-container { padding: 1.5rem 2.5rem 2.5rem; background: #0b0a15; }
 
 /* 🎁 Gift Card V3 Styles */
 .gift-card-v3:hover {
@@ -281,8 +284,12 @@
 .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
 
 @media (max-width: 991px) {
-    .main-content { margin-left: 0 !important; }
+    .main-content { margin-left: 0 !important; height: calc(100vh - 60px); }
     .chat-list-sidebar { display: none !important; }
+    .chat-header { padding: 1rem 1.25rem; }
+    .chat-messages-container { padding: 1.25rem; gap: 1rem; }
+    .chat-input-container { padding: 1rem 1.25rem 1.5rem; }
+    #gift_modal { right: 10px; bottom: 85px; width: calc(100% - 20px); }
 }
 </style>
 @endsection
