@@ -33,8 +33,8 @@
             </div>
         @endif
 
-        <div style="max-width: 800px; margin: 0 auto;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; margin-bottom: 3.5rem; justify-content: center;">
+        <div class="wallet-container">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; margin-bottom: 3.5rem;">
             <!-- Credit Card Style (Compact & Elegant) -->
             <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 1.75rem; position: relative; box-shadow: 0 15px 40px rgba(18, 97, 209, 0.3); border: 1.5px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 210px;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -82,7 +82,7 @@
 
         <h3 style="font-size: 1.4rem; font-weight: 950; color: white; margin-bottom: 1.5rem; letter-spacing: -0.5px;">Histórico de Transações</h3>
         
-        <div style="max-width: 800px; margin: 0 auto;">
+        <div class="wallet-container">
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 @forelse($history as $item)
                 <div class="transaction-item" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; cursor: default;">
@@ -234,6 +234,12 @@
         background: rgba(255,255,255,0.04) !important;
         border-color: rgba(255,255,255,0.1) !important;
         transform: translateY(-3px);
+    }
+    @media (max-width: 991px) {
+        .wallet-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
     }
 </style>
 @endsection
