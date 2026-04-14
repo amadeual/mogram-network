@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Community;
 use App\Models\CommunityPost;
+use App\Models\CommunityPostLike;
+use App\Models\CommunityPostComment;
 use App\Models\CommunitySubscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -264,5 +266,40 @@ class CommunityController extends Controller
         $community->update($data);
 
         return back()->with('success', 'Comunidade atualizada com sucesso!');
+    }
+
+    public function togglePostLike(Community $community, CommunityPost $post)
+    {
+        $like = CommunityPostLike::where('user_id', Auth::id())
+            ->where('community_post_id', $post->id)
+            ->first();
+
+        if ($like) {
+            $like->delete();
+            $post->decrement('likes_count');
+            return response()->json(['success' => true, 'liked' => false, 'count' => $post->likes_count]);
+        } else {
+            CommunityPostLike::create([
+                'user_id' => Auth::id(),
+                'community_post_id' => $post->id
+            ]);
+            $post->increment('likes_count');
+            return response()->json(['success' => true, 'liked' => true, 'count' => $post->likes_count]);
+        }
+    }
+
+    public function storePostComment(Request $request, Community $community, CommunityPost $post)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000'
+        ]);
+
+        CommunityPostComment::create([
+            'user_id' => Auth::id(),
+            'community_post_id' => $post->id,
+            'content' => $request->content
+        ]);
+
+        return back()->with('success', 'Comentário publicado!');
     }
 }

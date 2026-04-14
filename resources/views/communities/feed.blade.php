@@ -84,7 +84,7 @@
                 <!-- Community Posts -->
                 <div style="display: flex; flex-direction: column; gap: 1.5rem;">
                     @forelse($posts as $post)
-                    <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden; animation: fadeInUp 0.4s ease-out;">
+                    <div class="post-card" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; overflow: hidden; animation: fadeInUp 0.4s ease-out;">
                         <div style="padding: 1.5rem; display: flex; align-items: center; gap: 1rem; border-bottom: 1px solid rgba(255,255,255,0.03);">
                             <img src="{{ $post->user->avatar ? Storage::url($post->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $post->user->name }}" style="width: 40px; height: 40px; border-radius: 12px; object-fit: cover;">
                             <div style="flex: 1;">
@@ -122,14 +122,39 @@
                             @endif
                         </div>
                         <div style="padding: 1rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.03); display: flex; gap: 1.5rem;">
-                            <button style="background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='#ef4444'">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-                                {{ $post->likes_count }}
+                            <button onclick="toggleLike({{ $post->id }}, this)" style="background: transparent; border: none; color: {{ $post->isLikedByUser(Auth::id()) ? '#ef4444' : 'var(--text-muted)' }}; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: 0.2s;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="{{ $post->isLikedByUser(Auth::id()) ? 'currentColor' : 'none' }}" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                                <span class="likes-count">{{ $post->likes_count }}</span>
                             </button>
-                            <button style="background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'">
+                            <button onclick="toggleComments({{ $post->id }})" style="background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                                Comentar
+                                <span>{{ $post->comments()->count() }} Comentários</span>
                             </button>
+                        </div>
+                        
+                        <!-- Comment Section (Hidden by default) -->
+                        <div id="comments-{{ $post->id }}" style="display: none; padding: 0 1.5rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.02); background: rgba(0,0,0,0.1);">
+                            <div style="padding: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem;">
+                                @foreach($post->comments()->with('user')->get() as $comment)
+                                <div style="display: flex; gap: 0.75rem;">
+                                    <img src="{{ $comment->user->avatar ? Storage::url($comment->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $comment->user->name }}" style="width: 28px; height: 28px; border-radius: 8px;">
+                                    <div style="flex: 1; background: rgba(255,255,255,0.03); padding: 0.75rem 1rem; border-radius: 12px;">
+                                        <p style="font-size: 12px; font-weight: 800; color: white; margin: 0 0 4px;">{{ $comment->user->name }}</p>
+                                        <p style="font-size: 13px; color: rgba(255,255,255,0.8); margin: 0; line-height: 1.4;">{{ $comment->content }}</p>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <form action="{{ route('communities.posts.comment', [$community->slug, $post->id]) }}" method="POST" style="display: flex; gap: 0.75rem; align-items: flex-end;">
+                                @csrf
+                                <div style="flex: 1;">
+                                    <textarea name="content" placeholder="Escreva um comentário..." required style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 10px 12px; color: white; font-size: 13px; font-weight: 600; outline: none; resize: none; min-height: 40px;"></textarea>
+                                </div>
+                                <button type="submit" style="background: #3390ec; border: none; color: white; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"/><polyline points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                                </button>
+                            </form>
                         </div>
                     </div>
                     @empty
@@ -223,6 +248,41 @@
         input.value = '';
         document.getElementById('media-preview-container').style.display = 'none';
     }
+
+    async function toggleLike(postId, btn) {
+        try {
+            const response = await fetch(`/communities/{{ $community->slug }}/posts/${postId}/like`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                }
+            });
+            const data = await response.json();
+            if (data.success) {
+                const countSpan = btn.querySelector('.likes-count');
+                countSpan.textContent = data.count;
+                const svg = btn.querySelector('svg');
+                if (data.liked) {
+                    btn.style.color = '#ef4444';
+                    svg.setAttribute('fill', 'currentColor');
+                } else {
+                    btn.style.color = 'var(--text-muted)';
+                    svg.setAttribute('fill', 'none');
+                }
+            }
+        } catch (e) { 
+            console.error(e); 
+            window.location.reload(); // Fallback for migration issues or session expiry
+        }
+    }
+
+    function toggleComments(postId) {
+        const div = document.getElementById(`comments-${postId}`);
+        if (div) {
+            div.style.display = div.style.display === 'none' ? 'block' : 'none';
+        }
+    }
 </script>
 
 <style>
@@ -250,6 +310,17 @@
             grid-template-columns: 1fr !important;
             padding: 0 1rem 5rem !important;
             margin-top: 6rem !important;
+        }
+        .community-post-box {
+            padding: 1.25rem !important;
+            border-radius: 18px !important;
+            margin-bottom: 1.5rem !important;
+        }
+        .post-card {
+            border-radius: 18px !important;
+        }
+        .post-card-content {
+            padding: 1rem 1.25rem !important;
         }
     }
 </style>
