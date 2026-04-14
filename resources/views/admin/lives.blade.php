@@ -67,15 +67,29 @@
                     @elseif($live->scheduled_at && $live->status != 'finished')
                         <p style="font-size: 0.85rem; font-weight: 800; color: #ff8c2d;">Para {{ $live->scheduled_at->format('d/m H:i') }}</p>
                     @else
-                        <p style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Finalizada</p>
+                        @if($live->termination_reason)
+                            <p style="font-size: 0.85rem; font-weight: 800; color: var(--danger);">Derrubada</p>
+                        @else
+                            <p style="font-size: 0.85rem; font-weight: 800; color: var(--text-muted);">Finalizada</p>
+                        @endif
                     @endif
+
                 </td>
                 <td style="padding: 1.5rem 2rem; text-align: center;">
-                    <div style="display: inline-flex; align-items: center; gap: 8px; background: {{ $live->status == 'online' ? 'rgba(239, 68, 68, 0.1)' : ($live->status == 'finished' ? 'rgba(255,255,255,0.05)' : 'rgba(51, 144, 236, 0.1)') }}; color: {{ $live->status == 'online' ? 'var(--danger)' : ($live->status == 'finished' ? 'var(--text-muted)' : 'var(--primary-blue)') }}; padding: 6px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">
+                    <div style="display: inline-flex; align-items: center; gap: 8px; background: {{ $live->status == 'online' ? 'rgba(239, 68, 68, 0.1)' : ($live->termination_reason ? 'rgba(239, 68, 68, 0.1)' : ($live->status == 'finished' ? 'rgba(255,255,255,0.05)' : 'rgba(51, 144, 236, 0.1)')) }}; color: {{ $live->status == 'online' ? 'var(--danger)' : ($live->termination_reason ? 'var(--danger)' : ($live->status == 'finished' ? 'var(--text-muted)' : 'var(--primary-blue)')) }}; padding: 6px 14px; border-radius: 30px; font-size: 0.75rem; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px;">
                         <div style="width: 6px; height: 6px; background: currentColor; border-radius: 50%;"></div>
-                        {{ $live->status == 'online' ? 'Ao Vivo' : ($live->status == 'finished' ? 'Encerrada' : 'Agendada') }}
+                        @if($live->status == 'online')
+                            Ao Vivo
+                        @elseif($live->termination_reason)
+                            Derrubada
+                        @elseif($live->status == 'finished')
+                            Encerrada
+                        @else
+                            Agendada
+                        @endif
                     </div>
                 </td>
+
                 <td style="padding: 1.5rem 2rem; text-align: right;">
                     <div style="display: flex; justify-content: flex-end; gap: 10px;">
                         @if($live->status == 'online')
