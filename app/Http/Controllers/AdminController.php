@@ -152,18 +152,27 @@ class AdminController extends Controller
         return back()->with('success', 'Presente atualizado com sucesso!');
     }
 
-    public function categories()
+    public function contents()
     {
-        // For categories, we might use a separate model but currently they are strings in posts/lives
-        // I will use a mock list for now based on the image provided
-        $categories = [
-            ['id' => 1, 'name' => 'Premium', 'slug' => 'premium', 'posts' => Post::count(), 'status' => 'active', 'icon' => '⭐'],
-            ['id' => 2, 'name' => 'Bastidores', 'slug' => 'bastidores', 'posts' => Post::count() / 2, 'status' => 'active', 'icon' => '🎥'],
-            ['id' => 3, 'name' => 'Geral', 'slug' => 'geral', 'posts' => Post::count(), 'status' => 'active', 'icon' => '🌍'],
-        ];
-
-        return view('admin.categories', compact('categories'));
+        $posts = Post::with('user')->latest()->paginate(15);
+        $lives = Live::with('user')->latest()->take(10)->get();
+        return view('admin.content', compact('posts', 'lives'));
     }
+
+    public function deletePost($id)
+    {
+        $post = Post::findOrFail($id);
+        $post->delete();
+        return back()->with('success', 'Post removido com sucesso!');
+    }
+
+    public function deleteLive($id)
+    {
+        $live = Live::findOrFail($id);
+        $live->delete();
+        return back()->with('success', 'Live removida com sucesso!');
+    }
+
 
     public function withdrawals()
     {

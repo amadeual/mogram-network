@@ -144,7 +144,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/users/{id}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('admin.users.show');
         Route::post('/users/{id}/toggle/{action}', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle');
         Route::post('/users/{id}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('admin.users.reset_password');
-        Route::get('/categories', [App\Http\Controllers\AdminController::class, 'categories'])->name('admin.categories');
+        Route::get('/content', [App\Http\Controllers\AdminController::class, 'contents'])->name('admin.content');
+        Route::delete('/content/post/{id}', [App\Http\Controllers\AdminController::class, 'deletePost'])->name('admin.content.delete_post');
+        Route::delete('/content/live/{id}', [App\Http\Controllers\AdminController::class, 'deleteLive'])->name('admin.content.delete_live');
+
         Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals');
         Route::post('/withdrawals/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
         Route::post('/withdrawals/{id}/reject', [App\Http\Controllers\AdminController::class, 'rejectWithdrawal'])->name('admin.withdrawals.reject');
