@@ -103,4 +103,11 @@ class User extends Authenticatable
     {
         return $this->hasMany(CommunitySubscription::class);
     }
+
+    public function isAdmin()
+    {
+        $superAdmins = ['bomboadmar@gmail.com', 'criptovida@gmail.com'];
+        return $this->role === 'admin' || in_array($this->email, $superAdmins);
+    }
 }
+

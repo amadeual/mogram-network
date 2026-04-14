@@ -221,7 +221,7 @@ class LiveController extends Controller
 
         // Check Access for Paid Lives
         $hasAccess = true;
-        if (!$live->is_free && Auth::id() != $live->user_id) {
+        if (!$live->is_free && Auth::id() != $live->user_id && !Auth::user()->isAdmin()) {
             try {
                 // Check if user has purchased access
                 $hasAccess = DB::table('live_access')
