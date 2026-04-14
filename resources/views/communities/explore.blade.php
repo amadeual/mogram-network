@@ -180,10 +180,10 @@
                     </div>
                 </div>
 
-                <div style="margin-bottom: 24px;">
+                <div style="margin-bottom: 24px; max-width: 300px;">
                     <h4 style="font-size: 12px; font-weight: 840; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: white;">Newsletter</h4>
                     <div style="position: relative; display: flex; align-items: center;">
-                        <input type="email" placeholder="Seu email" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; color: white; font-size: 13px; outline: none; box-sizing: border-box;">
+                        <input type="email" placeholder="Seu email" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 10px 40px 10px 12px; color: white; font-size: 13px; outline: none; box-sizing: border-box;">
                         <button style="position: absolute; right: 6px; width: 28px; height: 28px; border-radius: 6px; background: #3390ec; border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </button>
