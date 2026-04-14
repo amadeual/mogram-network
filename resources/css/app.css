@@ -1321,7 +1321,7 @@ body.sidebar-is-collapsed .main-content {
     height: 56px;
     background: #0b0a15;
     border-bottom: 1px solid rgba(255,255,255,0.06);
-    display: flex;
+    display: none; /* hidden by default, shown via .mobile-only on mobile */
     align-items: center;
     justify-content: space-between;
     padding: 0 1rem;
@@ -1376,30 +1376,7 @@ body.sidebar-is-collapsed .main-content {
 
 /* ===== SIDEBAR MOBILE HEADER ===== */
 .sidebar-mobile-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem 1rem 1.25rem;
-    border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.sidebar-close-btn {
-    width: 36px;
-    height: 36px;
-    background: rgba(255,255,255,0.05);
-    border: none;
-    border-radius: 10px;
-    color: var(--text-muted);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: 0.2s;
-}
-
-.sidebar-close-btn:hover {
-    background: rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    display: none !important; /* hidden - top bar handles toggle */
 }
 
 /* Sidebar overlay – hidden by default on all breakpoints */
