@@ -2,7 +2,7 @@
 
 @section('title', 'Ticket #' . $ticket->id)
 
-@section('content')
+@section('admin_content')
 <div style="padding: 2.5rem; max-width: 1400px; margin: 0 auto;">
     <div style="margin-bottom: 2.5rem;">
         <a href="{{ route('admin.support.index') }}" style="color: #3390ec; text-decoration: none; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 8px;">

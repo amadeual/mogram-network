@@ -2,7 +2,7 @@
 
 @section('title', 'Gerenciamento de Suporte')
 
-@section('content')
+@section('admin_content')
 <div style="padding: 2.5rem;">
     <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 3rem;">
         <div>
