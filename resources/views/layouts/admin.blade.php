@@ -264,9 +264,50 @@
         /* Fade Animation */
         .fade-in { animation: fadeInAnim 0.5s ease-out; }
         @keyframes fadeInAnim { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Notification Dropdown */
+        .notification-wrapper {
+            position: relative;
+        }
+        .notification-dropdown {
+            position: absolute;
+            top: calc(100% + 15px);
+            right: 0;
+            width: 320px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-gray);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            padding: 1.25rem;
+            display: none;
+            z-index: 1000;
+        }
+        .notification-dropdown.active {
+            display: block;
+            animation: fadeInAnim 0.3s ease-out;
+        }
+        .notification-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            transition: 0.2s;
+            margin-bottom: 8px;
+        }
+        .notification-item:hover {
+            background: rgba(255,255,255,0.05);
+        }
     </style>
 </head>
 <body>
+    @php
+        $openTickets = \App\Models\Ticket::where('status', 'Aberto')->count();
+        $pendingWithdrawals = \App\Models\Withdrawal::where('status', 'pending')->count();
+        $totalAlerts = $openTickets + $pendingWithdrawals;
+    @endphp
     <div class="admin-layout">
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -336,9 +377,49 @@
                     <input type="text" placeholder="Buscar usuários, conteúdo ou transações...">
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                    </button>
+                    <div class="notification-wrapper">
+                        <button class="header-btn" onclick="document.getElementById('admin-notif-dropdown').classList.toggle('active')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            @if($totalAlerts > 0)
+                                <span style="position: absolute; top: 8px; right: 8px; width: 10px; height: 10px; background: var(--danger); border-radius: 50%; border: 2px solid var(--bg-deep);"></span>
+                            @endif
+                        </button>
+                        
+                        <div id="admin-notif-dropdown" class="notification-dropdown">
+                            <h3 style="font-size: 0.9rem; font-weight: 800; margin-bottom: 1rem;">Notificações</h3>
+                            
+                            @if($openTickets > 0)
+                            <a href="{{ route('admin.support.index') }}" class="notification-item">
+                                <div style="width: 32px; height: 32px; background: rgba(51, 144, 236, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 0.8rem; font-weight: 700;">{{ $openTickets }} Tickets em aberto</h4>
+                                    <p style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Clique para responder</p>
+                                </div>
+                            </a>
+                            @endif
+
+                            @if($pendingWithdrawals > 0)
+                            <a href="{{ route('admin.withdrawals') }}" class="notification-item">
+                                <div style="width: 32px; height: 32px; background: rgba(168, 85, 247, 0.1); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #a855f7;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                                </div>
+                                <div>
+                                    <h4 style="font-size: 0.8rem; font-weight: 700;">{{ $pendingWithdrawals }} Saques pendentes</h4>
+                                    <p style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Clique para processar</p>
+                                </div>
+                            </a>
+                            @endif
+
+                            @if($totalAlerts == 0)
+                            <div style="text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.8rem; font-weight: 600;">
+                                <p>Tudo em dia! ✨</p>
+                            </div>
+                            @endif
+                        </div>
+                    </div>
+
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="header-btn" style="color: var(--danger)">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
                     </a>
