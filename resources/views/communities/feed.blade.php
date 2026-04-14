@@ -8,10 +8,10 @@
 
     <main class="main-content">
         <!-- Community Header -->
-        <div style="height: 200px; background: {{ $community->banner ? 'url(\''.Storage::url($community->banner).'\')' : 'linear-gradient(45deg, #1a1c2e, #3390ec)' }}; background-size: cover; background-position: center; position: relative;">
+        <div class="community-header-container" style="height: 200px; background: {{ $community->banner ? 'url(\''.Storage::url($community->banner).'\')' : 'linear-gradient(45deg, #1a1c2e, #3390ec)' }}; background-size: cover; background-position: center; position: relative;">
             <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, transparent, rgba(11, 10, 21, 0.9));"></div>
             
-            <div style="position: absolute; bottom: -40px; left: 2rem; display: flex; align-items: flex-end; gap: 1.5rem;">
+            <div class="community-info-wrapper" style="position: absolute; bottom: -40px; left: 2rem; display: flex; align-items: flex-end; gap: 1.5rem;">
                 <div style="width: 100px; height: 100px; border-radius: 24px; overflow: hidden; border: 4px solid #0b0a15; background: #1a1c2e; box-shadow: 0 10px 20px rgba(0,0,0,0.3);">
                     @if($community->avatar)
                         <img src="{{ Storage::url($community->avatar) }}" style="width: 100%; height: 100%; object-fit: cover;">
@@ -25,7 +25,7 @@
                 </div>
             </div>
 
-            <div style="position: absolute; bottom: 1rem; right: 2rem; display: flex; gap: 0.75rem;">
+            <div class="community-actions-wrapper" style="position: absolute; bottom: 1rem; right: 2rem; display: flex; gap: 0.75rem;">
                 @if(Auth::id() === $community->user_id)
                     <a href="{{ route('communities.dashboard', $community->slug) }}" class="mogram-btn-secondary" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.75rem 1.25rem; border-radius: 12px; font-size: 13px; font-weight: 800; text-decoration: none;">Gerenciar</a>
                 @endif
@@ -231,5 +231,26 @@
         to { opacity: 1; transform: translateY(0); }
     }
     .filter-tab:hover { background: rgba(255,255,255,0.08) !important; color: white !important; }
+
+    @media (max-width: 991px) {
+        .community-header-container { height: 260px !important; }
+        .community-info-wrapper {
+            bottom: 70px !important;
+            left: 1rem !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.75rem !important;
+        }
+        .community-actions-wrapper {
+            bottom: 1.5rem !important;
+            left: 1rem !important;
+            right: auto !important;
+        }
+        .responsive-grid-feed {
+            grid-template-columns: 1fr !important;
+            padding: 0 1rem 5rem !important;
+            margin-top: 6rem !important;
+        }
+    }
 </style>
 @endsection
