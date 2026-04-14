@@ -195,7 +195,7 @@ class WalletController extends Controller
 
         $user = Auth::user();
         $amount = $request->amount;
-        $amountCents = (int)($amount * 100);
+        $amountCents = (int)round($amount * 100);
 
         // Create local deposit record
         $deposit = Deposit::create([

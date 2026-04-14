@@ -21,7 +21,7 @@ class Story extends Model
 
     protected $casts = [
         'is_exclusive' => 'boolean',
-        'price' => 'decimal:2',
+        'price' => 'double',
         'expires_at' => 'datetime',
     ];
 

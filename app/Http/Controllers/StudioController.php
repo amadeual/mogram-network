@@ -272,7 +272,7 @@ class StudioController extends Controller
 
         $w = Withdrawal::create([
             'user_id' => Auth::id(),
-            'amount' => $request->amount,
+            'amount' => (float)str_replace(',', '.', $request->amount),
             'method' => $request->method,
             'account_info' => $request->account_info,
             'status' => 'pending',
@@ -320,7 +320,7 @@ class StudioController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->type = $request->type;
-        $post->price = $request->price ?? 0;
+        $post->price = (float)str_replace(',', '.', $request->price ?? 0);
         $post->is_exclusive = $request->is_paid == "1";
         $post->scheduled_at = $request->scheduled_at;
         $post->allow_comments = $request->has('allow_comments') ? (bool)$request->allow_comments : true;
@@ -372,7 +372,7 @@ class StudioController extends Controller
         $post->title = $request->title;
         $post->description = $request->description;
         $post->type = $request->type;
-        $post->price = $request->price ?? 0;
+        $post->price = (float)str_replace(',', '.', $request->price ?? 0);
         $post->is_exclusive = $request->has('is_exclusive');
 
         if ($request->hasFile('file')) {

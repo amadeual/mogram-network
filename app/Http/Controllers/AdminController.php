@@ -138,7 +138,9 @@ class AdminController extends Controller
         ]);
 
         $gift = \App\Models\Gift::findOrFail($id);
-        $gift->update($request->only(['name', 'price', 'icon']));
+        $data = $request->only(['name', 'icon']);
+        $data['price'] = (float)str_replace(',', '.', $request->price);
+        $gift->update($data);
 
         return back()->with('success', 'Presente atualizado com sucesso!');
     }

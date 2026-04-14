@@ -121,7 +121,7 @@ class LiveController extends Controller
                 'category' => $request->category ?? 'Geral',
                 'thumbnail' => $thumbnailPath,
                 'is_free' => 0,
-                'price' => $request->price,
+                'price' => (float)str_replace(',', '.', $request->price),
                 'status' => $isScheduled ? 'scheduled' : 'offline',
                 'scheduled_at' => $isScheduled ? $request->scheduled_at : null,
                 'started_at' => now()
@@ -172,7 +172,7 @@ class LiveController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'category' => $request->category,
-            'price' => $request->price,
+            'price' => (float)str_replace(',', '.', $request->price),
             'community_id' => $request->community_id,
         ];
 

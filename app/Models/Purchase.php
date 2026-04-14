@@ -11,6 +11,11 @@ class Purchase extends Model
 
     protected $fillable = ['user_id', 'post_id', 'amount', 'commission'];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+        'commission' => 'decimal:2',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

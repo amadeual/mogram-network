@@ -10,6 +10,11 @@ class Community extends Model
     use HasFactory;
 
     protected $fillable = ['user_id', 'name', 'slug', 'description', 'category', 'banner', 'avatar', 'price', 'has_free_trial', 'free_trial_days', 'status'];
+    
+    protected $casts = [
+        'price' => 'decimal:2',
+        'has_free_trial' => 'boolean',
+    ];
 
     public function user()
     {

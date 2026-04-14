@@ -217,7 +217,7 @@
                                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3390ec" stroke-width="3"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                                 </div>
                                 <h4 style="font-size: 15px; font-weight: 950; color: white; margin-bottom: 0.5rem; letter-spacing: -0.5px;">Conteúdo Exclusivo</h4>
-                                <form onsubmit="unlockPost(event, '{{ $post->id }}', '{{ $post->price }}')" style="display:inline;">
+                                <form onsubmit="unlockPost(event, '{{ $post->id }}', '{{ number_format($post->price, 2, '.', '') }}')" style="display:inline;">
                                     @csrf
                                     <button type="submit" class="mogram-btn-primary" style="padding: 0.875rem 2rem; border-radius: 12px; font-weight: 850; font-size: 13px; background: #3390ec; border: none; color: white; cursor: pointer; box-shadow: 0 10px 20px rgba(51, 144, 236, 0.3);">Desbloquear R$ {{ number_format($post->price, 2, ',', '.') }}</button>
                                 </form>

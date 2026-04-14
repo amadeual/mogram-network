@@ -13,6 +13,7 @@ class CommunitySubscription extends Model
     
     protected $casts = [
         'expires_at' => 'datetime',
+        'amount' => 'decimal:2',
     ];
 
     public function community()

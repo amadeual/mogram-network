@@ -18,6 +18,10 @@ class Deposit extends Model
         'method',
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

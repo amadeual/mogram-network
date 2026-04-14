@@ -34,6 +34,7 @@
             @foreach($withdrawals as $withdrawal)
             <tr style="border-bottom: 1px solid var(--border-gray); transition: 0.2s;" onmouseover="this.style.background='rgba(51, 144, 236, 0.02)'" onmouseout="this.style.background='transparent'">
                 <td style="padding: 1rem;">
+                    @if($withdrawal->user)
                     <div style="display: flex; align-items: center; gap: 10px;">
                         <img src="{{ $withdrawal->user->avatar ? Storage::url($withdrawal->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$withdrawal->user->name }}" style="width: 32px; height: 32px; border-radius: 8px;">
                         <div>
@@ -41,6 +42,15 @@
                             <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">@<span>{{ $withdrawal->user->username }}</span></p>
                         </div>
                     </div>
+                    @else
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 10px; font-weight: 900;">N/A</div>
+                        <div>
+                            <h4 style="font-size: 0.8rem; font-weight: 800; color: var(--text-muted);">Usuário Excluído</h4>
+                            <p style="font-size: 0.65rem; color: var(--text-muted); font-weight: 600;">@<span>deletado</span></p>
+                        </div>
+                    </div>
+                    @endif
                 </td>
                 <td style="padding: 1rem; font-weight: 900; color: white; font-size: 0.85rem; white-space: nowrap;">
                     R$ {{ number_format($withdrawal->amount, 2, ',', '.') }}

@@ -18,6 +18,10 @@ class Withdrawal extends Model
         'rejection_reason',
     ];
 
+    protected $casts = [
+        'amount' => 'decimal:2',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

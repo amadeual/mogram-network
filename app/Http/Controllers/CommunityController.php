@@ -77,7 +77,7 @@ class CommunityController extends Controller
         $community->slug = $slug;
         $community->description = $request->description;
         $community->category = $request->category;
-        $community->price = $request->price;
+        $community->price = (float)str_replace(',', '.', $request->price);
         $community->has_free_trial = false;
         $community->free_trial_days = 0;
 
@@ -230,7 +230,8 @@ class CommunityController extends Controller
             'banner' => 'nullable|image|max:5120',
         ]);
 
-        $data = $request->only(['name', 'description', 'category', 'price']);
+        $data = $request->only(['name', 'description', 'category']);
+        $data['price'] = (float)str_replace(',', '.', $request->price);
         $data['has_free_trial'] = false;
         $data['free_trial_days'] = 0;
 

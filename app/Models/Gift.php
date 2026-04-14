@@ -10,4 +10,8 @@ class Gift extends Model
     use HasFactory;
 
     protected $fillable = ['name', 'icon', 'price'];
+
+    protected $casts = [
+        'price' => 'decimal:2',
+    ];
 }
