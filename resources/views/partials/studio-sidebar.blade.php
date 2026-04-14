@@ -41,8 +41,8 @@
         </div>
 
         {{-- Desktop Header --}}
-        <div style="padding: 0 0.625rem 1.5rem;" class="desktop-only">
-            <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; gap: 12px; padding: 0.5rem; text-decoration: none; margin-bottom: 0.5rem;">
+        <div style="padding: 0 0.625rem 1.5rem; display: flex; align-items: center; justify-content: space-between;" class="desktop-only">
+            <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
                     <defs><linearGradient id="sidebarLogoGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
                     <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioFinal)" />
@@ -50,6 +50,10 @@
                 </svg>
                 <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Studio</span>
             </a>
+            <button onclick="toggleSidebarCollapse()" class="burger-btn" style="width: 32px; height: 32px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 8px; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+            </button>
+        </div>
             
             <a href="{{ route('studio.settings') }}" style="display: flex; align-items: center; gap: 12px; padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); text-decoration: none; border: 1px solid rgba(255,255,255,0.05);">
                 @if(Auth::user()->avatar)
@@ -101,11 +105,7 @@
                 <span>Configurações</span>
             </a>
 
-            {{-- Collapse Toggle (Icon only) --}}
             <div class="sidebar-divider desktop-only"></div>
-            <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; padding: 0.5rem 0.875rem; cursor: pointer; justify-content: flex-start;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
         </nav>
 
         <div class="sidebar-user" style="padding: 1rem 0.625rem; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.03);">
