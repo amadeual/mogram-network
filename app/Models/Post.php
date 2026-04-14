@@ -78,14 +78,17 @@ class Post extends Model
 
     public function getFormattedDescriptionAttribute()
     {
-        $content = e($this->description);
+        $content = str_replace(['<div>', '</div>', '<p>', '</p>', '<br>', '<br/>', '<br />'], ["", "\n", "", "\n", "\n", "\n", "\n"], $this->description);
+        $content = strip_tags($content);
+        $content = nl2br(e(trim($content)));
         return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
     }
 
     public function getFormattedShortDescriptionAttribute()
     {
-        $plainText = strip_tags($this->description);
-        $short = mb_substr($plainText, 0, 500);
+        $content = str_replace(['<div>', '</div>', '<p>', '</p>', '<br>', '<br/>', '<br />'], ["", "\n", "", "\n", "\n", "\n", "\n"], $this->description);
+        $plainText = strip_tags($content);
+        $short = mb_substr(trim($plainText), 0, 500);
         return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', e($short));
     }
 }
