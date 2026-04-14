@@ -77,15 +77,15 @@
                     <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($communityRevenue, 2, ',', '.') }}</h4>
                 </div>
 
-                <!-- Mimos (Future/Placeholder) -->
-                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer; opacity: 0.6;">
+                <!-- Mimos (Real) -->
+                <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
                         <div style="width: 40px; height: 40px; background: rgba(245, 158, 11, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #f59e0b;">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/><path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/><path d="M18 12a2 2 0 0 0-2 2c0 1.1.9 2 2 2h4v-4h-4z"/></svg>
                         </div>
                     </div>
                     <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: none; margin-bottom: 4px; letter-spacing: 0.5px;">Mimos</p>
-                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ 0,00</h4>
+                    <h4 style="font-size: 1.4rem; font-weight: 950; color: white;">R$ {{ number_format($mimoRevenue, 2, ',', '.') }}</h4>
                 </div>
             </div>
 
@@ -108,9 +108,10 @@
                         <select name="type" onchange="document.getElementById('filterForm').submit()" 
                                 style="background: #151621; border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 8px 36px 8px 15px; color: white; font-size: 13px; font-weight: 700; outline: none; cursor: pointer; appearance: none; background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2216%22 height=%2216%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22white%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22%3E%3Cpolyline points=%226 9 12 15 18 9%22%3E%3C/polyline%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 10px center; background-size: 14px;">
                             <option value="all" {{ request('type') == 'all' ? 'selected' : '' }}>Todas Categorias</option>
-                            <option value="content" {{ request('type') == 'content' ? 'selected' : '' }}>Venda de Conteúdo</option>
-                            <option value="gifts" {{ request('type') == 'gifts' ? 'selected' : '' }}>Presentes / Gifts</option>
-                            <option value="tickets" {{ request('type') == 'tickets' ? 'selected' : '' }}>Live Tickets</option>
+                            <option value="content" {{ request('type') == 'content' ? 'selected' : '' }}>Conteúdo</option>
+                            <option value="lives" {{ request('type') == 'lives' ? 'selected' : '' }}>Lives (Tickets & Gifts)</option>
+                            <option value="subscriptions" {{ request('type') == 'subscriptions' ? 'selected' : '' }}>Assinaturas (Comunidades)</option>
+                            <option value="gifts" {{ request('type') == 'gifts' ? 'selected' : '' }}>Mimos (Chat & Stories)</option>
                             <option value="withdrawals" {{ request('type') == 'withdrawals' ? 'selected' : '' }}>Saques Realizados</option>
                         </select>
                     </div>

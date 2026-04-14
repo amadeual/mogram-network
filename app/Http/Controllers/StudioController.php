@@ -155,10 +155,18 @@ class StudioController extends Controller
             }
         }
 
-        if ($filterType == 'all' || $filterType == 'gifts') {
+        if ($filterType == 'all' || $filterType == 'lives' || $filterType == 'gifts') {
             foreach ($liveGifts as $gift) {
+                $isLive = !empty($gift->live_id);
+                $typeLabel = $isLive ? 'Lives' : 'Mimos';
+                
+                // If filtering by Lives, skip if not a live gift
+                if ($filterType == 'lives' && !$isLive) continue;
+                // If filtering by Gifts (Mimos), skip if it is a live gift
+                if ($filterType == 'gifts' && $isLive) continue;
+
                 $history->push([
-                    'type' => $gift->live_id ? 'Lives' : 'Mimos',
+                    'type' => $typeLabel,
                     'description' => $gift->gift_name,
                     'user' => $gift->sender_name,
                     'username' => $gift->sender_username,
@@ -170,10 +178,10 @@ class StudioController extends Controller
             }
         }
 
-        if ($filterType == 'all' || $filterType == 'tickets') {
+        if ($filterType == 'all' || $filterType == 'tickets' || $filterType == 'lives') {
             foreach ($liveTickets as $ticket) {
                 $history->push([
-                    'type' => 'Ticket de Live',
+                    'type' => 'Lives',
                     'description' => $ticket->live_title,
                     'user' => $ticket->buyer_name,
                     'username' => $ticket->buyer_username,
@@ -185,7 +193,7 @@ class StudioController extends Controller
             }
         }
 
-        if ($filterType == 'all' || $filterType == 'communities') {
+        if ($filterType == 'all' || $filterType == 'communities' || $filterType == 'subscriptions') {
             foreach ($communitySubs as $sub) {
                 $history->push([
                     'type' => 'Assinaturas',
@@ -217,14 +225,27 @@ class StudioController extends Controller
 
         $history = $history->sortByDesc('date');
 
-        $postRevenue = $postSales->sum('amount');
-        $giftRevenue = $liveGifts->sum(function($g) { return $g->amount - $g->commission; });
-        $ticketRevenue = $liveTickets->sum(function($t) { return $t->amount - (float)($t->commission ?? 0); });
-        $communityRevenue = $communitySubs->sum('amount');
-        $liveRevenue = $giftRevenue + $ticketRevenue;
-        $totalRevenue = $postRevenue + $liveRevenue + $communityRevenue;
+        $postRevenue = (float)$postSales->sum('amount');
         
-        $totalCompletedWithdrawals = $withdrawals->whereIn('status', ['approved', 'pending'])->sum('amount');
+        $liveGiftRevenue = (float)$liveGifts->filter(function($g) {
+            return !empty($g->live_id) && $g->live_id > 0;
+        })->sum(function($g) { return $g->amount - $g->commission; });
+        
+        $liveTicketRevenue = (float)$liveTickets->sum(function($t) { return $t->amount - (float)($t->commission ?? 0); });
+        $liveRevenue = $liveGiftRevenue + $liveTicketRevenue;
+
+        $communityRevenue = (float)$communitySubs->sum('amount');
+        
+        $mimoRevenue = (float)$liveGifts->filter(function($g) {
+            return empty($g->live_id) || $g->live_id == 0;
+        })->sum(function($g) { return $g->amount - $g->commission; });
+        
+        $totalRevenue = $postRevenue + $liveRevenue + $communityRevenue + $mimoRevenue;
+        
+        $totalCompletedWithdrawals = (float)Withdrawal::where('user_id', Auth::id())
+            ->whereIn('status', ['approved', 'pending'])
+            ->sum('amount');
+            
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
         
         return view('studio.finance', compact(
@@ -232,6 +253,7 @@ class StudioController extends Controller
             'postRevenue', 
             'liveRevenue', 
             'communityRevenue',
+            'mimoRevenue',
             'availableBalance', 
             'history'
         ));
