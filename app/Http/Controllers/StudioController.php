@@ -296,7 +296,16 @@ class StudioController extends Controller
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
 
         $withdrawAmount = (float)str_replace(',', '.', $request->amount);
-        $fee = 5.00;
+        
+        // Fee Calculation
+        $fee = 5.00; // Default for PIX
+        if ($request->method === 'redotpay') {
+            // Usando uma taxa de R$ 6.00 para representar $1 fixo "acima da taxa de câmbio"
+            // ou buscando de configurações se existir
+            $usdRate = \App\Models\Setting::where('key', 'USD_RATE')->value('value') ?? 6.00;
+            $fee = (float)$usdRate;
+        }
+
         $netAmount = $withdrawAmount - $fee;
 
         if ($withdrawAmount < 50) {
@@ -317,12 +326,6 @@ class StudioController extends Controller
                 ->withInput();
         }
 
-        if ($withdrawAmount < 20) { // Minimum withdrawal amount updated
-            return redirect()->back()
-                ->with('error', 'O valor mínimo para saque é R$ 20,00.')
-                ->withInput();
-        }
-
         $w = Withdrawal::create([
             'user_id' => Auth::id(),
             'amount' => $withdrawAmount,
@@ -339,7 +342,8 @@ class StudioController extends Controller
             \Log::error('Erro ao enviar email de saque: ' . $e->getMessage());
         }
 
-        return redirect()->route('studio.finance')->with('success', 'Pedido de saque de R$ ' . number_format($withdrawAmount, 2, ',', '.') . ' enviado com sucesso! (Taxa: R$ 5,00)');
+        $feeFormatted = 'R$ ' . number_format($fee, 2, ',', '.');
+        return redirect()->route('studio.finance')->with('success', 'Pedido de saque de R$ ' . number_format($withdrawAmount, 2, ',', '.') . ' enviado com sucesso! (Taxa: ' . $feeFormatted . ')');
     }
 
     public function postAnalytics(Post $post)

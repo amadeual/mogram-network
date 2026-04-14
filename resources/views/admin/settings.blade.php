@@ -99,6 +99,42 @@
             </div>
         </div>
 
+        <!-- RedotPay & International Withdrawals -->
+        <div class="admin-card">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;">
+                <div style="width: 42px; height: 42px; background: rgba(225, 29, 72, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #e11d48;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <div>
+                    <h3 style="font-size: 1.1rem; font-weight: 850; margin-bottom: 4px;">Saques Internacionais (RedotPay)</h3>
+                    <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 600;">Taxa fixa de $1 USD acima do câmbio para saques via RedotPay.</p>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2rem;">
+                <div>
+                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Câmbio Base USD → BRL (equivale a $1)</label>
+                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
+                        <span style="color: var(--text-muted); font-weight: 800;">R$</span>
+                        <input type="number" step="0.01" name="USD_RATE" value="{{ $settings['USD_RATE'] ?? '6.00' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: #e11d48; outline: none; font-weight: 900;">
+                    </div>
+                </div>
+                <div>
+                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Prazo de Pagamento</label>
+                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 15px;">
+                        <span style="color: rgba(255,255,255,0.6); font-weight: 700;">Até 24 horas úteis</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 1.5rem; padding: 1.25rem; background: rgba(225, 29, 72, 0.05); border-radius: 14px; border: 1px solid rgba(225, 29, 72, 0.1);">
+                <p style="font-size: 0.75rem; color: #e11d48; font-weight: 700; display: flex; align-items: center; gap: 8px; margin: 0;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                    Saques RedotPay: o criador informa UID ou Email da conta. Taxa de $1 (acima do câmbio) é descontada do saldo em BRL.
+                </p>
+            </div>
+        </div>
+
         <!-- Gateways -->
         <div class="admin-card">
             <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;">

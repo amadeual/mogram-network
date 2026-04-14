@@ -118,7 +118,7 @@
     <div class="container">
         <div class="header">
             <div style="margin: 0 auto; width: 64px; height: 64px; border-radius: 18px; box-shadow: 0 15px 35px rgba(255, 75, 31, 0.2); overflow: hidden; display: inline-block;">
-                <img src="{{ url('/logo-email.svg') }}" alt="Mogram" style="width: 100%; height: 100%; display: block;" onerror="this.src='https://ui-avatars.com/api/?name=M&background=ff4b1f&color=fff&size=128&bold=true'">
+                <img src="{{ url('/logo-mogram-email.png') }}" alt="Mogram" style="width: 100%; height: 100%; display: block; border-radius: 18px;" onerror="this.src='https://ui-avatars.com/api/?name=M&background=ff4b1f&color=fff&size=128&bold=true'">
             </div>
             <div class="brand-name">Mogram Network</div>
         </div>

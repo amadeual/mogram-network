@@ -89,28 +89,29 @@
                         <!-- Redotpay Card -->
                         <div id="redotpay_card" onclick="selectMethod('redotpay')" style="flex: 1; background: rgba(255,255,255,0.03); border: 2px solid transparent; border-radius: 24px; padding: 2rem; cursor: pointer; position: relative; transition: 0.3s;">
                              <div style="position: absolute; right: 1.5rem; top: 1.5rem; width: 24px; height: 24px; background: rgba(255,255,255,0.1); border-radius: 50%;" id="redotpay_check"></div>
-                             <div style="width: 52px; height: 52px; background: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="2.5"><rect x="3" y="10" width="18" height="12" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+                             <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #e11d48, #be123c); border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem;">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
                              </div>
                              <h4 style="font-size: 18px; font-weight: 950; color: white; margin-bottom: 4px;">RedotPay</h4>
-                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Internacional (USD)</p>
+                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Internacional (Até 24hrs)</p>
+                             <p style="font-size: 10px; color: #e11d48; font-weight: 800; margin-top: 6px;">Taxa: $1 fixo</p>
                         </div>
                     </div>
                 </div>
 
                 <!-- Form Fields -->
-                <div class="studio-grid-2" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;">
-                    <div>
+                <div class="studio-grid-2" style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-bottom: 3rem;" id="pix_fields">
+                    <div id="type_selector_wrap">
                         <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1rem; display: block;">Tipo</label>
-                        <select style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%; cursor: pointer;">
+                        <select id="pix_type_select" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%; cursor: pointer;">
                             <option value="cpf" style="background:#111">CPF</option>
                             <option value="email" style="background:#111">E-mail</option>
                             <option value="phone" style="background:#111">Telefone</option>
                         </select>
                     </div>
-                    <div>
+                    <div id="account_input_wrap">
                         <label id="account_label" style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1rem; display: block;">Chave PIX</label>
-                        <input type="text" name="account_info" placeholder="000.000.000-00" required
+                        <input type="text" name="account_info" id="account_info_input" placeholder="000.000.000-00" required
                                style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.25rem; color: white; outline: none; width: 100%;">
                     </div>
                 </div>
@@ -139,12 +140,31 @@
     const amountInput = document.getElementById('withdraw_amount');
     const methodInput = document.getElementById('method_input');
     const netAmountDisplay = document.getElementById('net_amount_display');
+    const feeDisplay = document.querySelector('#summary_section span[style*="#ef4444"]');
     
+    // Taxa de câmbio de $1 USD (configurável pelo admin)
+    const usdRate = {{ \App\Models\Setting::where('key', 'USD_RATE')->value('value') ?? 6.00 }};
+
     function updateNetAmount() {
         const val = parseFloat(amountInput.value) || 0;
-        const fee = 5.00;
+        const method = methodInput.value;
+        
+        let fee = 5.00;
+        if (method === 'redotpay') {
+            fee = usdRate; // $1 fixo convertido para BRL (estimativa)
+        }
+
         const net = Math.max(0, val - fee);
+        
+        feeDisplay.innerText = `- R$ ${fee.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
         netAmountDisplay.innerText = net > 0 ? `R$ ${net.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+        
+        const feeInfo = document.querySelector('#summary_section p');
+        if (method === 'redotpay') {
+            feeInfo.innerText = `Taxa fixa de $1 (aprox. R$ ${usdRate.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}) aplicada ao saque internacional.`;
+        } else {
+            feeInfo.innerText = "O valor líquido será enviado para sua conta pix cadastrada.";
+        }
     }
 
     amountInput.addEventListener('input', updateNetAmount);
@@ -161,13 +181,20 @@
         const pixCheck = document.getElementById('pix_check');
         const redotCheck = document.getElementById('redotpay_check');
         const accountLabel = document.getElementById('account_label');
+        const accountInput = document.getElementById('account_info_input');
+        const typeWrap = document.getElementById('type_selector_wrap');
+        const fieldsGrid = document.getElementById('pix_fields');
 
         if (m === 'pix') {
             pixCard.style.borderColor = '#3390ec';
             redotCard.style.borderColor = 'transparent';
             pixCheck.style.display = 'flex';
             redotCheck.innerHTML = '';
+            redotCheck.style.background = 'rgba(255,255,255,0.1)';
             accountLabel.innerText = 'Chave PIX';
+            accountInput.placeholder = '000.000.000-00';
+            typeWrap.style.display = 'block';
+            fieldsGrid.style.gridTemplateColumns = '1fr 2fr';
         } else {
             redotCard.style.borderColor = '#3390ec';
             pixCard.style.borderColor = 'transparent';
@@ -177,8 +204,12 @@
             redotCheck.style.justifyContent = 'center';
             redotCheck.style.alignItems = 'center';
             redotCheck.style.background = '#3390ec';
-            accountLabel.innerText = 'Email RedotPay';
+            accountLabel.innerText = 'Email ou UID da conta RedotPay';
+            accountInput.placeholder = 'exemplo@email.com ou UID (ex: 12345678)';
+            typeWrap.style.display = 'none';
+            fieldsGrid.style.gridTemplateColumns = '1fr';
         }
+        updateNetAmount();
     }
 
     // Initialize
