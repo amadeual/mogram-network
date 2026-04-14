@@ -24,13 +24,15 @@ class SupportController extends Controller
 
     public function reply(Request $request, Ticket $ticket)
     {
-        $request->validate(['message' => 'required|string']);
+        $request->validate(['message' => 'nullable|string']);
 
-        TicketMessage::create([
-            'ticket_id' => $ticket->id,
-            'user_id' => Auth::id(),
-            'message' => $request->message
-        ]);
+        if ($request->filled('message')) {
+            TicketMessage::create([
+                'ticket_id' => $ticket->id,
+                'user_id' => Auth::id(),
+                'message' => $request->message
+            ]);
+        }
 
         $ticket->update([
             'status' => $request->status ?? 'Aguardando Resposta',

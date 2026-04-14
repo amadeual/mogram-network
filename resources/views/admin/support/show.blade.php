@@ -45,34 +45,34 @@
             <div style="background: rgba(11, 10, 21, 0.4); border: 1.5px solid rgba(255,255,255,0.05); padding: 2.5rem; border-radius: 28px;">
                 <form action="{{ route('admin.support.reply', $ticket->id) }}" method="POST">
                     @csrf
-                    <textarea name="message" required placeholder="Digite sua resposta oficial aqui..." style="width: 100%; min-height: 180px; background: transparent; border: none; color: white; font-size: 16px; font-weight: 500; outline: none; margin-bottom: 2.5rem; resize: none;"></textarea>
+                    <textarea name="message" placeholder="Digite sua resposta oficial aqui..." style="width: 100%; min-height: 180px; background: transparent; border: none; color: white; font-size: 16px; font-weight: 500; outline: none; margin-bottom: 2.5rem; resize: none;"></textarea>
                     
                     <div style="display: flex; gap: 15px; margin-bottom: 2rem; border-top: 1.5px solid rgba(255,255,255,0.03); padding-top: 2rem; flex-wrap: wrap;">
                         <div style="flex: 1; min-width: 200px;">
                             <label style="display: block; font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Categoria</label>
                             <select name="category" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; padding: 10px 15px; font-size: 13px; font-weight: 700; cursor: pointer;">
-                                <option value="Pagamentos" {{ $ticket->category == 'Pagamentos' ? 'selected' : '' }}>Pagamentos</option>
-                                <option value="Técnico" {{ $ticket->category == 'Técnico' ? 'selected' : '' }}>Técnico</option>
-                                <option value="Financeiro" {{ $ticket->category == 'Financeiro' ? 'selected' : '' }}>Financeiro</option>
-                                <option value="Moderação" {{ $ticket->category == 'Moderação' ? 'selected' : '' }}>Moderação</option>
-                                <option value="Outros" {{ $ticket->category == 'Outros' ? 'selected' : '' }}>Outros</option>
+                                <option value="Pagamentos" style="background: #161a26; color: white;" {{ $ticket->category == 'Pagamentos' ? 'selected' : '' }}>Pagamentos</option>
+                                <option value="Técnico" style="background: #161a26; color: white;" {{ $ticket->category == 'Técnico' ? 'selected' : '' }}>Técnico</option>
+                                <option value="Financeiro" style="background: #161a26; color: white;" {{ $ticket->category == 'Financeiro' ? 'selected' : '' }}>Financeiro</option>
+                                <option value="Moderação" style="background: #161a26; color: white;" {{ $ticket->category == 'Moderação' ? 'selected' : '' }}>Moderação</option>
+                                <option value="Outros" style="background: #161a26; color: white;" {{ $ticket->category == 'Outros' ? 'selected' : '' }}>Outros</option>
                             </select>
                         </div>
                         <div style="flex: 1; min-width: 200px;">
                             <label style="display: block; font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Prioridade / Criticidade</label>
                             <select name="priority" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; padding: 10px 15px; font-size: 13px; font-weight: 700; cursor: pointer;">
-                                <option value="baixa" {{ $ticket->priority == 'baixa' ? 'selected' : '' }}>Baixa</option>
-                                <option value="normal" {{ $ticket->priority == 'normal' || !$ticket->priority ? 'selected' : '' }}>Normal</option>
-                                <option value="alta" {{ $ticket->priority == 'alta' ? 'selected' : '' }}>Alta</option>
-                                <option value="urgente" {{ $ticket->priority == 'urgente' ? 'selected' : '' }}>Urgente</option>
+                                <option value="baixa" style="background: #161a26; color: white;" {{ $ticket->priority == 'baixa' ? 'selected' : '' }}>Baixa</option>
+                                <option value="normal" style="background: #161a26; color: white;" {{ $ticket->priority == 'normal' || !$ticket->priority ? 'selected' : '' }}>Normal</option>
+                                <option value="alta" style="background: #161a26; color: white;" {{ $ticket->priority == 'alta' ? 'selected' : '' }}>Alta</option>
+                                <option value="urgente" style="background: #161a26; color: white;" {{ $ticket->priority == 'urgente' ? 'selected' : '' }}>Urgente</option>
                             </select>
                         </div>
                         <div style="flex: 1; min-width: 200px;">
                             <label style="display: block; font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase; margin-bottom: 8px;">Atribuído Para</label>
                             <select name="assigned_to" style="width: 100%; background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; padding: 10px 15px; font-size: 13px; font-weight: 700; cursor: pointer;">
-                                <option value="">Nenhum Admin</option>
+                                <option value="" style="background: #161a26; color: white;">Nenhum Admin</option>
                                 @foreach(\App\Models\User::where('role', 'admin')->get() as $admin)
-                                <option value="{{ $admin->id }}" {{ $ticket->assigned_to == $admin->id ? 'selected' : '' }}>{{ $admin->name }}</option>
+                                <option value="{{ $admin->id }}" style="background: #161a26; color: white;" {{ $ticket->assigned_to == $admin->id ? 'selected' : '' }}>{{ $admin->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -82,13 +82,13 @@
                         <div style="display: flex; align-items: center; gap: 15px;">
                             <span style="font-size: 11px; font-weight: 900; color: var(--text-muted); text-transform: uppercase;">Alterar Status:</span>
                             <select name="status" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 10px; color: white; padding: 10px 15px; font-size: 13px; font-weight: 800; cursor: pointer;">
-                                <option value="Aguardando Resposta" {{ $ticket->status == 'Aguardando Resposta' ? 'selected' : '' }}>Aguardando Resposta</option>
-                                <option value="Aberto" {{ $ticket->status == 'Aberto' ? 'selected' : '' }}>Manter Aberto</option>
-                                <option value="Resolvido" {{ $ticket->status == 'Resolvido' ? 'selected' : '' }}>Marcar como Resolvido</option>
+                                <option value="Aguardando Resposta" style="background: #161a26; color: white;" {{ $ticket->status == 'Aguardando Resposta' ? 'selected' : '' }}>Aguardando Resposta</option>
+                                <option value="Aberto" style="background: #161a26; color: white;" {{ $ticket->status == 'Aberto' ? 'selected' : '' }}>Manter Aberto</option>
+                                <option value="Resolvido" style="background: #161a26; color: white;" {{ $ticket->status == 'Resolvido' ? 'selected' : '' }}>Marcar como Resolvido</option>
                             </select>
                         </div>
                         <button type="submit" style="background: #3390ec; color: white; border: none; padding: 14px 40px; border-radius: 16px; font-weight: 950; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.4); transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                            Atualizar Chamado
+                            Responder
                         </button>
                     </div>
                 </form>
