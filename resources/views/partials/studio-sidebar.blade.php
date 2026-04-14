@@ -40,7 +40,7 @@
             </button>
         </div>
 
-        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem 1.0rem;">
+        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem 0.5rem;">
             <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
                     <defs><linearGradient id="studioLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
@@ -54,7 +54,8 @@
             </button>
         </div>
             
-            {{-- User Info --}}
+        {{-- User Info --}}
+        <div style="padding: 0 0.625rem; margin-bottom: 0.5rem;">
             <a href="{{ route('studio.settings') }}" style="display: flex; align-items: center; gap: 12px; padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); text-decoration: none; border: 1px solid rgba(255,255,255,0.05);">
                 @if(Auth::user()->avatar)
                     <img src="{{ Storage::url(Auth::user()->avatar) }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #3390ec; flex-shrink:0;">
