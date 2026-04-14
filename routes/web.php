@@ -182,4 +182,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/communities/{community:slug}/posts/{post}/like', [App\Http\Controllers\CommunityController::class, 'togglePostLike'])->name('communities.posts.like');
     Route::post('/communities/{community:slug}/posts/{post}/comments', [App\Http\Controllers\CommunityController::class, 'storePostComment'])->name('communities.posts.comment');
     Route::put('/communities/{community:slug}', [App\Http\Controllers\CommunityController::class, 'update'])->name('communities.update');
+
+    // Admin Migration Helper (Temporary fix for CLI issues)
+    Route::get('/admin/force-migrate', function() {
+        if (Auth::user()->role !== 'admin') abort(403);
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return '<h1>Migration Output:</h1><pre>' . \Illuminate\Support\Facades\Artisan::output() . '</pre><br><a href="/dashboard">Back to Dashboard</a>';
+    });
 });

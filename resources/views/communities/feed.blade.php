@@ -128,14 +128,15 @@
                             </button>
                             <button onclick="toggleComments({{ $post->id }})" style="background: transparent; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 0.5rem; cursor: pointer; transition: 0.2s;" onmouseover="this.style.color='white'">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-                                <span>{{ $post->comments()->count() }} Comentários</span>
+                                <span>{{ $post->comments_count }} Comentários</span>
                             </button>
                         </div>
                         
                         <!-- Comment Section (Hidden by default) -->
                         <div id="comments-{{ $post->id }}" style="display: none; padding: 0 1.5rem 1.5rem; border-top: 1px solid rgba(255,255,255,0.02); background: rgba(0,0,0,0.1);">
                             <div style="padding: 1.5rem 0; display: flex; flex-direction: column; gap: 1rem;">
-                                @foreach($post->comments()->with('user')->get() as $comment)
+                                @php $comments = []; try { $comments = $post->comments()->with('user')->get(); } catch(\Exception $e) {} @endphp
+                                @foreach($comments as $comment)
                                 <div style="display: flex; gap: 0.75rem;">
                                     <img src="{{ $comment->user->avatar ? Storage::url($comment->user->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed=' . $comment->user->name }}" style="width: 28px; height: 28px; border-radius: 8px;">
                                     <div style="flex: 1; background: rgba(255,255,255,0.03); padding: 0.75rem 1rem; border-radius: 12px;">

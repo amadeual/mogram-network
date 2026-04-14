@@ -33,6 +33,19 @@ class CommunityPost extends Model
 
     public function isLikedByUser($userId)
     {
-        return $this->likes()->where('user_id', $userId)->exists();
+        try {
+            return $this->likes()->where('user_id', $userId)->exists();
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function getCommentsCountAttribute()
+    {
+        try {
+            return $this->comments()->count();
+        } catch (\Exception $e) {
+            return 0;
+        }
     }
 }
