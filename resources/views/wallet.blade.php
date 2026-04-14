@@ -80,7 +80,9 @@
         </div>
         </div>
 
-        <h3 style="font-size: 1.4rem; font-weight: 950; color: white; margin-bottom: 1.5rem; letter-spacing: -0.5px;">Histórico de Transações</h3>
+        <div class="wallet-container">
+            <h3 style="font-size: 1.4rem; font-weight: 950; color: white; margin-bottom: 1.5rem; letter-spacing: -0.5px;">Histórico de Transações</h3>
+        </div>
         
         <div class="wallet-container">
             <div style="display: flex; flex-direction: column; gap: 0.75rem;">
