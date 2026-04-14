@@ -35,7 +35,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($tickets as $ticket)
+                @forelse($tickets as $ticket)
                 <tr style="border-bottom: 1px solid rgba(255,255,255,0.02); transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
                     <td style="padding: 1.5rem; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 700;">#{{ $ticket->id }}</td>
                     <td style="padding: 1.5rem;">
@@ -53,10 +53,10 @@
                     </td>
                     <td style="padding: 1.5rem;">
                         <p style="color: white; font-size: 13px; font-weight: 800; margin-bottom: 2px;">{{ $ticket->subject }}</p>
-                        <p style="color: rgba(255,255,255,0.3); font-size: 11px; font-weight: 600;">{{ Str::limit($ticket->lastMessage?->message, 50) }}</p>
+                        <p style="color: rgba(255,255,255,0.3); font-size: 11px; font-weight: 600;">{{ \Illuminate\Support\Str::limit($ticket->lastMessage?->message, 50) }}</p>
                     </td>
                     <td style="padding: 1.5rem;">
-                        <span class="category-tag {{ Str::slug($ticket->category) }}">{{ $ticket->category }}</span>
+                        <span class="category-tag {{ \Illuminate\Support\Str::slug($ticket->category) }}">{{ $ticket->category }}</span>
                     </td>
                     <td style="padding: 1.5rem;">
                         <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 900; color: {{ $ticket->status == 'Aberto' ? '#22c55e' : ($ticket->status == 'Resolvido' ? 'rgba(255,255,255,0.3)' : '#ffd600') }}">
@@ -70,7 +70,13 @@
                         </a>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="6" style="padding: 5rem; text-align: center;">
+                        <p style="color: rgba(255,255,255,0.2); font-weight: 800; font-size: 14px;">Nenhum chamado de suporte no momento.</p>
+                    </td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

@@ -32,7 +32,12 @@ class SupportController extends Controller
             'message' => $request->message
         ]);
 
-        $ticket->update(['status' => $request->status ?? 'Aguardando Resposta']);
+        $ticket->update([
+            'status' => $request->status ?? 'Aguardando Resposta',
+            'category' => $request->category ?? $ticket->category,
+            'priority' => $request->priority ?? $ticket->priority,
+            'assigned_to' => $request->assigned_to ?? $ticket->assigned_to
+        ]);
 
         return back()->with('success', 'Resposta enviada com sucesso!');
     }
