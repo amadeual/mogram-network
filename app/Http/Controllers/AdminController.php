@@ -179,9 +179,53 @@ class AdminController extends Controller
         return view('admin.deposits', compact('deposits', 'todayAmount'));
     }
 
-    public function reports()
+    public function reports(Request $request)
     {
-        return view('admin.reports');
+        $creatorId = $request->creator_id;
+        $creators = User::where('role', '!=', 'admin')->orderBy('name')->get();
+
+        // 1. Core Metrics
+        $revenueQuery = DB::table('purchases')
+            ->join('posts', 'purchases.post_id', '=', 'posts.id');
+        
+        $subQuery = DB::table('community_subscriptions');
+        $liveQuery = Live::query();
+        $postQuery = Post::query();
+
+        if ($creatorId) {
+            $revenueQuery->where('posts.user_id', $creatorId);
+            $subQuery->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')
+                     ->where('communities.user_id', $creatorId);
+            $liveQuery->where('user_id', $creatorId);
+            $postQuery->where('user_id', $creatorId);
+        }
+
+        $totalRevenue = $revenueQuery->sum('purchases.amount');
+        $totalGifts = DB::table('live_gifts')->when($creatorId, fn($q) => $q->where('receiver_id', $creatorId))->sum('amount');
+        $totalTicketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->when($creatorId, fn($q) => $q->where('lives.user_id', $creatorId))->sum('live_access.amount');
+        
+        $grossRevenue = $totalRevenue + $totalGifts + $totalTicketRevenue;
+        $newSubscribers = $subQuery->where('community_subscriptions.status', 'active')->count();
+        $completedLives = $liveQuery->where('status', 'finished')->count();
+        $totalContents = $postQuery->count();
+
+        // 2. Chart Data (Last 30 days)
+        $chartData = DB::table('purchases')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+            ->where('created_at', '>=', now()->subDays(30))
+            ->groupBy('date')
+            ->orderBy('date')
+            ->get();
+
+        return view('admin.reports', compact(
+            'creators', 
+            'grossRevenue', 
+            'newSubscribers', 
+            'completedLives', 
+            'totalContents',
+            'chartData',
+            'creatorId'
+        ));
     }
 
     public function settings()

@@ -16,38 +16,32 @@
 </div>
 
 <!-- Date & Filters -->
-<div class="admin-card" style="padding: 1rem 1.5rem; margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem;">
-    <select style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
-        <option>Período: Este Mês</option>
-        <option>Período: Último Mês</option>
-        <option>Período: Últimos 90 Dias</option>
-        <option>Período: Personalizado</option>
+<form action="{{ route('admin.reports') }}" method="GET" class="admin-card" style="padding: 1rem 1.5rem; margin-bottom: 3rem; display: flex; align-items: center; gap: 1rem;">
+    <select name="period" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
+        <option value="30">Período: Últimos 30 Dias</option>
+        <option value="90">Período: Últimos 90 Dias</option>
     </select>
-    <select style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
-        <option>Criador: Todos</option>
-        <option>Criador: Verificados</option>
-    </select>
-    <select style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
-        <option>Tipo: Conteúdo</option>
-        <option>Tipo: Lives</option>
-        <option>Tipo: Assinaturas</option>
+    <select name="creator_id" onchange="this.form.submit()" style="background: rgba(255,255,255,0.05); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 10px 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
+        <option value="">Todos os Criadores</option>
+        @foreach($creators as $creator)
+            <option value="{{ $creator->id }}" {{ $creatorId == $creator->id ? 'selected' : '' }}>
+                {{ $creator->name }} (@ {{ $creator->username }})
+            </option>
+        @endforeach
     </select>
     <div style="flex: 1; position: relative;">
         <svg style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" placeholder="Buscar relatório..." style="width: 100%; background: transparent; border: none; padding: 10px 15px; color: white; outline: none; font-weight: 600;">
+        <input type="text" name="search" placeholder="Pesquisar..." style="width: 100%; background: transparent; border: none; padding: 10px 15px; color: white; outline: none; font-weight: 600;">
     </div>
-</div>
+    <button type="submit" class="btn-primary" style="padding: 10px 20px; border-radius: 12px;">Filtrar</button>
+</form>
 
 <!-- Main Metrics Grid -->
 <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
     <div class="admin-card" style="padding: 1.5rem; display: flex; justify-content: space-between;">
         <div>
-            <div style="color: var(--success); display: flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 900; background: rgba(34, 197, 94, 0.1); padding: 2px 6px; border-radius: 4px; margin-bottom: 1rem; width: fit-content;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
-                +12%
-            </div>
             <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Receita Bruta</p>
-            <h2 style="font-size: 1.5rem; font-weight: 900;">R$ 1.2M</h2>
+            <h2 style="font-size: 1.5rem; font-weight: 900;">R$ {{ number_format($grossRevenue, 2, ',', '.') }}</h2>
         </div>
         <div style="color: var(--success); opacity: 0.5;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
@@ -55,12 +49,8 @@
     </div>
     <div class="admin-card" style="padding: 1.5rem; display: flex; justify-content: space-between;">
         <div>
-            <div style="color: var(--success); display: flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 900; background: rgba(34, 197, 94, 0.1); padding: 2px 6px; border-radius: 4px; margin-bottom: 1rem; width: fit-content;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"/></svg>
-                +5%
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Novos Assinantes</p>
-            <h2 style="font-size: 1.5rem; font-weight: 900;">4,502</h2>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Assinantes Ativos</p>
+            <h2 style="font-size: 1.5rem; font-weight: 900;">{{ number_format($newSubscribers, 0, ',', '.') }}</h2>
         </div>
         <div style="color: var(--primary-blue); opacity: 0.5;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
@@ -68,11 +58,8 @@
     </div>
     <div class="admin-card" style="padding: 1.5rem; display: flex; justify-content: space-between;">
         <div>
-            <div style="color: var(--text-muted); display: flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 900; background: rgba(255, 255, 255, 0.05); padding: 2px 6px; border-radius: 4px; margin-bottom: 1rem; width: fit-content;">
-                ~ 0%
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Lives Realizadas</p>
-            <h2 style="font-size: 1.5rem; font-weight: 900;">120</h2>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Lives Concluídas</p>
+            <h2 style="font-size: 1.5rem; font-weight: 900;">{{ number_format($completedLives, 0, ',', '.') }}</h2>
         </div>
         <div style="color: var(--danger); opacity: 0.5;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -80,12 +67,8 @@
     </div>
     <div class="admin-card" style="padding: 1.5rem; display: flex; justify-content: space-between;">
         <div>
-            <div style="color: var(--danger); display: flex; align-items: center; gap: 4px; font-size: 0.65rem; font-weight: 900; background: rgba(239, 68, 68, 0.1); padding: 2px 6px; border-radius: 4px; margin-bottom: 1rem; width: fit-content;">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"/></svg>
-                -2%
-            </div>
-            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Taxa de Retenção</p>
-            <h2 style="font-size: 1.5rem; font-weight: 900;">84.5%</h2>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Conteúdos Criados</p>
+            <h2 style="font-size: 1.5rem; font-weight: 900;">{{ number_format($totalContents, 0, ',', '.') }}</h2>
         </div>
         <div style="color: orange; opacity: 0.5;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -139,26 +122,26 @@
 
 @section('scripts')
 <script>
-    // Monetization Trend (Bar Chart)
+    // Monetization Trend (Line Chart)
     const trendCtx = document.getElementById('monetizationTrendChart').getContext('2d');
+    
+    const chartLabels = {!! json_encode($chartData->pluck('date')->map(fn($d) => date('d/m', strtotime($d)))) !!};
+    const chartValues = {!! json_encode($chartData->pluck('total')) !!};
+
     new Chart(trendCtx, {
-        type: 'bar',
+        type: 'line',
         data: {
-            labels: ['01 Jun', '07 Jun', '14 Jun', '21 Jun', '28 Jun'],
+            labels: chartLabels.length > 0 ? chartLabels : ['Sem dados'],
             datasets: [
                 {
-                    label: 'Assinaturas',
-                    data: [180, 250, 220, 310, 290],
-                    backgroundColor: '#3390ec',
-                    borderRadius: 6,
-                    barThickness: 15
-                },
-                {
-                    label: 'Gorjetas',
-                    data: [120, 190, 160, 240, 210],
-                    backgroundColor: '#ef4444',
-                    borderRadius: 6,
-                    barThickness: 15
+                    label: 'Vendas (R$)',
+                    data: chartValues.length > 0 ? chartValues : [0],
+                    borderColor: '#3390ec',
+                    backgroundColor: 'rgba(51, 144, 236, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointRadius: 4
                 }
             ]
         },
@@ -173,14 +156,15 @@
         }
     });
 
-    // Traffic Source (Doughnut Chart)
+    // Simple placeholder for other charts since data is now real
     const trafficCtx = document.getElementById('trafficSourceChart').getContext('2d');
     new Chart(trafficCtx, {
         type: 'doughnut',
         data: {
+            labels: ['Vendas', 'Outros'],
             datasets: [{
-                data: [45, 25, 20, 10],
-                backgroundColor: ['#3390ec', '#ef4444', '#22c55e', 'orange'],
+                data: [{{ $grossRevenue > 0 ? 100 : 0 }}, {{ $grossRevenue > 0 ? 0 : 100 }}],
+                backgroundColor: ['#3390ec', 'rgba(255,255,255,0.1)'],
                 borderWidth: 0,
                 cutout: '80%'
             }]
@@ -188,7 +172,7 @@
         options: {
             responsive: true,
             maintainAspectRatio: false,
-            plugins: { tooltip: { enabled: false } }
+            plugins: { tooltip: { enabled: true } }
         }
     });
 </script>
