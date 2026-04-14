@@ -14,6 +14,13 @@
                 Voltar para Carteira
             </a>
 
+            @if(session('error'))
+            <div style="background: rgba(239,68,68,0.1); border: 1.5px solid rgba(239,68,68,0.2); border-radius: 16px; padding: 1rem 1.5rem; color: #ef4444; font-weight: 800; font-size: 14px; margin-bottom: 2rem; display: flex; align-items: center; gap: 12px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                {{ session('error') }}
+            </div>
+            @endif
+
             <header class="studio-header" style="margin-bottom: 3rem;">
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px; margin-bottom: 0.5rem;">Processo de Saque</h1>
                 <p style="color: var(--text-muted); font-size: 15px; font-weight: 600;">Gerencie seus ganhos e transfira com facilidade.</p>
@@ -60,6 +67,19 @@
                         <button type="button" onclick="setPercent(0.25)" style="flex: 1; padding: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">25%</button>
                         <button type="button" onclick="setPercent(0.50)" style="flex: 1; padding: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">50%</button>
                         <button type="button" onclick="setPercent(1.00)" style="flex: 1; padding: 1.25rem; border: 1.5px solid #3390ec; background: rgba(51, 144, 236, 0.1); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">100%</button>
+                    </div>
+
+                    <!-- Fee Display -->
+                    <div id="summary_section" style="margin-top: 2rem; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                            <span style="color: var(--text-muted); font-size: 14px; font-weight: 600;">Taxa de Saque</span>
+                            <span style="color: #ef4444; font-size: 14px; font-weight: 800;">- R$ 5,00</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.05);">
+                            <span style="color: white; font-size: 15px; font-weight: 850;">Você Receberá</span>
+                            <span style="color: #22c55e; font-size: 18px; font-weight: 950;" id="net_amount_display">R$ 0,00</span>
+                        </div>
+                        <p style="font-size: 10px; color: var(--text-muted); margin-top: 10px; font-weight: 600;">O valor líquido será enviado para sua conta pix cadastrada.</p>
                     </div>
                 </div>
 
@@ -130,9 +150,20 @@
     const availableBalance = {{ $availableBalance }};
     const amountInput = document.getElementById('withdraw_amount');
     const methodInput = document.getElementById('method_input');
+    const netAmountDisplay = document.getElementById('net_amount_display');
     
+    function updateNetAmount() {
+        const val = parseFloat(amountInput.value) || 0;
+        const fee = 5.00;
+        const net = Math.max(0, val - fee);
+        netAmountDisplay.innerText = net > 0 ? `R$ ${net.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
+    }
+
+    amountInput.addEventListener('input', updateNetAmount);
+
     function setPercent(p) {
         amountInput.value = (availableBalance * p).toFixed(2);
+        updateNetAmount();
     }
 
     function selectMethod(m) {
@@ -161,5 +192,8 @@
             accountLabel.innerText = 'Email RedotPay';
         }
     }
+
+    // Initialize
+    updateNetAmount();
 </script>
 @endsection

@@ -23,7 +23,9 @@
         <thead>
             <tr style="border-bottom: 1.5px solid var(--border-gray);">
                 <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Criador</th>
-                <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Valor</th>
+                <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Bruto</th>
+                <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Taxa</th>
+                <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Líquido (Pagar)</th>
                 <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Dados Pagamento</th>
                 <th style="padding: 1.25rem 1rem; text-align: left; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Status</th>
                 <th style="padding: 1.25rem 1rem; text-align: center; color: var(--text-muted); font-size: 0.7rem; text-transform: uppercase; font-weight: 800;">Data</th>
@@ -52,8 +54,14 @@
                     </div>
                     @endif
                 </td>
-                <td style="padding: 1rem; font-weight: 900; color: white; font-size: 0.85rem; white-space: nowrap;">
+                <td style="padding: 1rem; font-weight: 700; color: rgba(255,255,255,0.7); font-size: 0.8rem; white-space: nowrap;">
                     R$ {{ number_format($withdrawal->amount, 2, ',', '.') }}
+                </td>
+                <td style="padding: 1rem; font-weight: 700; color: #ef4444; font-size: 0.8rem; white-space: nowrap;">
+                    R$ {{ number_format($withdrawal->fee ?? 5.00, 2, ',', '.') }}
+                </td>
+                <td style="padding: 1rem; font-weight: 950; color: #22c55e; font-size: 0.9rem; white-space: nowrap;">
+                    R$ {{ number_format($withdrawal->net_amount ?? ($withdrawal->amount - 5), 2, ',', '.') }}
                 </td>
                 <td style="padding: 1rem;">
                     <div style="display: flex; flex-direction: column; gap: 4px;">

@@ -9,17 +9,19 @@
 
     <!-- Content Area -->
     <main class="main-content" style="background: #0b0a15;">
-        <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: center; gap: 1rem;">
-            <a href="{{ route('studio.dashboard') }}" style="color: var(--text-muted); cursor: pointer; transition: 0.2s; background: rgba(255,255,255,0.05); padding: 0.5rem; border-radius: 12px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
-            </a>
-            <div>
-                <h1 style="font-size: 2.25rem; font-weight: 900; color: white;">Editar Conteúdo</h1>
-                <p style="color: var(--text-muted); font-size: 14px;">Atualize os detalhes da sua publicação.</p>
+        <header class="studio-header responsive-header">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <a href="{{ route('studio.dashboard') }}" class="back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+                </a>
+                <div>
+                    <h1 class="header-title">Editar Conteúdo</h1>
+                    <p class="header-subtitle">Atualize os detalhes da sua publicação.</p>
+                </div>
             </div>
         </header>
 
-        <div class="studio-body" style="padding: 0 3rem 3rem;">
+        <div class="studio-body-container">
             @if($errors->any())
             <div style="background: rgba(239,68,68,0.1); border: 1.5px solid rgba(239,68,68,0.2); border-radius: 16px; padding: 1rem 1.5rem; color: #ef4444; font-weight: 800; font-size: 14px; margin-bottom: 2rem;">
                 <ul style="margin: 0; padding-left: 1.5rem;">
@@ -31,7 +33,7 @@
             @endif
 
             <form action="{{ route('studio.update', $post->id) }}" method="POST" enctype="multipart/form-data" onsubmit="return validateAndSync()"
-                  class="studio-grid-custom studio-card-pad" style="background: rgba(255, 255, 255, 0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem; display: grid; grid-template-columns: 1.5fr 1fr; gap: 2.5rem;">
+                  class="studio-edit-form-grid">
                 @csrf
                 @method('PUT')
                 
@@ -200,6 +202,58 @@
     #editor_body b, #editor_body strong { font-weight: 950 !important; color: white; }
     #editor_body i, #editor_body em { font-style: italic !important; }
     #editor_body u { text-decoration: underline !important; }
+
+    /* Responsive Edits */
+    .responsive-header {
+        padding: 2.5rem 3rem 1.5rem; 
+        display: flex; 
+        align-items: center; 
+        gap: 1rem;
+    }
+    .back-btn {
+        color: var(--text-muted); 
+        cursor: pointer; 
+        transition: 0.2s; 
+        background: rgba(255,255,255,0.05); 
+        padding: 0.5rem; 
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .header-title { font-size: 2.25rem; font-weight: 900; color: white; margin: 0; }
+    .header-subtitle { color: var(--text-muted); font-size: 14px; margin: 0; }
+    
+    .studio-body-container { padding: 0 3rem 3rem; }
+    
+    .studio-edit-form-grid {
+        background: rgba(255, 255, 255, 0.02); 
+        border: 1.5px solid rgba(255,255,255,0.05); 
+        border-radius: 32px; 
+        padding: 2.5rem; 
+        display: grid; 
+        grid-template-columns: 1.5fr 1fr; 
+        gap: 2.5rem;
+    }
+
+    @media (max-width: 1024px) {
+        .studio-edit-form-grid {
+            grid-template-columns: 1fr;
+            padding: 1.5rem;
+            gap: 2rem;
+            border-radius: 24px;
+        }
+        .studio-body-container {
+            padding: 0 1rem 3rem;
+        }
+        .responsive-header {
+            padding: 1.5rem 1rem;
+            margin-top: 50px;
+        }
+        .header-title {
+            font-size: 1.75rem;
+        }
+    }
 </style>
 
 <script>

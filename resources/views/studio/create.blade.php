@@ -12,27 +12,29 @@
         <form id="create_post_form" action="{{ route('studio.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateAndSync()">
             @csrf
             
+            <!-- Mobile Header Burger (Handled by studio-sidebar, but we need room) -->
+            
             <!-- Fixed Header -->
-            <header class="studio-header" style="position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(30px); background: rgba(11, 10, 21, 0.95); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem;">
-                <div>
+            <header class="studio-header responsive-header">
+                <div class="desktop-only">
                     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); font-weight: 800;">
                         <span>Início</span>
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
                         <span style="color: white; opacity: 0.7;">Novo Post</span>
                     </div>
                 </div>
-                <div style="display: flex; gap: 1.25rem; align-items: center;">
-                    <a href="{{ route('studio.dashboard') }}" style="color: var(--text-muted); font-size: 13px; font-weight: 800; text-decoration: none; padding: 0.875rem 1.5rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.05); transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.03)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='var(--text-muted)'">
+                <div class="header-actions">
+                    <a href="{{ route('studio.dashboard') }}" class="cancel-btn">
                         Cancelar
                     </a>
-                    <button type="submit" class="mogram-btn-primary" style="padding: 0.875rem 2.5rem; border-radius: 12px; font-weight: 950; font-size: 13px; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; background: #3390ec; color: white; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);">
+                    <button type="submit" class="mogram-btn-primary publish-btn-responsive">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         Publicar
                     </button>
                 </div>
             </header>
 
-            <div class="studio-body" style="display: grid; grid-template-columns: 1fr 340px; gap: 4rem; padding: 3rem 2.5rem;">
+            <div class="studio-body-grid">
                 
                 <!-- Left Side: Editor -->
                 <div style="display: flex; flex-direction: column; gap: 2.5rem;">
@@ -382,6 +384,81 @@
         background: rgba(255,255,255,0.05);
         color: white;
         box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    /* Responsive Styles */
+    .studio-header.responsive-header {
+        position: sticky; top: 0; z-index: 1000; 
+        backdrop-filter: blur(30px); 
+        background: rgba(11, 10, 21, 0.95); 
+        border-bottom: 1px solid rgba(255,255,255,0.1); 
+        display: flex; align-items: center; 
+        justify-content: space-between; 
+        padding: 1.25rem 2.5rem;
+    }
+
+    .studio-body-grid {
+        display: grid; 
+        grid-template-columns: 1fr 340px; 
+        gap: 4rem; 
+        padding: 3rem 2.5rem;
+    }
+
+    .header-actions {
+        display: flex; gap: 1.25rem; align-items: center;
+    }
+
+    .cancel-btn {
+        color: var(--text-muted); 
+        font-size: 13px; 
+        font-weight: 800; 
+        text-decoration: none; 
+        padding: 0.875rem 1.5rem; 
+        border-radius: 12px; 
+        border: 1.5px solid rgba(255,255,255,0.05); 
+        transition: 0.2s;
+    }
+
+    .publish-btn-responsive {
+        padding: 0.875rem 2.5rem; 
+        border-radius: 12px; 
+        font-weight: 950; 
+        font-size: 13px; 
+        display: flex; 
+        align-items: center; 
+        gap: 10px; 
+        border: none; 
+        cursor: pointer; 
+        background: #3390ec; 
+        color: white; 
+        box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);
+    }
+
+    @media (max-width: 1024px) {
+        .studio-body-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            padding: 1.5rem;
+        }
+        
+        .studio-header.responsive-header {
+            padding: 1rem;
+            margin-top: 50px; /* Space for mobile top bar if needed */
+        }
+
+        .publish-btn-responsive {
+            padding: 0.75rem 1.25rem;
+            font-size: 11px;
+        }
+
+        .cancel-btn {
+            padding: 0.75rem 1rem;
+            font-size: 11px;
+        }
+        
+        .main-content {
+            padding-bottom: 80px;
+        }
     }
 </style>
 

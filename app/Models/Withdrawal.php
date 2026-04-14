@@ -12,6 +12,8 @@ class Withdrawal extends Model
     protected $fillable = [
         'user_id',
         'amount',
+        'fee',
+        'net_amount',
         'method',
         'account_info',
         'status',
@@ -20,6 +22,8 @@ class Withdrawal extends Model
 
     protected $casts = [
         'amount' => 'decimal:2',
+        'fee' => 'decimal:2',
+        'net_amount' => 'decimal:2',
     ];
 
     public function user()

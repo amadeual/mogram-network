@@ -183,12 +183,26 @@
                 @csrf
                 <input type="hidden" name="method" id="method_input" value="pix">
 
-                <div style="margin-bottom: 3rem;">
+                <div style="margin-bottom: 2rem;">
                     <label style="font-size: 14px; font-weight: 900; color: white; margin-bottom: 1.5rem; display: block; text-transform: none; letter-spacing: 0.5px;">Valor do saque</label>
-                    <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1rem;">
                         <span style="font-size: 2.5rem; font-weight: 950; color: var(--text-muted); margin-right: 1.5rem;">R$</span>
-                        <input type="number" id="withdraw_amount" name="amount" placeholder="0,00" step="0.01" min="50" value="{{ old('amount') }}" required
+                        <input type="number" id="withdraw_amount_finance" name="amount" placeholder="0,00" step="0.01" min="20" value="{{ old('amount') }}" required
+                               oninput="updateFinanceNetAmount()"
                                style="background: transparent; border: none; font-size: 3.5rem; font-weight: 950; color: white; outline: none; width: 100%;">
+                    </div>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O valor mínimo para saque é R$ 20,00.</p>
+                </div>
+
+                <!-- Fee Summary -->
+                <div style="background: rgba(0,0,0,0.2); border-radius: 24px; padding: 1.75rem; border: 1.5px solid rgba(255,255,255,0.04); margin-bottom: 3rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.75rem;">
+                        <span style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Taxa Administrativa</span>
+                        <span style="color: #ef4444; font-size: 14px; font-weight: 900;">- R$ 5,00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.04);">
+                        <span style="color: white; font-size: 16px; font-weight: 950;">Total a Receber</span>
+                        <span style="color: #22c55e; font-size: 20px; font-weight: 950;" id="net_amount_finance_display">R$ 0,00</span>
                     </div>
                 </div>
 
@@ -266,6 +280,14 @@
         else if (type === 'email') input.placeholder = 'seuemail@exemplo.com';
         else if (type === 'phone') input.placeholder = '(00) 00000-0000';
         else if (type === 'random') input.placeholder = 'Chave aleatória de 32 caracteres';
+    }
+
+    function updateFinanceNetAmount() {
+        const input = document.getElementById('withdraw_amount_finance');
+        const display = document.getElementById('net_amount_finance_display');
+        const val = parseFloat(input.value) || 0;
+        const net = Math.max(0, val - 5);
+        display.innerText = net > 0 ? `R$ ${net.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : 'R$ 0,00';
     }
 
     function selectMethod(m) {

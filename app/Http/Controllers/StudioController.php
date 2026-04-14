@@ -271,11 +271,19 @@ class StudioController extends Controller
 
     public function withdraw(Request $request)
     {
+        $messages = [
+            'amount.required' => 'Por favor, informe o valor que deseja sacar.',
+            'amount.numeric' => 'O valor do saque deve ser um número válido.',
+            'amount.min' => 'O valor mínimo para saque é de R$ 20,00.',
+            'method.required' => 'Selecione um método de pagamento.',
+            'account_info.required' => 'Informe os dados da sua conta para recebimento.',
+        ];
+
         $request->validate([
-            'amount' => 'required|numeric|min:50',
+            'amount' => 'required|numeric|min:20',
             'method' => 'required|in:pix,redotpay,usdt_bep20',
             'account_info' => 'required|string|max:255',
-        ]);
+        ], $messages);
 
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         $totalRevenue = $this->calculateTotalRevenue();
@@ -286,27 +294,45 @@ class StudioController extends Controller
             
         $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
 
-        if ($request->amount > $availableBalance) {
+        $withdrawAmount = (float)str_replace(',', '.', $request->amount);
+        $fee = 5.00;
+        $netAmount = $withdrawAmount - $fee;
+
+        if ($withdrawAmount < 20) {
             return redirect()->back()
-                ->with('error', 'Saldo insuficiente para realizar este saque. Seu saldo disponível é R$ ' . number_format($availableBalance, 2, ',', '.'))
+                ->with('error', '⚠️ O valor mínimo permitido para saques é de R$ 20,00. Por favor, ajuste o valor e tente novamente.')
+                ->withInput();
+        }
+
+        if ($withdrawAmount > $availableBalance) {
+            return redirect()->back()
+                ->with('error', '❌ Saldo Insuficiente! Você tentou sacar R$ ' . number_format($withdrawAmount, 2, ',', '.') . ', mas seu saldo disponível no momento é de R$ ' . number_format($availableBalance, 2, ',', '.') . '.')
+                ->withInput();
+        }
+
+        if ($withdrawAmount < 20) { // Minimum withdrawal amount updated
+            return redirect()->back()
+                ->with('error', 'O valor mínimo para saque é R$ 20,00.')
                 ->withInput();
         }
 
         $w = Withdrawal::create([
             'user_id' => Auth::id(),
-            'amount' => (float)str_replace(',', '.', $request->amount),
+            'amount' => $withdrawAmount,
+            'fee' => $fee,
+            'net_amount' => $netAmount,
             'method' => $request->method,
             'account_info' => $request->account_info,
             'status' => 'pending',
         ]);
 
         try {
-            Mail::to(Auth::user()->email)->send(new WithdrawalRequestedMail($request->amount, $request->method, $w->id));
+            Mail::to(Auth::user()->email)->send(new WithdrawalRequestedMail($withdrawAmount, $request->method, $w->id));
         } catch (\Exception $e) {
             \Log::error('Erro ao enviar email de saque: ' . $e->getMessage());
         }
 
-        return redirect()->route('studio.finance')->with('success', 'Pedido de saque enviado com sucesso!');
+        return redirect()->route('studio.finance')->with('success', 'Pedido de saque de R$ ' . number_format($withdrawAmount, 2, ',', '.') . ' enviado com sucesso! (Taxa: R$ 5,00)');
     }
 
     public function postAnalytics(Post $post)
