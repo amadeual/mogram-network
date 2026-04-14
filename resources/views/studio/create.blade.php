@@ -13,23 +13,26 @@
             @csrf
             
             <!-- Fixed Header -->
-            <header class="studio-header" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(11, 10, 21, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
+            <header class="studio-header" style="position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(30px); background: rgba(11, 10, 21, 0.95); border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; padding: 1.25rem 2.5rem;">
                 <div>
-                    <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: none; letter-spacing: 0.5px; margin-bottom: 4px;">
+                    <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); font-weight: 800;">
                         <span>Início</span>
                         <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
-                        <span style="color: white; opacity: 0.5;">Criar Novo Post</span>
+                        <span style="color: white; opacity: 0.7;">Novo Post</span>
                     </div>
                 </div>
-                <div style="display: flex; gap: 1rem;">
-                    <button type="submit" class="mogram-btn-primary studio-header-btn" style="padding: 0.875rem 2rem; border-radius: 12px; font-weight: 950; font-size: 13px; display: flex; align-items: center; gap: 8px; border: none; cursor: pointer; background: #3390ec; color: white;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                <div style="display: flex; gap: 1.25rem; align-items: center;">
+                    <a href="{{ route('studio.dashboard') }}" style="color: var(--text-muted); font-size: 13px; font-weight: 800; text-decoration: none; padding: 0.875rem 1.5rem; border-radius: 12px; border: 1.5px solid rgba(255,255,255,0.05); transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.03)';this.style.color='white'" onmouseout="this.style.background='transparent';this.style.color='var(--text-muted)'">
+                        Cancelar
+                    </a>
+                    <button type="submit" class="mogram-btn-primary" style="padding: 0.875rem 2.5rem; border-radius: 12px; font-weight: 950; font-size: 13px; display: flex; align-items: center; gap: 10px; border: none; cursor: pointer; background: #3390ec; color: white; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.3);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         Publicar
                     </button>
                 </div>
             </header>
 
-            <div class="studio-body responsive-grid-feed" style="display: grid; grid-template-columns: 1fr 340px; gap: 3rem;">
+            <div class="studio-body" style="display: grid; grid-template-columns: 1fr 340px; gap: 4rem; padding: 3rem 2.5rem;">
                 
                 <!-- Left Side: Editor -->
                 <div style="display: flex; flex-direction: column; gap: 2.5rem;">
@@ -99,20 +102,22 @@
                             </div>
                             <span style="font-size: 9px; font-weight: 900; color: #a855f7; text-transform: none; letter-spacing: 1px;">Editor Premium</span>
                         </div>
-                        <div style="padding: 2rem;">
+                        <div style="padding: 2rem; position: relative;">
                             <input type="text" name="title" placeholder="Título do Post" required
-                                   style="background: transparent; border: none; font-size: 1.5rem; font-weight: 900; color: white; width: 100%; outline: none; margin-bottom: 1.5rem;">
+                                   style="background: transparent; border: none; font-size: 2rem; font-weight: 950; color: white; width: 100%; outline: none; margin-bottom: 1.5rem; letter-spacing: -1px;">
                             
                             <!-- Rich Editor -->
-                            <div id="editor_body" contenteditable="true" 
-                                 style="background: transparent; border: none; font-size: 1.1rem; font-weight: 500; color: white; width: 100%; min-height: 250px; outline: none; line-height: 1.6; cursor: text;"
-                                 oninput="syncEditor()"></div>
-                            <div style="display: flex; justify-content: flex-end; padding-top: 1rem;">
+                            <div style="position: relative;">
+                                <div id="editor_body" contenteditable="true" 
+                                     style="background: transparent; border: none; font-size: 1.15rem; font-weight: 500; color: rgba(255,255,255,0.9); width: 100%; min-height: 250px; outline: none; line-height: 1.7; cursor: text; position: relative; z-index: 2;"
+                                     oninput="syncEditor()"></div>
+                                <p id="placeholder_custom" style="position: absolute; top: 0; left: 0; color: var(--text-muted); pointer-events: none; font-size: 1.15rem; font-weight: 500; z-index: 1;">O que você está pensando? Escreva sua legenda aqui...</p>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: flex-end; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.03); margin-top: 1rem;">
                                 <span id="char_count_display" style="font-size: 11px; font-weight: 800; color: var(--text-muted);">0 / 2200</span>
                             </div>
                             <textarea name="description" id="description_input" hidden required maxlength="2200"></textarea>
-                            
-                            <p id="placeholder_custom" style="position: absolute; top: 115px; color: var(--text-muted); pointer-events: none; font-size: 1.1rem; font-weight: 500;">O que você está pensando? Escreva sua legenda aqui...</p>
                         </div>
                     </div>
 
