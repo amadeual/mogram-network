@@ -741,7 +741,7 @@ section { padding: 4rem 0; }
 
 .sidebar.collapsed + .main-content,
 body.sidebar-is-collapsed .main-content {
-    margin-left: 80px;
+    margin-left: 80px !important;
 }
 
 .feed-container {

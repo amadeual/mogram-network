@@ -44,19 +44,14 @@
             </button>
         </div>
 
-        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem 1.5rem;">
-            <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
-                    <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
-                </svg>
-                <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
-            </a>
-            <button onclick="toggleSidebarCollapse()" class="burger-btn desktop-only" style="width: 38px; height: 38px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
-        </div>
+        <a href="{{ route('dashboard') }}" class="sidebar-logo desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0 0.75rem 1.5rem; text-decoration: none;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
+                <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
+                <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
+            </svg>
+            <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
+        </a>
 
         <nav style="display: flex; flex-direction: column; gap: 0.35rem;">
             <a href="{{ route('dashboard') }}" class="menu-item sidebar-nav-item {{ Route::is('dashboard') ? 'active' : '' }}">
@@ -118,8 +113,8 @@
             {{-- Collapse Toggle (Desktop) --}}
             <div class="sidebar-divider desktop-only"></div>
             <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start;">
-                <svg id="collapse-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><polyline points="15 18 9 12 15 6"/></svg>
-                <span>Recolher</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <span style="margin-left: 12px;">Recolher</span>
             </button>
         </nav>
 

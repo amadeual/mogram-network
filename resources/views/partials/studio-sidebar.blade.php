@@ -13,13 +13,12 @@
         {{-- Logo centered --}}
         <a href="{{ route('dashboard') }}" class="mobile-logo" style="text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
-                <defs><linearGradient id="mobileLogoGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradStudioFinal)" />
+                <defs><linearGradient id="mobileLogoGradStudioV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradStudioV2)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
             <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.15rem;">Studio</span>
         </a>
-
         <div style="width: 44px;"></div>
     </div>
 
@@ -30,8 +29,8 @@
         <div class="sidebar-mobile-header mobile-only">
             <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap: 10px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarMobGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradStudioFinal)" />
+                    <defs><linearGradient id="sidebarMobGradStudioV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradStudioV2)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">Studio</span>
@@ -41,19 +40,28 @@
             </button>
         </div>
 
-        {{-- Desktop Header (Logo + Toggle) --}}
-        <div class="sidebar-header desktop-only" style="display: flex; align-items: center; justify-content: space-between; padding: 0.5rem 0.75rem 1.5rem;">
-            <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
+        {{-- Desktop Header (Logo and User Info) --}}
+        <div style="padding: 0 0.625rem 1.5rem;">
+            <a href="{{ route('dashboard') }}" class="desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0.5rem; text-decoration: none; margin-bottom: 0.5rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarLogoGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioFinal)" />
+                    <defs><linearGradient id="sidebarLogoGradStudioV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioV2)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Studio</span>
             </a>
-            <button onclick="toggleSidebarCollapse()" class="burger-btn desktop-only" style="width: 38px; height: 38px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; cursor: pointer;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-            </button>
+            
+            <a href="{{ route('studio.settings') }}" class="desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); text-decoration: none; border: 1px solid rgba(255,255,255,0.05);">
+                @if(Auth::user()->avatar)
+                    <img src="{{ Storage::url(Auth::user()->avatar) }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #3390ec; flex-shrink:0;">
+                @else
+                    <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" style="width: 32px; height: 32px; border-radius: 50%; flex-shrink:0;">
+                @endif
+                <div class="studio-user-details" style="flex: 1; min-width: 0;">
+                    <p style="font-size: 13px; font-weight: 700; color: white; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ Auth::user()->name }}</p>
+                    <p style="font-size: 10px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
+                </div>
+            </a>
         </div>
 
         <nav style="display: flex; flex-direction: column; gap: 0.35rem; flex: 1; padding: 0 0.625rem;">
@@ -93,16 +101,16 @@
                 <span>Configurações</span>
             </a>
 
-            {{-- Collapse Toggle (Text Link) --}}
+            {{-- Collapse Toggle (with Burger Icon) --}}
             <div class="sidebar-divider desktop-only"></div>
             <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start;">
-                <svg id="collapse-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><polyline points="15 18 9 12 15 6"/></svg>
-                <span>Recolher</span>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <span style="margin-left: 12px;">Recolher</span>
             </button>
         </nav>
 
         <div class="sidebar-user" style="padding: 1rem 0.625rem; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.03);">
-            <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; width: 100%; box-sizing: border-box;">
+            <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
                 <div style="width: 8px; height: 8px; background: #3390ec; border-radius: 50%; box-shadow: 0 0 10px #3390ec;"></div>
                 <div id="account-status-text">
                     <p style="font-size: 10px; color: var(--text-muted); text-transform: none; font-weight: 800; margin: 0;">Status da conta</p>
@@ -110,23 +118,13 @@
                 </div>
             </div>
             
-            <div style="display: flex; align-items: center; gap: 12px; padding: 0.5rem; border-radius: 12px;">
-                @if(Auth::user()->avatar)
-                    <img src="{{ Storage::url(Auth::user()->avatar) }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #3390ec; flex-shrink:0;">
-                @else
-                    <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" style="width: 38px; height: 38px; border-radius: 50%; flex-shrink:0;">
-                @endif
-                <div class="studio-user-details" style="flex: 1; min-width: 0;">
-                    <p style="font-size: 13px; font-weight: 700; color: white; margin: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ Auth::user()->name }}</p>
-                    <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
-                </div>
-                <form action="{{ route('logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" style="background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 6px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.color='#ef4444'" onmouseout="this.style.color='var(--text-muted)'">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                    </button>
-                </form>
-            </div>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="menu-item" style="width: 100%; background: transparent; border: none; color: #ef4444; padding: 0.875rem 1rem; cursor: pointer; justify-content: flex-start; gap: 1rem;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    <span class="logout-text">Sair</span>
+                </button>
+            </form>
         </div>
     </aside>
 
@@ -159,16 +157,11 @@ function closeMogramSidebar() {
 
 function toggleSidebarCollapse() {
     const sidebar = document.getElementById('mogram_sidebar');
-    const icon = document.getElementById('collapse-icon');
     if (!sidebar) return;
     
     const isCollapsed = sidebar.classList.toggle('collapsed');
     localStorage.setItem('sidebar_collapsed', isCollapsed);
     
-    if (icon) {
-        icon.style.transform = isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)';
-    }
-
     if (isCollapsed) {
         document.body.classList.add('sidebar-is-collapsed');
     } else {
@@ -194,9 +187,7 @@ function toggleSidebarCollapse() {
     const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
     if (isCollapsed && window.innerWidth > 991) {
         const sidebar = document.getElementById('mogram_sidebar');
-        const icon = document.getElementById('collapse-icon');
         if (sidebar) sidebar.classList.add('collapsed');
-        if (icon) icon.style.transform = 'rotate(180deg)';
         document.body.classList.add('sidebar-is-collapsed');
     }
 })();
