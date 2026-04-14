@@ -180,11 +180,12 @@
             <div style="margin-bottom: 2rem;">
                 <label style="display: block; font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Categoria</label>
                 <select name="category" required style="width: 100%; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 15px; color: white; font-size: 14px; outline: none; cursor: pointer; appearance: none;">
-                    <option value="Pagamentos">Pagamentos</option>
-                    <option value="Técnico">Técnico</option>
-                    <option value="Financeiro">Financeiro</option>
-                    <option value="Moderação">Moderação</option>
-                    <option value="Outros">Outros</option>
+                    <option value="" disabled selected style="background: #1a1c2e; color: rgba(255,255,255,0.5);">Selecione uma categoria...</option>
+                    <option value="Pagamentos" style="background: #1a1c2e; color: white;">Pagamentos</option>
+                    <option value="Técnico" style="background: #1a1c2e; color: white;">Técnico</option>
+                    <option value="Financeiro" style="background: #1a1c2e; color: white;">Financeiro</option>
+                    <option value="Moderação" style="background: #1a1c2e; color: white;">Moderação</option>
+                    <option value="Outros" style="background: #1a1c2e; color: white;">Outros</option>
                 </select>
             </div>
 
