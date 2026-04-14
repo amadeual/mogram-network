@@ -3,7 +3,7 @@
 @section('title', 'Explorar Comunidades | Mogram')
 
 @section('content')
-<div class="app-layout" style="background: #000; color: white; font-family: 'Inter', sans-serif; min-height: 100vh;">
+<div class="app-layout" style="background: #000; color: white; font-family: 'Inter', sans-serif; min-height: 100vh; overflow-x: hidden;">
     @include('partials.sidebar')
 
     <main class="main-content">
@@ -23,7 +23,7 @@
             </div>
         </header>
 
-        <div class="explore-container" style="flex: 1; padding: 40px 20px; max-width: 1400px; margin: 0 auto; width: 100%;">
+        <div class="explore-container" style="flex: 1; padding: 40px 12px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box;">
             
             <!-- Hero Search Section -->
             <div style="text-align: center; margin-bottom: 60px;">
@@ -138,64 +138,65 @@
             </div>
 
             <!-- Create Community Banner -->
-            <div style="background: linear-gradient(135deg, #110e2e 0%, #05040d 100%); border: 1px solid rgba(51,144,236,0.1); border-radius: 40px; padding: 60px 20px; text-align: center; position: relative; overflow: hidden;">
-                <h2 style="font-size: clamp(1.5rem, 5vw, 2.25rem); font-weight: 900; margin-bottom: 15px; letter-spacing: -1px;">Crie sua comunidade</h2>
-                <p style="font-size: 16px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 40px;">Comece a monetizar seu conteúdo hoje.</p>
-                <button onclick="openCreateModal()" style="background: #3390ec; color: white; border: none; border-radius: 50px; padding: 18px 45px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3); transition: 0.3s;">Criar agora</button>
+            <div class="cta-banner" style="background: linear-gradient(135deg, #110e2e 0%, #05040d 100%); border: 1px solid rgba(51,144,236,0.1); border-radius: 24px; padding: 40px 16px; text-align: center; position: relative; overflow: hidden;">
+                <h2 style="font-size: clamp(1.25rem, 5vw, 2rem); font-weight: 900; margin-bottom: 12px; letter-spacing: -0.5px;">Crie sua comunidade</h2>
+                <p style="font-size: 14px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 30px;">Comece a monetizar seu conteúdo hoje.</p>
+                <button onclick="openCreateModal()" style="background: #3390ec; color: white; border: none; border-radius: 50px; padding: 14px 36px; font-weight: 900; font-size: 14px; cursor: pointer; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3); transition: 0.3s;">Criar agora</button>
             </div>
 
         </div>
 
-        <!-- Detailed Footer -->
-        <footer style="background: #000; border-top: 1px solid rgba(255,255,255,0.03); padding: 40px 0.75rem 30px; overflow: hidden;">
-            <div class="communities-footer" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 30px;">
-                <div>
-                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
+        <!-- Simplified Mobile-First Footer -->
+        <footer style="background: #000; border-top: 1px solid rgba(255,255,255,0.03); padding: 30px 12px 20px; overflow: hidden; box-sizing: border-box;">
+            <div class="communities-footer" style="max-width: 1400px; margin: 0 auto;">
+                <div style="margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512">
                             <defs><linearGradient id="footerLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
                             <rect width="512" height="512" rx="100" fill="url(#footerLogoGrad)" />
                             <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                         </svg>
-                        <span style="font-size: 20px; font-weight: 900; letter-spacing: -0.5px;">Mogram</span>
+                        <span style="font-size: 18px; font-weight: 900; letter-spacing: -0.5px;">Mogram</span>
                     </div>
-                    <p style="color: rgba(255,255,255,0.4); font-size: 14px; line-height: 1.6; max-width: 300px; font-weight: 600;">A plataforma definitiva para criadores de elite. Transforme sua audiência em uma comunidade lucrativa.</p>
+                    <p style="color: rgba(255,255,255,0.4); font-size: 13px; line-height: 1.6; font-weight: 600;">A plataforma definitiva para criadores de elite.</p>
                 </div>
 
-                <div>
-                    <h4 style="font-size: 14px; font-weight: 840; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 0.5px;">Plataforma</h4>
-                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px;">
-                        <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; font-weight: 700;">Explorar</a></li>
-                        <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; font-weight: 700;">Recursos</a></li>
-                        <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; font-weight: 700;">Preços</a></li>
-                    </ul>
+                <div class="footer-links-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 24px;">
+                    <div>
+                        <h4 style="font-size: 12px; font-weight: 840; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: white;">Plataforma</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Explorar</a></li>
+                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Recursos</a></li>
+                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Preços</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="font-size: 12px; font-weight: 840; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: white;">Suporte</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
+                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">FAQ</a></li>
+                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Central de Ajuda</a></li>
+                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Termos de Uso</a></li>
+                        </ul>
+                    </div>
                 </div>
 
-                <div>
-                    <h4 style="font-size: 14px; font-weight: 840; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 0.5px;">Suporte</h4>
-                    <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 15px;">
-                        <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; font-weight: 700;">FAQ</a></li>
-                        <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; font-weight: 700;">Central de Ajuda</a></li>
-                        <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 13px; font-weight: 700;">Termos de Uso</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h4 style="font-size: 14px; font-weight: 840; margin-bottom: 25px; text-transform: uppercase; letter-spacing: 0.5px;">Newsletter</h4>
+                <div style="margin-bottom: 24px;">
+                    <h4 style="font-size: 12px; font-weight: 840; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: white;">Newsletter</h4>
                     <div style="position: relative; display: flex; align-items: center;">
-                        <input type="email" placeholder="Seu email" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 15px; color: white; font-size: 14px; outline: none;">
-                        <button style="position: absolute; right: 8px; width: 32px; height: 32px; border-radius: 8px; background: #3390ec; border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        <input type="email" placeholder="Seu email" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 12px; color: white; font-size: 13px; outline: none; box-sizing: border-box;">
+                        <button style="position: absolute; right: 6px; width: 28px; height: 28px; border-radius: 6px; background: #3390ec; border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <div style="max-width: 1400px; margin: 60px auto 0; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; align-items: center;">
-                <p style="color: rgba(255,255,255,0.2); font-size: 12px; font-weight: 700;">&copy; 2024 Mogram. Todos os direitos reservados.</p>
-                <div style="display: flex; gap: 24px;">
-                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 12px; font-weight: 800;">Instagram</a>
-                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 12px; font-weight: 800;">TikTok</a>
-                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 12px; font-weight: 800;">Telegram</a>
+            <div style="max-width: 1400px; margin: 0 auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; text-align: center;">
+                <p style="color: rgba(255,255,255,0.2); font-size: 11px; font-weight: 700; width: 100%;">&copy; 2024 Mogram. Todos os direitos reservados.</p>
+                <div style="display: flex; gap: 16px;">
+                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">Instagram</a>
+                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">TikTok</a>
+                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">Telegram</a>
                 </div>
             </div>
         </footer>
