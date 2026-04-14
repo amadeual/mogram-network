@@ -33,7 +33,8 @@
             </div>
         @endif
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; margin-bottom: 3.5rem;">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; align-items: stretch; margin-bottom: 3.5rem; justify-content: center;">
             <!-- Credit Card Style (Compact & Elegant) -->
             <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 28px; padding: 1.75rem; position: relative; box-shadow: 0 15px 40px rgba(18, 97, 209, 0.3); border: 1.5px solid rgba(255,255,255,0.1); overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; height: 210px;">
                 <div style="display: flex; justify-content: space-between; align-items: flex-start;">
@@ -77,40 +78,43 @@
                 </div>
             </div>
         </div>
+        </div>
 
         <h3 style="font-size: 1.4rem; font-weight: 950; color: white; margin-bottom: 1.5rem; letter-spacing: -0.5px;">Histórico de Transações</h3>
         
-        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
-            @forelse($history as $item)
-            <div class="transaction-item" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; cursor: default;">
-                <div style="display: flex; align-items: center; gap: 1.25rem;">
-                    <div style="width: 52px; height: 52px; background: {{ $item['direction'] == 'in' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
-                        @if($item['direction'] == 'in')
-                            <span style="font-size: 20px;">💵</span>
-                        @else
-                            <span style="font-size: 20px;">🛍️</span>
-                        @endif
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                @forelse($history as $item)
+                <div class="transaction-item" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 1.35rem; display: flex; align-items: center; justify-content: space-between; transition: 0.3s; cursor: default;">
+                    <div style="display: flex; align-items: center; gap: 1.25rem;">
+                        <div style="width: 52px; height: 52px; background: {{ $item['direction'] == 'in' ? 'linear-gradient(135deg, rgba(34, 197, 94, 0.2) 0%, rgba(34, 197, 94, 0.05) 100%)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }};">
+                            @if($item['direction'] == 'in')
+                                <span style="font-size: 20px;">💵</span>
+                            @else
+                                <span style="font-size: 20px;">🛍️</span>
+                            @endif
+                        </div>
+                        <div>
+                            <h4 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 4px; letter-spacing: -0.3px;">{{ $item['type'] }}</h4>
+                            <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">{{ $item['description'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <h4 style="font-size: 15px; font-weight: 900; color: white; margin-bottom: 4px; letter-spacing: -0.3px;">{{ $item['type'] }}</h4>
-                        <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">{{ $item['description'] }} • {{ (new \DateTime($item['date']))->format('d/m/Y') }}</p>
+                    <div style="text-align: right;">
+                        <p style="font-size: 17px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }}; letter-spacing: -0.5px;">
+                            {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
+                        </p>
+                        <div style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 6px; margin-top: 6px;">
+                            <span style="font-size: 9px; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'var(--text-muted)' }}; font-weight: 900; text-transform: none; letter-spacing: 0.5px;">{{ $item['status'] }}</span>
+                        </div>
                     </div>
                 </div>
-                <div style="text-align: right;">
-                    <p style="font-size: 17px; font-weight: 950; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'white' }}; letter-spacing: -0.5px;">
-                        {{ $item['direction'] == 'in' ? '+' : '-' }} R$ {{ number_format($item['amount'], 2, ',', '.') }}
-                    </p>
-                    <div style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; background: {{ $item['direction'] == 'in' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(255, 255, 255, 0.05)' }}; border-radius: 6px; margin-top: 6px;">
-                        <span style="font-size: 9px; color: {{ $item['direction'] == 'in' ? '#22c55e' : 'var(--text-muted)' }}; font-weight: 900; text-transform: none; letter-spacing: 0.5px;">{{ $item['status'] }}</span>
-                    </div>
+                @empty
+                <div style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.01); border-radius: 32px; border: 2px dashed rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1.25rem;">
+                    <div style="font-size: 48px; opacity: 0.2;">📭</div>
+                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Você ainda não possui transações registradas.</p>
                 </div>
+                @endforelse
             </div>
-            @empty
-            <div style="text-align: center; padding: 5rem 2rem; background: rgba(255,255,255,0.01); border-radius: 32px; border: 2px dashed rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; gap: 1.25rem;">
-                <div style="font-size: 48px; opacity: 0.2;">📭</div>
-                <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Você ainda não possui transações registradas.</p>
-            </div>
-            @endforelse
         </div>
 
         <!-- Deposit Modal -->
