@@ -98,8 +98,9 @@
                                 @csrf
                                 <button type="submit" style="background: var(--success); border: none; color: white; padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Aprovar</button>
                             </form>
-                            <form action="{{ route('admin.withdrawals.reject', $withdrawal->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Tem certeza que deseja recusar este saque?')">
+                            <form action="{{ route('admin.withdrawals.reject', $withdrawal->id) }}" method="POST" style="display: inline;" onsubmit="let reason = prompt('Informe o motivo da recusa:'); if(!reason) return false; this.reason.value = reason; return true;">
                                 @csrf
+                                <input type="hidden" name="reason" value="">
                                 <button type="submit" style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2); color: var(--danger); padding: 6px 12px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'">Recusar</button>
                             </form>
                         </div>
