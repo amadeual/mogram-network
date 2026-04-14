@@ -29,21 +29,6 @@
     {{-- ===== SIDEBAR ===== --}}
     <aside class="sidebar" id="mogram_sidebar">
 
-        {{-- Mobile sidebar header --}}
-        <div class="sidebar-mobile-header mobile-only">
-            <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap: 10px; text-decoration: none;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarMobGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGrad)" />
-                    <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
-                </svg>
-                <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">Mogram</span>
-            </a>
-            <button class="sidebar-close-btn" onclick="closeMogramSidebar()" aria-label="Close menu">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-            </button>
-        </div>
-
         <div class="sidebar-header desktop-only" style="display: flex; align-items: center; padding: 0.5rem 0.75rem 1.0rem;">
             <a href="{{ route('dashboard') }}" class="sidebar-logo" style="display: flex; align-items: center; gap: 12px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
