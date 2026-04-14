@@ -312,8 +312,10 @@
         }
         .responsive-grid-feed {
             grid-template-columns: 1fr !important;
-            padding: 0 0.75rem 5rem !important;
-            margin-top: 5rem !important;
+            padding: 0 0.5rem 5rem !important;
+            margin-top: 4rem !important;
+            display: flex !important;
+            flex-direction: column !important;
         }
         .community-post-box {
             padding: 1rem !important;
@@ -321,12 +323,16 @@
             margin-bottom: 1.5rem !important;
         }
         .post-create-footer {
-            gap: 0.25rem !important;
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 1rem !important;
         }
         .mogram-btn-primary {
-            padding: 0.6rem 0.8rem !important;
-            font-size: 11px !important;
-            white-space: nowrap !important;
+            padding: 0.8rem !important;
+            font-size: 13px !important;
+            width: 100% !important;
+            text-align: center !important;
+            display: block !important;
         }
         .post-card {
             border-radius: 18px !important;
