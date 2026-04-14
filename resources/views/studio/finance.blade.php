@@ -214,7 +214,7 @@
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="4"><polyline points="20 6 9 17 4 12"/></svg>
                              </div>
                              <h4 style="font-size: 20px; font-weight: 950; color: white; margin-bottom: 6px;">PIX</h4>
-                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Brasil (Instantâneo)</p>
+                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Brasil (Até 24hrs)</p>
                         </div>
                         <div id="redotpay_card" onclick="selectMethod('redotpay')" style="flex: 1; background: #151621; border: 2.5px solid transparent; border-radius: 28px; padding: 2.5rem; cursor: pointer; transition: 0.3s; position: relative;">
                              <h4 style="font-size: 20px; font-weight: 950; color: white; margin-bottom: 6px;">RedotPay</h4>

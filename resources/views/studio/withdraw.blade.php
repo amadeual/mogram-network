@@ -88,7 +88,7 @@
                                 <img src="https://upload.wikimedia.org/wikipedia/commons/a/a2/Logo_Pix.png" style="width: 32px; height: 32px; object-fit: contain;">
                              </div>
                              <h4 style="font-size: 18px; font-weight: 950; color: white; margin-bottom: 4px;">PIX</h4>
-                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Brasil (Instantâneo)</p>
+                             <p style="font-size: 12px; color: var(--text-muted); font-weight: 700;">Brasil (Até 24hrs)</p>
                         </div>
                         <!-- Redotpay Card -->
                         <div id="redotpay_card" onclick="selectMethod('redotpay')" style="flex: 1; background: rgba(255,255,255,0.03); border: 2px solid transparent; border-radius: 24px; padding: 2rem; cursor: pointer; position: relative; transition: 0.3s;">
