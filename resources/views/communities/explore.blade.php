@@ -6,52 +6,46 @@
 <div class="app-layout" style="background: #000; color: white; font-family: 'Inter', sans-serif; min-height: 100vh;">
     @include('partials.sidebar')
 
-    <main class="main-content" style="margin-left: 280px; width: calc(100% - 280px); min-height: 100vh; display: flex; flex-direction: column;">
+    <main class="main-content">
         
         <!-- Premium Header -->
-        <header style="height: 70px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
+        <header class="communities-explore-header" style="border-bottom: 1px solid rgba(255,255,255,0.03); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between;">
             <div style="display: flex; align-items: center; gap: 30px;">
                 <h2 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Explorar</h2>
                 <nav style="display: flex; gap: 24px;">
-                    <a href="{{ route('communities.my') }}" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; font-weight: 700;">Minhas Comunidades</a>
+                    <a href="{{ route('communities.my') }}" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; font-weight: 700;">Minhas</a>
                     <a href="{{ route('chat.index') }}" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; font-weight: 700;">Mensagens</a>
-                    <a href="{{ route('studio.dashboard') }}" style="color: rgba(255,255,255,0.6); text-decoration: none; font-size: 14px; font-weight: 700;">Painel</a>
                 </nav>
             </div>
             
             <div style="display: flex; align-items: center; gap: 20px;">
-                <div style="width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                </div>
                 <img src="{{ Auth::user()->avatar ? Storage::url(Auth::user()->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.Auth::user()->name }}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.1);">
             </div>
         </header>
 
-        <div style="flex: 1; padding: 60px 5%; max-width: 1400px; margin: 0 auto; width: 100%;">
+        <div style="flex: 1; padding: 40px 5%; max-width: 1400px; margin: 0 auto; width: 100%;">
             
             <!-- Hero Search Section -->
             <div style="text-align: center; margin-bottom: 60px;">
-                <h1 style="font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">Explorar Comunidades</h1>
-                <p style="font-size: 18px; color: rgba(255,255,255,0.6); font-weight: 500; margin-bottom: 40px;">Encontre e conecte-se com os melhores criadores do Mogram. Acesse<br>conteúdos exclusivos e cresça com a sua tribo.</p>
+                <h1 class="communities-hero-title" style="font-size: 48px; font-weight: 900; letter-spacing: -2px; margin-bottom: 20px;">Explorar Comunidades</h1>
+                <p class="communities-hero-subtitle" style="font-size: 18px; color: rgba(255,255,255,0.6); font-weight: 500; margin-bottom: 40px;">Encontre e conecte-se com os melhores criadores do Mogram.</p>
                 
                 <form action="{{ route('communities.explore') }}" method="GET" style="max-width: 700px; margin: 0 auto; position: relative; margin-bottom: 30px;">
-                    <div style="position: relative; display: flex; align-items: center;">
+                    <div style="position: relative; display: flex; align-items: center; flex-direction: inherit;" class="communities-search-container">
                         <span style="position: absolute; left: 24px; color: rgba(255,255,255,0.3);">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
                         </span>
-                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar por nome, nicho ou criador..." 
-                               style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 20px 140px 20px 60px; color: white; font-size: 16px; font-weight: 600; outline: none; transition: 0.3s; focus: border-color: #3390ec;">
-                        <button type="submit" style="position: absolute; right: 10px; background: #3390ec; color: white; border: none; border-radius: 50px; padding: 12px 30px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#2b7bcc'" onmouseout="this.style.background='#3390ec'">Buscar</button>
+                        <input type="text" name="search" value="{{ request('search') }}" placeholder="Pesquisar..." class="communities-search-input"
+                               style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 50px; padding: 20px 140px 20px 60px; color: white; font-size: 16px; font-weight: 600; outline: none; transition: 0.3s;">
+                        <button type="submit" class="communities-search-btn" style="position: absolute; right: 10px; background: #3390ec; color: white; border: none; border-radius: 50px; padding: 12px 30px; font-weight: 800; font-size: 14px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='#2b7bcc'" onmouseout="this.style.background='#3390ec'">Buscar</button>
                     </div>
                 </form>
 
                 <!-- Category Pills -->
-                <div style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
+                <div class="communities-category-pills" style="display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;">
                     @foreach(['Todos', 'Games', 'Negócios', 'Arte', 'Música', 'Estilo de Vida', 'Tecnologia'] as $cat)
                         <a href="{{ route('communities.explore', ['category' => $cat]) }}" 
-                           style="padding: 10px 24px; border-radius: 50px; background: {{ request('category', 'Todos') == $cat ? '#3390ec' : 'rgba(255,255,255,0.04)' }}; border: 1px solid rgba(255,255,255,0.05); color: {{ request('category', 'Todos') == $cat ? 'white' : 'rgba(255,255,255,0.6)' }}; text-decoration: none; font-size: 14px; font-weight: 700; transition: 0.2s;"
-                           onmouseover="this.style.background='rgba(51, 144, 236, 0.1)'; this.style.color='white'"
-                           onmouseout="this.style.background='{{ request('category', 'Todos') == $cat ? '#3390ec' : 'rgba(255,255,255,0.04)' }}'; this.style.color='{{ request('category', 'Todos') == $cat ? 'white' : 'rgba(255,255,255,0.6)' }}'">
+                           style="padding: 10px 24px; border-radius: 50px; background: {{ request('category', 'Todos') == $cat ? '#3390ec' : 'rgba(255,255,255,0.04)' }}; border: 1px solid rgba(255,255,255,0.05); color: {{ request('category', 'Todos') == $cat ? 'white' : 'rgba(255,255,255,0.6)' }}; text-decoration: none; font-size: 14px; font-weight: 700; transition: 0.2s; white-space: nowrap;">
                            {{ $cat }}
                         </a>
                     @endforeach
@@ -65,12 +59,12 @@
                         <span style="color: #3390ec;">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
                         </span>
-                        <h2 style="font-size: 24px; font-weight: 900; letter-spacing: -0.5px;">Recomendados para Você</h2>
+                        <h2 class="communities-section-title" style="font-size: 24px; font-weight: 900; letter-spacing: -0.5px;">Recomendados</h2>
                     </div>
                     <a href="#" style="color: #3390ec; text-decoration: none; font-weight: 800; font-size: 13px;">Ver tudo</a>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
+                <div class="premium-card-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;">
                     @forelse($recommended as $c)
                     <div class="premium-card">
                         <div style="height: 180px; position: relative;">
@@ -101,9 +95,6 @@
 
                                 <div style="display: flex; gap: 10px;">
                                     <a href="{{ route('communities.show', $c->slug) }}" style="flex: 1; background: #3390ec; color: white; text-align: center; padding: 14px; border-radius: 14px; font-weight: 800; font-size: 13px; text-decoration: none; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Participar</a>
-                                    <button style="width: 45px; height: 45px; border-radius: 14px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -116,26 +107,19 @@
             <!-- Categories Grid -->
             <div style="margin-bottom: 100px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 30px;">
-                    <h2 style="font-size: 24px; font-weight: 900; letter-spacing: -0.5px;">Descobrir Categorias</h2>
-                    <div style="display: flex; gap: 10px;">
-                        <button class="arrow-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
-                        <button class="arrow-btn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
-                    </div>
+                    <h2 class="communities-section-title" style="font-size: 24px; font-weight: 900; letter-spacing: -0.5px;">Descobrir Mais</h2>
                 </div>
 
-                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+                <div class="categories-grid-small" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
                     @foreach($allCommunities->skip(3)->take(8) as $c)
                     <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 15px; display: flex; gap: 15px; align-items: center; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.04)'; this.style.borderColor='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.05)'">
                         <div style="width: 80px; height: 80px; border-radius: 12px; overflow: hidden; flex-shrink: 0; position: relative;">
                             <img src="{{ $c->avatar ? Storage::url($c->avatar) : 'https://api.dicebear.com/7.x/initials/svg?seed='.$c->name }}" style="width: 100%; height: 100%; object-fit: cover;">
-                            <div style="position: absolute; top: 5px; right: 5px; background: #22c55e; color: white; font-size: 7px; font-weight: 940; padding: 2px 5px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.2);">
-                                {{ $c->price > 0 ? 'R$ '.number_format($c->price, 0) : 'GRATUITO' }}
-                            </div>
                         </div>
                         <div style="flex: 1; min-width: 0;">
                             <h4 style="font-size: 15px; font-weight: 800; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ $c->name }}</h4>
                             <p style="font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700; margin-bottom: 8px;">{{ number_format($c->members_count, 0, ',', '.') }} membros</p>
-                            <a href="{{ route('communities.show', $c->slug) }}" style="color: #3390ec; font-size: 11px; font-weight: 900; text-decoration: none;">Ver Detalhes</a>
+                            <a href="{{ route('communities.show', $c->slug) }}" style="color: #3390ec; font-size: 11px; font-weight: 900; text-decoration: none;">Ver</a>
                         </div>
                     </div>
                     @endforeach
@@ -143,20 +127,17 @@
             </div>
 
             <!-- Create Community Banner -->
-            <div style="background: linear-gradient(135deg, #110e2e 0%, #05040d 100%); border: 1px solid rgba(51,144,236,0.1); border-radius: 40px; padding: 60px; text-align: center; position: relative; overflow: hidden;">
-                <div style="position: absolute; top: -100px; right: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(51,144,236,0.1) 0%, transparent 70%); border-radius: 50%;"></div>
-                <div style="position: absolute; bottom: -100px; left: -100px; width: 300px; height: 300px; background: radial-gradient(circle, rgba(51,144,236,0.05) 0%, transparent 70%); border-radius: 50%;"></div>
-                
-                <h2 style="font-size: 36px; font-weight: 900; margin-bottom: 15px; letter-spacing: -1px;">Crie sua própria comunidade</h2>
-                <p style="font-size: 16px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 40px;">Comece a monetizar seu conteúdo hoje mesmo com as melhores<br>ferramentas do mercado.</p>
-                <button onclick="openCreateModal()" style="background: #3390ec; color: white; border: none; border-radius: 50px; padding: 18px 45px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3); transition: 0.3s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Criar agora</button>
+            <div style="background: linear-gradient(135deg, #110e2e 0%, #05040d 100%); border: 1px solid rgba(51,144,236,0.1); border-radius: 40px; padding: 60px 20px; text-align: center; position: relative; overflow: hidden;">
+                <h2 style="font-size: clamp(1.5rem, 5vw, 2.25rem); font-weight: 900; margin-bottom: 15px; letter-spacing: -1px;">Crie sua comunidade</h2>
+                <p style="font-size: 16px; color: rgba(255,255,255,0.5); font-weight: 600; margin-bottom: 40px;">Comece a monetizar seu conteúdo hoje.</p>
+                <button onclick="openCreateModal()" style="background: #3390ec; color: white; border: none; border-radius: 50px; padding: 18px 45px; font-weight: 900; font-size: 15px; cursor: pointer; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3); transition: 0.3s;">Criar agora</button>
             </div>
 
         </div>
 
         <!-- Detailed Footer -->
         <footer style="background: #000; border-top: 1px solid rgba(255,255,255,0.03); padding: 80px 5% 40px;">
-            <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px;">
+            <div class="communities-footer" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 60px;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 25px;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">

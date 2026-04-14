@@ -1291,60 +1291,141 @@ section { padding: 4rem 0; }
 }
 
 /* ===== STUDIO MOBILE OPTIMIZATION ===== */
-@media (max-width: 768px) {
+/* ===== ADDITIONAL MOBILE OPTIMIZATIONS ===== */
+@media (max-width: 991px) {
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-top: 60px !important;
+    }
+    
+    /* Responsive Grids */
+    .responsive-grid-3, .responsive-grid-2, .responsive-grid-4 {
+        grid-template-columns: 1fr !important;
+        gap: 1.25rem !important;
+    }
+    
+    /* Studio Fixes */
     .studio-header {
         padding: 1.5rem 1rem !important;
         flex-direction: column !important;
         align-items: flex-start !important;
         gap: 1rem !important;
-        height: auto !important;
     }
-    .studio-header-btn {
-        width: 100%;
-        justify-content: center;
+    
+    .studio-header a, .studio-header button {
+        width: 100% !important;
+        justify-content: center !important;
     }
+    
     .studio-body {
         padding: 0 1rem 2rem !important;
     }
-    .studio-main-pad {
-        padding: 1.5rem 1rem !important;
-    }
-    .studio-grid-3 {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-    .studio-grid-4 {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-    .studio-grid-2 {
-        grid-template-columns: 1fr !important;
-        gap: 1rem !important;
-    }
-    .studio-grid-custom {
-        grid-template-columns: 1fr !important;
-        gap: 1.5rem !important;
-    }
+    
     .studio-card-pad {
-        padding: 1.5rem 1rem !important;
-        margin-bottom: 1.5rem !important;
+        padding: 1.25rem 1rem !important;
+        border-radius: 20px !important;
     }
-    .studio-huge-stat {
-        font-size: 2.5rem !important;
-    }
+    
     .studio-table {
         display: block !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+    }
+    
+    /* Community Exploration Fixes */
+    .communities-explore-header {
+        padding: 0 1rem !important;
+        height: auto !important;
+        padding-top: 1rem !important;
+        padding-bottom: 1rem !important;
+        flex-direction: column !important;
+        gap: 1rem !important;
+        position: relative !important;
+    }
+    
+    .communities-explore-header nav {
         width: 100% !important;
         overflow-x: auto !important;
-        white-space: nowrap !important;
+        padding-bottom: 5px !important;
+        justify-content: flex-start !important;
     }
-    /* Provide sufficient breathing room to studio layout to prevent cutoff when bottom-bar nav exists */
-    .app-layout .main-content {
-        padding-bottom: 60px !important;
+    
+    .communities-hero-title {
+        font-size: 2rem !important;
     }
-    .create-grid {
+    
+    .communities-hero-subtitle {
+        font-size: 1rem !important;
+    }
+    
+    .communities-search-input {
+        padding-right: 20px !important;
+    }
+    
+    .communities-search-btn {
+        position: static !important;
+        width: 100% !important;
+        margin-top: 10px !important;
+    }
+    
+    .communities-category-pills {
+        justify-content: flex-start !important;
+        overflow-x: auto !important;
+        padding-bottom: 10px !important;
+        margin: 0 -1rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1.5rem !important;
+    }
+    
+    .communities-section-title {
+        font-size: 1.5rem !important;
+    }
+    
+    .premium-card-grid {
         grid-template-columns: 1fr !important;
         gap: 1.5rem !important;
-        padding: 1.5rem !important;
+    }
+    
+    .categories-grid-small {
+        grid-template-columns: 1fr !important;
+    }
+    
+    .communities-footer {
+        grid-template-columns: 1fr !important;
+        gap: 3rem !important;
+        text-align: center !important;
+    }
+    
+    .communities-footer > div {
+        align-items: center !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .responsive-grid-feed {
+        grid-template-columns: 1fr !important;
+        padding: 0 1rem 5rem !important;
+    }
+
+    .main-content {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding-top: 70px !important;
+        padding-bottom: 80px !important;
+    }
+
+    .studio-header-btn {
+        padding: 0.6rem 1rem !important;
+        font-size: 12px !important;
+    }
+
+    .studio-body, .feed-container {
+        padding: 1.25rem !important;
     }
 }
+
+/* Utilities */
+.responsive-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+.responsive-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.responsive-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; }

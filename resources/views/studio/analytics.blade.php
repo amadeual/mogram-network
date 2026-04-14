@@ -7,16 +7,17 @@
     <!-- Studio Sidebar -->
     @include('partials.studio-sidebar')
 
-    <main class="main-content studio-main-pad" style="background: #0b0a15; padding: 2.5rem 3rem;">
-        <header class="studio-header" style="margin-bottom: 3rem; display: flex; justify-content: space-between; align-items: end;">
+    <main class="main-content">
+        <header class="studio-header" style="margin-bottom: 3rem;">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Analytics Geral</h1>
-                <p style="color: var(--text-muted); font-size: 15px;">Monitoramento completo do seu desempenho no Mogram.</p>
+                <p style="color: var(--text-muted); font-size: 15px;">Acompanhe o desempenho das suas tribos.</p>
             </div>
         </header>
 
-        <!-- Key Metrics -->
-        <div class="studio-grid-4" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="studio-body">
+            <!-- Key Metrics -->
+            <div class="responsive-grid-2" style="margin-bottom: 2.5rem;">
             <div class="premium-metric-card" style="--accent-color: #3390ec;">
                 <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Visualizações Totais</p>
                 <h3 style="font-size: 2.25rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ number_format($totalViews, 0, ',', '.') }}</h3>
@@ -35,7 +36,7 @@
             </div>
         </div>
 
-        <div class="studio-grid-2" style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 2rem;">
+        <div class="responsive-grid-feed" style="margin-top: 3rem;">
             <!-- Main Chart -->
             <div class="studio-card-pad" style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; padding: 2.5rem;">
                 <h3 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 3rem;">Evolução de Ganhos Semanal (Seg-Dom)</h3>

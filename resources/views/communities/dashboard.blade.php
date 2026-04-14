@@ -7,21 +7,21 @@
     @include('partials.sidebar')
 
     <main class="main-content">
-        <header style="height: 70px; padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-gray); background: rgba(11, 10, 21, 0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
+        <header class="studio-header" style="height: 70px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid var(--border-gray);">
             <div style="display: flex; align-items: center; gap: 1rem;">
                 <a href="{{ route('communities.show', $community->slug) }}" style="color: var(--text-muted); transition: 0.2s;" onmouseover="this.style.color='white'">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
                 </a>
-                <h2 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Gerenciar Comunidade</h2>
+                <h2 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Gerenciar</h2>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <button onclick="openEditModal()" class="mogram-btn-secondary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Editar Configurações</button>
+                <button onclick="openEditModal()" class="mogram-btn-secondary studio-header-btn" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">Configurações</button>
             </div>
         </header>
 
-        <div class="feed-container" style="padding: 2rem;">
+        <div class="studio-body">
             <!-- Stats -->
-            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 3rem;">
+            <div class="responsive-grid-2" style="margin-bottom: 3rem;">
                 <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem;">
                     <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; margin-bottom: 0.5rem; letter-spacing: 0.5px;">Membros Ativos</p>
                     <h3 style="font-size: 1.75rem; font-weight: 950; color: white;">{{ $community->subscriptions()->where('status', 'active')->count() }}</h3>
@@ -40,7 +40,7 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 350px; gap: 2rem;">
+            <div class="responsive-grid-feed">
                 <!-- Recent Members -->
                 <div style="background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2rem;">
                     <h3 style="font-size: 1.25rem; font-weight: 900; color: white; margin-bottom: 2rem;">Membros Recentes</h3>

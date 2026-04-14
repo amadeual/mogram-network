@@ -6,21 +6,21 @@
 <div class="app-layout">
     @include('partials.sidebar')
 
-    <main class="main-content" style="margin-left: 280px; width: calc(100% - 280px); min-height: 100vh; display: flex; flex-direction: column;">
-        <header style="height: 80px; padding: 0 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.03); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
+    <main class="main-content">
+        <header class="studio-header" style="border-bottom: 1px solid rgba(255,255,255,0.03); background: rgba(0,0,0,0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 1000;">
             <div>
                 <h2 style="font-size: 1.25rem; font-weight: 900; color: white; letter-spacing: -0.5px;">Minhas Comunidades</h2>
                 <div style="display: flex; gap: 1rem; margin-top: 4px;">
-                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Gerencie suas comunidades e assinaturas</span>
+                    <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Gerencie suas tribos e assinaturas</span>
                 </div>
             </div>
             <div style="display: flex; gap: 1rem;">
-                <a href="{{ route('communities.explore') }}" class="mogram-btn-secondary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='rgba(255,255,255,0.05)'">Explorar</a>
-                <button onclick="openCreateModal()" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; background: #3390ec; border: none; color: white; cursor: pointer; transition: 0.3s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">Criar nova</button>
+                <a href="{{ route('communities.explore') }}" class="mogram-btn-secondary studio-header-btn" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; text-decoration: none; color: white; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; display: flex; align-items: center; justify-content: center;">Explorar</a>
+                <button onclick="openCreateModal()" class="mogram-btn-primary studio-header-btn" style="padding: 0.75rem 1.5rem; border-radius: 12px; font-weight: 800; font-size: 13px; background: #3390ec; border: none; color: white; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center;">Criar nova</button>
             </div>
         </header>
 
-        <div style="flex: 1; padding: 40px 5%; max-width: 1400px; margin: 0 auto; width: 100%;">
+        <div class="studio-body">
             <!-- My Owned Communities -->
             <div style="margin-bottom: 5rem;">
                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2.5rem;">

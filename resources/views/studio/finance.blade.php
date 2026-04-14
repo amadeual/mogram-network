@@ -7,11 +7,11 @@
     <!-- Studio Sidebar -->
     @include("partials.studio-sidebar")
 
-    <main class="main-content studio-main-pad" style="flex: 1; background: #0b0a15; padding: 2.5rem 3rem; overflow-y: auto;">
+    <main class="main-content">
         
         <!-- Overview Section -->
-        <div id="overview_section">
-            <header class="studio-header" style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center;">
+        <div id="overview_section" class="studio-body" style="padding-top: 2.5rem;">
+            <header class="studio-header" style="margin-bottom: 2.5rem; display: flex; justify-content: space-between; align-items: center; padding: 0;">
                 <h1 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -2px;">Carteira</h1>
             </header>
 
@@ -43,7 +43,7 @@
                 <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: white; filter: blur(80px); opacity: 0.15;"></div>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+            <div class="responsive-grid-4" style="margin-bottom: 3rem;">
                 <!-- Conteúdo (Real) -->
                 <div class="premium-finance-card" style="background: #151621; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.5rem; transition: all 0.4s; cursor: pointer;">
                     <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">

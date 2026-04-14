@@ -8,12 +8,12 @@
     @include('partials.studio-sidebar')
 
     <!-- Main Content Area -->
-    <main class="main-content" style="flex: 1; background: #0b0a15; overflow-y: auto;">
+    <main class="main-content">
         <form id="create_post_form" action="{{ route('studio.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateAndSync()">
             @csrf
             
             <!-- Fixed Header -->
-            <header class="studio-header" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(11, 10, 21, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); padding: 1.5rem 3rem; display: flex; align-items: center; justify-content: space-between;">
+            <header class="studio-header" style="position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px); background: rgba(11, 10, 21, 0.8); border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; justify-content: space-between;">
                 <div>
                     <div style="display: flex; align-items: center; gap: 8px; font-size: 11px; color: var(--text-muted); font-weight: 800; text-transform: none; letter-spacing: 0.5px; margin-bottom: 4px;">
                         <span>Início</span>
@@ -22,18 +22,14 @@
                     </div>
                 </div>
                 <div style="display: flex; gap: 1rem;">
-                    <button type="button" class="mogram-btn-secondary" style="padding: 0.875rem 1.75rem; border-radius: 12px; font-weight: 850; font-size: 13px; display: flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); color: white;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
-                        Visualizar
-                    </button>
-                    <button type="submit" class="mogram-btn-primary" style="padding: 0.875rem 2rem; border-radius: 12px; font-weight: 950; font-size: 13px; display: flex; align-items: center; gap: 8px; border: none; cursor: pointer; background: #3390ec; color: white;">
+                    <button type="submit" class="mogram-btn-primary studio-header-btn" style="padding: 0.875rem 2rem; border-radius: 12px; font-weight: 950; font-size: 13px; display: flex; align-items: center; gap: 8px; border: none; cursor: pointer; background: #3390ec; color: white;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        Publicar Agora
+                        Publicar
                     </button>
                 </div>
             </header>
 
-            <div class="create-grid" style="padding: 3rem; display: grid; grid-template-columns: 1fr 340px; gap: 3rem;">
+            <div class="studio-body responsive-grid-feed" style="display: grid; grid-template-columns: 1fr 340px; gap: 3rem;">
                 
                 <!-- Left Side: Editor -->
                 <div style="display: flex; flex-direction: column; gap: 2.5rem;">

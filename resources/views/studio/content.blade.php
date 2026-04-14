@@ -8,10 +8,10 @@
     @include('partials.studio-sidebar')
 
     <main class="main-content" style="background: #0b0a15;">
-        <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
+        <header class="studio-header">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Gerenciar Conteúdo</h1>
-                <p style="color: var(--text-muted); font-size: 15px;">Visualize, edite e monitore o desempenho de suas publicações.</p>
+                <p style="color: var(--text-muted); font-size: 15px;">Visualize, edite e monitore suas publicações.</p>
             </div>
             <a href="{{ route('studio.create') }}" class="mogram-btn-primary" style="padding: 0.875rem 2rem; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 15px rgba(51, 144, 236, 0.4); border-radius: 12px; font-weight: 700; text-decoration: none; color: white;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
@@ -19,8 +19,8 @@
             </a>
         </header>
 
-        <div class="studio-body" style="padding: 0 3rem 3rem;">
-            <div class="metrics-grid studio-grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+        <div class="studio-body">
+            <div class="metrics-grid responsive-grid-3" style="margin-bottom: 2.5rem;">
                 <div class="premium-metric-card" style="padding: 1.5rem; --accent-color: #3390ec;">
                     <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Publicações Totais</p>
                     <h3 style="font-size: 2rem; font-weight: 950; color: white; margin: 0.75rem 0;">{{ $totalPosts }}</h3>

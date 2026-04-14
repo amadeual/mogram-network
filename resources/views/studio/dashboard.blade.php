@@ -9,7 +9,7 @@
 
     <!-- Studio Content -->
     <main class="main-content" style="background: #0b0a15;">
-        <header class="studio-header" style="padding: 2.5rem 3rem 1.5rem; display: flex; align-items: start; justify-content: space-between;">
+        <header class="studio-header">
             <div>
                 <h1 style="font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 0.5rem; letter-spacing: -1px;">Dashboard do Studio</h1>
                 <p style="color: var(--text-muted); font-size: 15px;">Acompanhe o desempenho e gerencie seu conteúdo.</p>
@@ -20,9 +20,9 @@
             </a>
         </header>
 
-        <div class="studio-body" style="padding: 0 3rem 3rem;">
+        <div class="studio-body">
             <!-- Metrics Grid -->
-            <div class="studio-grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 2.5rem;">
+            <div class="responsive-grid-3" style="margin-bottom: 2.5rem;">
                 <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 1.75rem;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                         <p style="font-size: 11px; font-weight: 800; color: var(--text-muted); text-transform: none;">Publicações Totais</p>

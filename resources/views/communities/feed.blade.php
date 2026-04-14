@@ -35,7 +35,7 @@
             </div>
         </div>
 
-        <div style="margin-top: 4rem; display: grid; grid-template-columns: 1fr 300px; gap: 2rem; padding: 0 2rem 5rem;">
+        <div style="margin-top: 4rem; display: grid; grid-template-columns: 1fr 300px; gap: 2rem; padding: 0 2rem 5rem;" class="responsive-grid-feed">
             <!-- Main Content -->
             <div class="community-feed">
                 <!-- Create Post (if owner or permission, assuming members can post for now as per Image 4) -->
