@@ -155,8 +155,7 @@ class AdminController extends Controller
     public function contents()
     {
         $posts = Post::with('user')->latest()->paginate(15);
-        $lives = Live::with('user')->latest()->take(10)->get();
-        return view('admin.content', compact('posts', 'lives'));
+        return view('admin.content', compact('posts'));
     }
 
     public function deletePost($id)
@@ -166,12 +165,32 @@ class AdminController extends Controller
         return back()->with('success', 'Post removido com sucesso!');
     }
 
+    public function lives()
+    {
+        $lives = Live::with('user')->latest()->paginate(15);
+        return view('admin.lives', compact('lives'));
+    }
+
+    public function finishLive(Request $request, $id)
+    {
+        $live = Live::findOrFail($id);
+        $live->update([
+            'status' => 'finished',
+            'ended_at' => now(),
+            'termination_reason' => $request->reason ?? 'Finalizada pelo administrador'
+        ]);
+        return back()->with('success', 'Live finalizada pelo administrador.');
+    }
+
+
     public function deleteLive($id)
     {
         $live = Live::findOrFail($id);
         $live->delete();
-        return back()->with('success', 'Live removida com sucesso!');
+        return back()->with('success', 'Live removida do sistema.');
     }
+
+
 
 
     public function withdrawals()

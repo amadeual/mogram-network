@@ -147,6 +147,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/content', [App\Http\Controllers\AdminController::class, 'contents'])->name('admin.content');
         Route::delete('/content/post/{id}', [App\Http\Controllers\AdminController::class, 'deletePost'])->name('admin.content.delete_post');
         Route::delete('/content/live/{id}', [App\Http\Controllers\AdminController::class, 'deleteLive'])->name('admin.content.delete_live');
+        Route::get('/lives', [App\Http\Controllers\AdminController::class, 'lives'])->name('admin.lives');
+        Route::post('/lives/{id}/finish', [App\Http\Controllers\AdminController::class, 'finishLive'])->name('admin.lives.finish');
+
 
         Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals');
         Route::post('/withdrawals/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
