@@ -40,23 +40,23 @@
                     <td style="padding: 1.5rem; color: rgba(255,255,255,0.5); font-size: 13px; font-weight: 700;">#{{ $ticket->id }}</td>
                     <td style="padding: 1.5rem;">
                         <div style="display: flex; align-items: center; gap: 10px;">
-                            @if($ticket->user->avatar)
-                                <img src="{{ Storage::url($ticket->user->avatar) }}" style="width: 32px; height: 32px; border-radius: 8px;">
+                            @if(optional($ticket->user)->avatar)
+                                <img src="{{ \Illuminate\Support\Facades\Storage::url($ticket->user->avatar) }}" style="width: 32px; height: 32px; border-radius: 8px;">
                             @else
-                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ $ticket->user->name }}" style="width: 32px; height: 32px; border-radius: 8px;">
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ urlencode(optional($ticket->user)->name ?? 'Anonimo') }}" style="width: 32px; height: 32px; border-radius: 8px;">
                             @endif
                             <div>
-                                <p style="color: white; font-size: 13px; font-weight: 800; margin: 0;">{{ $ticket->user->name }}</p>
-                                <p style="color: var(--text-muted); font-size: 10px; font-weight: 600; margin: 0;">@<span>{{ $ticket->user->username }}</span></p>
+                                <p style="color: white; font-size: 13px; font-weight: 800; margin: 0;">{{ optional($ticket->user)->name ?? 'Usuário Removido' }}</p>
+                                <p style="color: var(--text-muted); font-size: 10px; font-weight: 600; margin: 0;">@<span>{{ optional($ticket->user)->username ?? 'desconhecido' }}</span></p>
                             </div>
                         </div>
                     </td>
                     <td style="padding: 1.5rem;">
-                        <p style="color: white; font-size: 13px; font-weight: 800; margin-bottom: 2px;">{{ $ticket->subject }}</p>
-                        <p style="color: rgba(255,255,255,0.3); font-size: 11px; font-weight: 600;">{{ \Illuminate\Support\Str::limit($ticket->lastMessage?->message, 50) }}</p>
+                        <p style="color: white; font-size: 13px; font-weight: 800; margin-bottom: 2px;">{{ $ticket->subject ?? 'Sem Assunto' }}</p>
+                        <p style="color: rgba(255,255,255,0.3); font-size: 11px; font-weight: 600;">{{ $ticket->lastMessage?->message ? \Illuminate\Support\Str::limit($ticket->lastMessage->message, 50) : 'Sem mensagens ou detalhes' }}</p>
                     </td>
                     <td style="padding: 1.5rem;">
-                        <span class="category-tag {{ \Illuminate\Support\Str::slug($ticket->category) }}">{{ $ticket->category }}</span>
+                        <span class="category-tag {{ \Illuminate\Support\Str::slug($ticket->category ?? 'outros') }}">{{ $ticket->category ?? 'Outros' }}</span>
                     </td>
                     <td style="padding: 1.5rem;">
                         <div style="display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 900; color: {{ $ticket->status == 'Aberto' ? '#22c55e' : ($ticket->status == 'Resolvido' ? 'rgba(255,255,255,0.3)' : '#ffd600') }}">
