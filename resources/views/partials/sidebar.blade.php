@@ -13,8 +13,8 @@
         {{-- Logo centered --}}
         <a href="{{ route('dashboard') }}" class="mobile-logo" style="text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
-                <defs><linearGradient id="mobileLogoGradFeed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradFeed)" />
+                <defs><linearGradient id="mobileLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGrad)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
             <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.15rem;">Mogram</span>
@@ -27,14 +27,14 @@
     </div>
 
     {{-- ===== SIDEBAR ===== --}}
-    <aside class="sidebar collapsed" id="mogram_sidebar">
+    <aside class="sidebar" id="mogram_sidebar">
 
         {{-- Mobile sidebar header --}}
         <div class="sidebar-mobile-header mobile-only">
             <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap: 10px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarMobGradFeed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradFeed)" />
+                    <defs><linearGradient id="sidebarMobGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGrad)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">Mogram</span>
@@ -46,8 +46,8 @@
 
         <a href="{{ route('dashboard') }}" class="sidebar-logo desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0 0.75rem 1.5rem; text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
-                <defs><linearGradient id="sidebarLogoGradFeed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradFeed)" />
+                <defs><linearGradient id="sidebarLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGrad)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
             <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Mogram</span>
@@ -106,11 +106,10 @@
                 <span>Mogram Studio</span>
             </a>
 
-            {{-- Collapse Toggle (with Burger Icon) --}}
+            {{-- Collapse Toggle (Icon only) --}}
             <div class="sidebar-divider desktop-only"></div>
-            <button onclick="toggleMogramSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start; cursor: pointer;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="pointer-events: none;"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                <span style="margin-left: 12px; pointer-events: none;">Recolher</span>
+            <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; padding: 0.5rem 0.875rem; cursor: pointer; justify-content: flex-start;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
         </nav>
 
@@ -134,24 +133,23 @@
     </aside>
 
 <script>
-window.toggleMogramSidebar = function() {
+function toggleMogramSidebar() {
     const sidebar  = document.getElementById('mogram_sidebar');
     const overlay  = document.getElementById('mogram_sidebar_overlay');
     const burgerBtn = document.getElementById('mogram_mobile_btn');
     if (!sidebar || !overlay) return;
-    
     const isOpen = sidebar.classList.contains('active');
     if (isOpen) {
-        window.closeMogramSidebar();
+        closeMogramSidebar();
     } else {
         sidebar.classList.add('active');
         overlay.classList.add('active');
         if (burgerBtn) burgerBtn.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
-};
+}
 
-window.closeMogramSidebar = function() {
+function closeMogramSidebar() {
     const sidebar   = document.getElementById('mogram_sidebar');
     const overlay   = document.getElementById('mogram_sidebar_overlay');
     const burgerBtn = document.getElementById('mogram_mobile_btn');
@@ -159,38 +157,27 @@ window.closeMogramSidebar = function() {
     if (overlay) overlay.classList.remove('active');
     if (burgerBtn) burgerBtn.classList.remove('open');
     document.body.style.overflow = '';
-};
+}
 
-window.toggleMogramSidebarCollapse = function() {
+function toggleSidebarCollapse() {
     const sidebar = document.getElementById('mogram_sidebar');
     if (!sidebar) return;
-    
     const isCollapsed = sidebar.classList.toggle('collapsed');
     localStorage.setItem('sidebar_collapsed', isCollapsed);
-    
     if (isCollapsed) {
         document.body.classList.add('sidebar-is-collapsed');
     } else {
         document.body.classList.remove('sidebar-is-collapsed');
     }
-};
+}
 
-// Auto-init for Feed
+// Init
 (function() {
-    const stored = localStorage.getItem('sidebar_collapsed');
-    const isCollapsed = stored === null ? true : (stored === 'true');
-    
-    if (window.innerWidth > 991) {
+    const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+    if (isCollapsed && window.innerWidth > 991) {
         const sidebar = document.getElementById('mogram_sidebar');
-        if (sidebar) {
-            if (isCollapsed) {
-                sidebar.classList.add('collapsed');
-                document.body.classList.add('sidebar-is-collapsed');
-            } else {
-                sidebar.classList.remove('collapsed');
-                document.body.classList.remove('sidebar-is-collapsed');
-            }
-        }
+        if (sidebar) sidebar.classList.add('collapsed');
+        document.body.classList.add('sidebar-is-collapsed');
     }
 })();
 </script>

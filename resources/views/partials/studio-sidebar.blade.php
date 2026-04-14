@@ -1,10 +1,10 @@
     {{-- ===== SIDEBAR OVERLAY (mobile backdrop) ===== --}}
-    <div class="sidebar-overlay" id="studio_mogram_overlay" onclick="closeStudioMogramSidebar()"></div>
+    <div class="sidebar-overlay" id="studio_mogram_overlay" onclick="closeStudioSidebar()"></div>
 
     {{-- ===== MOBILE TOP BAR ===== --}}
     <div class="mobile-top-bar mobile-only">
         {{-- Burger Button --}}
-        <button class="burger-btn" id="studio_mobile_btn" onclick="toggleStudioMogramSidebar()" aria-label="Toggle menu">
+        <button class="burger-btn" id="studio_mobile_btn" onclick="toggleStudioSidebar()" aria-label="Toggle menu">
             <span class="burger-line"></span>
             <span class="burger-line"></span>
             <span class="burger-line"></span>
@@ -13,8 +13,8 @@
         {{-- Logo centered --}}
         <a href="{{ route('dashboard') }}" class="mobile-logo" style="text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
-                <defs><linearGradient id="mobileLogoGradStudioFinalV3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradStudioFinalV3)" />
+                <defs><linearGradient id="mobileLogoGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradStudioFinal)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
             <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.15rem;">Studio</span>
@@ -29,13 +29,13 @@
         <div class="sidebar-mobile-header mobile-only">
             <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap: 10px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarMobGradStudioFinalV3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradStudioFinalV3)" />
+                    <defs><linearGradient id="sidebarMobGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradStudioFinal)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">Studio</span>
             </a>
-            <button class="sidebar-close-btn" onclick="closeStudioMogramSidebar()" aria-label="Close menu">
+            <button class="sidebar-close-btn" onclick="closeStudioSidebar()" aria-label="Close menu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
@@ -44,8 +44,8 @@
         <div style="padding: 0 0.625rem 1.5rem;" class="desktop-only">
             <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; gap: 12px; padding: 0.5rem; text-decoration: none; margin-bottom: 0.5rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarLogoGradStudioFinalV3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioFinalV3)" />
+                    <defs><linearGradient id="sidebarLogoGradStudioFinal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioFinal)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Studio</span>
@@ -101,11 +101,10 @@
                 <span>Configurações</span>
             </a>
 
-            {{-- Collapse Toggle --}}
+            {{-- Collapse Toggle (Icon only) --}}
             <div class="sidebar-divider desktop-only"></div>
-            <button onclick="toggleStudioMogramSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start; cursor: pointer;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="pointer-events: none;"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                <span style="margin-left: 12px; pointer-events: none;">Recolher</span>
+            <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; padding: 0.5rem 0.875rem; cursor: pointer; justify-content: flex-start;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
             </button>
         </nav>
 
@@ -129,24 +128,23 @@
     </aside>
 
 <script>
-window.toggleStudioMogramSidebar = function() {
+function toggleStudioSidebar() {
     const sidebar  = document.getElementById('studio_mogram_sidebar');
     const overlay  = document.getElementById('studio_mogram_overlay');
     const burgerBtn = document.getElementById('studio_mobile_btn');
     if (!sidebar || !overlay) return;
-    
     const isOpen = sidebar.classList.contains('active');
     if (isOpen) {
-        window.closeStudioMogramSidebar();
+        closeStudioSidebar();
     } else {
         sidebar.classList.add('active');
         overlay.classList.add('active');
         if (burgerBtn) burgerBtn.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
-};
+}
 
-window.closeStudioMogramSidebar = function() {
+function closeStudioSidebar() {
     const sidebar   = document.getElementById('studio_mogram_sidebar');
     const overlay   = document.getElementById('studio_mogram_overlay');
     const burgerBtn = document.getElementById('studio_mobile_btn');
@@ -154,39 +152,27 @@ window.closeStudioMogramSidebar = function() {
     if (overlay) overlay.classList.remove('active');
     if (burgerBtn) burgerBtn.classList.remove('open');
     document.body.style.overflow = '';
-};
+}
 
-window.toggleStudioMogramSidebarCollapse = function() {
-    const sidebar = document.getElementById('studio_mogram_sidebar');
+function toggleSidebarCollapse() {
+    const sidebar = document.getElementById('studio_mogram_sidebar') || document.getElementById('mogram_sidebar');
     if (!sidebar) return;
-    
     const isCollapsed = sidebar.classList.toggle('collapsed');
     localStorage.setItem('sidebar_collapsed', isCollapsed);
-    
     if (isCollapsed) {
         document.body.classList.add('sidebar-is-collapsed');
     } else {
         document.body.classList.remove('sidebar-is-collapsed');
     }
-};
+}
 
-// Auto-init for Studio
+// Init
 (function() {
-    // Default to collapsed if not set, otherwise follow localStorage
-    const stored = localStorage.getItem('sidebar_collapsed');
-    const isCollapsed = stored === null ? true : (stored === 'true');
-    
-    if (window.innerWidth > 991) {
-        const sidebar = document.getElementById('studio_mogram_sidebar');
-        if (sidebar) {
-            if (isCollapsed) {
-                sidebar.classList.add('collapsed');
-                document.body.classList.add('sidebar-is-collapsed');
-            } else {
-                sidebar.classList.remove('collapsed');
-                document.body.classList.remove('sidebar-is-collapsed');
-            }
-        }
+    const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
+    if (isCollapsed && window.innerWidth > 991) {
+        const sidebar = document.getElementById('studio_mogram_sidebar') || document.getElementById('mogram_sidebar');
+        if (sidebar) sidebar.classList.add('collapsed');
+        document.body.classList.add('sidebar-is-collapsed');
     }
 })();
 </script>
