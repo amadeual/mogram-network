@@ -28,7 +28,9 @@ class CommunityPost extends Model
 
     public function getFormattedContentAttribute()
     {
-        $content = e($this->content);
+        $content = str_replace(['<div>', '</div>', '<p>', '</p>', '<br>', '<br/>', '<br />'], ["", "\n", "", "\n", "\n", "\n", "\n"], $this->content);
+        $content = strip_tags($content);
+        $content = nl2br(e(trim($content)));
         return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
     }
 
@@ -60,9 +62,5 @@ class CommunityPost extends Model
         }
     }
 
-    public function getFormattedContentAttribute()
-    {
-        $content = e($this->content);
-        return preg_replace('/(\B@(\w+))/', '<a href="/profile/$2" style="color: #3390ec; font-weight: 800; text-decoration: none;">$1</a>', $content);
-    }
+
 }
