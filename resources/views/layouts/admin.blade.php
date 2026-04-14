@@ -13,6 +13,8 @@
     <!-- Icons -->
     <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     <style>
         :root {
@@ -454,6 +456,39 @@
             <div class="fade-in">
                 @yield('admin_content')
             </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: 'top-end',
+                        showConfirmButton: false,
+                        timer: 3000,
+                        timerProgressBar: true,
+                        background: '#161a26',
+                        color: '#fff',
+                        didOpen: (toast) => {
+                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                        }
+                    });
+
+                    @if(session('success'))
+                        Toast.fire({
+                            icon: 'success',
+                            title: '{{ session("success") }}'
+                        });
+                    @endif
+
+                    @if(session('error'))
+                        Toast.fire({
+                            icon: 'error',
+                            title: '{{ session("error") }}'
+                        });
+                    @endif
+                });
+            </script>
+
         </main>
     </div>
 

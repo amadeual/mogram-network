@@ -126,15 +126,44 @@
 </div>
 
 <script>
-    function terminateLive(id) {
-        const reason = prompt("Por favor, informe a razão para encerrar esta live (ex: Conteúdo Impróprio, Direitos Autorais, etc.):");
-        if (reason !== null && reason.trim() !== "") {
+    async function terminateLive(id) {
+        const { value: reason } = await Swal.fire({
+            title: 'Encerrar Transmissão',
+            text: "Selecione o motivo para derrubar esta live:",
+            icon: 'warning',
+            input: 'select',
+            inputOptions: {
+                'Conteúdo Impróprio': 'Conteúdo Impróprio (Nudez, Violência, etc)',
+                'Violação de Direitos Autorais': 'Violação de Direitos Autorais',
+                'Violação dos Termos de Uso': 'Violação dos Termos de Uso',
+                'Atividade Ilegal': 'Atividade Ilegal (Drogas, Armas, Tráfico)',
+                'Outros': 'Outros'
+            },
+            inputPlaceholder: 'Selecione uma razão...',
+            showCancelButton: true,
+            confirmButtonColor: 'var(--danger)',
+            cancelButtonColor: 'var(--text-muted)',
+            confirmButtonText: 'Derrubar Agora',
+            cancelButtonText: 'Cancelar',
+            background: '#161a26',
+            color: '#fff',
+            inputValidator: (value) => {
+                return new Promise((resolve) => {
+                    if (value) {
+                        resolve();
+                    } else {
+                        resolve('Você precisa selecionar uma razão!');
+                    }
+                });
+            }
+        });
+
+        if (reason) {
             document.getElementById('reason-' + id).value = reason;
             document.getElementById('finish-live-' + id).submit();
-        } else if (reason !== null) {
-            alert("A razão é obrigatória para encerrar a live.");
         }
     }
 </script>
+
 @endsection
 
