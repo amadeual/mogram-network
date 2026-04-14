@@ -19,8 +19,9 @@
     </div>
     <div class="admin-card" style="padding: 1.5rem;">
         <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Transmissões Ativas/Recentes</p>
-        <h2 style="font-size: 1.5rem; font-weight: 900;">{{ count($lives) }}</h2>
+        <h2 style="font-size: 1.5rem; font-weight: 900;">{{ $livesCount }}</h2>
     </div>
+
 </div>
 
 <!-- Posts Table -->

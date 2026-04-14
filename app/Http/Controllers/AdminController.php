@@ -155,8 +155,10 @@ class AdminController extends Controller
     public function contents()
     {
         $posts = Post::with('user')->latest()->paginate(15);
-        return view('admin.content', compact('posts'));
+        $livesCount = Live::count();
+        return view('admin.content', compact('posts', 'livesCount'));
     }
+
 
     public function deletePost($id)
     {
