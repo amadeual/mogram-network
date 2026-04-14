@@ -10,6 +10,7 @@ use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\FeedController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\SupportController;
 
 /*
 |--------------------------------------------------------------------------
