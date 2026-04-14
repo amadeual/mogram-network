@@ -1312,6 +1312,96 @@ body.sidebar-is-collapsed .main-content {
 .mobile-only  { display: none !important; }
 .desktop-only { display: block !important; }
 
+/* ===== MOBILE TOP BAR ===== */
+.mobile-top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background: #0b0a15;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    z-index: 8500;
+}
+
+.mobile-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ===== BURGER BUTTON ===== */
+.burger-btn {
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 6px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+
+.burger-btn:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+.burger-line {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: white;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+.burger-btn.open .burger-line:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+.burger-btn.open .burger-line:nth-child(2) {
+    opacity: 0;
+}
+.burger-btn.open .burger-line:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ===== SIDEBAR MOBILE HEADER ===== */
+.sidebar-mobile-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.sidebar-close-btn {
+    width: 36px;
+    height: 36px;
+    background: rgba(255,255,255,0.05);
+    border: none;
+    border-radius: 10px;
+    color: var(--text-muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+}
+
+.sidebar-close-btn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
 /* Sidebar overlay – hidden by default on all breakpoints */
 .sidebar-overlay {
     display: none;
@@ -1326,11 +1416,30 @@ body.sidebar-is-collapsed .main-content {
     pointer-events: none;
 }
 
+.sidebar-overlay.active {
+    display: block !important;
+    opacity: 1;
+    pointer-events: auto;
+}
+
 /* ===== STUDIO MOBILE OPTIMIZATION ===== */
 /* ===== ADDITIONAL MOBILE OPTIMIZATIONS ===== */
 @media (max-width: 991px) {
     .mobile-only { display: flex !important; }
     .desktop-only { display: none !important; }
+
+    /* Hide sidebar off-screen by default on mobile */
+    .sidebar {
+        transform: translateX(-100%) !important;
+        transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        z-index: 9500 !important;
+        width: 280px !important;
+    }
+
+    /* Show sidebar when .active is toggled */
+    .sidebar.active {
+        transform: translateX(0) !important;
+    }
 
     /* Force app-layout to not overflow */
     .app-layout {
