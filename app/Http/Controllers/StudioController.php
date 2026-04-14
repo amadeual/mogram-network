@@ -274,13 +274,14 @@ class StudioController extends Controller
         $messages = [
             'amount.required' => 'Por favor, informe o valor que deseja sacar.',
             'amount.numeric' => 'O valor do saque deve ser um número válido.',
-            'amount.min' => 'O valor mínimo para saque é de R$ 20,00.',
+            'amount.min' => 'O valor mínimo para saque é de R$ 50,00.',
+            'amount.max' => 'O valor máximo permitido por saque é de R$ 5.000,00.',
             'method.required' => 'Selecione um método de pagamento.',
             'account_info.required' => 'Informe os dados da sua conta para recebimento.',
         ];
 
         $request->validate([
-            'amount' => 'required|numeric|min:20',
+            'amount' => 'required|numeric|min:50|max:5000',
             'method' => 'required|in:pix,redotpay,usdt_bep20',
             'account_info' => 'required|string|max:255',
         ], $messages);
@@ -298,9 +299,15 @@ class StudioController extends Controller
         $fee = 5.00;
         $netAmount = $withdrawAmount - $fee;
 
-        if ($withdrawAmount < 20) {
+        if ($withdrawAmount < 50) {
             return redirect()->back()
-                ->with('error', '⚠️ O valor mínimo permitido para saques é de R$ 20,00. Por favor, ajuste o valor e tente novamente.')
+                ->with('error', '⚠️ O valor mínimo permitido para saques é de R$ 50,00. Por favor, ajuste o valor e tente novamente.')
+                ->withInput();
+        }
+
+        if ($withdrawAmount > 5000) {
+            return redirect()->back()
+                ->with('error', '⚠️ O valor máximo permitido por saque é de R$ 5.000,00. Por favor, ajuste o valor e tente novamente.')
                 ->withInput();
         }
 

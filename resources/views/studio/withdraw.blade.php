@@ -57,11 +57,13 @@
                 <!-- Withdraw Value -->
                 <div style="margin-bottom: 3rem;">
                     <label style="font-size: 14px; font-weight: 850; color: white; margin-bottom: 1.5rem; display: block;">Valor do Saque</label>
-                    <div class="studio-card-pad" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1.5rem;">
-                        <span style="font-size: 2.5rem; font-weight: 900; color: var(--text-muted); margin-right: 1rem;">R$</span>
-                        <input type="number" id="withdraw_amount" name="amount" placeholder="0,00" step="0.01" min="50" required
-                               style="background: transparent; border: none; font-size: 3rem; font-weight: 900; color: white; outline: none; width: 100%;">
+                    <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 24px; padding: 2.5rem; display: flex; align-items: center; margin-bottom: 1rem;">
+                        <span style="font-size: 2.5rem; font-weight: 950; color: var(--text-muted); margin-right: 1.5rem;">R$</span>
+                        <input type="number" id="withdraw_amount" name="amount" placeholder="0,00" step="0.01" min="50" max="5000" value="{{ old('amount') }}" required
+                               style="background: transparent; border: none; font-size: 3.5rem; font-weight: 950; color: white; outline: none; width: 100%;">
                     </div>
+                    <p style="font-size: 11px; color: var(--text-muted); font-weight: 600;">O valor permitido é entre R$ 50,00 e R$ 5.000,00.</p>
+                </div>
                     
                     <div style="display: flex; gap: 1rem;">
                         <button type="button" onclick="setPercent(0.25)" style="flex: 1; padding: 1.25rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; color: white; font-weight: 800; cursor: pointer; transition: 0.3s; font-size: 15px;">25%</button>
