@@ -170,25 +170,16 @@ function toggleSidebarCollapse() {
 
 // Init
 (function() {
-    const isMobile = window.innerWidth <= 991;
     const sidebar = document.getElementById('studio_mogram_sidebar') || document.getElementById('mogram_sidebar');
     if (!sidebar) return;
     
-    if (isMobile) {
-        sidebar.classList.remove('collapsed');
-        document.body.classList.remove('sidebar-is-collapsed');
-    } else {
-        const stored = localStorage.getItem('sidebar_collapsed');
-        // Default to EXPANDED (false) if nothing stored
-        const shouldBeCollapsed = stored === 'true';
-        
-        if (shouldBeCollapsed) {
-            sidebar.classList.add('collapsed');
-            document.body.classList.add('sidebar-is-collapsed');
-        } else {
-            sidebar.classList.remove('collapsed');
-            document.body.classList.remove('sidebar-is-collapsed');
-        }
+    // Force expanded state on Studio to ensure texts are visible
+    sidebar.classList.remove('collapsed');
+    document.body.classList.remove('sidebar-is-collapsed');
+    
+    // Clear stored collapsed state to prevent it from coming back
+    if (sidebar.id === 'studio_mogram_sidebar') {
+        localStorage.setItem('sidebar_collapsed', 'false');
     }
 })();
 </script>
