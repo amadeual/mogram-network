@@ -8,7 +8,7 @@
     @include("partials.studio-sidebar")
 
     <main class="main-content studio-main-pad" style="flex: 1; padding: 3rem 6rem; overflow-y: auto;">
-        <div style="max-width: 800px; margin: 0 auto;">
+        <div style="max-width: 800px; margin: 0;">
             <a href="{{ route('studio.finance') }}" style="color: #3390ec; text-decoration: none; font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 6px; margin-bottom: 2rem;">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
                 Voltar para Carteira
@@ -27,10 +27,6 @@
             </header>
 
             <!-- Premium Wallet Card -->
-            <div class="studio-card-pad" style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 32px; padding: 2.5rem; margin-bottom: 3rem; position: relative; box-shadow: 0 30px 60px rgba(18, 97, 209, 0.25);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <div style="width: 38px; height: 38px; background: rgba(255,255,255,0.2); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white;">
             <div style="background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 24px; padding: 1.75rem; margin-bottom: 2.5rem; box-shadow: 0 15px 40px rgba(18, 97, 209, 0.2); border: 1.5px solid rgba(255,255,255,0.1); display: flex; flex-direction: column; justify-content: center; min-height: 160px;">
                 <p style="font-size: 11px; font-weight: 850; color: white; opacity: 0.8; text-transform: none; letter-spacing: 1px; margin-bottom: 0.75rem;">Saldo Disponível</p>
                 <h2 style="font-size: 2.5rem; font-weight: 950; color: white; letter-spacing: -1.5px; margin: 0;">R$ {{ number_format($availableBalance, 2, ',', '.') }}</h2>
