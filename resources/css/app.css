@@ -701,7 +701,8 @@ section { padding: 4rem 0; }
 .sidebar.collapsed .sidebar-user div,
 .sidebar.collapsed .sidebar-mobile-header span,
 .sidebar.collapsed #account-status-text,
-.sidebar.collapsed .logout-text {
+.sidebar.collapsed .logout-text,
+.sidebar.collapsed .studio-user-details {
     display: none !important;
 }
 

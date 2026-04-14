@@ -47,7 +47,7 @@
         @else
             <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ Auth::user()->name }}" style="width: 44px; height: 44px; border-radius: 50%; object-fit: cover; border: 2px solid rgba(255,255,255,0.1);">
         @endif
-        <div>
+        <div class="studio-user-details">
             <h4 style="font-size: 15px; font-weight: 700; color: white; margin: 0;">{{ Auth::user()->name }}</h4>
             <p style="font-size: 11px; color: var(--text-muted); margin: 0;">@<span>{{ Auth::user()->username }}</span></p>
         </div>
@@ -66,7 +66,7 @@
 
         <a href="{{ route('dashboard') }}" class="sidebar-nav-item menu-item" style="padding: 0.875rem 1rem; color: #a855f7; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 0.5rem;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            Voltar ao Feed
+            <span>Voltar ao Feed</span>
         </a>
         <a href="{{ route('studio.dashboard') }}" class="sidebar-nav-item menu-item {{ Route::is('studio.dashboard') ? 'active' : '' }}" style="padding: 0.875rem 1rem;">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M14 14h7v7h-7z"/><path d="M3 14h7v7H3z"/></svg>
@@ -91,9 +91,8 @@
 
         {{-- Collapse Toggle (Desktop) --}}
         <div class="sidebar-divider desktop-only"></div>
-        <button onclick="toggleStudioSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start;">
+        <button onclick="toggleStudioSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start; gap: 1rem;">
             <svg id="studio-collapse-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transition: transform 0.3s;"><polyline points="15 18 9 12 15 6"/></svg>
-            <span>Recolher</span>
         </button>
     </nav>
 
