@@ -1,10 +1,10 @@
     {{-- ===== SIDEBAR OVERLAY (mobile backdrop) ===== --}}
-    <div class="sidebar-overlay" id="mogram_sidebar_overlay" onclick="closeMogramSidebar()"></div>
+    <div class="sidebar-overlay" id="studio_mogram_overlay" onclick="closeStudioMogramSidebar()"></div>
 
     {{-- ===== MOBILE TOP BAR ===== --}}
-    <div class="mobile-top-bar mobile-only" id="mogram_mobile_topbar">
+    <div class="mobile-top-bar mobile-only">
         {{-- Burger Button --}}
-        <button class="burger-btn" id="mogram_mobile_btn" onclick="toggleMogramSidebar()" aria-label="Toggle menu">
+        <button class="burger-btn" id="studio_mobile_btn" onclick="toggleStudioMogramSidebar()" aria-label="Toggle menu">
             <span class="burger-line"></span>
             <span class="burger-line"></span>
             <span class="burger-line"></span>
@@ -13,8 +13,8 @@
         {{-- Logo centered --}}
         <a href="{{ route('dashboard') }}" class="mobile-logo" style="text-decoration: none;">
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 512 512">
-                <defs><linearGradient id="mobileLogoGradStudioV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradStudioV2)" />
+                <defs><linearGradient id="mobileLogoGradStudioFinalV3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                <rect width="512" height="512" rx="100" fill="url(#mobileLogoGradStudioFinalV3)" />
                 <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
             </svg>
             <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.15rem;">Studio</span>
@@ -23,35 +23,35 @@
     </div>
 
     {{-- ===== SIDEBAR ===== --}}
-    <aside class="sidebar" id="mogram_sidebar">
+    <aside class="sidebar" id="studio_mogram_sidebar">
 
         {{-- Mobile sidebar header --}}
         <div class="sidebar-mobile-header mobile-only">
             <a href="{{ route('dashboard') }}" style="display:flex; align-items:center; gap: 10px; text-decoration: none;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarMobGradStudioV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradStudioV2)" />
+                    <defs><linearGradient id="sidebarMobGradStudioFinalV3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarMobGradStudioFinalV3)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight:900;font-size:1.25rem;letter-spacing:-0.5px;">Studio</span>
             </a>
-            <button class="sidebar-close-btn" onclick="closeMogramSidebar()" aria-label="Close menu">
+            <button class="sidebar-close-btn" onclick="closeStudioMogramSidebar()" aria-label="Close menu">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
         </div>
 
-        {{-- Desktop Header (Logo and User Info) --}}
-        <div style="padding: 0 0.625rem 1.5rem;">
-            <a href="{{ route('dashboard') }}" class="desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0.5rem; text-decoration: none; margin-bottom: 0.5rem;">
+        {{-- Desktop Header --}}
+        <div style="padding: 0 0.625rem 1.5rem;" class="desktop-only">
+            <a href="{{ route('dashboard') }}" style="display: flex; align-items: center; gap: 12px; padding: 0.5rem; text-decoration: none; margin-bottom: 0.5rem;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512">
-                    <defs><linearGradient id="sidebarLogoGradStudioV2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
-                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioV2)" />
+                    <defs><linearGradient id="sidebarLogoGradStudioFinalV3" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#ff8c2d;stop-opacity:1" /><stop offset="100%" style="stop-color:#ff4b1f;stop-opacity:1" /></linearGradient></defs>
+                    <rect width="512" height="512" rx="100" fill="url(#sidebarLogoGradStudioFinalV3)" />
                     <path d="M120 392V120h80l56 120 56-120h80v272h-60V200l-76 160-76-160v192z" fill="white" />
                 </svg>
                 <span class="grad-text" style="font-weight: 900; letter-spacing: -1px; font-size: 1.5rem;">Studio</span>
             </a>
             
-            <a href="{{ route('studio.settings') }}" class="desktop-only" style="display: flex; align-items: center; gap: 12px; padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); text-decoration: none; border: 1px solid rgba(255,255,255,0.05);">
+            <a href="{{ route('studio.settings') }}" style="display: flex; align-items: center; gap: 12px; padding: 0.75rem; border-radius: 12px; background: rgba(255,255,255,0.03); text-decoration: none; border: 1px solid rgba(255,255,255,0.05);">
                 @if(Auth::user()->avatar)
                     <img src="{{ Storage::url(Auth::user()->avatar) }}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #3390ec; flex-shrink:0;">
                 @else
@@ -101,18 +101,18 @@
                 <span>Configurações</span>
             </a>
 
-            {{-- Collapse Toggle (with Burger Icon) --}}
+            {{-- Collapse Toggle --}}
             <div class="sidebar-divider desktop-only"></div>
-            <button onclick="toggleSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start;">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-                <span style="margin-left: 12px;">Recolher</span>
+            <button onclick="toggleStudioMogramSidebarCollapse()" class="menu-item desktop-only" style="background: transparent; border: none; width: 100%; border-top: 1px solid rgba(255,255,255,0.03); padding-top: 1rem; margin-top: 0.5rem; justify-content: flex-start; cursor: pointer;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="pointer-events: none;"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <span style="margin-left: 12px; pointer-events: none;">Recolher</span>
             </button>
         </nav>
 
         <div class="sidebar-user" style="padding: 1rem 0.625rem; flex-shrink: 0; border-top: 1px solid rgba(255,255,255,0.03);">
             <div style="background: rgba(255,255,255,0.03); border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;">
                 <div style="width: 8px; height: 8px; background: #3390ec; border-radius: 50%; box-shadow: 0 0 10px #3390ec;"></div>
-                <div id="account-status-text">
+                <div>
                     <p style="font-size: 10px; color: var(--text-muted); text-transform: none; font-weight: 800; margin: 0;">Status da conta</p>
                     <p style="font-size: 11px; color: white; font-weight: 700; margin: 0;">Verificado</p>
                 </div>
@@ -129,34 +129,35 @@
     </aside>
 
 <script>
-function toggleMogramSidebar() {
-    const sidebar  = document.getElementById('mogram_sidebar');
-    const overlay  = document.getElementById('mogram_sidebar_overlay');
-    const burgerBtn = document.getElementById('mogram_mobile_btn');
-    const isOpen   = sidebar.classList.contains('active');
-
+window.toggleStudioMogramSidebar = function() {
+    const sidebar  = document.getElementById('studio_mogram_sidebar');
+    const overlay  = document.getElementById('studio_mogram_overlay');
+    const burgerBtn = document.getElementById('studio_mobile_btn');
+    if (!sidebar || !overlay) return;
+    
+    const isOpen = sidebar.classList.contains('active');
     if (isOpen) {
-        closeMogramSidebar();
+        window.closeStudioMogramSidebar();
     } else {
         sidebar.classList.add('active');
         overlay.classList.add('active');
-        burgerBtn.classList.add('open');
+        if (burgerBtn) burgerBtn.classList.add('open');
         document.body.style.overflow = 'hidden';
     }
-}
+};
 
-function closeMogramSidebar() {
-    const sidebar   = document.getElementById('mogram_sidebar');
-    const overlay   = document.getElementById('mogram_sidebar_overlay');
-    const burgerBtn = document.getElementById('mogram_mobile_btn');
+window.closeStudioMogramSidebar = function() {
+    const sidebar   = document.getElementById('studio_mogram_sidebar');
+    const overlay   = document.getElementById('studio_mogram_overlay');
+    const burgerBtn = document.getElementById('studio_mobile_btn');
     if (sidebar) sidebar.classList.remove('active');
     if (overlay) overlay.classList.remove('active');
     if (burgerBtn) burgerBtn.classList.remove('open');
     document.body.style.overflow = '';
-}
+};
 
-function toggleSidebarCollapse() {
-    const sidebar = document.getElementById('mogram_sidebar');
+window.toggleStudioMogramSidebarCollapse = function() {
+    const sidebar = document.getElementById('studio_mogram_sidebar');
     if (!sidebar) return;
     
     const isCollapsed = sidebar.classList.toggle('collapsed');
@@ -167,26 +168,13 @@ function toggleSidebarCollapse() {
     } else {
         document.body.classList.remove('sidebar-is-collapsed');
     }
-}
+};
 
-// Swiper closure
-(function() {
-    let startX = null;
-    const sidebar = document.getElementById('mogram_sidebar');
-    if (!sidebar) return;
-    sidebar.addEventListener('touchstart', (e) => startX = e.touches[0].clientX, { passive: true });
-    sidebar.addEventListener('touchend', (e) => {
-        if (startX === null) return;
-        if (e.changedTouches[0].clientX - startX < -60) closeMogramSidebar();
-        startX = null;
-    }, { passive: true });
-})();
-
-// Init
+// Auto-init for Studio
 (function() {
     const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
     if (isCollapsed && window.innerWidth > 991) {
-        const sidebar = document.getElementById('mogram_sidebar');
+        const sidebar = document.getElementById('studio_mogram_sidebar');
         if (sidebar) sidebar.classList.add('collapsed');
         document.body.classList.add('sidebar-is-collapsed');
     }

@@ -678,17 +678,14 @@ section { padding: 4rem 0; }
     position: fixed;
     top: 0;
     left: 0;
-    border-right: 1px solid var(--border-gray);
+    background: #0b0a15 !important;
+    border-right: 1px solid rgba(255,255,255,0.06) !important;
     padding: 1.25rem 0.875rem;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background: #0b0a15;
-    z-index: 1000;
-    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    scrollbar-width: thin;
-    scrollbar-color: rgba(255,255,255,0.08) transparent;
+    z-index: 9999 !important;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-x: hidden !important;
 }
 
 /* Collapsed State */
