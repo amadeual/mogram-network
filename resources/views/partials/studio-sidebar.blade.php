@@ -23,7 +23,7 @@
     </div>
 
     {{-- ===== SIDEBAR ===== --}}
-    <aside class="sidebar" id="studio_mogram_sidebar">
+    <aside class="sidebar collapsed" id="studio_mogram_sidebar">
 
         {{-- Mobile sidebar header --}}
         <div class="sidebar-mobile-header mobile-only">
@@ -172,11 +172,21 @@ window.toggleStudioMogramSidebarCollapse = function() {
 
 // Auto-init for Studio
 (function() {
-    const isCollapsed = localStorage.getItem('sidebar_collapsed') === 'true';
-    if (isCollapsed && window.innerWidth > 991) {
+    // Default to collapsed if not set, otherwise follow localStorage
+    const stored = localStorage.getItem('sidebar_collapsed');
+    const isCollapsed = stored === null ? true : (stored === 'true');
+    
+    if (window.innerWidth > 991) {
         const sidebar = document.getElementById('studio_mogram_sidebar');
-        if (sidebar) sidebar.classList.add('collapsed');
-        document.body.classList.add('sidebar-is-collapsed');
+        if (sidebar) {
+            if (isCollapsed) {
+                sidebar.classList.add('collapsed');
+                document.body.classList.add('sidebar-is-collapsed');
+            } else {
+                sidebar.classList.remove('collapsed');
+                document.body.classList.remove('sidebar-is-collapsed');
+            }
+        }
     }
 })();
 </script>
