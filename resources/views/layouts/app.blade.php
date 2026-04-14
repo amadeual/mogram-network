@@ -40,6 +40,12 @@
     <style>
         /* Small ad-hoc styles that might not merit full CSS file inclusion yet */
         .icon { width: 44px; height: 44px; display: inline-flex; align-items: center; justify-content: center; }
+
+        /* Global Select Fix */
+        select, option {
+            background-color: #11141e !important;
+            color: #ffffff !important;
+        }
     </style>
 </head>
 <body>

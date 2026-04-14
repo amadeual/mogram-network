@@ -17,6 +17,13 @@
     box-sizing: border-box;
 }
 
+/* Global Dropdown Fix */
+select, option {
+    background-color: #11141e !important;
+    color: #ffffff !important;
+}
+
+
 html, body {
     overflow-x: hidden;
     max-width: 100vw;
