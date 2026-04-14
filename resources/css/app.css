@@ -1312,10 +1312,19 @@ body.sidebar-is-collapsed .main-content {
 /* ===== STUDIO MOBILE OPTIMIZATION ===== */
 /* ===== ADDITIONAL MOBILE OPTIMIZATIONS ===== */
 @media (max-width: 991px) {
+    body.sidebar-is-collapsed .main-content,
+    .sidebar.collapsed + .main-content,
     .main-content {
         margin-left: 0 !important;
+        padding-left: 0 !important;
         width: 100% !important;
         padding-top: 60px !important;
+    }
+    
+    .explore-container, .studio-body, .feed-container {
+        padding: 1.25rem 1rem !important;
+        width: 100% !important;
+        margin: 0 !important;
     }
     
     /* Responsive Grids */
@@ -1427,20 +1436,9 @@ body.sidebar-is-collapsed .main-content {
         padding: 0 1rem 5rem !important;
     }
 
-    .main-content {
-        margin-left: 0 !important;
-        width: 100% !important;
-        padding-top: 70px !important;
-        padding-bottom: 80px !important;
-    }
-
     .studio-header-btn {
         padding: 0.6rem 1rem !important;
         font-size: 12px !important;
-    }
-
-    .studio-body, .feed-container {
-        padding: 1.25rem !important;
     }
 }
 
