@@ -53,6 +53,10 @@ Route::get('/ajuda', function () {
     return view('help.index');
 })->name('help');
 
+Route::get('/criadores', function () {
+    return view('creators');
+})->name('creators');
+
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');

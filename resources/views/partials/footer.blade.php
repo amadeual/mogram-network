@@ -45,6 +45,7 @@
                 <div class="footer-links">
                     <a href="{{ route('login') }}">Entrar na Conta</a>
                     <a href="{{ route('register') }}">Parceiro Creator</a>
+                    <a href="{{ route('creators') }}">Para Criadores</a>
                     <a href="#">Mogram Studio</a>
                     <a href="#">Central de Ajuda</a>
                 </div>
