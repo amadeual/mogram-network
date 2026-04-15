@@ -36,7 +36,6 @@
                     <a href="#">Top Criadores</a>
                     <a href="{{ route('lives') }}">Lives Ativas</a>
                     <a href="#">Stories</a>
-                    <a href="#">Marketplace</a>
                 </div>
             </div>
             
@@ -57,7 +56,6 @@
                     <a href="{{ route('terms') }}">Termos de Uso</a>
                     <a href="{{ route('privacy') }}">Política de Privacidade</a>
                     <a href="#">Cookies</a>
-                    <a href="#">Suporte Direto</a>
                 </div>
             </div>
         </div>
@@ -67,10 +65,6 @@
                 <p style="font-size: 0.85rem; color: #555; margin: 0;">&copy; 2026 Mogram Network. Todos os direitos reservados.</p>
             </div>
             <div style="display: flex; align-items: center; gap: 1.5rem;">
-                <div style="display: flex; align-items: center; gap: 8px; background: rgba(34, 197, 94, 0.05); padding: 4px 12px; border-radius: 99px; border: 1px solid rgba(34, 197, 94, 0.1);">
-                    <span style="width: 6px; height: 6px; background: #22C55E; border-radius: 50%; box-shadow: 0 0 8px #22C55E;"></span>
-                    <span style="color: #22C55E; font-weight: 800; font-size: 0.7rem; letter-spacing: 0.5px;">SISTEMA ONLINE</span>
-                </div>
                 <p style="font-size: 0.85rem; color: #555; margin: 0;">Feito para <strong>Criadores</strong>.</p>
             </div>
         </div>
