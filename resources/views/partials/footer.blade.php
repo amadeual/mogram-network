@@ -55,7 +55,6 @@
                 <div class="footer-links">
                     <a href="{{ route('terms') }}">Termos de Uso</a>
                     <a href="{{ route('privacy') }}">Política de Privacidade</a>
-                    <a href="#">Cookies</a>
                 </div>
             </div>
         </div>
