@@ -58,6 +58,11 @@ Route::get('/criadores', function () {
     return view('creators');
 })->name('creators');
 
+use App\Http\Controllers\ExploreController;
+
+Route::get('/explorar', [ExploreController::class, 'feed'])->name('explore.feed');
+Route::get('/explorar/criadores', [ExploreController::class, 'creators'])->name('explore.creators');
+
 // Protected Routes
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');
