@@ -18,10 +18,10 @@ class StudioController extends Controller
         $posts = Post::where('user_id', Auth::id())->latest()->take(5)->get();
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         
-        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum(DB::raw('amount - commission'));
         $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
         $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
-        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum('community_subscriptions.amount');
+        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum(DB::raw('community_subscriptions.amount - (CASE WHEN community_subscriptions.commission IS NULL THEN 0 ELSE community_subscriptions.commission END)'));
         
         $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue + $communityRevenue;
         
@@ -34,10 +34,10 @@ class StudioController extends Controller
         $totalPosts = Post::where('user_id', Auth::id())->count();
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         
-        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum(DB::raw('amount - commission'));
         $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
         $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
-        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum('community_subscriptions.amount');
+        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum(DB::raw('community_subscriptions.amount - (CASE WHEN community_subscriptions.commission IS NULL THEN 0 ELSE community_subscriptions.commission END)'));
             
         $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue + $communityRevenue;
         
@@ -49,11 +49,10 @@ class StudioController extends Controller
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         $totalPosts = count($postIds);
         
-        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum(DB::raw('amount - commission'));
         $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
         $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
-        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum('community_subscriptions.amount');
-            
+        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum(DB::raw('community_subscriptions.amount - (CASE WHEN community_subscriptions.commission IS NULL THEN 0 ELSE community_subscriptions.commission END)'));
         $totalRevenue = $postRevenue + $giftRevenue + $ticketRevenue + $communityRevenue;
         $totalViews = Post::where('user_id', Auth::id())->sum('views');
         
@@ -147,7 +146,7 @@ class StudioController extends Controller
                     'description' => $sale->post_title,
                     'user' => $sale->buyer_name,
                     'username' => $sale->buyer_username,
-                    'amount' => $sale->amount,
+                    'amount' => $sale->amount - (float)($sale->commission ?? 0),
                     'direction' => 'in',
                     'date' => $sale->created_at,
                     'status' => 'Aprovado',
@@ -200,7 +199,7 @@ class StudioController extends Controller
                     'description' => $sub->community_name,
                     'user' => $sub->buyer_name,
                     'username' => $sub->buyer_username,
-                    'amount' => $sub->amount,
+                    'amount' => $sub->amount - (float)($sub->commission ?? 0),
                     'direction' => 'in',
                     'date' => $sub->created_at,
                     'status' => 'Ativo',
@@ -489,10 +488,10 @@ class StudioController extends Controller
     private function calculateTotalRevenue()
     {
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
-        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum('amount');
+        $postRevenue = DB::table('purchases')->whereIn('post_id', $postIds)->sum(DB::raw('amount - commission'));
         $giftRevenue = DB::table('live_gifts')->where('receiver_id', Auth::id())->sum(DB::raw('amount - commission'));
         $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
-        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum('community_subscriptions.amount');
+        $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum(DB::raw('community_subscriptions.amount - (CASE WHEN community_subscriptions.commission IS NULL THEN 0 ELSE community_subscriptions.commission END)'));
         
         return (float)$postRevenue + (float)$giftRevenue + (float)$ticketRevenue + (float)$communityRevenue;
     }

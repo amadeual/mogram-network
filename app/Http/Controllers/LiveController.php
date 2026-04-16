@@ -286,8 +286,9 @@ class LiveController extends Controller
                 // Deduct from viewer
                 $user->decrement('balance', $live->price);
                 
-                // Add to creator (20% platform commission)
-                $commission = $live->price * 0.20;
+                // Add to creator (dynamic platform commission)
+                $commSetting = \App\Models\Setting::where('key', 'commission_lives')->value('value') ?? 20;
+                $commission = $live->price * ($commSetting / 100);
                 $creatorShare = $live->price - $commission;
                 // Removed: $live->user->increment('balance', $creatorShare); // Goes only to Finance ledger
 
@@ -477,8 +478,9 @@ class LiveController extends Controller
             // Deduct from sender
             $user->decrement('balance', $gift->price);
             
-            // Platform commission (20%)
-            $platformComm = $gift->price * 0.20;
+            // Platform commission (dynamic)
+            $commSetting = \App\Models\Setting::where('key', 'commission_gifts')->value('value') ?? 20;
+            $platformComm = $gift->price * ($commSetting / 100);
             $creatorShare = $gift->price - $platformComm;
             
             // Credit the creator

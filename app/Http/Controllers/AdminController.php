@@ -16,23 +16,25 @@ class AdminController extends Controller
     public function index()
     {
         $settings = \App\Models\Setting::all()->pluck('value', 'key');
-        $commission = (float)($settings['commission_percentage'] ?? 15);
-        $creatorShare = (100 - $commission) / 100;
-        $platformShare = $commission / 100;
-
         // Sum of all money spent on the platform
         $totalSpent = \App\Models\LiveGift::sum('amount') + 
                       \App\Models\Purchase::sum('amount') + 
-                      DB::table('live_access')->sum('amount');
+                      DB::table('live_access')->sum('amount') +
+                      \App\Models\CommunitySubscription::where('status', 'active')->sum('amount');
+
+        $totalCommission = \App\Models\LiveGift::sum('commission') + 
+                           \App\Models\Purchase::sum('commission') + 
+                           DB::table('live_access')->sum('commission') +
+                           \App\Models\CommunitySubscription::where('status', 'active')->sum('commission');
 
         $stats = [
             'total_users' => User::count(),
             'total_deposits' => \App\Models\Deposit::whereIn('status', ['completed', 'approved'])->sum('amount'),
-            'total_revenue' => $totalSpent * $creatorShare, // What creators actually earned
+            'total_revenue' => $totalSpent - $totalCommission, // What creators actually earned
             'total_posts' => Post::count(),
             'total_lives' => Live::count(),
-            'net_profit' => $totalSpent * $platformShare, // Platform revenue (commission)
-            'commission' => $commission,
+            'net_profit' => $totalCommission, // Platform revenue (commission)
+            'commission' => (float)($settings['commission_content'] ?? 15),
             'open_tickets' => Ticket::where('status', 'Aberto')->count(),
             'pending_withdrawals' => Withdrawal::where('status', 'pending')->count()
         ];
@@ -235,7 +237,29 @@ class AdminController extends Controller
         $totalTicketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->when($creatorId, fn($q) => $q->where('lives.user_id', $creatorId))->sum('live_access.amount');
         
         $grossRevenue = $totalRevenue + $totalGifts + $totalTicketRevenue;
-        $newSubscribers = $subQuery->where('community_subscriptions.status', 'active')->count();
+        
+        $totalCommission = DB::table('live_gifts')->when($creatorId, fn($q) => $q->where('receiver_id', $creatorId))->sum('commission') +
+                           DB::table('purchases')
+                                ->join('posts', 'purchases.post_id', '=', 'posts.id')
+                                ->when($creatorId, fn($q) => $q->where('posts.user_id', $creatorId))
+                                ->sum('purchases.commission') +
+                           DB::table('live_access')
+                                ->join('lives', 'live_access.live_id', '=', 'lives.id')
+                                ->when($creatorId, fn($q) => $q->where('lives.user_id', $creatorId))
+                                ->sum('live_access.commission') +
+                           DB::table('community_subscriptions')
+                                ->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')
+                                ->when($creatorId, fn($q) => $q->where('communities.user_id', $creatorId))
+                                ->where('community_subscriptions.status', 'active')
+                                ->sum('community_subscriptions.commission');
+
+        $netProfit = $totalCommission;
+        $activeSubQuery = DB::table('community_subscriptions')
+            ->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')
+            ->when($creatorId, fn($q) => $q->where('communities.user_id', $creatorId))
+            ->where('community_subscriptions.status', 'active');
+            
+        $newSubscribers = $activeSubQuery->count();
         $completedLives = $liveQuery->where('status', 'finished')->count();
         $totalContents = $postQuery->count();
 
@@ -250,6 +274,7 @@ class AdminController extends Controller
         return view('admin.reports', compact(
             'creators', 
             'grossRevenue', 
+            'netProfit',
             'newSubscribers', 
             'completedLives', 
             'totalContents',

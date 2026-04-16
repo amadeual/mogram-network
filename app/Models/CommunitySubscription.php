@@ -9,7 +9,7 @@ class CommunitySubscription extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['community_id', 'user_id', 'amount', 'expires_at', 'status'];
+    protected $fillable = ['community_id', 'user_id', 'amount', 'commission', 'expires_at', 'status'];
     
     protected $casts = [
         'expires_at' => 'datetime',

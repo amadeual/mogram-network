@@ -169,11 +169,16 @@ class FeedController extends Controller
                 $creator = $post->user;
                 // Removed: $creator->increment('balance', $post->price); // Goes only to Finance ledger
 
+                // Calculate commission
+                $commPercentage = (float)(\App\Models\Setting::where('key', 'commission_content')->value('value') ?? 15);
+                $commission = $post->price * ($commPercentage / 100);
+
                 // Record purchase
                 \App\Models\Purchase::create([
                     'user_id' => $user->id,
                     'post_id' => $post->id,
-                    'amount' => $post->price
+                    'amount' => $post->price,
+                    'commission' => $commission
                 ]);
 
                 // Send email to buyer

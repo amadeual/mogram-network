@@ -67,11 +67,11 @@
     </div>
     <div class="admin-card" style="padding: 1.5rem; display: flex; justify-content: space-between;">
         <div>
-            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Conteúdos Criados</p>
-            <h2 style="font-size: 1.5rem; font-weight: 900;">{{ number_format($totalContents, 0, ',', '.') }}</h2>
+            <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 700; margin-bottom: 0.5rem;">Lucro Líquido (Plataforma)</p>
+            <h2 style="font-size: 1.5rem; font-weight: 900; color: var(--success);">R$ {{ number_format($netProfit, 2, ',', '.') }}</h2>
         </div>
-        <div style="color: orange; opacity: 0.5;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <div style="color: var(--success); opacity: 0.5;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
         </div>
     </div>
 </div>

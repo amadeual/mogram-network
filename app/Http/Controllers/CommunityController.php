@@ -180,11 +180,16 @@ class CommunityController extends Controller
             // Deduct from buyer
             Auth::user()->decrement('balance', $community->price);
 
+            // Calculate commission
+            $commPercentage = (float)(\App\Models\Setting::where('key', 'commission_community')->value('value') ?? 10);
+            $commission = $community->price * ($commPercentage / 100);
+
             // Create or update subscription
             CommunitySubscription::updateOrCreate(
                 ['community_id' => $community->id, 'user_id' => Auth::id()],
                 [
                     'amount' => $community->price,
+                    'commission' => $commission,
                     'status' => 'active',
                     'expires_at' => now()->addMonth(),
                     'created_at' => now(), // Force update timestamp to show in finance

@@ -54,24 +54,45 @@
 
         <!-- Taxes & Commissions -->
         <div class="admin-card">
-            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 2rem;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 2.5rem;">
                 <div style="width: 42px; height: 42px; background: rgba(34, 197, 94, 0.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--success);">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                 </div>
                 <div>
                     <h3 style="font-size: 1.1rem; font-weight: 850; margin-bottom: 4px;">Taxas e Comissões</h3>
-                    <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 600;">Defina a repartição de receita entre plataforma e criadores.</p>
+                    <p style="color: var(--text-muted); font-size: 0.75rem; font-weight: 600;">Defina o percentual que a plataforma retém para cada tipo de transação.</p>
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem;">
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2.5rem; margin-bottom: 2rem;">
+                <!-- Content Commission -->
                 <div>
-                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Comissão da Plataforma (%)</label>
+                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Comissão Conteúdo (Fotos/Vídeos) %</label>
                     <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
-                        <input type="number" name="commission_percentage" value="{{ $settings['commission_percentage'] ?? '15' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 700;">
+                        <input type="number" name="commission_content" value="{{ $settings['commission_content'] ?? '15' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 700;">
                         <span style="color: var(--text-muted); font-weight: 800;">%</span>
                     </div>
                 </div>
+                
+                <!-- Community Commission -->
+                <div>
+                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Comissão Assinaturas/Comunidades %</label>
+                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
+                        <input type="number" name="commission_community" value="{{ $settings['commission_community'] ?? '10' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 700;">
+                        <span style="color: var(--text-muted); font-weight: 800;">%</span>
+                    </div>
+                </div>
+
+                <!-- Gifts Commission -->
+                <div>
+                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Comissão Gifts/Mimos (Lives/Chat) %</label>
+                    <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
+                        <input type="number" name="commission_gifts" value="{{ $settings['commission_gifts'] ?? '20' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 700;">
+                        <span style="color: var(--text-muted); font-weight: 800;">%</span>
+                    </div>
+                </div>
+                
+                <!-- Fixed Withdrawal Fee -->
                 <div>
                     <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Taxa de Saque Fixa</label>
                     <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
@@ -79,22 +100,15 @@
                         <input type="number" step="0.01" name="withdrawal_fee" value="{{ $settings['withdrawal_fee'] ?? '5.00' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: #22c55e; outline: none; font-weight: 900;">
                     </div>
                 </div>
-                <div>
-                    <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">Moeda Padrão</label>
-                    <select name="currency" style="width: 100%; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 15px; color: white; font-weight: 700; outline: none; cursor: pointer;">
-                        <option value="R$" {{ ($settings['currency'] ?? 'R$') == 'R$' ? 'selected' : '' }}>BRL - Real Brasileiro (R$)</option>
-                        <option value="$" {{ ($settings['currency'] ?? '') == '$' ? 'selected' : '' }}>USD - Dollar ($)</option>
-                    </select>
-                </div>
             </div>
             
-            <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(51, 144, 236, 0.05); border-radius: 14px; border: 1px solid rgba(51, 144, 236, 0.1);">
+            <div style="padding: 1.5rem; background: rgba(51, 144, 236, 0.05); border-radius: 14px; border: 1px solid rgba(51, 144, 236, 0.1);">
                 <p style="font-size: 0.8rem; color: var(--primary-blue); font-weight: 700; display: flex; align-items: center; gap: 8px;">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-                    Nota sobre a repartição
+                    Nota sobre as repartições
                 </p>
                 <p style="margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted); font-weight: 600; line-height: 1.5;">
-                    Ao definir a comissão em <b><span id="comm_val">{{ $settings['commission_percentage'] ?? '15' }}</span>%</b>, os criadores receberão automaticamente <b><span id="creat_val">{{ 100 - ($settings['commission_percentage'] ?? 15) }}</span>%</b> do valor líquido. A taxa de saque é descontada do saldo do criador no momento da solicitação.
+                    As taxas definidas acima são aplicadas no momento em que o usuário realiza o pagamento. O valor da comissão é gravado no registro da transação para garantir a integridade financeira histórica.
                 </p>
             </div>
         </div>
@@ -188,11 +202,4 @@
     </div>
 </form>
 
-<script>
-    document.querySelector('input[name="commission_percentage"]').addEventListener('input', function(e) {
-        const val = e.target.value;
-        document.getElementById('comm_val').innerText = val;
-        document.getElementById('creat_val').innerText = 100 - val;
-    });
-</script>
 @endsection
