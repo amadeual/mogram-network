@@ -1,6 +1,6 @@
 {
   "resources/css/app.css": {
-    "file": "assets/app-UC-cyu5J.css",
+    "file": "assets/app-DUNN8zuE.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
@@ -8,6 +8,12 @@
     "file": "assets/app-BuG9aa18.js",
     "name": "app",
     "src": "resources/js/app.js",
+    "isEntry": true
+  },
+  "resources/js/community-feed.tsx": {
+    "file": "assets/community-feed-D0uzzdZB.js",
+    "name": "community-feed",
+    "src": "resources/js/community-feed.tsx",
     "isEntry": true
   }
 }
