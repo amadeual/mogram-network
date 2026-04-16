@@ -71,7 +71,7 @@
                     </div>
                     <div style="display: flex; justify-content: space-between; font-size: 0.9rem;">
                         <span style="color: #ccc;">via CARTÃO</span>
-                        <span style="color: #ff8c2d; font-weight: 800;">ATÉ 2 DIAS ÚTEIS</span>
+                        <span style="color: #ff8c2d; font-weight: 800;">ATÉ 3 DIAS ÚTEIS</span>
                     </div>
                 </div>
 
