@@ -25,7 +25,7 @@
                 </a>
                 <div style="display: flex; align-items: center; gap: 0.5rem; color: #22C55E; font-weight: 800; font-size: 0.9rem;">
                     <span style="width: 10px; height: 10px; background: #22C55E; border-radius: 50%; display: block; animation: pulse 2s infinite;"></span>
-                    1,240 LIVES AGORA
+                    {{ number_format($onlineLivesCount ?? 0, 0, ',', '.') }} LIVES AGORA
                 </div>
             </div>
         </div>

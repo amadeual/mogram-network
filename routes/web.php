@@ -20,8 +20,9 @@ use App\Http\Controllers\SupportController;
 
 Route::get('/', function () {
     $topLives = App\Models\Live::where('status', 'online')->latest()->take(3)->get();
+    $onlineLivesCount = App\Models\Live::where('status', 'online')->count();
     
-    return view('landing', compact('topLives'));
+    return view('landing', compact('topLives', 'onlineLivesCount'));
 })->name('home');
 
 
