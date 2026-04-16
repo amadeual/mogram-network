@@ -15,7 +15,7 @@
         <div class="nav-links-desktop">
             <a href="#" class="text-light text-sm font-semibold">Explorar Feed</a>
             <a href="#" class="text-light text-sm font-semibold">Explorar Criadores</a>
-            <a href="#" class="text-light text-sm font-semibold">Ganhos</a>
+            <a href="{{ route('creators') }}" class="text-light text-sm font-semibold">Ganhos</a>
         </div>
         
         <div class="nav-actions flex items-center gap-3">
@@ -59,7 +59,7 @@
         <div class="mobile-menu-content">
             <a href="#" class="mobile-menu-link">Explorar Feed</a>
             <a href="#" class="mobile-menu-link">Explorar Criadores</a>
-            <a href="#" class="mobile-menu-link">Ganhos</a>
+            <a href="{{ route('creators') }}" class="mobile-menu-link">Ganhos</a>
             <div class="dropdown-divider" style="margin: 1.5rem 0;"></div>
             @guest
                 <a href="{{ route('login') }}" class="mobile-menu-link" style="color: var(--primary-blue);">Entrar</a>
