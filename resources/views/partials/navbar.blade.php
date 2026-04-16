@@ -21,7 +21,7 @@
         <div class="nav-actions flex items-center gap-3">
             @auth
                 <div class="nav-dropdown-wrapper">
-                    <div class="flex items-center gap-2 cursor-pointer">
+                    <div class="flex items-center gap-2 cursor-pointer" onclick="toggleUserDropdown(event)">
                         @if(Auth::user()->avatar)
                             <img src="{{ Storage::url(Auth::user()->avatar) }}" style="width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--primary-blue); object-fit: cover;">
                         @else
@@ -98,6 +98,20 @@
 </nav>
 
 <script>
+    function toggleUserDropdown(event) {
+        event.stopPropagation();
+        const wrapper = document.querySelector('.nav-dropdown-wrapper');
+        wrapper.classList.toggle('is-active');
+    }
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+        const wrapper = document.querySelector('.nav-dropdown-wrapper');
+        if (wrapper && !wrapper.contains(event.target)) {
+            wrapper.classList.remove('is-active');
+        }
+    });
+
     function toggleMobileMenu() {
         const overlay = document.getElementById('mobile-menu-overlay');
         const openIcon = document.getElementById('menu-icon-open');

@@ -1080,7 +1080,17 @@ body.sidebar-is-collapsed .main-content {
     transform-origin: top right;
 }
 
-.nav-dropdown-wrapper:hover .nav-dropdown {
+.nav-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 0;
+    width: 100%;
+    height: 10px;
+}
+
+.nav-dropdown-wrapper:hover .nav-dropdown,
+.nav-dropdown-wrapper.is-active .nav-dropdown {
     display: block;
     animation: dropdownPop 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
