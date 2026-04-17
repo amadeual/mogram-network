@@ -13,8 +13,8 @@
         
         <!-- Desktop Links - only visible on desktop -->
         <div class="nav-links-desktop">
-            <a href="#" class="text-light text-sm font-semibold">Explorar Feed</a>
-            <a href="#" class="text-light text-sm font-semibold">Explorar Criadores</a>
+            <a href="{{ route('explore.feed') }}" class="text-light text-sm font-semibold">Explorar Feed</a>
+            <a href="{{ route('explore.creators') }}" class="text-light text-sm font-semibold">Explorar Criadores</a>
             <a href="{{ route('creators') }}" class="text-light text-sm font-semibold">Ganhos</a>
         </div>
         
@@ -57,8 +57,8 @@
     <!-- Mobile Side Menu Overlay -->
     <div id="mobile-menu-overlay" class="mobile-menu-overlay">
         <div class="mobile-menu-content">
-            <a href="#" class="mobile-menu-link">Explorar Feed</a>
-            <a href="#" class="mobile-menu-link">Explorar Criadores</a>
+            <a href="{{ route('explore.feed') }}" class="mobile-menu-link">Explorar Feed</a>
+            <a href="{{ route('explore.creators') }}" class="mobile-menu-link">Explorar Criadores</a>
             <a href="{{ route('creators') }}" class="mobile-menu-link">Ganhos</a>
             <div class="dropdown-divider" style="margin: 1.5rem 0;"></div>
             @guest
@@ -74,7 +74,7 @@
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
         <span>Início</span>
     </a>
-    <a href="#" class="bottom-nav-item">
+    <a href="{{ route('explore.feed') }}" class="bottom-nav-item">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <span>Explorar</span>
     </a>

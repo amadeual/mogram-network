@@ -8,12 +8,90 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Mail\WelcomeMail;
 use App\Mail\PasswordResetMail;
+use Laravel\Socialite\Facades\Socialite;
 
 class AuthController extends Controller
 {
+    /**
+     * Redirect the user to the Google authentication page.
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function redirectToGoogle()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    /**
+     * Obtain the user information from Google.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handleGoogleCallback()
+    {
+        try {
+            $googleUser = Socialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect('/login')->withErrors(['login' => 'Erro ao autenticar com o Google. Tente novamente.']);
+        }
+
+        // Find or create the user
+        $user = User::where('google_id', $googleUser->id)
+                    ->orWhere('email', $googleUser->email)
+                    ->first();
+
+        if ($user) {
+            // Update existing user with Google ID if not present
+            if (!$user->google_id) {
+                $user->update([
+                    'google_id' => $googleUser->id,
+                    'google_token' => $googleUser->token,
+                    'google_refresh_token' => $googleUser->refreshToken,
+                ]);
+            } else {
+                // Just update tokens
+                $user->update([
+                    'google_token' => $googleUser->token,
+                    'google_refresh_token' => $googleUser->refreshToken,
+                ]);
+            }
+        } else {
+            // Create a new user
+            $username = $googleUser->nickname ?: strtolower(str_replace(' ', '', $googleUser->name)) . rand(100, 999);
+            
+            // Ensure username is unique
+            while (User::where('username', $username)->exists()) {
+                $username = strtolower(str_replace(' ', '', $googleUser->name)) . rand(100, 999);
+            }
+
+            $user = User::create([
+                'name' => $googleUser->name,
+                'email' => $googleUser->email,
+                'username' => $username,
+                'google_id' => $googleUser->id,
+                'google_token' => $googleUser->token,
+                'google_refresh_token' => $googleUser->refreshToken,
+                'password' => Hash::make(Str::random(24)), // Random password for social accounts
+                'avatar' => $googleUser->avatar,
+            ]);
+
+            // Send welcome mail
+            try {
+                Mail::to($user->email)->send(new WelcomeMail($user));
+            } catch (\Exception $e) {
+                Log::error('Erro ao enviar email de boas-vindas (Google): ' . $e->getMessage());
+            }
+        }
+
+        Auth::login($user);
+
+        return redirect()->intended(route('dashboard'))->with('success', 'Bem-vindo ao Mogram!');
+    }
+
     public function showRegistrationForm()
     {
         return view('auth.register');
@@ -44,7 +122,7 @@ class AuthController extends Controller
         try {
             Mail::to($user->email)->send(new WelcomeMail($user));
         } catch (\Exception $e) {
-            \Log::error('Erro ao enviar email de boas-vindas: ' . $e->getMessage());
+            Log::error('Erro ao enviar email de boas-vindas: ' . $e->getMessage());
         }
 
         Auth::login($user);
@@ -111,7 +189,7 @@ class AuthController extends Controller
             Mail::to($request->email)->send(new PasswordResetMail($token));
             return back()->with('success', 'Um e-mail de redefinição de senha foi enviado!');
         } catch (\Exception $e) {
-            \Log::error('Erro ao enviar email de reset de senha: ' . $e->getMessage());
+            Log::error('Erro ao enviar email de reset de senha: ' . $e->getMessage());
             return back()->withErrors(['email' => 'Não foi possível enviar o e-mail de recuperação. Tente novamente mais tarde.']);
         }
     }

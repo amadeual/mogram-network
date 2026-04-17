@@ -99,10 +99,10 @@
             </div>
 
             <div class="flex flex-direction-column gap-4" style="flex-direction: column;">
-                <button class="mogram-btn-social">
+                <a href="{{ route('auth.google') }}" class="mogram-btn-social" style="text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%;">
                     <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#EA4335" d="M12.48 10.92v3.28h7.84c-.24 1.84-.9 3.47-1.92 4.64-1.12 1.34-2.88 2.62-5.92 2.62-4.73 0-8.59-3.41-8.59-8.46s3.86-8.46 8.59-8.46c2.51 0 4.27 1.01 5.56 2.22l2.3-2.3C18.66 2.76 16.03 1.5 12.48 1.5 6.3 1.5 1.5 6.44 1.5 12.63s4.8 11.13 10.98 11.13c3.34 0 5.86-1.1 7.82-3.14 2 2 4.7 3.14 7.7 3.14 5.34 0 9.7-4.36 9.7-9.7s-4.36-9.7-9.7-9.7c-2.34 0-4.48.84-6.14 2.24L12.48 10.92z"/></svg>
                     Google
-                </button>
+                </a>
             </div>
 
             <p class="text-center text-muted" style="font-size: 10px; margin-top: 3rem; line-height: 1.6;">

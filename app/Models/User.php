@@ -34,6 +34,9 @@ class User extends Authenticatable
         'deposits_frozen',
         'last_ip',
         'two_factor_secret',
+        'google_id',
+        'google_token',
+        'google_refresh_token',
     ];
 
     /**
