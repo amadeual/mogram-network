@@ -148,33 +148,38 @@
             
             <form action="{{ route('admin.users.adjust_balance', $user->id) }}" method="POST">
                 @csrf
-                <div style="display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 0.8fr; gap: 1.5rem; align-items: end;">
-                    <div>
-                        <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Destino do Saldo</label>
-                        <div style="position: relative;">
-                            <select name="wallet" class="mogram-input-field" style="height: 54px; padding-left: 1.25rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 700; cursor: pointer; border-radius: 14px;">
+                <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                    <!-- First Row: Selectors -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Destino do Saldo</label>
+                            <select name="wallet" class="mogram-input-field" style="height: 54px; width: 100%; padding: 0 1.25rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 700; cursor: pointer; border-radius: 14px; color: white;">
                                 <option value="balance">💳 Carteira Principal (Gasto)</option>
                                 <option value="studio_balance">💰 Saldo Studio (Lucros)</option>
                             </select>
                         </div>
-                    </div>
-                    <div>
-                        <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Tipo de Operação</label>
-                        <select name="type" class="mogram-input-field" style="height: 54px; padding-left: 1.25rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 700; cursor: pointer; border-radius: 14px;">
-                            <option value="credit" style="color: var(--success);">📈 Creditar (+)</option>
-                            <option value="debit" style="color: var(--danger);">📉 Debitar (-)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Valor Estimado</label>
-                        <div style="position: relative;">
-                            <span style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); font-weight: 900; color: var(--text-muted); font-size: 0.9rem;">R$</span>
-                            <input type="text" name="amount" class="mogram-input-field" placeholder="0,00" style="height: 54px; padding-left: 3.5rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 900; font-size: 1.1rem; border-radius: 14px;">
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Tipo de Operação</label>
+                            <select name="type" class="mogram-input-field" style="height: 54px; width: 100%; padding: 0 1.25rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 700; cursor: pointer; border-radius: 14px; color: white;">
+                                <option value="credit" style="color: var(--success);">📈 Creditar (+)</option>
+                                <option value="debit" style="color: var(--danger);">📉 Debitar (-)</option>
+                            </select>
                         </div>
                     </div>
-                    <button type="submit" class="mogram-btn-primary" style="height: 54px; border-radius: 14px; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 10px 25px rgba(51, 144, 236, 0.25);">
-                        CONFIRMAR
-                    </button>
+
+                    <!-- Second Row: Value and Button -->
+                    <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 1.5rem; align-items: end;">
+                        <div>
+                            <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Valor Estimado</label>
+                            <div style="position: relative;">
+                                <span style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); font-weight: 900; color: var(--text-muted); font-size: 0.9rem;">R$</span>
+                                <input type="text" name="amount" class="mogram-input-field" placeholder="0,00" style="height: 54px; width: 100%; padding-left: 3.5rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 900; font-size: 1.1rem; border-radius: 14px; color: white;">
+                            </div>
+                        </div>
+                        <button type="submit" class="mogram-btn-primary" style="height: 54px; width: 100%; border-radius: 14px; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 10px 25px rgba(51, 144, 236, 0.25);">
+                            CONFIRMAR AJUSTE
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>
