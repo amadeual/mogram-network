@@ -172,6 +172,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/users/{id}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('admin.users.show');
         Route::post('/users/{id}/toggle/{action}', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle');
         Route::post('/users/{id}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('admin.users.reset_password');
+        Route::post('/users/{id}/adjust-balance', [App\Http\Controllers\AdminController::class, 'adjustBalance'])->name('admin.users.adjust_balance');
         Route::get('/content', [App\Http\Controllers\AdminController::class, 'contents'])->name('admin.content');
         Route::delete('/content/post/{id}', [App\Http\Controllers\AdminController::class, 'deletePost'])->name('admin.content.delete_post');
         Route::delete('/content/live/{id}', [App\Http\Controllers\AdminController::class, 'deleteLive'])->name('admin.content.delete_live');

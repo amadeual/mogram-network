@@ -37,14 +37,14 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; border-top: 1px solid var(--border-gray); padding-top: 2rem;">
-                <div>
-                    <p style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Saldo</p>
-                    <p style="font-size: 1.1rem; font-weight: 900;">R$ {{ number_format($user->balance, 2, ',', '.') }}</p>
+            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; border-top: 1px solid var(--border-gray); padding-top: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Saldo de Gasto</p>
+                    <p style="font-size: 1.1rem; font-weight: 900; color: var(--primary-blue);">R$ {{ number_format($user->balance, 2, ',', '.') }}</p>
                 </div>
-                <div>
-                    <p style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Posts</p>
-                    <p style="font-size: 1.1rem; font-weight: 900;">{{ $user->posts_count ?? $user->posts()->count() }}</p>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <p style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Saldo Financeiro</p>
+                    <p style="font-size: 1.1rem; font-weight: 900; color: var(--success);">R$ {{ number_format($user->studio_balance, 2, ',', '.') }}</p>
                 </div>
             </div>
         </div>
@@ -127,6 +127,41 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <!-- Balance Management -->
+        <div class="admin-card">
+            <h3 style="font-size: 1.1rem; font-weight: 900; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Gestão de Saldos
+            </h3>
+            
+            <form action="{{ route('admin.users.adjust_balance', $user->id) }}" method="POST">
+                @csrf
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr 1fr; gap: 1rem; align-items: end;">
+                    <div style="margin-bottom: 0;">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Carteira</label>
+                        <select name="wallet" class="mogram-input-field" style="height: 48px; background: rgba(0,0,0,0.2);">
+                            <option value="balance">Saldo de Gasto (Wallet)</option>
+                            <option value="studio_balance">Saldo Financeiro (Profits)</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 0;">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Operação</label>
+                        <select name="type" class="mogram-input-field" style="height: 48px; background: rgba(0,0,0,0.2);">
+                            <option value="credit">Creditar (+)</option>
+                            <option value="debit">Debitar (-)</option>
+                        </select>
+                    </div>
+                    <div style="margin-bottom: 0;">
+                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Valor (R$)</label>
+                        <input type="text" name="amount" class="mogram-input-field" placeholder="0,00" style="height: 48px; background: rgba(0,0,0,0.2);">
+                    </div>
+                    <button type="submit" class="mogram-btn-primary" style="height: 48px; width: 100%; font-size: 0.8rem;">
+                        APLICAR
+                    </button>
+                </div>
+            </form>
         </div>
 
         <div class="admin-card" style="flex: 1;">

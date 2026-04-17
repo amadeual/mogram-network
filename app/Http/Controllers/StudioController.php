@@ -245,7 +245,7 @@ class StudioController extends Controller
             ->whereIn('status', ['approved', 'pending'])
             ->sum('amount');
             
-        $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
+        $availableBalance = $totalRevenue - $totalCompletedWithdrawals + (float)Auth::user()->studio_balance;
         
         return view('studio.finance', compact(
             'totalRevenue', 
@@ -263,7 +263,7 @@ class StudioController extends Controller
         $postIds = Post::where('user_id', Auth::id())->pluck('id');
         $totalRevenue = $this->calculateTotalRevenue();
         $totalCompletedWithdrawals = Withdrawal::where('user_id', Auth::id())->whereIn('status', ['approved', 'pending'])->sum('amount');
-        $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
+        $availableBalance = $totalRevenue - $totalCompletedWithdrawals + (float)Auth::user()->studio_balance;
 
         return view('studio.withdraw', compact('availableBalance'));
     }
@@ -292,7 +292,7 @@ class StudioController extends Controller
             ->whereIn('status', ['pending', 'approved'])
             ->sum('amount');
             
-        $availableBalance = $totalRevenue - $totalCompletedWithdrawals;
+        $availableBalance = $totalRevenue - $totalCompletedWithdrawals + (float)Auth::user()->studio_balance;
 
         $withdrawAmount = (float)str_replace(',', '.', $request->amount);
         
@@ -493,6 +493,6 @@ class StudioController extends Controller
         $ticketRevenue = DB::table('live_access')->join('lives', 'live_access.live_id', '=', 'lives.id')->where('lives.user_id', Auth::id())->sum(DB::raw('live_access.amount - (CASE WHEN live_access.commission IS NULL THEN 0 ELSE live_access.commission END)'));
         $communityRevenue = DB::table('community_subscriptions')->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')->where('communities.user_id', Auth::id())->where('community_subscriptions.status', 'active')->sum(DB::raw('community_subscriptions.amount - (CASE WHEN community_subscriptions.commission IS NULL THEN 0 ELSE community_subscriptions.commission END)'));
         
-        return (float)$postRevenue + (float)$giftRevenue + (float)$ticketRevenue + (float)$communityRevenue;
+        return (float)$postRevenue + (float)$giftRevenue + (float)$ticketRevenue + (float)$communityRevenue + (float)Auth::user()->studio_balance;
     }
 }

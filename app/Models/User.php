@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_id',
         'google_token',
         'google_refresh_token',
+        'studio_balance',
     ];
 
     /**
@@ -58,6 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
         'balance' => 'decimal:2',
+        'studio_balance' => 'decimal:2',
     ];
     /**
      * Get the posts for the user.

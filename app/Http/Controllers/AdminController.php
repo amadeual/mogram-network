@@ -118,6 +118,36 @@ class AdminController extends Controller
         return back()->with('success', 'Ação executada com sucesso!');
     }
 
+    public function adjustBalance(Request $request, $id)
+    {
+        $request->validate([
+            'amount' => 'required',
+            'type' => 'required|in:credit,debit',
+            'wallet' => 'required|in:balance,studio_balance',
+        ]);
+
+        $user = User::findOrFail($id);
+        
+        // Handle comma or dot for decimal input
+        $amountRaw = str_replace(',', '.', $request->amount);
+        $amount = (float)$amountRaw;
+        
+        $wallet = $request->wallet;
+
+        if ($request->type === 'credit') {
+            $user->$wallet += $amount;
+        } else {
+            $user->$wallet -= $amount;
+        }
+
+        $user->save();
+        
+        $walletName = $wallet === 'balance' ? 'Carteira (Gasto)' : 'Financeiro (Ganhos)';
+        $actionName = $request->type === 'credit' ? 'Creditado' : 'Debitado';
+
+        return back()->with('success', "R$ " . number_format($amount, 2, ',', '.') . " foi {$actionName} da {$walletName} com sucesso!");
+    }
+
     public function resetUserPassword($id)
     {
         $user = User::findOrFail($id);
