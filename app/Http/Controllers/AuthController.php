@@ -170,6 +170,25 @@ class AuthController extends Controller
         return redirect('/');
     }
 
+    public function verifyEmail(Request $request, $id, $hash)
+    {
+        $user = User::findOrFail($id);
+
+        if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+            return redirect()->route('login')->withErrors(['login' => 'Link de verificação inválido ou expirado.']);
+        }
+
+        if ($user->hasVerifiedEmail()) {
+            return redirect()->route('login')->with('success', 'E-mail já verificado anteriormente. Por favor, faça login.');
+        }
+
+        if ($user->markEmailAsVerified()) {
+            event(new \Illuminate\Auth\Events\Verified($user));
+        }
+
+        return redirect()->route('login')->with('success', 'E-mail verificado com sucesso! Você já pode acessar sua conta.');
+    }
+
     // --- Password Reset Logic ---
 
     public function showForgotPasswordForm()

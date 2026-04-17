@@ -47,10 +47,7 @@ Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
 
-Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
-    $request->fulfill();
-    return redirect()->route('dashboard')->with('success', 'E-mail verificado com sucesso!');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])->middleware(['signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
     $request->user()->sendEmailVerificationNotification();
