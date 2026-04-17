@@ -42,6 +42,21 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLinkEmail'])->
 Route::get('/reset-password/{token}', [AuthController::class, 'showResetForm'])->name('password.reset');
 Route::post('/reset-password', [AuthController::class, 'resetPassword'])->name('password.update');
 
+// Email Verification Routes
+Route::get('/email/verify', function () {
+    return view('auth.verify-email');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (\Illuminate\Foundation\Auth\EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect()->route('dashboard')->with('success', 'E-mail verificado com sucesso!');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (\Illuminate\Http\Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+    return back()->with('success', 'Link de verificação reenviado!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // Legal & Support Routes
@@ -67,7 +82,7 @@ Route::get('/explorar', [ExploreController::class, 'feed'])->name('explore.feed'
 Route::get('/explorar/criadores', [ExploreController::class, 'creators'])->name('explore.creators');
 
 // Protected Routes
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [FeedController::class, 'index'])->name('dashboard');
     Route::get('/search/users', [App\Http\Controllers\SearchController::class, 'search'])->name('search.users');
     Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');

@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Mail\WelcomeMail;
 use App\Mail\PasswordResetMail;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
@@ -89,6 +90,11 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        // Social users are considered verified
+        if (!$user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
+
         return redirect()->intended(route('dashboard'))->with('success', 'Bem-vindo ao Mogram!');
     }
 
@@ -119,15 +125,9 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        try {
-            Mail::to($user->email)->send(new WelcomeMail($user));
-        } catch (\Exception $e) {
-            Log::error('Erro ao enviar email de boas-vindas: ' . $e->getMessage());
-        }
+        event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect()->route('dashboard')->with('success', 'Bem-vindo ao Mogram! Sua conta foi criada com sucesso.');
+        return redirect()->route('login')->with('success', 'Sua conta foi criada! Por favor, verifique seu e-mail para confirmar seu cadastro antes de fazer login.');
     }
 
     public function showLoginForm()
@@ -146,6 +146,13 @@ class AuthController extends Controller
         $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         if (Auth::attempt([$loginType => $request->login, 'password' => $request->password])) {
+            $user = Auth::user();
+            
+            if (!$user->hasVerifiedEmail()) {
+                Auth::logout();
+                return redirect()->route('login')->withErrors(['login' => 'Por favor, verifique seu e-mail antes de fazer login.']);
+            }
+
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'))->with('success', 'Bem-vindo de volta!');
         }
