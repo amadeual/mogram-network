@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ContentPurchasedMail;
 
+use App\Models\ActivityLog;
+
 class FeedController extends Controller
 {
     public function index()
@@ -180,6 +182,8 @@ class FeedController extends Controller
                     'amount' => $post->price,
                     'commission' => $commission
                 ]);
+
+                ActivityLog::log("Comprou post exclusivo: {$post->title}", 'financial', $post->price, $user->id, 'balance');
 
                 // Send email to buyer
                 try {

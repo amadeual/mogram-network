@@ -11,6 +11,8 @@ use App\Models\Ticket;
 use App\Models\Withdrawal;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\ActivityLog;
+
 class AdminController extends Controller
 {
     public function index()
@@ -96,7 +98,8 @@ class AdminController extends Controller
     {
         $user = User::findOrFail($id);
         $roles = \App\Models\AdminRole::orderBy('name')->get();
-        return view('admin.user-details', compact('user', 'roles'));
+        $logs = ActivityLog::where('user_id', $id)->latest()->take(20)->get();
+        return view('admin.user-details', compact('user', 'roles', 'logs'));
     }
 
     public function updateUserRole(Request $request, $id)
@@ -120,6 +123,8 @@ class AdminController extends Controller
 
         $user->update($data);
 
+        ActivityLog::log("Função administrativa atualizada para " . ($user->adminRole ? $user->adminRole->name : 'Nenhuma'), 'admin_action', null, $user->id);
+
         return back()->with('success', 'Função do usuário atualizada com sucesso!');
     }
 
@@ -138,6 +143,9 @@ class AdminController extends Controller
         }
 
         $user->save();
+
+        ActivityLog::log("Status/Ação administrativa: {$action}", 'admin_action', null, $user->id);
+
         return back()->with('success', 'Ação executada com sucesso!');
     }
 
@@ -167,6 +175,8 @@ class AdminController extends Controller
         
         $walletName = $wallet === 'balance' ? 'Carteira (Gasto)' : 'Financeiro (Ganhos)';
         $actionName = $request->type === 'credit' ? 'Creditado' : 'Debitado';
+
+        ActivityLog::log("Ajuste manual de saldo: R$ " . number_format($amount, 2, ',', '.') . " na {$walletName} ({$actionName})", 'financial', $amount, $user->id, $wallet);
 
         return back()->with('success', "R$ " . number_format($amount, 2, ',', '.') . " foi {$actionName} da {$walletName} com sucesso!");
     }
@@ -262,6 +272,25 @@ class AdminController extends Controller
         $deposits = \App\Models\Deposit::with('user')->orderBy('created_at', 'desc')->paginate(15);
         $todayAmount = \App\Models\Deposit::whereDate('created_at', \Carbon\Carbon::today())->sum('amount');
         return view('admin.deposits', compact('deposits', 'todayAmount'));
+    }
+
+    public function activityLogs(Request $request)
+    {
+        $query = ActivityLog::with(['user', 'admin'])->latest();
+
+        if ($request->search) {
+            $query->whereHas('user', function($q) use ($request) {
+                $q->where('name', 'LIKE', "%{$request->search}%")
+                  ->orWhere('email', 'LIKE', "%{$request->search}%");
+            })->orWhere('description', 'LIKE', "%{$request->search}%");
+        }
+
+        if ($request->type) {
+            $query->where('type', $request->type);
+        }
+
+        $logs = $query->paginate(30);
+        return view('admin.logs', compact('logs'));
     }
 
     public function reports(Request $request)
@@ -372,6 +401,8 @@ class AdminController extends Controller
         $withdrawal->status = 'approved';
         $withdrawal->save();
 
+        ActivityLog::log("Saque aprovado: R$ " . number_format($withdrawal->amount, 2, ',', '.'), 'financial', $withdrawal->amount, $withdrawal->user_id);
+
         // Optional: Send notification to user
         
         return back()->with('success', 'Saque aprovado e marcado como pago!');
@@ -388,6 +419,8 @@ class AdminController extends Controller
         $withdrawal->status = 'rejected';
         $withdrawal->rejection_reason = $request->reason ?? 'Solicitação recusada pela administração.';
         $withdrawal->save();
+
+        ActivityLog::log("Saque recusado: R$ " . number_format($withdrawal->amount, 2, ',', '.') . ". Motivo: " . ($request->reason ?? 'Não especificado'), 'financial', $withdrawal->amount, $withdrawal->user_id);
 
         // Optional: Send notification to user
 

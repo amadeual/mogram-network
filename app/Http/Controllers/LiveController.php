@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\LiveStartedMail;
 
+use App\Models\ActivityLog;
+
 class LiveController extends Controller
 {
     public function index(Request $request)
@@ -312,6 +314,8 @@ class LiveController extends Controller
                         'created_at' => now()
                     ]);
                 }
+
+                ActivityLog::log("Comprou acesso à live: {$live->title}", 'financial', $live->price, $user->id, 'balance');
             });
             return back()->with('success', 'Acesso liberado!');
         } catch (\Exception $e) {
@@ -495,6 +499,8 @@ class LiveController extends Controller
                 'amount' => $gift->price,
                 'commission' => $platformComm
             ]);
+
+            ActivityLog::log("Enviou presente {$gift->icon} {$gift->name} na live: {$live->title}", 'financial', $gift->price, $user->id, 'balance');
 
             // Create special chat message for the gift
             \App\Models\LiveChat::create([

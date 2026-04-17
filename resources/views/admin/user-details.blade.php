@@ -254,6 +254,58 @@
                 </div>
             </div>
         </div>
+        <!-- Activity Logs Card -->
+        <div class="admin-card">
+            <h3 style="font-size: 1.1rem; font-weight: 950; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    Atividade Recente (Logs)
+                </div>
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">Últimos 20 Registros</span>
+            </h3>
+
+            @if($logs->count() > 0)
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                @foreach($logs as $log)
+                <div style="padding: 1.25rem; background: rgba(255,255,255,0.02); border-radius: 16px; border: 1.5px solid rgba(255,255,255,0.04); display: flex; justify-content: space-between; align-items: center; transition: 0.3s;" onmouseover="this.style.background='rgba(51, 144, 236, 0.04)'; this.style.borderColor='rgba(51, 144, 236, 0.1)';" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255,255,255,0.04)';">
+                    <div style="display: flex; gap: 1.5rem; align-items: center;">
+                        <div style="width: 42px; height: 42px; background: {{ $log->type == 'financial' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(51, 144, 236, 0.1)' }}; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: {{ $log->type == 'financial' ? '#22c55e' : '#3390ec' }}; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+                            @if($log->type == 'financial')
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            @else
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            @else
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                            @endif
+                        </div>
+                        <div>
+                            <p style="font-weight: 850; font-size: 0.95rem; color: rgba(255,255,255,0.95); margin-bottom: 0.25rem;">{{ $log->description }}</p>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 0.725rem; color: var(--text-muted); font-weight: 700;">{{ $log->created_at->translatedFormat('d M, Y \à\s H:i') }}</span>
+                                @if($log->admin)
+                                    <span style="width: 4px; height: 4px; background: rgba(255,255,255,0.2); border-radius: 50%;"></span>
+                                    <span style="font-size: 0.725rem; color: var(--primary-blue); font-weight: 800; text-transform: uppercase;">ADMIN: {{ $log->admin->name }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    @if($log->amount)
+                    <div style="text-align: right;">
+                        <span style="font-weight: 950; font-size: 1.1rem; color: {{ $log->amount > 0 ? '#22c55e' : '#ef4444' }}; display: block;">
+                            {{ $log->amount > 0 ? '+' : '' }}R$ {{ number_format($log->amount, 2, ',', '.') }}
+                        </span>
+                        <span style="font-size: 0.65rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 0.5px;">{{ $log->wallet_type == 'balance' ? 'Carteira Principal' : 'Saldo Studio' }}</span>
+                    </div>
+                    @endif
+                </div>
+                @endforeach
+            </div>
+            @else
+            <div style="text-align: center; padding: 4rem 2rem; border: 1.5px dashed rgba(255,255,255,0.08); border-radius: 20px;">
+                <p style="font-weight: 700; color: var(--text-muted); font-size: 0.9rem;">Este usuário ainda não possui registros de atividade.</p>
+            </div>
+            @endif
+        </div>
     </div>
 </div>
 @endsection

@@ -183,6 +183,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/deposits', [App\Http\Controllers\AdminController::class, 'deposits'])->name('admin.deposits')->middleware('admin:manage_finance');
         Route::get('/gifts', [App\Http\Controllers\AdminController::class, 'gifts'])->name('admin.gifts')->middleware('admin:manage_content');
         Route::post('/gifts/{id}', [App\Http\Controllers\AdminController::class, 'updateGift'])->name('admin.gifts.update')->middleware('admin:manage_content');
+        Route::get('/logs', [App\Http\Controllers\AdminController::class, 'activityLogs'])->name('admin.logs')->middleware('admin:manage_reports');
         Route::get('/reports', [App\Http\Controllers\AdminController::class, 'reports'])->name('admin.reports')->middleware('admin:manage_reports');
         Route::get('/settings', [App\Http\Controllers\AdminController::class, 'settings'])->name('admin.settings')->middleware('admin:manage_settings');
         Route::post('/settings', [App\Http\Controllers\AdminController::class, 'updateSettings'])->name('admin.settings.update')->middleware('admin:manage_settings');
