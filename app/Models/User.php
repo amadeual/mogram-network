@@ -38,7 +38,26 @@ class User extends Authenticatable implements MustVerifyEmail
         'google_token',
         'google_refresh_token',
         'studio_balance',
+        'admin_role_id',
     ];
+
+    public function adminRole()
+    {
+        return $this->belongsTo(AdminRole::class, 'admin_role_id');
+    }
+
+    public function canAccess($permission)
+    {
+        if (!$this->isAdmin()) return false;
+        
+        // Superadmins can access everything
+        $superAdmins = ['bomboadmar@gmail.com', 'criptovida@gmail.com'];
+        if (in_array($this->email, $superAdmins)) return true;
+
+        if (!$this->adminRole) return false;
+
+        return $this->adminRole->hasPermission($permission);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

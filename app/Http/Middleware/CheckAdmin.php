@@ -13,14 +13,16 @@ class CheckAdmin
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next, ?string $permission = null): Response
     {
-        $superAdmins = ['bomboadmar@gmail.com', 'criptovida@gmail.com'];
-
-        if (auth()->check() && (auth()->user()->role === 'admin' || in_array(auth()->user()->email, $superAdmins))) {
-            return $next($request);
+        if (!auth()->check() || !auth()->user()->isAdmin()) {
+            return redirect()->route('dashboard')->with('error', 'Acesso negado. Apenas administradores.');
         }
 
-        return redirect()->route('dashboard')->with('error', 'Acesso negado. Apenas administradores podem acessar esta área.');
+        if ($permission && !auth()->user()->canAccess($permission)) {
+            return redirect()->route('admin.dashboard')->with('error', 'Você não tem permissão para acessar esta funcionalidade.');
+        }
+
+        return $next($request);
     }
 }

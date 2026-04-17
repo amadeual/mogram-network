@@ -95,9 +95,32 @@ class AdminController extends Controller
     public function showUser($id)
     {
         $user = User::findOrFail($id);
-        // Logic for city, country, IP etc. IP usually stored in a logs table or session.
-        // For now using the column added in migration.
-        return view('admin.user-details', compact('user'));
+        $roles = \App\Models\AdminRole::orderBy('name')->get();
+        return view('admin.user-details', compact('user', 'roles'));
+    }
+
+    public function updateUserRole(Request $request, $id)
+    {
+        $request->validate([
+            'admin_role_id' => 'nullable|exists:admin_roles,id',
+            'role' => 'required|in:user,creator,admin',
+        ]);
+
+        $user = User::findOrFail($id);
+        
+        $data = [
+            'role' => $request->role,
+            'admin_role_id' => $request->admin_role_id,
+        ];
+
+        // If an admin role is selected, ensure the base role is 'admin'
+        if ($request->admin_role_id) {
+            $data['role'] = 'admin';
+        }
+
+        $user->update($data);
+
+        return back()->with('success', 'Função do usuário atualizada com sucesso!');
     }
 
     public function toggleUserStatus($id, $action)

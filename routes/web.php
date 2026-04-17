@@ -164,33 +164,41 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Admin Panel Routes
     Route::middleware(['admin'])->prefix('admin')->group(function () {
-        Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
-        Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
-        Route::get('/users/{id}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('admin.users.show');
-        Route::post('/users/{id}/toggle/{action}', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle');
-        Route::post('/users/{id}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('admin.users.reset_password');
-        Route::post('/users/{id}/adjust-balance', [App\Http\Controllers\AdminController::class, 'adjustBalance'])->name('admin.users.adjust_balance');
-        Route::get('/content', [App\Http\Controllers\AdminController::class, 'contents'])->name('admin.content');
-        Route::delete('/content/post/{id}', [App\Http\Controllers\AdminController::class, 'deletePost'])->name('admin.content.delete_post');
-        Route::delete('/content/live/{id}', [App\Http\Controllers\AdminController::class, 'deleteLive'])->name('admin.content.delete_live');
-        Route::get('/lives', [App\Http\Controllers\AdminController::class, 'lives'])->name('admin.lives');
-        Route::post('/lives/{id}/finish', [App\Http\Controllers\AdminController::class, 'finishLive'])->name('admin.lives.finish');
+        Route::get('/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard'); // dashboard is general for all admins
+        Route::get('/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users')->middleware('admin:manage_users');
+        Route::get('/users/{id}', [App\Http\Controllers\AdminController::class, 'showUser'])->name('admin.users.show')->middleware('admin:manage_users');
+        Route::post('/users/{id}/update-role', [App\Http\Controllers\AdminController::class, 'updateUserRole'])->name('admin.users.update_role')->middleware('admin:manage_roles');
+        Route::post('/users/{id}/toggle/{action}', [App\Http\Controllers\AdminController::class, 'toggleUserStatus'])->name('admin.users.toggle')->middleware('admin:manage_users');
+        Route::post('/users/{id}/reset-password', [App\Http\Controllers\AdminController::class, 'resetUserPassword'])->name('admin.users.reset_password')->middleware('admin:manage_users');
+        Route::post('/users/{id}/adjust-balance', [App\Http\Controllers\AdminController::class, 'adjustBalance'])->name('admin.users.adjust_balance')->middleware('admin:manage_users');
+        Route::get('/content', [App\Http\Controllers\AdminController::class, 'contents'])->name('admin.content')->middleware('admin:manage_content');
+        Route::delete('/content/post/{id}', [App\Http\Controllers\AdminController::class, 'deletePost'])->name('admin.content.delete_post')->middleware('admin:manage_content');
+        Route::delete('/content/live/{id}', [App\Http\Controllers\AdminController::class, 'deleteLive'])->name('admin.content.delete_live')->middleware('admin:manage_content');
+        Route::get('/lives', [App\Http\Controllers\AdminController::class, 'lives'])->name('admin.lives')->middleware('admin:manage_content');
+        Route::post('/lives/{id}/finish', [App\Http\Controllers\AdminController::class, 'finishLive'])->name('admin.lives.finish')->middleware('admin:manage_content');
 
-
-        Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals');
-        Route::post('/withdrawals/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve');
-        Route::post('/withdrawals/{id}/reject', [App\Http\Controllers\AdminController::class, 'rejectWithdrawal'])->name('admin.withdrawals.reject');
-        Route::get('/deposits', [App\Http\Controllers\AdminController::class, 'deposits'])->name('admin.deposits');
-        Route::get('/gifts', [App\Http\Controllers\AdminController::class, 'gifts'])->name('admin.gifts');
-        Route::post('/gifts/{id}', [App\Http\Controllers\AdminController::class, 'updateGift'])->name('admin.gifts.update');
-        Route::get('/reports', [App\Http\Controllers\AdminController::class, 'reports'])->name('admin.reports');
-        Route::get('/settings', [App\Http\Controllers\AdminController::class, 'settings'])->name('admin.settings');
-        Route::post('/settings', [App\Http\Controllers\AdminController::class, 'updateSettings'])->name('admin.settings.update');
+        Route::get('/withdrawals', [App\Http\Controllers\AdminController::class, 'withdrawals'])->name('admin.withdrawals')->middleware('admin:manage_finance');
+        Route::post('/withdrawals/{id}/approve', [App\Http\Controllers\AdminController::class, 'approveWithdrawal'])->name('admin.withdrawals.approve')->middleware('admin:manage_finance');
+        Route::post('/withdrawals/{id}/reject', [App\Http\Controllers\AdminController::class, 'rejectWithdrawal'])->name('admin.withdrawals.reject')->middleware('admin:manage_finance');
+        Route::get('/deposits', [App\Http\Controllers\AdminController::class, 'deposits'])->name('admin.deposits')->middleware('admin:manage_finance');
+        Route::get('/gifts', [App\Http\Controllers\AdminController::class, 'gifts'])->name('admin.gifts')->middleware('admin:manage_content');
+        Route::post('/gifts/{id}', [App\Http\Controllers\AdminController::class, 'updateGift'])->name('admin.gifts.update')->middleware('admin:manage_content');
+        Route::get('/reports', [App\Http\Controllers\AdminController::class, 'reports'])->name('admin.reports')->middleware('admin:manage_reports');
+        Route::get('/settings', [App\Http\Controllers\AdminController::class, 'settings'])->name('admin.settings')->middleware('admin:manage_settings');
+        Route::post('/settings', [App\Http\Controllers\AdminController::class, 'updateSettings'])->name('admin.settings.update')->middleware('admin:manage_settings');
 
         // Admin Support Routes
-        Route::get('/suporte', [App\Http\Controllers\Admin\SupportController::class, 'index'])->name('admin.support.index');
-        Route::get('/suporte/{ticket}', [App\Http\Controllers\Admin\SupportController::class, 'show'])->name('admin.support.show');
-        Route::post('/suporte/{ticket}/reply', [App\Http\Controllers\Admin\SupportController::class, 'reply'])->name('admin.support.reply');
+        Route::get('/suporte', [App\Http\Controllers\Admin\SupportController::class, 'index'])->name('admin.support.index')->middleware('admin:manage_support');
+        Route::get('/suporte/{ticket}', [App\Http\Controllers\Admin\SupportController::class, 'show'])->name('admin.support.show')->middleware('admin:manage_support');
+        Route::post('/suporte/{ticket}/reply', [App\Http\Controllers\Admin\SupportController::class, 'reply'])->name('admin.support.reply')->middleware('admin:manage_support');
+
+        // Roles & Permissions Management
+        Route::get('/roles', [App\Http\Controllers\Admin\AdminRoleController::class, 'index'])->name('admin.roles')->middleware('admin:manage_roles');
+        Route::get('/roles/create', [App\Http\Controllers\Admin\AdminRoleController::class, 'create'])->name('admin.roles.create')->middleware('admin:manage_roles');
+        Route::post('/roles', [App\Http\Controllers\Admin\AdminRoleController::class, 'store'])->name('admin.roles.store')->middleware('admin:manage_roles');
+        Route::get('/roles/{role}/edit', [App\Http\Controllers\Admin\AdminRoleController::class, 'edit'])->name('admin.roles.edit')->middleware('admin:manage_roles');
+        Route::put('/roles/{role}', [App\Http\Controllers\Admin\AdminRoleController::class, 'update'])->name('admin.roles.update')->middleware('admin:manage_roles');
+        Route::delete('/roles/{role}', [App\Http\Controllers\Admin\AdminRoleController::class, 'destroy'])->name('admin.roles.delete')->middleware('admin:manage_roles');
     });
 
     // Purchases Routes

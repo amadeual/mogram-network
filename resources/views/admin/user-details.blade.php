@@ -68,6 +68,45 @@
                 </div>
             </div>
         </div>
+
+        <div class="admin-card" style="padding: 2rem; border: 1.5px solid rgba(51, 144, 236, 0.1);">
+            <h3 style="font-size: 1rem; font-weight: 900; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Controle de Acesso
+            </h3>
+            
+            <form action="{{ route('admin.users.update_role', $user->id) }}" method="POST">
+                @csrf
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.5rem;">Base de Função</label>
+                    <select name="role" class="mogram-input-field" style="height: 48px; background: rgba(0,0,0,0.2); border-radius: 10px; font-weight: 700;">
+                        <option value="user" {{ $user->role == 'user' ? 'selected' : '' }}>Usuário Padrão</option>
+                        <option value="creator" {{ $user->role == 'creator' ? 'selected' : '' }}>Criador</option>
+                        <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Administrador</option>
+                    </select>
+                </div>
+
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.5rem;">Função Administrativa</label>
+                    <select name="admin_role_id" class="mogram-input-field" style="height: 48px; background: rgba(0,0,0,0.2); border-radius: 10px; font-weight: 700;">
+                        <option value="">Nenhuma (Acesso Negado)</option>
+                        @foreach($roles as $role)
+                            <option value="{{ $role->id }}" {{ $user->admin_role_id == $role->id ? 'selected' : '' }}>
+                                {{ $role->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <button type="submit" class="mogram-btn-primary" style="width: 100%; height: 48px; border-radius: 10px; font-size: 0.8rem; font-weight: 850;">ATUALIZAR ACESSO</button>
+            </form>
+
+            @if($user->isAdmin())
+                <p style="font-size: 0.65rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.4; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 0.75rem;">
+                    <strong>Nota:</strong> Usuários com Função Administrativa selecionada serão automaticamente promovidos a 'admin'.
+                </p>
+            @endif
+        </div>
     </div>
 
     <!-- Main Content -->
