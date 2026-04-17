@@ -37,14 +37,14 @@
                 </div>
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr; gap: 1.5rem; border-top: 1px solid var(--border-gray); padding-top: 2rem;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <p style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Saldo de Gasto</p>
-                    <p style="font-size: 1.1rem; font-weight: 900; color: var(--primary-blue);">R$ {{ number_format($user->balance, 2, ',', '.') }}</p>
+            <div style="display: flex; flex-direction: column; gap: 1rem; border-top: 1px solid var(--border-gray); padding-top: 1.5rem;">
+                <div style="background: rgba(51, 144, 236, 0.05); border: 1px solid rgba(51, 144, 236, 0.1); padding: 1rem; border-radius: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-muted); font-size: 0.7rem; font-weight: 850; text-transform: uppercase;">Saldo Gasto</span>
+                    <span style="font-size: 1rem; font-weight: 950; color: var(--primary-blue);">R$ {{ number_format($user->balance, 2, ',', '.') }}</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <p style="color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase;">Saldo Financeiro</p>
-                    <p style="font-size: 1.1rem; font-weight: 900; color: var(--success);">R$ {{ number_format($user->studio_balance, 2, ',', '.') }}</p>
+                <div style="background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.1); padding: 1rem; border-radius: 16px; display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: var(--text-muted); font-size: 0.7rem; font-weight: 850; text-transform: uppercase;">Saldo Lucros</span>
+                    <span style="font-size: 1rem; font-weight: 950; color: var(--success);">R$ {{ number_format($user->studio_balance, 2, ',', '.') }}</span>
                 </div>
             </div>
         </div>
@@ -129,36 +129,51 @@
             </div>
         </div>
 
-        <!-- Balance Management -->
-        <div class="admin-card">
-            <h3 style="font-size: 1.1rem; font-weight: 900; margin-bottom: 2rem; display: flex; align-items: center; gap: 10px;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Gestão de Saldos
-            </h3>
+        <!-- Professional Balance Management -->
+        <div class="admin-card" style="padding: 2.5rem; border: 1px solid rgba(51, 144, 236, 0.15); background: linear-gradient(145deg, rgba(17, 20, 30, 0.4) 0%, rgba(13, 15, 23, 0.2) 100%); overflow: hidden; position: relative;">
+            <!-- Decorative Glow -->
+            <div style="position: absolute; top: -50px; right: -50px; width: 150px; height: 150px; background: var(--primary-blue); filter: blur(100px); opacity: 0.05;"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+                <div>
+                    <h3 style="font-size: 1.25rem; font-weight: 950; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 12px; letter-spacing: -0.5px;">
+                        <div style="width: 32px; height: 32px; background: rgba(51, 144, 236, 0.1); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        Ajuste de Saldo Manual
+                    </h3>
+                    <p style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">Credit ou debite valores diretamente das carteiras do usuário.</p>
+                </div>
+            </div>
             
             <form action="{{ route('admin.users.adjust_balance', $user->id) }}" method="POST">
                 @csrf
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1.5fr 1fr; gap: 1rem; align-items: end;">
-                    <div style="margin-bottom: 0;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Carteira</label>
-                        <select name="wallet" class="mogram-input-field" style="height: 48px; background: rgba(0,0,0,0.2);">
-                            <option value="balance">Saldo de Gasto (Wallet)</option>
-                            <option value="studio_balance">Saldo Financeiro (Profits)</option>
+                <div style="display: grid; grid-template-columns: 1.2fr 1fr 1.2fr 0.8fr; gap: 1.5rem; align-items: end;">
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Destino do Saldo</label>
+                        <div style="position: relative;">
+                            <select name="wallet" class="mogram-input-field" style="height: 54px; padding-left: 1.25rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 700; cursor: pointer; border-radius: 14px;">
+                                <option value="balance">💳 Carteira Principal (Gasto)</option>
+                                <option value="studio_balance">💰 Saldo Studio (Lucros)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Tipo de Operação</label>
+                        <select name="type" class="mogram-input-field" style="height: 54px; padding-left: 1.25rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 700; cursor: pointer; border-radius: 14px;">
+                            <option value="credit" style="color: var(--success);">📈 Creditar (+)</option>
+                            <option value="debit" style="color: var(--danger);">📉 Debitar (-)</option>
                         </select>
                     </div>
-                    <div style="margin-bottom: 0;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Operação</label>
-                        <select name="type" class="mogram-input-field" style="height: 48px; background: rgba(0,0,0,0.2);">
-                            <option value="credit">Creditar (+)</option>
-                            <option value="debit">Debitar (-)</option>
-                        </select>
+                    <div>
+                        <label style="font-size: 0.7rem; color: var(--text-muted); font-weight: 850; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 0.75rem;">Valor Estimado</label>
+                        <div style="position: relative;">
+                            <span style="position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); font-weight: 900; color: var(--text-muted); font-size: 0.9rem;">R$</span>
+                            <input type="text" name="amount" class="mogram-input-field" placeholder="0,00" style="height: 54px; padding-left: 3.5rem; background: rgba(0,0,0,0.3); border: 1.5px solid rgba(255,255,255,0.08); font-weight: 900; font-size: 1.1rem; border-radius: 14px;">
+                        </div>
                     </div>
-                    <div style="margin-bottom: 0;">
-                        <label style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display: block; margin-bottom: 0.5rem;">Valor (R$)</label>
-                        <input type="text" name="amount" class="mogram-input-field" placeholder="0,00" style="height: 48px; background: rgba(0,0,0,0.2);">
-                    </div>
-                    <button type="submit" class="mogram-btn-primary" style="height: 48px; width: 100%; font-size: 0.8rem;">
-                        APLICAR
+                    <button type="submit" class="mogram-btn-primary" style="height: 54px; border-radius: 14px; font-weight: 900; font-size: 0.85rem; letter-spacing: 0.5px; box-shadow: 0 10px 25px rgba(51, 144, 236, 0.25);">
+                        CONFIRMAR
                     </button>
                 </div>
             </form>
