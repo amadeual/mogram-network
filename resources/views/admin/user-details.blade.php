@@ -272,7 +272,7 @@
                         <div style="width: 42px; height: 42px; background: {{ $log->type == 'financial' ? 'rgba(34, 197, 94, 0.1)' : 'rgba(51, 144, 236, 0.1)' }}; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: {{ $log->type == 'financial' ? '#22c55e' : '#3390ec' }}; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
                             @if($log->type == 'financial')
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                            @else
+                            @elseif($log->type == 'admin_action')
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                             @else
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
