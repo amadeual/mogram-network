@@ -167,13 +167,14 @@ class FeedController extends Controller
                 // Debit buyer
                 $user->decrement('balance', $post->price);
 
-                // Credit seller (creator)
-                $creator = $post->user;
-                // Removed: $creator->increment('balance', $post->price); // Goes only to Finance ledger
-
-                // Calculate commission
+                // Calculate commission (default 15%) and creator earnings (85%)
                 $commPercentage = (float)(\App\Models\Setting::where('key', 'commission_content')->value('value') ?? 15);
                 $commission = $post->price * ($commPercentage / 100);
+                $creatorEarnings = $post->price - $commission;
+
+                // Credit creator with net amount (after commission)
+                $creator = $post->user;
+                $creator->increment('balance', $creatorEarnings);
 
                 // Record purchase
                 \App\Models\Purchase::create([
@@ -183,7 +184,11 @@ class FeedController extends Controller
                     'commission' => $commission
                 ]);
 
+                // Log for buyer
                 ActivityLog::log("Comprou post exclusivo: {$post->title}", 'financial', $post->price, $user->id, 'balance');
+
+                // Log for creator (net earnings)
+                ActivityLog::log("Recebeu por post desbloqueado: {$post->title} (comissão {$commPercentage}%)", 'financial', $creatorEarnings, $creator->id, 'balance');
 
                 // Send email to buyer
                 try {

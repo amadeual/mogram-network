@@ -177,27 +177,37 @@ class CommunityController extends Controller
         }
 
         DB::transaction(function () use ($community) {
-            // Deduct from buyer
-            Auth::user()->decrement('balance', $community->price);
+            $buyer = Auth::user();
 
-            // Calculate commission
+            // Deduct full price from subscriber
+            $buyer->decrement('balance', $community->price);
+
+            // Calculate commission (default 10%) and creator earnings (90%)
             $commPercentage = (float)(\App\Models\Setting::where('key', 'commission_community')->value('value') ?? 10);
             $commission = $community->price * ($commPercentage / 100);
+            $creatorEarnings = $community->price - $commission;
+
+            // Credit creator with net amount (after commission)
+            $owner = $community->user;
+            $owner->increment('balance', $creatorEarnings);
 
             // Create or update subscription
             CommunitySubscription::updateOrCreate(
-                ['community_id' => $community->id, 'user_id' => Auth::id()],
+                ['community_id' => $community->id, 'user_id' => $buyer->id],
                 [
                     'amount' => $community->price,
                     'commission' => $commission,
                     'status' => 'active',
                     'expires_at' => now()->addMonth(),
-                    'created_at' => now(), // Force update timestamp to show in finance
+                    'created_at' => now(),
                 ]
             );
 
-            // Note: We don't increment the owner's 'balance' column because the Studio 
-            // calculates earnings based on the community_subscriptions table.
+            // Log for subscriber
+            \App\Models\ActivityLog::log("Assinou comunidade: {$community->name}", 'financial', $community->price, $buyer->id, 'balance');
+
+            // Log for creator (net earnings)
+            \App\Models\ActivityLog::log("Recebeu assinatura de comunidade: {$community->name} (comissão {$commPercentage}%)", 'financial', $creatorEarnings, $owner->id, 'balance');
         });
 
         return redirect()->route('communities.show', $community->slug)->with('success', 'Assinatura realizada com sucesso! Bem-vindo à comunidade.');

@@ -185,6 +185,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::post('/gifts/{id}', [App\Http\Controllers\AdminController::class, 'updateGift'])->name('admin.gifts.update')->middleware('admin:manage_content');
         Route::get('/logs', [App\Http\Controllers\AdminController::class, 'activityLogs'])->name('admin.logs')->middleware('admin:manage_reports');
         Route::get('/reports', [App\Http\Controllers\AdminController::class, 'reports'])->name('admin.reports')->middleware('admin:manage_reports');
+        Route::get('/reports/creator/{id}', [App\Http\Controllers\AdminController::class, 'creatorStatement'])->name('admin.reports.creator')->middleware('admin:manage_reports');
         Route::get('/settings', [App\Http\Controllers\AdminController::class, 'settings'])->name('admin.settings')->middleware('admin:manage_settings');
         Route::post('/settings', [App\Http\Controllers\AdminController::class, 'updateSettings'])->name('admin.settings.update')->middleware('admin:manage_settings');
 

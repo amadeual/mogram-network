@@ -353,6 +353,37 @@ class AdminController extends Controller
             ->orderBy('date')
             ->get();
 
+        // 3. Top Creators Table
+        $topCreators = User::where('role', 'creator')
+            ->select('users.*')
+            ->selectSub(function($q) {
+                $q->selectRaw('COALESCE(SUM(p.amount),0)')
+                  ->from('purchases as p')
+                  ->join('posts as po', 'p.post_id', '=', 'po.id')
+                  ->whereColumn('po.user_id', 'users.id');
+            }, 'content_revenue')
+            ->selectSub(function($q) {
+                $q->selectRaw('COALESCE(SUM(lg.amount),0)')
+                  ->from('live_gifts as lg')
+                  ->whereColumn('lg.receiver_id', 'users.id');
+            }, 'gifts_revenue')
+            ->selectSub(function($q) {
+                $q->selectRaw('COALESCE(SUM(cs.amount),0)')
+                  ->from('community_subscriptions as cs')
+                  ->join('communities as c', 'cs.community_id', '=', 'c.id')
+                  ->whereColumn('c.user_id', 'users.id')
+                  ->where('cs.status', 'active');
+            }, 'community_revenue')
+            ->selectSub(function($q) {
+                $q->selectRaw('COALESCE(SUM(COALESCE(p.commission,0)),0)')
+                  ->from('purchases as p')
+                  ->join('posts as po', 'p.post_id', '=', 'po.id')
+                  ->whereColumn('po.user_id', 'users.id');
+            }, 'total_commission')
+            ->orderByDesc('content_revenue')
+            ->limit(20)
+            ->get();
+
         return view('admin.reports', compact(
             'creators', 
             'grossRevenue', 
@@ -361,7 +392,107 @@ class AdminController extends Controller
             'completedLives', 
             'totalContents',
             'chartData',
-            'creatorId'
+            'creatorId',
+            'topCreators'
+        ));
+    }
+
+    public function creatorStatement(Request $request, $id)
+    {
+        $creator = User::findOrFail($id);
+
+        $period   = (int)($request->period ?? 30);
+        $dateFrom = $request->date_from
+            ? \Carbon\Carbon::parse($request->date_from)->startOfDay()
+            : now()->subDays($period)->startOfDay();
+        $dateTo = $request->date_to
+            ? \Carbon\Carbon::parse($request->date_to)->endOfDay()
+            : now()->endOfDay();
+
+        $contentData = DB::table('purchases')
+            ->join('posts', 'purchases.post_id', '=', 'posts.id')
+            ->where('posts.user_id', $id)
+            ->whereBetween('purchases.created_at', [$dateFrom, $dateTo])
+            ->selectRaw('COALESCE(SUM(amount),0) as total, COALESCE(SUM(commission),0) as commission, COUNT(*) as qty')
+            ->first();
+
+        $giftsData = DB::table('live_gifts')
+            ->where('receiver_id', $id)
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->selectRaw('COALESCE(SUM(amount),0) as total, COALESCE(SUM(commission),0) as commission, COUNT(*) as qty')
+            ->first();
+
+        $ticketsData = DB::table('live_access')
+            ->join('lives', 'live_access.live_id', '=', 'lives.id')
+            ->where('lives.user_id', $id)
+            ->whereBetween('live_access.created_at', [$dateFrom, $dateTo])
+            ->selectRaw('COALESCE(SUM(live_access.amount),0) as total, COALESCE(SUM(live_access.commission),0) as commission, COUNT(*) as qty')
+            ->first();
+
+        $communityData = DB::table('community_subscriptions')
+            ->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')
+            ->where('communities.user_id', $id)
+            ->where('community_subscriptions.status', 'active')
+            ->whereBetween('community_subscriptions.created_at', [$dateFrom, $dateTo])
+            ->selectRaw('COALESCE(SUM(community_subscriptions.amount),0) as total, COALESCE(SUM(community_subscriptions.commission),0) as commission, COUNT(*) as qty')
+            ->first();
+
+        $grossRevenue    = $contentData->total + $giftsData->total + $ticketsData->total + $communityData->total;
+        $totalCommission = $contentData->commission + $giftsData->commission + $ticketsData->commission + $communityData->commission;
+
+        $infraRate = (float)(\App\Models\Setting::where('key', 'infra_cost_rate')->value('value') ?? 2);
+        $infraCost = $grossRevenue * ($infraRate / 100);
+        $netToCreator = $grossRevenue - $totalCommission;
+        $platformNet  = $totalCommission - $infraCost;
+
+        $withdrawals = Withdrawal::where('user_id', $id)
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->orderByDesc('created_at')
+            ->get();
+        $totalWithdrawn    = $withdrawals->where('status', 'approved')->sum('amount');
+        $pendingWithdrawal = $withdrawals->where('status', 'pending')->sum('amount');
+
+        $chartData = DB::table(function($q) use ($id, $dateFrom, $dateTo) {
+            $q->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+              ->from('purchases')
+              ->join('posts', 'purchases.post_id', '=', 'posts.id')
+              ->where('posts.user_id', $id)
+              ->whereBetween('purchases.created_at', [$dateFrom, $dateTo])
+              ->groupBy('date')
+              ->unionAll(
+                DB::table('live_gifts')
+                  ->select(DB::raw('DATE(created_at) as date'), DB::raw('SUM(amount) as total'))
+                  ->where('receiver_id', $id)
+                  ->whereBetween('created_at', [$dateFrom, $dateTo])
+                  ->groupBy('date')
+              )
+              ->unionAll(
+                DB::table('community_subscriptions')
+                  ->join('communities', 'community_subscriptions.community_id', '=', 'communities.id')
+                  ->select(DB::raw('DATE(community_subscriptions.created_at) as date'), DB::raw('SUM(community_subscriptions.amount) as total'))
+                  ->where('communities.user_id', $id)
+                  ->whereBetween('community_subscriptions.created_at', [$dateFrom, $dateTo])
+                  ->groupBy('date')
+              );
+        }, 'combined')
+        ->select('date', DB::raw('SUM(total) as daily_total'))
+        ->groupBy('date')
+        ->orderBy('date')
+        ->get();
+
+        $transactions = \App\Models\ActivityLog::where('user_id', $id)
+            ->where('type', 'financial')
+            ->whereBetween('created_at', [$dateFrom, $dateTo])
+            ->orderByDesc('created_at')
+            ->paginate(25);
+
+        return view('admin.reports-creator', compact(
+            'creator', 'period', 'dateFrom', 'dateTo',
+            'contentData', 'giftsData', 'ticketsData', 'communityData',
+            'grossRevenue', 'totalCommission', 'infraCost', 'infraRate',
+            'netToCreator', 'platformNet',
+            'totalWithdrawn', 'pendingWithdrawal', 'withdrawals',
+            'chartData', 'transactions'
         ));
     }
 

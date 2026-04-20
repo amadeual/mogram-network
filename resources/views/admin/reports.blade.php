@@ -118,6 +118,60 @@
         </div>
     </div>
 </div>
+{{-- Top Creators Table --}}
+<div class="admin-card" style="margin-bottom: 3rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.1rem; font-weight: 850;">Top Criadores — Receita no Período</h3>
+        <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Clique em "Extrato" para breakdown detalhado</span>
+    </div>
+    <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+        <thead>
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.07);">
+                <th style="text-align: left; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">#</th>
+                <th style="text-align: left; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Criador</th>
+                <th style="text-align: right; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Conteúdo</th>
+                <th style="text-align: right; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Gorjetas</th>
+                <th style="text-align: right; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Comunidade</th>
+                <th style="text-align: right; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Comissão</th>
+                <th style="text-align: right; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Bruto Total</th>
+                <th style="text-align: center; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @forelse($topCreators as $i => $tc)
+            @php
+                $tcGross = $tc->content_revenue + $tc->gifts_revenue + $tc->community_revenue;
+            @endphp
+            <tr style="border-bottom: 1px solid rgba(255,255,255,0.04); transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.03)'" onmouseout="this.style.background='transparent'">
+                <td style="padding: 0.85rem 1rem; color: var(--text-muted); font-weight: 800;">{{ $i + 1 }}</td>
+                <td style="padding: 0.85rem 1rem;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-blue), #6366f1); display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.75rem; flex-shrink: 0;">
+                            {{ strtoupper(substr($tc->name, 0, 2)) }}
+                        </div>
+                        <div>
+                            <div style="font-weight: 700;">{{ $tc->name }}</div>
+                            <div style="color: var(--text-muted); font-size: 0.7rem;">@{{ $tc->username }}</div>
+                        </div>
+                    </div>
+                </td>
+                <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700;">R$ {{ number_format($tc->content_revenue, 2, ',', '.') }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700;">R$ {{ number_format($tc->gifts_revenue, 2, ',', '.') }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700;">R$ {{ number_format($tc->community_revenue, 2, ',', '.') }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 700; color: var(--danger);">R$ {{ number_format($tc->total_commission, 2, ',', '.') }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: right; font-weight: 900; color: var(--success);">R$ {{ number_format($tcGross, 2, ',', '.') }}</td>
+                <td style="padding: 0.85rem 1rem; text-align: center;">
+                    <a href="{{ route('admin.reports.creator', $tc->id) }}" class="btn-primary" style="padding: 6px 14px; font-size: 0.72rem; border-radius: 8px; text-decoration: none;">
+                        Extrato
+                    </a>
+                </td>
+            </tr>
+            @empty
+            <tr><td colspan="8" style="padding: 2rem; text-align: center; color: var(--text-muted);">Nenhum criador encontrado.</td></tr>
+            @endforelse
+        </tbody>
+    </table>
+</div>
 @endsection
 
 @section('scripts')
