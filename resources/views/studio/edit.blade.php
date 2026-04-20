@@ -355,6 +355,12 @@
             const file = input.files[0];
             if(!file) return;
 
+            if (file.size > 50 * 1024 * 1024) {
+                alert('O arquivo selecionado tem mais de 50MB. Por favor, escolha um arquivo menor.');
+                input.value = '';
+                return;
+            }
+
             // Update UI feedback
             const title = document.getElementById('file-status-title');
             const subtitle = document.getElementById('file-status-subtitle');
@@ -380,6 +386,12 @@
         window.handleThumbnailSelect = function(input) {
             const file = input.files[0];
             if(!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                alert('A capa selecionada tem mais de 5MB. Por favor, escolha uma imagem menor.');
+                input.value = '';
+                return;
+            }
 
             const reader = new FileReader();
             const previewImg = document.querySelector('#thumbnail_img_preview img');

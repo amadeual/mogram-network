@@ -360,6 +360,12 @@ class StudioController extends Controller
 
     public function store(Request $request)
     {
+        $messages = [
+            'file.max' => 'O arquivo de mídia selecionado ultrapassa o limite de 50MB. Por favor, comprima o arquivo ou escolha um menor.',
+            'thumbnail.max' => 'A imagem de capa selecionada ultrapassa o limite de 5MB.',
+            'file.required' => 'Você precisa selecionar ao menos uma mídia (Foto, Vídeo ou PDF) para o seu conteúdo.'
+        ];
+
         $request->validate([
             'title' => 'nullable|string|max:255',
             'description' => 'required|string|max:50000',
@@ -371,7 +377,7 @@ class StudioController extends Controller
             'scheduled_at' => 'nullable|date',
             'allow_comments' => 'nullable|boolean',
             'category' => 'nullable|string'
-        ]);
+        ], $messages);
 
         $post = new Post();
         $post->user_id = Auth::id();
@@ -418,6 +424,11 @@ class StudioController extends Controller
             return redirect()->route('studio.dashboard');
         }
 
+        $messages = [
+            'file.max' => 'O arquivo de mídia selecionado ultrapassa o limite de 50MB. Por favor, comprima o arquivo ou escolha um menor.',
+            'thumbnail.max' => 'A imagem de capa selecionada ultrapassa o limite de 5MB.'
+        ];
+
         $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string|max:50000',
@@ -425,7 +436,7 @@ class StudioController extends Controller
             'price' => 'nullable|numeric|min:0',
             'file' => 'nullable|file|max:51200',
             'thumbnail' => 'nullable|image|max:5120',
-        ]);
+        ], $messages);
 
         $post->title = $request->title;
         $post->description = $request->description;

@@ -135,7 +135,7 @@
                             <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Máx. 50MB (Foto, Vídeo ou PDF)</span>
                         </div>
 
-                        <div id="dropzone" style="border: 2px dashed rgba(255,255,255,0.08); border-radius: 24px; padding: 4rem 2rem; text-align: center; background: rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; margin-bottom: 2rem;">
+                        <div id="dropzone" style="border: 2px dashed rgba(255,255,255,0.08); border-radius: 24px; padding: 2.5rem 1.5rem; text-align: center; background: rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; margin-bottom: 2rem;">
                             <input type="file" name="file" id="file_input" accept="image/*,video/*,application/pdf" hidden required onchange="handleFileSelect(this)">
                             <input type="hidden" name="type" id="post_type_input" value="image">
                             <div style="width: 56px; height: 56px; background: rgba(51, 144, 236, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin: 0 auto 1.5rem;">
@@ -615,6 +615,12 @@
             container.innerHTML = '';
             
             Array.from(input.files).forEach(file => {
+                if (file.size > 50 * 1024 * 1024) {
+                    alert('O arquivo selecionado tem mais de 50MB. Por favor, escolha um arquivo menor.');
+                    input.value = '';
+                    return;
+                }
+
                 // Set post type based on first file
                 if(typeInput) {
                     if(file.type.startsWith('image/')) typeInput.value = 'image';
@@ -639,7 +645,7 @@
                     
                     const del = document.createElement('div');
                     del.innerHTML = '×';
-                    del.style = "position: absolute; top: -8px; right: -8px; width: 20px; height: 20px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 950; cursor: pointer; border: 2px solid #0b0a15; z-index: 10;";
+                    del.style = "position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; font-size: 18px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 950; cursor: pointer; border: 3px solid #0b0a15; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.5);";
                     del.onclick = () => wrapper.remove();
                     wrapper.appendChild(del);
                 };
@@ -658,6 +664,12 @@
             const file = input.files[0];
             if(!file) return;
 
+            if (file.size > 5 * 1024 * 1024) {
+                alert('A capa selecionada tem mais de 5MB. Por favor, escolha uma imagem menor.');
+                input.value = '';
+                return;
+            }
+
             const reader = new FileReader();
             const previewImg = document.querySelector('#thumbnail_img_preview img');
             const previewContainer = document.getElementById('thumbnail_img_preview');
@@ -673,6 +685,29 @@
 
         if(dropzone) {
             dropzone.addEventListener('click', () => fileInput && fileInput.click());
+
+            dropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropzone.style.background = 'rgba(51, 144, 236, 0.2)';
+                dropzone.style.borderColor = '#3390ec';
+            });
+
+            dropzone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                dropzone.style.background = 'rgba(0,0,0,0.1)';
+                dropzone.style.borderColor = 'rgba(255,255,255,0.08)';
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropzone.style.background = 'rgba(0,0,0,0.1)';
+                dropzone.style.borderColor = 'rgba(255,255,255,0.08)';
+                
+                if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    fileInput.files = e.dataTransfer.files;
+                    handleFileSelect(fileInput);
+                }
+            });
         }
 
         let currentCategories = ['Fotografia', 'Lifestyle'];
