@@ -658,7 +658,7 @@
                     
                     const del = document.createElement('div');
                     del.innerHTML = '×';
-                    del.style = "position: absolute; top: -10px; left: -10px; width: 32px; height: 32px; font-size: 20px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 950; cursor: pointer; border: 3px solid #0b0a15; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.5); perspective: 1000px;";
+                    del.style = "position: absolute; top: 10px; left: 10px; width: 32px; height: 32px; font-size: 20px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 950; cursor: pointer; border: 3px solid #0b0a15; z-index: 20; box-shadow: 0 4px 10px rgba(0,0,0,0.5); perspective: 1000px;";
                     del.onclick = (ev) => {
                         ev.stopPropagation();
                         wrapper.remove();
