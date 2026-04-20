@@ -46,7 +46,7 @@
                     <label style="display: block; color: var(--text-muted); font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;">E-mail de Suporte</label>
                     <div style="display: flex; align-items: center; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
                         <svg style="color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        <input type="text" name="support_email" value="{{ $settings['support_email'] ?? 'suporte@mogram.com' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 600;">
+                        <input type="text" name="support_email" value="{{ $settings['support_email'] ?? 'info@mogramnetwork.com' }}" style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 600;">
                     </div>
                 </div>
             </div>

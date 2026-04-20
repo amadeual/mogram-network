@@ -44,7 +44,10 @@
             <h3 class="font-bold" style="color: white; margin-top: 2.5rem; margin-bottom: 1rem;">7. Alterações nos Termos</h3>
             <p>Podemos atualizar estes Termos de Uso periodicamente. O uso continuado da plataforma após as alterações constitui aceitação dos novos termos.</p>
 
-            <p style="margin-top: 4rem; font-size: 0.875rem; color: var(--text-muted);">Última atualização: 14 de Abril de 2026.</p>
+            <h3 class="font-bold" style="color: white; margin-top: 2.5rem; margin-bottom: 1rem;">8. Contato</h3>
+            <p>Para dúvidas, suporte ou denúncias relacionadas a estes termos, entre em contato conosco através do e-mail: <a href="mailto:info@mogramnetwork.com" style="color: var(--primary-blue); font-weight: 700;">info@mogramnetwork.com</a>.</p>
+
+            <p style="margin-top: 4rem; font-size: 0.875rem; color: var(--text-muted);">Última atualização: 20 de Abril de 2026.</p>
 
         </div>
     </div>

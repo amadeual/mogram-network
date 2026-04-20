@@ -33,7 +33,10 @@
             <h3 class="font-bold" style="color: white; margin-top: 2.5rem; margin-bottom: 1rem;">6. Cookies</h3>
             <p>Usamos cookies para melhorar a navegação e personalizar sua experiência na plataforma. Ao continuar navegando, você concorda com o uso de cookies.</p>
 
-            <p style="margin-top: 4rem; font-size: 0.875rem; color: var(--text-muted);">Última atualização: 22 de Março de 2026.</p>
+            <h3 class="font-bold" style="color: white; margin-top: 2.5rem; margin-bottom: 1rem;">7. Contato</h3>
+            <p>Para exercer seus direitos de privacidade ou esclarecer dúvidas sobre esta política, contate-nos em: <a href="mailto:info@mogramnetwork.com" style="color: var(--primary-blue); font-weight: 700;">info@mogramnetwork.com</a>.</p>
+
+            <p style="margin-top: 4rem; font-size: 0.875rem; color: var(--text-muted);">Última atualização: 20 de Abril de 2026.</p>
         </div>
     </div>
 </div>

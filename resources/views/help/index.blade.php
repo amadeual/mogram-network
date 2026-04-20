@@ -78,7 +78,7 @@
             <div style="background: linear-gradient(135deg, rgba(51, 144, 236, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%); border: 1.5px solid rgba(51, 144, 236, 0.2); border-radius: 32px; padding: 4rem; text-align: center;">
                 <h2 style="font-size: 24px; font-weight: 900; color: white; margin-bottom: 1rem;">Ainda precisa de ajuda?</h2>
                 <p style="color: var(--text-muted); margin-bottom: 2rem; font-weight: 600;">Nossa equipe de suporte está disponível para atender você.</p>
-                <a href="mailto:suporte@mogram.com" class="mogram-btn-primary" style="padding: 1rem 3rem; border-radius: 16px; text-decoration: none; font-weight: 800; display: inline-block;">Falar com o Suporte</a>
+                <a href="mailto:info@mogramnetwork.com" class="mogram-btn-primary" style="padding: 1rem 3rem; border-radius: 16px; text-decoration: none; font-weight: 800; display: inline-block;">Falar com o Suporte</a>
             </div>
         </div>
     </main>
