@@ -135,14 +135,21 @@
                             <span style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Máx. 50MB (Foto, Vídeo ou PDF)</span>
                         </div>
 
-                        <div id="dropzone" style="border: 2px dashed rgba(255,255,255,0.08); border-radius: 24px; padding: 2.5rem 1.5rem; text-align: center; background: rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; margin-bottom: 2rem;">
+                        <div id="dropzone" style="position: relative; border: 2px dashed rgba(255,255,255,0.08); border-radius: 24px; padding: 2.5rem 1.5rem; text-align: center; background: rgba(0,0,0,0.1); cursor: pointer; transition: 0.3s; margin-bottom: 2rem; min-height: 250px; display: flex; align-items: center; justify-content: center;">
                             <input type="file" name="file" id="file_input" accept="image/*,video/*,application/pdf" hidden required onchange="handleFileSelect(this)">
                             <input type="hidden" name="type" id="post_type_input" value="image">
-                            <div style="width: 56px; height: 56px; background: rgba(51, 144, 236, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin: 0 auto 1.5rem;">
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/><polyline points="16 16 12 12 8 16"/></svg>
+                            
+                            <div id="dropzone_content">
+                                <div style="width: 56px; height: 56px; background: rgba(51, 144, 236, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: #3390ec; margin: 0 auto 1.5rem;">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/><polyline points="16 16 12 12 8 16"/></svg>
+                                </div>
+                                <h4 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ __('Arraste seu conteúdo aqui') }}</h4>
+                                <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">ou <span style="color: #3390ec;">clique para procurar</span> no computador</p>
                             </div>
-                            <h4 style="font-size: 18px; font-weight: 900; color: white; margin-bottom: 0.5rem;">{{ __('Arraste seu conteúdo aqui') }}</h4>
-                            <p style="font-size: 14px; color: var(--text-muted); font-weight: 600;">ou <span style="color: #3390ec;">clique para procurar</span> no computador</p>
+                            
+                            <div id="media_previews_container" style="display: none; width: 100%; height: 100%; justify-content: center; align-items: center;">
+                                <!-- Previews will appear here -->
+                            </div>
                         </div>
 
                         <div id="thumbnail_section" style="display: block; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 2rem; margin-top: 2rem;">
@@ -167,9 +174,7 @@
                             </div>
                         </div>
 
-                        <div id="media_previews_container" style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                            <!-- Previews will appear here -->
-                        </div>
+
                     </div>
                 </div>
 
@@ -610,8 +615,12 @@
 
         window.handleFileSelect = function(input) {
             const container = document.getElementById('media_previews_container');
+            const placeholder = document.getElementById('dropzone_content');
             const typeInput = document.getElementById('post_type_input');
             if(!container) return;
+            
+            placeholder.style.display = 'none';
+            container.style.display = 'flex';
             container.innerHTML = '';
             
             Array.from(input.files).forEach(file => {
@@ -631,22 +640,32 @@
                 const wrapper = document.createElement('div');
                 wrapper.className = 'media-preview-box';
                 wrapper.style.position = 'relative';
+                wrapper.style.width = '200px';
+                wrapper.style.height = '200px';
 
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     if (file.type.startsWith('image/')) {
-                        wrapper.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;">`;
+                        wrapper.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">`;
                     } else if (file.type.startsWith('video/')) {
                         wrapper.innerHTML = `
-                            <video src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></video>
+                            <video src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;border-radius:12px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);"></video>
                             <div style="position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.6); padding: 3px 6px; border-radius: 4px; font-size: 8px; font-weight: 900; color: white;">VÍDEO</div>
                         `;
+                    } else if (file.type === 'application/pdf') {
+                        wrapper.innerHTML = `<div style="width:100%; height:100%; background:rgba(239,68,68,0.1); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg><span style="margin-top:8px; font-size:10px; font-weight:800; color:#ef4444;">PDF Selecionado</span></div>`;
                     }
                     
                     const del = document.createElement('div');
                     del.innerHTML = '×';
-                    del.style = "position: absolute; top: -10px; right: -10px; width: 28px; height: 28px; font-size: 18px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 950; cursor: pointer; border: 3px solid #0b0a15; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.5);";
-                    del.onclick = () => wrapper.remove();
+                    del.style = "position: absolute; top: -10px; left: -10px; width: 32px; height: 32px; font-size: 20px; background: #ef4444; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 950; cursor: pointer; border: 3px solid #0b0a15; z-index: 10; box-shadow: 0 4px 10px rgba(0,0,0,0.5); perspective: 1000px;";
+                    del.onclick = (ev) => {
+                        ev.stopPropagation();
+                        wrapper.remove();
+                        input.value = '';
+                        placeholder.style.display = 'block';
+                        container.style.display = 'none';
+                    };
                     wrapper.appendChild(del);
                 };
                 reader.readAsDataURL(file);
