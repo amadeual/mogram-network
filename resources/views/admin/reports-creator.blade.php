@@ -20,8 +20,18 @@
             </div>
         </div>
     </div>
-    <div style="font-size: 0.8rem; color: var(--text-muted); text-align: right; font-weight: 700;">
-        Período: <span style="color: white;">{{ $dateFrom->format('d/m/Y') }}</span> até <span style="color: white;">{{ $dateTo->format('d/m/Y') }}</span>
+    <div style="text-align: right;">
+        <div style="font-size: 0.8rem; color: var(--text-muted); font-weight: 700; margin-bottom: 0.5rem;" class="no-print">
+            Período: <span style="color: white;">{{ $dateFrom->format('d/m/Y') }}</span> até <span style="color: white;">{{ $dateTo->format('d/m/Y') }}</span>
+        </div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;" class="no-print">
+            <button onclick="exportToExcel('transactionsTable', 'transacoes_{{ $creator->username }}.xlsx')" class="btn-primary" style="background: #22c55e; padding: 8px 16px; font-size: 0.8rem;">
+                Excel
+            </button>
+            <button onclick="window.print()" class="btn-primary" style="background: #ef4444; padding: 8px 16px; font-size: 0.8rem;">
+                PDF
+            </button>
+        </div>
     </div>
 </div>
 
@@ -197,7 +207,7 @@
 <div class="admin-card" style="margin-bottom: 3rem;">
     <h3 style="font-size: 1rem; font-weight: 850; padding: 1.5rem 1.5rem 0; margin-bottom: 1.25rem;">Log de Transações Financeiras</h3>
     @if($transactions->count())
-    <table style="width: 100%; border-collapse: collapse; font-size: 0.78rem;">
+    <table id="transactionsTable" style="width: 100%; border-collapse: collapse; font-size: 0.78rem;">
         <thead>
             <tr style="border-bottom: 1px solid rgba(255,255,255,0.07);">
                 <th style="text-align: left; padding: 0.75rem 1.5rem; color: var(--text-muted); font-weight: 700; font-size: 0.7rem; text-transform: uppercase;">Data</th>
@@ -227,6 +237,15 @@
 @endsection
 
 @section('scripts')
+<script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+<script>
+    function exportToExcel(tableId, filename) {
+        var table = document.getElementById(tableId);
+        if(!table) return alert('Tabela não encontrada.');
+        var wb = XLSX.utils.table_to_book(table, {sheet: "Relatório"});
+        XLSX.writeFile(wb, filename);
+    }
+</script>
 <script>
     const ctx = document.getElementById('creatorRevenueChart').getContext('2d');
     const labels = {!! json_encode($chartData->pluck('date')->map(fn($d) => date('d/m', strtotime($d)))) !!};

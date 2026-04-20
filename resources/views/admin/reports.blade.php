@@ -9,10 +9,16 @@
         <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -1px; margin-bottom: 0.5rem;">Relatórios Analíticos</h1>
         <p style="color: var(--text-muted); font-weight: 600;">Visão detalhada do desempenho da plataforma, engajamento e monetização.</p>
     </div>
-    <button class="btn-primary">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Exportar Relatório
-    </button>
+    <div style="display: flex; gap: 10px;" class="no-print">
+        <button onclick="exportTableToExcel('topCreatorsTable', 'relatorio-criadores.xlsx')" class="btn-primary" style="background: #22c55e;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            Excel
+        </button>
+        <button onclick="window.print()" class="btn-primary" style="background: #ef4444;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            PDF
+        </button>
+    </div>
 </div>
 
 <!-- Date & Filters -->
@@ -124,7 +130,7 @@
         <h3 style="font-size: 1.1rem; font-weight: 850;">Top Criadores — Receita no Período</h3>
         <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700;">Clique em "Extrato" para breakdown detalhado</span>
     </div>
-    <table style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
+    <table id="topCreatorsTable" style="width: 100%; border-collapse: collapse; font-size: 0.8rem;">
         <thead>
             <tr style="border-bottom: 1px solid rgba(255,255,255,0.07);">
                 <th style="text-align: left; padding: 0.75rem 1rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; font-size: 0.7rem;">#</th>
@@ -175,6 +181,18 @@
 @endsection
 
 @section('scripts')
+<!-- SheetJS para Excel -->
+<script src="https://cdn.sheetjs.com/xlsx-0.19.3/package/dist/xlsx.full.min.js"></script>
+<script>
+    function exportTableToExcel(tableID, filename = ''){
+        var table = document.getElementById(tableID);
+        var wb = XLSX.utils.table_to_book(table, {sheet: "Relatório"});
+        
+        // Remove columns or format if needed here
+        XLSX.writeFile(wb, filename);
+    }
+</script>
+
 <script>
     // Monetization Trend (Line Chart)
     const trendCtx = document.getElementById('monetizationTrendChart').getContext('2d');

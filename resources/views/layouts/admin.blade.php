@@ -308,6 +308,16 @@
         .notification-item:hover {
             background: rgba(255,255,255,0.05);
         }
+
+        /* Print Styles */
+        @media print {
+            body { background: white; color: black; }
+            .sidebar, .top-header, .no-print { display: none !important; }
+            .main-content { margin-left: 0; padding: 0; }
+            .admin-card { box-shadow: none; border: 1px solid #ddd; background: white; color: black; break-inside: avoid; }
+            h1, h2, h3, h4, p, span, div, td, th { color: black !important; }
+            svg { color: black !important; }
+        }
     </style>
 </head>
 <body>
