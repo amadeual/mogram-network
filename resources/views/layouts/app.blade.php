@@ -46,7 +46,33 @@
             background-color: #11141e !important;
             color: #ffffff !important;
         }
+
+        /* SweetAlert2 Customized Styles for Mogram */
+        div.swal2-popup.mogram-swal-popup {
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+        }
     </style>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Override standard alert to provide a professional, Mogram-styled notification globally
+        window.alert = function(message) {
+            Swal.fire({
+                title: 'Aviso',
+                text: message,
+                icon: 'warning',
+                confirmButtonText: 'Entendi',
+                confirmButtonColor: '#3390ec',
+                background: '#1a1c2e',
+                color: '#ffffff',
+                customClass: {
+                    popup: 'mogram-swal-popup'
+                }
+            });
+        };
+    </script>
 </head>
 <body>
     @auth

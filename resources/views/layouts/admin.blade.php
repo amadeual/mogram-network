@@ -14,9 +14,32 @@
     <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script>
+        // Override standard alert to provide a professional, Mogram-styled notification globally in Admin Panel
+        window.alert = function(message) {
+            Swal.fire({
+                title: 'Aviso',
+                text: message,
+                icon: 'warning',
+                confirmButtonText: 'Entendi',
+                confirmButtonColor: '#3390ec',
+                background: '#161a26',
+                color: '#ffffff',
+                customClass: {
+                    popup: 'mogram-swal-popup'
+                }
+            });
+        };
+    </script>
 
     <style>
+        /* SweetAlert2 Customized Styles for Mogram */
+        div.swal2-popup.mogram-swal-popup {
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5) !important;
+        }
+
         :root {
             --bg-deep: #0b0d17;
             --bg-card: #161a26;
