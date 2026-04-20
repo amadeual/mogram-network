@@ -185,19 +185,15 @@
                             <h3 style="font-size: 14px; font-weight: 900; color: white;">Visibilidade e Preço</h3>
                         </div>
 
-                        <div style="background: rgba(0,0,0,0.1); border-radius: 12px; padding: 4px; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 1.5rem;">
-                            <button type="button" class="tab-btn active" onclick="setPostPaid(false)">Grátis</button>
-                            <button type="button" class="tab-btn" onclick="setPostPaid(true)">Pago</button>
-                        </div>
-                        <input type="hidden" name="is_paid" id="is_paid_input" value="0">
+                        <input type="hidden" name="is_paid" id="is_paid_input" value="1">
 
-                        <div id="price_section" style="display: none;">
+                        <div id="price_section" style="display: block;">
                             <label style="font-size: 10px; font-weight: 950; color: var(--text-muted); text-transform: none; margin-bottom: 8px; display: block;">Preço do Post (BRL)</label>
                             <div style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 1.25rem; display: flex; align-items: center;">
                                 <span style="font-weight: 900; color: var(--text-muted); margin-right: 1rem;">R$</span>
                                 <input type="number" name="price" id="price_input" value="5.00" step="0.01" min="5" style="background: transparent; border: none; font-size: 1.5rem; font-weight: 950; color: white; width: 100%; outline: none;" placeholder="5,00">
                             </div>
-                            <p style="font-size: 10px; color: var(--text-muted); margin-top: 10px; font-weight: 600;">Valor mínimo: R$ 5,00. Taxa da plataforma: 10%.</p>
+                            <p style="font-size: 10px; color: var(--text-muted); margin-top: 10px; font-weight: 600;">Valor mínimo: R$ 5,00. Taxa da plataforma: 15%.</p>
                         </div>
                     </div>
 

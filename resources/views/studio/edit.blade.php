@@ -150,9 +150,10 @@
                             <label style="font-size: 13px; font-weight: 800; color: white;">Preço de Venda (R$)</label>
                             <div style="position: relative;">
                                 <span style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-weight: 900;">R$</span>
-                                <input type="number" name="price" step="0.01" value="{{ $post->price }}"
+                                <input type="number" name="price" step="0.01" min="5" value="{{ $post->price }}"
                                        style="background: #1a1c2e; border: 1.5px solid rgba(255,255,255,0.1); border-radius: 14px; padding: 0.875rem 1rem 0.875rem 3rem; color: white; outline: none; width: 100%;">
                             </div>
+                            <p style="font-size: 10px; color: var(--text-muted); margin-top: 10px; font-weight: 600;">Valor mínimo: R$ 5,00. Taxa da plataforma: 15%.</p>
                         </div>
 
                         <div style="display: flex; align-items: center; gap: 1rem; background: rgba(51, 144, 236, 0.05); padding: 1.25rem; border-radius: 16px;">
