@@ -12,7 +12,7 @@ class ExploreController extends Controller
     public function feed()
     {
         // Get public posts or trending posts
-        $posts = Post::where('is_locked', false)
+        $posts = Post::where('is_exclusive', false)
             ->with(['user', 'media'])
             ->latest()
             ->paginate(12);
