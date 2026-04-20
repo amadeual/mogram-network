@@ -665,7 +665,7 @@
                             openMogramModal(
                                 'Saldo Insuficiente',
                                 data.message,
-                                () => { window.location.href = '#'; }, 
+                                () => { window.location.href = '{{ route('wallet.index') }}'; }, 
                                 'Depositar Agora',
                                 'error'
                             );

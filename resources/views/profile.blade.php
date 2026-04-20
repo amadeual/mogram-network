@@ -267,25 +267,42 @@
     function unlockPost(e, postId, price) {
         e.preventDefault();
         
-        // Basic confirmation for demo - ideally matches dashboard.blade.php's modal
-        if (!confirm(`Deseja desbloquear este conteúdo por R$ ${price}?`)) return;
-
-        fetch(`/posts/${postId}/unlock`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Accept': 'application/json',
-                'X-Requested-With': 'XMLHttpRequest'
+        openMogramModal(
+            'Desbloquear Conteúdo?', 
+            `Deseja usar R$ ${parseFloat(price).toLocaleString('pt-BR', {minimumFractionDigits: 2})} do seu saldo para desbloquear este conteúdo?`,
+            () => {
+                fetch(`/posts/${postId}/unlock`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        showToast(data.message);
+                        setTimeout(() => window.location.reload(), 1500);
+                    } else {
+                        if (data.error === 'Saldo insuficiente!') {
+                            openMogramModal(
+                                'Saldo Insuficiente',
+                                data.message,
+                                () => { window.location.href = '{{ route('wallet.index') }}'; }, 
+                                'Depositar Agora',
+                                'error'
+                            );
+                        } else {
+                            showToast(data.error || 'Erro ao processar', 'error');
+                        }
+                    }
+                })
+                .catch(err => {
+                    showToast('Ocorreu um erro técnico. Tente novamente.', 'error');
+                });
             }
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.success) {
-                window.location.reload();
-            } else {
-                alert(data.error || 'Erro ao processar');
-            }
-        });
+        );
     }
 </script>
 @endsection
