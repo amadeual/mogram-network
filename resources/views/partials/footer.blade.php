@@ -18,8 +18,12 @@
                     </svg>
                     <span style="font-size: 1.85rem; font-weight: 950; color: white; letter-spacing: -1.5px;">Mogram</span>
                 </div>
-                <p style="line-height: 1.8; color: #777; font-size: 0.95rem; margin-bottom: 2rem;">A plataforma definitva para criadores que buscam autonomia, monetização justa e conexão real com sua audiência.</p>
+                <p style="line-height: 1.8; color: #777; font-size: 0.95rem; margin-bottom: 1rem;">A plataforma definitva para criadores que buscam autonomia, monetização justa e conexão real com sua audiência.</p>
                 
+                <p style="line-height: 1.4; color: #555; font-size: 0.85rem; margin-bottom: 2rem;">
+                    Av. Paulista, 1765 - Bela Vista, São Paulo - SP, 01311
+                </p>
+
                 <div style="display: flex; gap: 0.85rem;">
                     <a href="https://www.instagram.com/mogramlatam" target="_blank" class="footer-social-link" title="Instagram">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
