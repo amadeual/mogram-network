@@ -251,7 +251,7 @@
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
                             <span class="comments-count">{{ $post->comments->count() }}</span>
                         </button>
-                        <button onclick="openShareModal('{{ route('dashboard') }}?post={{ $post->id }}', '{{ str_replace("'", "\\'", $post->title) }}')" 
+                        <button onclick="openShareModal('{{ route('dashboard') }}?post={{ $post->id }}', '{{ str_replace("'", "\\'", $post->title) }}', '{{ $post->id }}')" 
                                 style="background: transparent; border: none; display: flex; align-items: center; gap: 0.6rem; font-size: 14px; font-weight: 800; color: var(--text-muted); cursor: pointer; transition: 0.2s; padding: 0;" onmouseover="this.style.color='white'" onmouseout="this.style.color='var(--text-muted)'">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         </button>
@@ -735,10 +735,12 @@
 <script>
     let currentShareUrl = '';
     let currentShareTitle = '';
+    let currentSharePostId = null;
 
-    function openShareModal(url, title) {
+    function openShareModal(url, title, postId = null) {
         currentShareUrl = url;
         currentShareTitle = title;
+        currentSharePostId = postId;
         document.getElementById('mogramShareModal').style.display = 'flex';
         document.body.style.overflow = 'hidden';
     }
