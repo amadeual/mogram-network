@@ -444,6 +444,13 @@
                 </a>
                 @endif
 
+                @if(Auth::user()->canAccess('manage_settings'))
+                <a href="{{ route('admin.help.index') }}" class="nav-item {{ Route::is('admin.help.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    Central de Ajuda
+                </a>
+                @endif
+
                 @if(Auth::user()->canAccess('manage_reports'))
                 <a href="{{ route('admin.reports') }}" class="nav-item {{ Route::is('admin.reports') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>

@@ -66,9 +66,7 @@ Route::get('/politica-de-privacidade', function () {
     return view('legal.privacy');
 })->name('privacy');
 
-Route::get('/ajuda', function () {
-    return view('help.index');
-})->name('help');
+Route::get('/ajuda', [App\Http\Controllers\HelpController::class, 'index'])->name('help');
 
 Route::get('/criadores', function () {
     return view('creators');
@@ -205,6 +203,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/roles/{role}', [App\Http\Controllers\Admin\AdminRoleController::class, 'update'])->name('admin.roles.update')->middleware('admin:manage_roles');
         Route::delete('/roles/{role}', [App\Http\Controllers\Admin\AdminRoleController::class, 'destroy'])->name('admin.roles.delete')->middleware('admin:manage_roles');
         Route::get('/newsletter', [NewsletterController::class, 'index'])->name('admin.newsletter.index')->middleware('admin:manage_reports');
+        
+        // Help Management
+        Route::prefix('help')->name('admin.help.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\HelpController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\HelpController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\HelpController::class, 'store'])->name('store');
+            Route::get('/{article}/edit', [App\Http\Controllers\Admin\HelpController::class, 'edit'])->name('edit');
+            Route::put('/{article}', [App\Http\Controllers\Admin\HelpController::class, 'update'])->name('update');
+            Route::delete('/{article}', [App\Http\Controllers\Admin\HelpController::class, 'destroy'])->name('destroy');
+        });
     });
 
     // Purchases Routes
