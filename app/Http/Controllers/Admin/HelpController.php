@@ -27,6 +27,8 @@ class HelpController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category' => 'required',
+            'description' => 'required',
+            'order' => 'nullable|integer',
             'image' => 'nullable|image|max:2048'
         ]);
 
@@ -54,6 +56,8 @@ class HelpController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category' => 'required',
+            'description' => 'required',
+            'order' => 'nullable|integer',
             'image' => 'nullable|image|max:2048'
         ]);
 

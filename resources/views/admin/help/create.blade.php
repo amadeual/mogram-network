@@ -8,7 +8,7 @@
     <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -1px;">Novo Artigo de Ajuda</h1>
 </div>
 
-<form action="{{ route('admin.help.store') }}" method="POST" enctype="multipart/form-data" class="admin-card" style="max-width: 800px;">
+<form action="{{ route('admin.help.store') }}" method="POST" enctype="multipart/form-data" id="help-form" class="admin-card" style="max-width: 800px;">
     @csrf
     
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
@@ -66,8 +66,8 @@
         });
 
         // Update hidden input on submit
-        document.querySelector('form').onsubmit = function() {
-            var content = document.querySelector('input[name=content]');
+        document.getElementById('help-form').onsubmit = function() {
+            var content = document.getElementById('content-input');
             content.value = quill.root.innerHTML;
         };
     </script>

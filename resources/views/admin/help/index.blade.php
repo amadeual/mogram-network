@@ -32,7 +32,7 @@
                 <td style="padding: 1.5rem 2rem;">
                     <div style="display: flex; align-items: center; gap: 12px;">
                         @if($article->image)
-                            <img src="{{ Storage::url($article->image) }}" style="width: 48px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
+                            <img src="{{ asset('storage/' . $article->image) }}" style="width: 48px; height: 32px; border-radius: 6px; object-fit: cover; border: 1px solid rgba(255,255,255,0.1);">
                         @else
                             <div style="width: 48px; height: 32px; border-radius: 6px; background: rgba(51,144,236,0.1); display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>

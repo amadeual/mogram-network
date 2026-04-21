@@ -14,99 +14,41 @@
                 <p style="color: #64748b; font-size: 18px; font-weight: 600;">Aprenda a dominar o Mogram com nossos guias práticos.</p>
             </header>
 
-            <!-- Quick Navigation -->
+            <!-- Dynamic Navigation -->
             <nav style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 6rem;">
-                <a href="#postar-conteudo" class="guide-nav-item">Postar Conteúdo</a>
-                <a href="#criar-comunidades" class="guide-nav-item">Criar Comunidades</a>
-                <a href="#iniciar-lives" class="guide-nav-item">Iniciar Lives</a>
-                <a href="#enviar-gifts" class="guide-nav-item">Enviar Gifts</a>
+                @foreach($articles as $article)
+                    <a href="#{{ $article->slug }}" class="guide-nav-item">{{ $article->title }}</a>
+                @endforeach
             </nav>
 
             <div style="display: flex; flex-direction: column; gap: 8rem;">
-                
-                <!-- 1. Postar Conteúdo -->
-                <section id="postar-conteudo" class="help-section">
-                    <div class="section-content">
-                        <div class="section-text">
-                            <span class="step-badge">Etapa 1</span>
-                            <h2 class="section-title">Como Postar Conteúdo</h2>
-                            <p class="section-desc">Compartilhar seu conteúdo exclusivo é simples. Você pode postar fotos ou vídeos e até definir um preço para desbloqueio.</p>
-                            <ul class="step-list">
-                                <li>Acesse o <strong>Mogram Studio</strong> no menu lateral.</li>
-                                <li>Clique em <strong>"Criar Novo"</strong> ou arraste seus arquivos.</li>
-                                <li>Adicione uma legenda cativante para seus fãs.</li>
-                                <li>Se desejar, ative o <strong>Conteúdo Desbloqueável</strong> e defina o valor em moedas.</li>
-                                <li>Clique em <strong>Publicar</strong> e comece a faturar!</li>
-                            </ul>
+                @forelse($articles as $article)
+                    <section id="{{ $article->slug }}" class="help-section">
+                        <div class="section-content {{ $loop->iteration % 2 == 0 ? 'reverse' : '' }}">
+                            <div class="section-text">
+                                <span class="step-badge">Guia Mogram</span>
+                                <h2 class="section-title">{{ $article->title }}</h2>
+                                <p class="section-desc">{{ $article->description }}</p>
+                                <div class="article-body">
+                                    {!! $article->content !!}
+                                </div>
+                            </div>
+                            <div class="section-image-container">
+                                @if($article->image)
+                                    <img src="{{ asset('storage/' . $article->image) }}" alt="{{ $article->title }}" class="guide-img">
+                                @else
+                                    <div style="width: 100%; aspect-ratio: 16/9; background: rgba(51,144,236,0.1); border-radius: 24px; display: flex; align-items: center; justify-content: center; color: var(--primary-blue);">
+                                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                        <div class="section-image-container">
-                            <img src="{{ asset('images/guides/guide_post_content_1776776284037.png') }}" alt="Como Postar Conteúdo" class="guide-img">
-                        </div>
+                    </section>
+                @empty
+                    <div style="text-align: center; padding: 5rem 0;">
+                        <p style="color: #64748b; font-size: 1.25rem; font-weight: 600;">Nenhum guia disponível no momento.</p>
                     </div>
-                </section>
-
-                <!-- 2. Criar Comunidades -->
-                <section id="criar-comunidades" class="help-section">
-                    <div class="section-content reverse">
-                        <div class="section-text">
-                            <span class="step-badge">Etapa 2</span>
-                            <h2 class="section-title">Criando sua Comunidade</h2>
-                            <p class="section-desc">Comunidades são perfeitas para fidelizar seu público em um ambiente exclusivo por assinatura.</p>
-                            <ul class="step-list">
-                                <li>Vá para a aba <strong>Comunidades</strong>.</li>
-                                <li>Selecione <strong>"Criar Nova Comunidade"</strong>.</li>
-                                <li>Escolha um nome marcante e uma imagem de capa premium.</li>
-                                <li>Defina se a comunidade será <strong>Gratuita</strong> ou via <strong>Assinatura Mensal</strong>.</li>
-                                <li>Configure o preço e as regras de convivência.</li>
-                            </ul>
-                        </div>
-                        <div class="section-image-container">
-                            <img src="{{ asset('images/guides/guide_create_community_1776776319490.png') }}" alt="Criar Comunidade" class="guide-img">
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 3. Iniciar Lives -->
-                <section id="iniciar-lives" class="help-section">
-                    <div class="section-content">
-                        <div class="section-text">
-                            <span class="step-badge">Etapa 3</span>
-                            <h2 class="section-title">Iniciando uma Live Stream</h2>
-                            <p class="section-desc">Interaja em tempo real e receba presentes instantâneos durante suas transmissões.</p>
-                            <ul class="step-list">
-                                <li>No Studio, acesse a aba <strong>Lives</strong>.</li>
-                                <li>Clique em <strong>"Iniciar Transmissão"</strong>.</li>
-                                <li>Configure o título da Live e a categoria (ex: Chat, Gaming, ASMR).</li>
-                                <li>Verifique sua conexão e iluminação no preview.</li>
-                                <li>Clique em <strong>Entrar Ao Vivo</strong> e brilhe para sua audiência!</li>
-                            </ul>
-                        </div>
-                        <div class="section-image-container">
-                            <img src="{{ asset('images/guides/guide_start_live_1776776352552.png') }}" alt="Iniciar Lives" class="guide-img">
-                        </div>
-                    </div>
-                </section>
-
-                <!-- 4. Enviar Gifts -->
-                <section id="enviar-gifts" class="help-section">
-                    <div class="section-content reverse">
-                        <div class="section-text">
-                            <span class="step-badge">Etapa 4</span>
-                            <h2 class="section-title">Como Enviar Gifts (Presentes)</h2>
-                            <p class="section-desc">Apoie seus criadores favoritos enviando presentes virtuais durante as Lives ou no Chat.</p>
-                            <ul class="step-list">
-                                <li>Durante uma Live, clique no ícone de <strong>Presente (Mimo)</strong>.</li>
-                                <li>Escolha entre uma variedade de Gifts, de rosas a diamantes.</li>
-                                <li>Confirme o envio e veja seu nome aparecer em destaque na stream.</li>
-                                <li>Você também pode enviar gifts diretamente nas mensagens privadas.</li>
-                            </ul>
-                        </div>
-                        <div class="section-image-container">
-                            <img src="{{ asset('images/guides/guide_send_gifts_v2_1776777015238.png') }}" alt="Enviar Gifts" class="guide-img">
-                        </div>
-                    </div>
-                </section>
-
+                @endforelse
             </div>
 
             <!-- FAQ -->

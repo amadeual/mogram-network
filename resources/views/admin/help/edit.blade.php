@@ -8,7 +8,7 @@
     <h1 style="font-size: 2.25rem; font-weight: 900; letter-spacing: -1px;">Editar: {{ $article->title }}</h1>
 </div>
 
-<form action="{{ route('admin.help.update', $article->id) }}" method="POST" enctype="multipart/form-data" class="admin-card" style="max-width: 800px;">
+<form action="{{ route('admin.help.update', $article->id) }}" method="POST" enctype="multipart/form-data" id="help-form" class="admin-card" style="max-width: 800px;">
     @csrf
     @method('PUT')
     
@@ -69,8 +69,8 @@
         });
 
         // Update hidden input on submit
-        document.querySelector('form').onsubmit = function() {
-            var content = document.querySelector('input[name=content]');
+        document.getElementById('help-form').onsubmit = function() {
+            var content = document.getElementById('content-input');
             content.value = quill.root.innerHTML;
         };
     </script>
@@ -79,7 +79,7 @@
         <div>
             <label style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Imagem Ilustrativa</label>
             @if($article->image)
-                <img src="{{ Storage::url($article->image) }}" style="width: 100px; border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid rgba(255,255,255,0.1);">
+                <img src="{{ asset('storage/' . $article->image) }}" style="width: 100px; border-radius: 8px; margin-bottom: 10px; display: block; border: 1px solid rgba(255,255,255,0.1);">
             @endif
             <input type="file" name="image" accept="image/*" style="width: 100%; color: #94a3b8; font-size: 0.9rem;">
         </div>
