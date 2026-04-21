@@ -31,6 +31,30 @@
                 }
             });
         };
+
+        // Global Professional Deletion Confirmation using SweetAlert2
+        window.confirmDelete = function(event, form, text = "Esta ação não pode ser desfeita!") {
+            event.preventDefault();
+            Swal.fire({
+                title: 'Tem certeza?',
+                text: text,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#64748b',
+                confirmButtonText: 'Sim, deletar!',
+                cancelButtonText: 'Cancelar',
+                background: '#161a26',
+                color: '#ffffff',
+                customClass: {
+                    popup: 'mogram-swal-popup'
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    form.submit();
+                }
+            });
+        };
     </script>
 
     <style>

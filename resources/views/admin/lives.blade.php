@@ -107,7 +107,7 @@
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                         </a>
 
-                        <form action="{{ route('admin.content.delete_live', $live->id) }}" method="POST" onsubmit="return confirm('Remover esta live permanentemente do sistema?')">
+                        <form action="{{ route('admin.content.delete_live', $live->id) }}" method="POST" onsubmit="confirmDelete(event, this, 'Removeresta live permanentemente do sistema?')">
                             @csrf
                             @method('DELETE')
                             <button title="Deletar Live" type="submit" class="header-btn" style="width: 36px; height: 36px; background: rgba(239, 68, 68, 0.05); color: var(--text-muted);">

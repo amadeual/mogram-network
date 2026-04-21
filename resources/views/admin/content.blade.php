@@ -91,7 +91,7 @@
                         <a href="{{ route('creator.profile', $post->user->username) }}" target="_blank" class="header-btn" style="width: 32px; height: 32px; background: rgba(51, 144, 236, 0.1); color: var(--primary-blue);">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                         </a>
-                        <form action="{{ route('admin.content.delete_post', $post->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja remover este post permanentemente?')">
+                        <form action="{{ route('admin.content.delete_post', $post->id) }}" method="POST" onsubmit="confirmDelete(event, this, 'Tem certeza que deseja remover este post permanentemente?')">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="header-btn" style="width: 32px; height: 32px; background: rgba(239, 68, 68, 0.1); color: var(--danger);">

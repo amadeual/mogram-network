@@ -47,7 +47,7 @@
                 <td style="padding: 1.5rem 2rem; text-align: right;">
                     <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
                         <a href="{{ route('admin.roles.edit', $role->id) }}" class="btn-primary" style="padding: 8px 12px; font-size: 0.75rem; background: rgba(255,255,255,0.05); box-shadow: none;">Editar</a>
-                        <form action="{{ route('admin.roles.delete', $role->id) }}" method="POST" onsubmit="return confirm('Excluir esta função permanentemente?')">
+                        <form action="{{ route('admin.roles.delete', $role->id) }}" method="POST" onsubmit="confirmDelete(event, this, 'Excluir esta função permanentemente?')">
                             @csrf @method('DELETE')
                             <button type="submit" class="btn-primary" style="padding: 8px 12px; font-size: 0.75rem; background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.2); color: #ef4444; box-shadow: none;">Excluir</button>
                         </form>
