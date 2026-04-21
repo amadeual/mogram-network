@@ -11,6 +11,7 @@ use App\Http\Controllers\FeedController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\NewsletterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,6 +73,8 @@ Route::get('/ajuda', function () {
 Route::get('/criadores', function () {
     return view('creators');
 })->name('creators');
+
+Route::post('/newsletter/subscribe', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
 
 use App\Http\Controllers\ExploreController;
 
@@ -201,6 +204,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/roles/{role}/edit', [App\Http\Controllers\Admin\AdminRoleController::class, 'edit'])->name('admin.roles.edit')->middleware('admin:manage_roles');
         Route::put('/roles/{role}', [App\Http\Controllers\Admin\AdminRoleController::class, 'update'])->name('admin.roles.update')->middleware('admin:manage_roles');
         Route::delete('/roles/{role}', [App\Http\Controllers\Admin\AdminRoleController::class, 'destroy'])->name('admin.roles.delete')->middleware('admin:manage_roles');
+        Route::get('/newsletter', [NewsletterController::class, 'index'])->name('admin.newsletter.index')->middleware('admin:manage_reports');
     });
 
     // Purchases Routes

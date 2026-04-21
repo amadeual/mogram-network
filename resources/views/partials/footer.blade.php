@@ -61,6 +61,20 @@
                     <a href="{{ route('privacy') }}">Política de Privacidade</a>
                 </div>
             </div>
+
+            <div class="footer-newsletter">
+                <h4 class="footer-heading">Newsletter</h4>
+                <p style="color: #666; font-size: 0.85rem; margin-bottom: 1.5rem; line-height: 1.6;">Receba atualizações exclusivas diretamente no seu e-mail.</p>
+                <form action="{{ route('newsletter.subscribe') }}" method="POST">
+                    @csrf
+                    <div style="position: relative; display: flex; align-items: center;">
+                        <input type="email" name="email" placeholder="Seu e-mail" required style="width: 100%; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 12px 45px 12px 15px; color: white; font-size: 0.9rem; outline: none; transition: 0.3s; box-sizing: border-box;">
+                        <button type="submit" style="position: absolute; right: 6px; width: 34px; height: 34px; border-radius: 8px; background: #ff4b1f; border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
         
         <div class="footer-bottom">
@@ -161,8 +175,8 @@
 
     @media (min-width: 1024px) {
         .footer-grid {
-            grid-template-columns: 2fr repeat(3, 1fr);
-            gap: 5rem;
+            grid-template-columns: 2fr repeat(2, 1fr) 1.2fr 1.8fr;
+            gap: 4rem;
         }
     }
 

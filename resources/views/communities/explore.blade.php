@@ -182,21 +182,26 @@
 
                 <div style="margin-bottom: 24px; max-width: 300px;">
                     <h4 style="font-size: 12px; font-weight: 840; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: white;">Newsletter</h4>
-                    <div style="position: relative; display: flex; align-items: center;">
-                        <input type="email" placeholder="Seu email" style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 10px 40px 10px 12px; color: white; font-size: 13px; outline: none; box-sizing: border-box;">
-                        <button style="position: absolute; right: 6px; width: 28px; height: 28px; border-radius: 6px; background: #3390ec; border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        </button>
-                    </div>
+                    <form action="{{ route('newsletter.subscribe') }}" method="POST">
+                        @csrf
+                        <div style="position: relative; display: flex; align-items: center;">
+                            <input type="email" name="email" placeholder="Seu email" required style="width: 100%; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); border-radius: 10px; padding: 10px 40px 10px 12px; color: white; font-size: 13px; outline: none; box-sizing: border-box;">
+                            <button type="submit" style="position: absolute; right: 6px; width: 28px; height: 28px; border-radius: 6px; background: #3390ec; border: none; color: white; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="22 2 11 13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                            </button>
+                        </div>
+                        @error('email')
+                            <p style="color: #ef4444; font-size: 11px; margin-top: 5px; font-weight: 600;">{{ $message }}</p>
+                        @enderror
+                    </form>
                 </div>
             </div>
 
             <div style="max-width: 1400px; margin: 0 auto; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.03); display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; text-align: center;">
                 <p style="color: rgba(255,255,255,0.2); font-size: 11px; font-weight: 700; width: 100%;">&copy; 2024 Mogram. Todos os direitos reservados.</p>
                 <div style="display: flex; gap: 16px;">
-                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">Instagram</a>
-                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">TikTok</a>
-                    <a href="#" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">Telegram</a>
+                    <a href="https://www.instagram.com/mogramlatam" target="_blank" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">Instagram</a>
+                    <a href="https://www.tiktok.com/@mogramnetwork" target="_blank" style="color: rgba(255,255,255,0.3); text-decoration: none; font-size: 11px; font-weight: 800;">TikTok</a>
                 </div>
             </div>
         </footer>

@@ -436,6 +436,13 @@
                     Suporte e Tickets
                 </a>
                 @endif
+                
+                @if(Auth::user()->canAccess('manage_reports'))
+                <a href="{{ route('admin.newsletter.index') }}" class="nav-item {{ Route::is('admin.newsletter.index') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                    Newsletter
+                </a>
+                @endif
 
                 @if(Auth::user()->canAccess('manage_reports'))
                 <a href="{{ route('admin.reports') }}" class="nav-item {{ Route::is('admin.reports') ? 'active' : '' }}">
