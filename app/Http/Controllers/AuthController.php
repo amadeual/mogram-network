@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use App\Mail\WelcomeMail;
 use App\Mail\PasswordResetMail;
@@ -137,10 +138,18 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->validate([
+        $request->validate([
             'login' => ['required', 'string'],
             'password' => ['required'],
         ]);
+
+        $throttleKey = Str::lower($request->input('login')) . '|' . $request->ip();
+
+        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
+            return back()->withErrors([
+                'login' => 'Muitas tentativas de login malsucedidas. Sua conta foi temporariamente bloqueada por segurança. Por favor, utilize a opção "Esqueci minha senha" para recuperá-la.',
+            ])->onlyInput('login');
+        }
 
         // Check if login is email or username
         $loginType = filter_var($request->login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -153,9 +162,12 @@ class AuthController extends Controller
                 return redirect()->route('login')->withErrors(['login' => 'Por favor, verifique seu e-mail antes de fazer login.']);
             }
 
+            RateLimiter::clear($throttleKey);
             $request->session()->regenerate();
             return redirect()->intended(route('dashboard'))->with('success', 'Bem-vindo de volta!');
         }
+
+        RateLimiter::hit($throttleKey, 31536000); // Bloqueio persistente (1 ano) até resetar
 
         return back()->withErrors([
             'login' => 'As credenciais fornecidas não correspondem aos nossos registros.',
@@ -244,6 +256,10 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
         $user->update(['password' => Hash::make($request->password)]);
+
+        // Limpar o throttle para o e-mail e username do usuário
+        RateLimiter::clear(Str::lower($user->email) . '|' . $request->ip());
+        RateLimiter::clear(Str::lower($user->username) . '|' . $request->ip());
 
         DB::table('password_reset_tokens')->where('email', $request->email)->delete();
 
