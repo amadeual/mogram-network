@@ -21,7 +21,7 @@
                 <p style="line-height: 1.8; color: #777; font-size: 0.95rem; margin-bottom: 1rem;">A plataforma definitva para criadores que buscam autonomia, monetização justa e conexão real com sua audiência.</p>
                 
                 <p style="line-height: 1.4; color: #555; font-size: 0.85rem; margin-bottom: 2rem;">
-                    Av. Paulista, 1765 - Bela Vista, São Paulo - SP, 01311
+                    Av. Paulista, 91 - Bela Vista, São Paulo - SP, 01311-000
                 </p>
 
                 <div style="display: flex; gap: 0.85rem;">
