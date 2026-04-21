@@ -50,7 +50,7 @@
                     <a href="{{ route('register') }}">Parceiro Creator</a>
                     <a href="{{ route('creators') }}">Para Criadores</a>
                     <a href="#">Mogram Studio</a>
-                    <a href="#">Central de Ajuda</a>
+                    <a href="{{ route('help') }}">Central de Ajuda</a>
                 </div>
             </div>
             

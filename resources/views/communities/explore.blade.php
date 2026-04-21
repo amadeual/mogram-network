@@ -174,7 +174,7 @@
                         <h4 style="font-size: 12px; font-weight: 840; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.5px; color: white;">Suporte</h4>
                         <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px;">
                             <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">FAQ</a></li>
-                            <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Central de Ajuda</a></li>
+                            <li><a href="{{ route('help') }}" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Central de Ajuda</a></li>
                             <li><a href="#" style="color: rgba(255,255,255,0.4); text-decoration: none; font-size: 12px; font-weight: 700;">Termos de Uso</a></li>
                         </ul>
                     </div>
