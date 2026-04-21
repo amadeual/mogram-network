@@ -398,22 +398,22 @@
 
     function sendMimo(giftId, name, icon, price) {
         const story = stories[currentIndex];
-        if (!confirm(`Deseja enviar ${icon} ${name} por R$ ${price.toFixed(2)}?`)) return;
-
-        fetch(`/stories/${story.id}/gift`, {
-            method: 'POST',
-            headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' },
-            body: JSON.stringify({ gift_id: giftId })
-        }).then(r => r.json()).then(data => {
-            if (data.success) {
-                showToast(`Mimo ${icon} enviado com sucesso! 🎁`, 'success');
-                // Update balance in header
-                document.querySelector('header span').innerText = `R$ ${data.balance}`;
-                toggleGifts();
-            } else {
-                showToast(data.message || 'Erro ao enviar mimo', 'error');
-            }
-        });
+        openMogramModal('Confirmar Presente', `Deseja enviar ${icon} ${name} por R$ ${price.toFixed(2)}?`, () => {
+            fetch(`/stories/${story.id}/gift`, {
+                method: 'POST',
+                headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ gift_id: giftId })
+            }).then(r => r.json()).then(data => {
+                if (data.success) {
+                    showToast(`Mimo ${icon} enviado com sucesso! 🎁`, 'success');
+                    // Update balance in header
+                    document.querySelector('header span').innerText = `R$ ${data.balance}`;
+                    toggleGifts();
+                } else {
+                    showToast(data.message || 'Erro ao enviar mimo', 'error');
+                }
+            });
+        }, 'Sim, Enviar', 'info');
     }
 
     document.addEventListener('DOMContentLoaded', initStory);

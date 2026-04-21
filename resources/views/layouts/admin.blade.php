@@ -32,28 +32,32 @@
             });
         };
 
-        // Global Professional Deletion Confirmation using SweetAlert2
+        // Global Professional Deletion Confirmation using Custom Modal
         window.confirmDelete = function(event, form, text = "Esta ação não pode ser desfeita!") {
             event.preventDefault();
-            Swal.fire({
-                title: 'Tem certeza?',
-                text: text,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#ef4444',
-                cancelButtonColor: '#64748b',
-                confirmButtonText: 'Sim, deletar!',
-                cancelButtonText: 'Cancelar',
-                background: '#161a26',
-                color: '#ffffff',
-                customClass: {
-                    popup: 'mogram-swal-popup'
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
+            if (typeof openMogramModal === 'function') {
+                openMogramModal('Tem certeza?', text, () => {
                     form.submit();
-                }
-            });
+                }, 'Sim, Deletar', 'danger');
+            } else {
+                // Fallback to SweetAlert2 if modal not ready
+                Swal.fire({
+                    title: 'Tem certeza?',
+                    text: text,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Sim, deletar!',
+                    cancelButtonText: 'Cancelar',
+                    background: '#161a26',
+                    color: '#ffffff'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            }
         };
     </script>
 
@@ -579,5 +583,71 @@
     </div>
 
     @yield('scripts')
+
+    <!-- Stunning Mogram Professional Modal -->
+    <div id="mogram-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(8, 7, 14, 0.85); backdrop-filter: blur(12px); z-index: 20000; align-items: center; justify-content: center; animation: fadeInModal 0.3s ease-out;">
+        <div style="background: #161a26; border: 1px solid rgba(255,255,255,0.08); border-radius: 32px; padding: 2.5rem; width: 420px; max-width: 90%; text-align: center; box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8); transform: translateY(0); transition: 0.3s; position: relative; overflow: hidden;">
+            <!-- Glow Effect -->
+            <div id="modal-glow" style="position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(51, 144, 236, 0.05) 0%, transparent 70%); pointer-events: none;"></div>
+            
+            <div id="mogram-modal-icon" style="width: 64px; height: 64px; background: rgba(51, 144, 236, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.75rem; color: #3390ec; position: relative;">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+            </div>
+            
+            <h3 id="mogram-modal-title" style="font-size: 1.5rem; font-weight: 900; color: white; margin-bottom: 0.75rem; letter-spacing: -0.5px;">Confirmar Ação</h3>
+            <p id="mogram-modal-text" style="color: #94a3b8; font-size: 0.95rem; font-weight: 600; line-height: 1.6; margin-bottom: 2.5rem;">Deseja realmente prosseguir com esta operação?</p>
+            
+            <div style="display: flex; gap: 1rem;">
+                <button onclick="closeMogramModal()" style="flex: 1; padding: 1rem; border-radius: 16px; background: rgba(255,255,255,0.04); color: white; font-weight: 800; border: 1px solid rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.08)'" onmouseout="this.style.background='rgba(255,255,255,0.04)'">Cancelar</button>
+                <button id="mogram-modal-confirm" style="flex: 1; padding: 1rem; border-radius: 16px; background: #3390ec; color: white; font-weight: 900; border: none; cursor: pointer; transition: 0.3s; box-shadow: 0 10px 20px rgba(51, 144, 236, 0.2);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 15px 30px rgba(51, 144, 236, 0.3)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 10px 20px rgba(51, 144, 236, 0.2)'">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes fadeInModal { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+
+    <script>
+        function openMogramModal(title, text, confirmCallback, confirmLabel = 'Confirmar', iconType = 'info') {
+            const overlay = document.getElementById('mogram-modal-overlay');
+            const titleEl = document.getElementById('mogram-modal-title');
+            const textEl = document.getElementById('mogram-modal-text');
+            const confirmBtn = document.getElementById('mogram-modal-confirm');
+            const iconEl = document.getElementById('mogram-modal-icon');
+            const glowEl = document.getElementById('modal-glow');
+
+            titleEl.innerText = title;
+            textEl.innerText = text;
+            confirmBtn.innerText = confirmLabel;
+            
+            confirmBtn.onclick = () => {
+                confirmCallback();
+                closeMogramModal();
+            };
+
+            if (iconType === 'danger') {
+                iconEl.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+                iconEl.style.color = '#ef4444';
+                iconEl.style.background = 'rgba(239,68,68,0.1)';
+                confirmBtn.style.background = '#ef4444';
+                confirmBtn.style.boxShadow = '0 10px 20px rgba(239, 68, 68, 0.2)';
+                glowEl.style.background = 'radial-gradient(circle, rgba(239, 68, 68, 0.05) 0%, transparent 70%)';
+            } else {
+                iconEl.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+                iconEl.style.color = '#3390ec';
+                iconEl.style.background = 'rgba(51,144,236,0.1)';
+                confirmBtn.style.background = '#3390ec';
+                confirmBtn.style.boxShadow = '0 10px 20px rgba(51, 144, 236, 0.2)';
+                glowEl.style.background = 'radial-gradient(circle, rgba(51, 144, 236, 0.05) 0%, transparent 70%)';
+            }
+
+            overlay.style.display = 'flex';
+        }
+
+        function closeMogramModal() {
+            document.getElementById('mogram-modal-overlay').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

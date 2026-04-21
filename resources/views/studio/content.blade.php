@@ -106,7 +106,7 @@
                                     <a href="{{ route('studio.edit', $post->id) }}" style="color: inherit; text-decoration: none; padding: 0.5rem;">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
                                     </a>
-                                    <form action="{{ route('studio.delete', $post->id) }}" method="POST" onsubmit="return confirm('Excluir?')">
+                                    <form action="{{ route('studio.delete', $post->id) }}" method="POST" onsubmit="confirmDelete(event, this, 'Excluir esta publicação?')">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" style="background: transparent; border: none; color: inherit; cursor: pointer; padding: 0.5rem;">
