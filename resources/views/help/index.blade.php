@@ -209,7 +209,7 @@
         font-weight: 500;
     }
 
-    .step-list {
+    .article-body ul, .article-body ol {
         list-style: none;
         padding: 0;
         display: flex;
@@ -217,21 +217,24 @@
         gap: 1.25rem;
     }
 
-    .step-list li {
+    .article-body li {
         color: #cbd5e1;
         font-weight: 600;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 12px;
+        line-height: 1.5;
     }
 
-    .step-list li::before {
+    .article-body li::before {
         content: '';
         width: 6px;
         height: 6px;
         background: var(--primary-blue);
         border-radius: 50%;
         box-shadow: 0 0 10px var(--primary-blue);
+        margin-top: 8px;
+        flex-shrink: 0;
     }
 
     .guide-nav-item {

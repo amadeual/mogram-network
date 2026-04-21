@@ -34,10 +34,46 @@
         <textarea name="description" rows="2" style="width: 100%; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 15px; color: white; font-weight: 600; outline: none; resize: none;">{{ old('description', $article->description) }}</textarea>
     </div>
 
-    <div style="margin-bottom: 1.5rem;">
-        <label style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Conteúdo Completo (Suporta HTML)</label>
-        <textarea name="content" rows="10" required style="width: 100%; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 15px; color: white; font-weight: 600; outline: none; font-family: monospace;">{{ old('content', $article->content) }}</textarea>
+    <div style="margin-bottom: 2rem;">
+        <label style="display: block; font-size: 0.85rem; font-weight: 800; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">Conteúdo Completo</label>
+        <div id="editor" style="height: 350px; background: rgba(255,255,255,0.02); border: 1.5px solid rgba(255,255,255,0.08); border-radius: 12px; color: white; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px;">
+            {!! old('content', $article->content) !!}
+        </div>
+        <input type="hidden" name="content" id="content-input">
     </div>
+
+    <!-- Quill Editor Assets -->
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <style>
+        .ql-toolbar.ql-snow { border-color: rgba(255,255,255,0.08) !important; border-top-left-radius: 12px; border-top-right-radius: 12px; background: rgba(255,255,255,0.05); }
+        .ql-container.ql-snow { border-color: rgba(255,255,255,0.08) !important; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+        .ql-editor { font-size: 1rem; color: #cbd5e1; font-family: 'Inter', sans-serif; line-height: 1.6; }
+        .ql-snow .ql-stroke { stroke: #94a3b8 !important; }
+        .ql-snow .ql-fill { fill: #94a3b8 !important; }
+        .ql-snow .ql-picker { color: #94a3b8 !important; }
+    </style>
+
+    <script>
+        var quill = new Quill('#editor', {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'clean']
+                ]
+            }
+        });
+
+        // Update hidden input on submit
+        document.querySelector('form').onsubmit = function() {
+            var content = document.querySelector('input[name=content]');
+            content.value = quill.root.innerHTML;
+        };
+    </script>
 
     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 2rem;">
         <div>
