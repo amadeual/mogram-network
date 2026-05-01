@@ -516,6 +516,9 @@ class AdminController extends Controller
             if ($key === 'ABACATE_PAY_KEY') {
                 $this->updateEnvFile('ABACATE_PAY_KEY', $value);
             }
+            if ($key === 'SAFE2PAY_KEY') {
+                $this->updateEnvFile('SAFE2PAY_KEY', $value);
+            }
         }
 
         return back()->with('success', 'Configurações atualizadas com sucesso!');

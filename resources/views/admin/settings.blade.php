@@ -188,6 +188,32 @@
                     </div>
                 </div>
                 
+                <div style="display: flex; flex-direction: column; background: rgba(0,0,0,0.2); border: 1.5px solid var(--border-gray); border-radius: 20px; padding: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 48px; height: 48px; background: #3390ec; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.5rem;">S</div>
+                            <div>
+                                <h4 style="font-size: 1rem; font-weight: 850;">Safe2Pay</h4>
+                                <p style="font-size: 0.75rem; color: #3390ec; font-weight: 800;">ATIVADO (PIX)</p>
+                            </div>
+                        </div>
+                        <div style="background: rgba(51, 144, 236, 0.1); color: #3390ec; padding: 6px 14px; border-radius: 10px; font-size: 0.7rem; font-weight: 840;">
+                            SINCROZINADO COM .ENV
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 1.25rem;">
+                        <div>
+                            <label style="display: block; color: var(--text-muted); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; margin-bottom: 8px;">Safe2Pay API Token</label>
+                            <div style="display: flex; align-items: center; background: rgba(0,0,0,0.3); border: 1.5px solid var(--border-gray); border-radius: 12px; padding: 0 15px;">
+                                <svg style="color: var(--text-muted);" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3L15.5 7.5z"/></svg>
+                                <input type="password" name="SAFE2PAY_KEY" value="{{ env('SAFE2PAY_KEY') }}" placeholder="s2p_..." style="width: 100%; border: none; background: transparent; padding: 15px; color: white; outline: none; font-weight: 600; font-family: monospace;">
+                            </div>
+                            <p style="margin-top: 8px; font-size: 0.7rem; color: var(--text-muted); font-weight: 600;">Esta chave será salva tanto no banco quanto no seu arquivo .env automaticamente.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); border: 1.5px solid var(--border-gray); border-radius: 20px; padding: 1.5rem; opacity: 0.4; filter: grayscale(1);">
                     <div style="display: flex; align-items: center; gap: 1rem;">
                         <div style="width: 48px; height: 48px; background: #635bff; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 900; font-size: 1.5rem;">S</div>

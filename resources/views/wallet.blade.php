@@ -120,60 +120,114 @@
         </div>
 
         <!-- Deposit Modal -->
-        <div id="depositModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem; transition: 0.3s; opacity: 0;">
-            <div style="background: #0b0a15; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; width: 100%; max-width: 480px; padding: 2.5rem; position: relative; box-shadow: 0 30px 100px rgba(0,0,0,0.5);">
-                <button onclick="closeDepositModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; background: rgba(255,255,255,0.05); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        <div id="depositModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 9999; align-items: center; justify-content: center; padding: 1rem; transition: 0.3s; opacity: 0;">
+            <div style="background: #0b0a15; border: 1px solid rgba(255,255,255,0.08); border-radius: 28px; width: 100%; max-width: 440px; padding: 2rem; position: relative; box-shadow: 0 25px 80px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column;">
+                <button type="button" onclick="closeDepositModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; background: rgba(255,255,255,0.05); border: none; width: 32px; height: 32px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                 </button>
 
-                <div style="text-align: center; margin-bottom: 2rem;">
-                    <div style="width: 72px; height: 72px; background: rgba(51, 144, 236, 0.1); border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 1.5rem;">
-                        🪙
-                    </div>
-                    <h2 style="font-size: 24px; font-weight: 950; color: white; letter-spacing: -0.5px; margin-bottom: 0.5rem;">Adicionar Saldo</h2>
-                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Recarga via PIX e Cartão</p>
+                <div style="text-align: center; margin-bottom: 1.5rem;">
+                    <h2 style="font-size: 20px; font-weight: 900; color: white; letter-spacing: -0.5px; margin-bottom: 0.25rem;">Adicionar Saldo</h2>
+                    <p style="color: var(--text-muted); font-size: 13px; font-weight: 600;">Depósito automático via PIX e Cartão</p>
                 </div>
 
-                <form action="{{ route('wallet.deposit') }}" method="POST">
+                <form action="{{ route('wallet.deposit') }}" method="POST" style="display: flex; flex-direction: column; gap: 1.25rem;">
                     @csrf
-                    <div style="margin-bottom: 1.5rem;">
-                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 0.25rem 1.25rem;">
-                            <span style="font-size: 20px; font-weight: 950; color: var(--text-muted); margin-right: 0.75rem;">R$</span>
+                    <div>
+                        <div style="display: flex; align-items: center; background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 0.5rem 1rem; transition: border-color 0.2s;" onfocusin="this.style.borderColor='#3390ec'" onfocusout="this.style.borderColor='rgba(255,255,255,0.05)'">
+                            <span style="font-size: 16px; font-weight: 900; color: var(--text-muted); margin-right: 0.5rem;">R$</span>
                             <input type="number" name="amount" placeholder="0,00" step="0.01" min="10" max="5000" required
                                    oninput="if(this.value > 5000) this.value = 5000"
-                                   style="background: transparent; border: none; padding: 1.25rem 0; color: white; outline: none; width: 100%; font-size: 22px; font-weight: 950;">
+                                   style="background: transparent; border: none; padding: 0.75rem 0; color: white; outline: none; width: 100%; font-size: 24px; font-weight: 900; letter-spacing: -1px;">
                         </div>
-                        <div style="display: flex; justify-content: space-between; margin-top: 8px;">
-                            <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Mín: R$ 10,00</p>
-                            <p style="font-size: 11px; color: #ef4444; font-weight: 700;">Máx: R$ 5.000,00</p>
+                        <div style="display: flex; justify-content: space-between; margin-top: 6px; padding: 0 4px;">
+                            <p style="font-size: 11px; color: var(--text-muted); font-weight: 700;">Mínimo: R$ 10</p>
+                            <p style="font-size: 11px; color: rgba(255,255,255,0.4); font-weight: 700;">Máximo: R$ 5.000</p>
                         </div>
                     </div>
 
-                    <div style="margin-bottom: 1rem;">
-                        <input type="text" id="cpfInput" name="taxId" placeholder="CPF (somente números)" required
-                               maxlength="11"
-                               oninput="validateCPF(this)"
-                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.9rem 1.25rem; color: white; outline: none; width: 100%; font-size: 14px; font-weight: 700;">
-                        <span id="cpfError" style="color: #ef4444; font-size: 11px; font-weight: 700; margin-top: 5px; display: none; margin-left: 0.5rem;">CPF Inválido</span>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="position: relative;">
+                            <input type="text" id="cpfInput" name="taxId" placeholder="CPF (somente números)" required
+                                   maxlength="11" oninput="validateCPF(this)"
+                                   style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.85rem 1rem; color: white; outline: none; width: 100%; font-size: 13px; font-weight: 600; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3390ec'">
+                            <span id="cpfError" style="position: absolute; bottom: -18px; left: 4px; color: #ef4444; font-size: 10px; font-weight: 800; display: none;">CPF Inválido</span>
+                        </div>
+                        <div>
+                            <input type="text" name="cellphone" placeholder="Celular/DDD" required
+                                   pattern="[0-9]{10,11}" title="O Celular deve conter o DDD seguido de 8 ou 9 números."
+                                   style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.85rem 1rem; color: white; outline: none; width: 100%; font-size: 13px; font-weight: 600; transition: border-color 0.2s;" onfocus="this.style.borderColor='#3390ec'" onblur="this.style.borderColor='rgba(255,255,255,0.05)'">
+                        </div>
                     </div>
 
-                    <div style="margin-bottom: 2rem;">
-                        <input type="text" name="cellphone" placeholder="Celular (ex: 11999999999)" required
-                               pattern="[0-9]{10,11}" title="O Celular deve conter o DDD seguido de 8 ou 9 números."
-                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.9rem 1.25rem; color: white; outline: none; width: 100%; font-size: 14px; font-weight: 700;">
+                    <div style="margin-top: 0.5rem;">
+                        <p style="font-size: 12px; font-weight: 800; color: white; margin-bottom: 0.75rem; opacity: 0.8;">Escolha o Método:</p>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <label style="cursor: pointer;">
+                                <input type="radio" name="gateway" value="abacatepay" checked style="display: none;" onchange="updateGatewayUI(this)">
+                                <div class="gateway-option active" id="opt-abacate" style="background: rgba(34, 197, 94, 0.08); border: 1.5px solid #22c55e; border-radius: 14px; padding: 0.85rem; text-align: center; transition: 0.2s;">
+                                    <p style="font-size: 12px; font-weight: 800; color: white;">Abacate Pay</p>
+                                    <p style="font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 2px;">PIX / Cartão</p>
+                                </div>
+                            </label>
+                            <label style="cursor: pointer;">
+                                <input type="radio" name="gateway" value="safe2pay" style="display: none;" onchange="updateGatewayUI(this)">
+                                <div class="gateway-option" id="opt-safe2pay" style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 14px; padding: 0.85rem; text-align: center; transition: 0.2s;">
+                                    <p style="font-size: 12px; font-weight: 800; color: white;">Safe2Pay</p>
+                                    <p style="font-size: 10px; color: rgba(255,255,255,0.5); font-weight: 600; margin-top: 2px;">Somente PIX</p>
+                                </div>
+                            </label>
+                        </div>
                     </div>
 
-                    <button type="submit" id="submitDeposit" class="mogram-btn-primary" style="width: 100%; padding: 1.5rem; border-radius: 20px; font-weight: 950; font-size: 18px; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 12px; box-shadow: 0 10px 30px rgba(51, 144, 236, 0.3);">
-                        Gerar Pagamento
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5"><polyline points="9 18 15 12 9 6"/></svg>
-                    </button>
-                    
-                    <p style="text-align: center; font-size: 11px; color: var(--text-muted); margin-top: 1.5rem; font-weight: 850; opacity: 0.7;">
-                        Pagamento processado com segurança por <span style="color: #22c55e;">Abacate Pay</span>.
-                    </p>
+                    <div style="margin-top: 0.5rem;">
+                        <button type="submit" id="submitDeposit" class="mogram-btn-primary" style="width: 100%; padding: 1.15rem; background: linear-gradient(135deg, #3390ec 0%, #1261d1 100%); border-radius: 16px; font-weight: 900; font-size: 15px; color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 25px rgba(51, 144, 236, 0.25); transition: 0.2s;">
+                            Gerar Pagamento
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
+
+        @if(session('show_pix'))
+        @php
+            $depositShow = \App\Models\Deposit::find(session('show_pix'));
+        @endphp
+        @if($depositShow)
+        <!-- Pix Modal (Safe2Pay) -->
+        <div id="pixModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem; transition: 0.3s; opacity: 0;">
+            <div style="background: #0b0a15; border: 1.5px solid rgba(255,255,255,0.05); border-radius: 32px; width: 100%; max-width: 480px; padding: 2.5rem; position: relative; box-shadow: 0 30px 100px rgba(0,0,0,0.5); text-align: center;">
+                <button onclick="closePixModal()" style="position: absolute; right: 1.5rem; top: 1.5rem; background: rgba(255,255,255,0.05); border: none; width: 36px; height: 36px; border-radius: 50%; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+
+                <div style="margin-bottom: 2rem;">
+                    <h2 style="font-size: 24px; font-weight: 950; color: white; letter-spacing: -0.5px; margin-bottom: 0.5rem;">Pagamento PIX</h2>
+                    <p style="color: var(--text-muted); font-size: 14px; font-weight: 700;">Escaneie o QR Code ou copie o código</p>
+                </div>
+
+                <div style="background: white; padding: 1rem; border-radius: 20px; display: inline-block; margin-bottom: 2rem; box-shadow: 0 10px 30px rgba(255,255,255,0.1);">
+                    <img src="{{ $depositShow->pix_qr_code }}" alt="QR Code PIX" style="width: 240px; height: 240px;">
+                </div>
+
+                <div style="margin-bottom: 2rem; text-align: left;">
+                    <p style="font-size: 11px; font-weight: 850; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 0.75rem;">PIX Copia e Cola</p>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <input type="text" id="pixPayload" value="{{ $depositShow->pix_payload }}" readonly
+                               style="background: rgba(255,255,255,0.03); border: 1.5px solid rgba(255,255,255,0.05); border-radius: 12px; padding: 0.75rem 1rem; color: white; font-size: 12px; outline: none; flex: 1;">
+                        <button onclick="copyPix()" class="copy-btn" style="background: rgba(255,255,255,0.05); border: none; padding: 0 1.25rem; border-radius: 12px; color: white; font-weight: 950; font-size: 12px; cursor: pointer; white-space: nowrap; transition: 0.2s;">Copiar</button>
+                    </div>
+                </div>
+
+                <div style="background: rgba(34, 197, 94, 0.1); border: 1.5px solid rgba(34, 197, 94, 0.2); border-radius: 16px; padding: 1rem; display: flex; align-items: center; gap: 1rem; text-align: left;">
+                    <div style="font-size: 20px;">✅</div>
+                    <p style="font-size: 11px; color: #22c55e; font-weight: 850; line-height: 1.4;">Assim que o pagamento for confirmado, seu saldo será atualizado automaticamente.</p>
+                </div>
+            </div>
+        </div>
+        @endif
+        @endif
 
     </main>
 </div>
@@ -217,6 +271,55 @@
     }
     function closeDepositModal() {
         const modal = document.getElementById('depositModal');
+        modal.style.opacity = '0';
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+
+    function updateGatewayUI(radio) {
+        const abacateOpt = document.getElementById('opt-abacate');
+        const safe2payOpt = document.getElementById('opt-safe2pay');
+        const gatewayName = document.getElementById('gateway-name');
+
+        if (radio.value === 'abacatepay') {
+            abacateOpt.style.borderColor = '#22c55e';
+            abacateOpt.style.background = 'rgba(34, 197, 94, 0.05)';
+            safe2payOpt.style.borderColor = 'rgba(255,255,255,0.05)';
+            safe2payOpt.style.background = 'rgba(255,255,255,0.03)';
+            gatewayName.innerText = 'Abacate Pay';
+            gatewayName.style.color = '#22c55e';
+        } else {
+            safe2payOpt.style.borderColor = '#3390ec';
+            safe2payOpt.style.background = 'rgba(51, 144, 236, 0.05)';
+            abacateOpt.style.borderColor = 'rgba(255,255,255,0.05)';
+            abacateOpt.style.background = 'rgba(255,255,255,0.03)';
+            gatewayName.innerText = 'Safe2Pay';
+            gatewayName.style.color = '#3390ec';
+        }
+    }
+
+    function copyPix() {
+        const payload = document.getElementById('pixPayload').value;
+        navigator.clipboard.writeText(payload).then(() => {
+            const btn = document.querySelector('.copy-btn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Copiado!';
+            btn.style.background = '#22c55e';
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.style.background = 'rgba(255,255,255,0.05)';
+            }, 2000);
+        });
+    }
+
+    @if(session('show_pix'))
+        window.addEventListener('load', () => {
+             document.getElementById('pixModal').style.display = 'flex';
+             document.getElementById('pixModal').style.opacity = '1';
+        });
+    @endif
+
+    function closePixModal() {
+        const modal = document.getElementById('pixModal');
         modal.style.opacity = '0';
         setTimeout(() => modal.style.display = 'none', 300);
     }

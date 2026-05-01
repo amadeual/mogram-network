@@ -16,6 +16,9 @@ class Deposit extends Model
         'payment_url',
         'status',
         'method',
+        'gateway',
+        'pix_payload',
+        'pix_qr_code',
     ];
 
     protected $casts = [

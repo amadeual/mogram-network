@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WalletController;
 
 Route::post('/webhooks/abacatepay', [WalletController::class, 'webhook']);
+Route::post('/webhooks/safe2pay', [WalletController::class, 'safe2payWebhook'])->name('api.safe2pay.webhook');
 
 /*
 |--------------------------------------------------------------------------

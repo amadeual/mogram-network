@@ -21,9 +21,11 @@
         </a>
 
         {{-- Notification shortcut --}}
+        @auth
         <div class="notif-bell" style="width: 44px; display:flex; justify-content:center; cursor:pointer;" onclick="toggleNotifs()">
             <div class="notif-badge" style="width:8px;height:8px;background:#3390ec;border-radius:50%;box-shadow:0 0 8px #3390ec; display: {{ auth()->user()->unreadNotifications->count() > 0 ? 'block' : 'none' }};"></div>
         </div>
+        @endauth
     </div>
 
     {{-- ===== SIDEBAR ===== --}}
@@ -58,10 +60,13 @@
                 <span>Lives</span>
             </a>
             @php
-                $unreadChatsCount = \App\Models\Message::where('receiver_id', Auth::id())
-                    ->where('is_read', false)
-                    ->distinct('sender_id')
-                    ->count('sender_id');
+                $unreadChatsCount = 0;
+                if (Auth::check()) {
+                    $unreadChatsCount = \App\Models\Message::where('receiver_id', Auth::id())
+                        ->where('is_read', false)
+                        ->distinct('sender_id')
+                        ->count('sender_id');
+                }
             @endphp
             <a href="{{ route('chat.index') }}" class="menu-item sidebar-nav-item {{ Route::is('chat.*') ? 'active' : '' }}">
                 <div style="position: relative; display: flex; align-items: center;">
@@ -100,6 +105,7 @@
             <div class="sidebar-divider desktop-only"></div>
         </nav>
 
+        @auth
         <div class="sidebar-user">
             @if(Auth::user()->avatar)
                 <img src="{{ Storage::url(Auth::user()->avatar) }}" style="width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #3390ec; flex-shrink:0;">
@@ -117,6 +123,11 @@
                 </button>
             </form>
         </div>
+        @else
+        <div class="sidebar-user" style="justify-content: center; gap: 0.75rem;">
+            <a href="{{ route('login') }}" class="mogram-btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 800; flex: 1; text-align: center;">Entrar</a>
+        </div>
+        @endauth
     </aside>
 
 <script>

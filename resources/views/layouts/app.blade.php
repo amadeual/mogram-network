@@ -35,7 +35,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
-    <script src="https://kit.fontawesome.com/your-kit.js" crossorigin="anonymous"></script> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
         /* Small ad-hoc styles that might not merit full CSS file inclusion yet */
@@ -265,8 +265,8 @@
             }
 
             const rect = input.getBoundingClientRect();
-            mentionDropdown.style.left = \`\${rect.left}px\`;
-            mentionDropdown.style.top = \`\${rect.bottom + window.scrollY + 5}px\`;
+            mentionDropdown.style.left = `${rect.left}px`;
+            mentionDropdown.style.top = `${rect.bottom + window.scrollY + 5}px`;
             mentionDropdown.innerHTML = '';
             mentionDropdown.style.display = 'flex';
 
