@@ -45,7 +45,7 @@
             </div>
 
             <p style="max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.6; color: rgba(255,255,255,0.8); font-size: 14px; font-weight: 500;">
-                {{ $user->bio ?: 'Este usuário ainda não adicionou uma biografia.' }}
+                {{ trim(str_replace('&nbsp;', ' ', $user->bio)) ?: 'Este usuário ainda não adicionou uma biografia.' }}
             </p>
 
             <div style="display: flex; justify-content: center; gap: 1rem;">
@@ -114,14 +114,14 @@
 
                             @if($isLong)
                                 <div id="short_desc_{{ $post->id }}">
-                                    {{ mb_substr($plainText, 0, 500) }}...
+                                    {!! $post->formatted_short_description !!}...
                                     <span onclick="showFullDesc('{{ $post->id }}')" style="color: #3390ec; cursor: pointer; font-weight: 800; margin-left: 4px;">Mais+</span>
                                 </div>
                                 <div id="full_desc_{{ $post->id }}" style="display: none;">
-                                    {!! $post->description !!}
+                                    {!! $post->formatted_description !!}
                                 </div>
                             @else
-                                {!! $post->description !!}
+                                {!! $post->formatted_description !!}
                             @endif
                         </div>
                     </div>

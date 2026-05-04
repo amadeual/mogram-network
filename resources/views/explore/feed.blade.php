@@ -42,7 +42,7 @@
                             <p style="font-size: 0.75rem; color: #3390ec; font-weight: 700;">@ {{ $post->user->username }}</p>
                         </div>
                     </div>
-                    <p style="font-size: 0.9rem; color: #ccc; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{{ $post->content }}</p>
+                    <p style="font-size: 0.9rem; color: #ccc; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">{!! $post->formatted_description !!}</p>
                 </div>
             </div>
         @empty
